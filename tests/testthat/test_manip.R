@@ -3,20 +3,20 @@
 context('Test manipulation functions')
 
 
-test_that( 'f_manip_factor_2_numeric'
+test_that( 'manip_factor_2_numeric'
   ,{
 
     fac_num = factor( c(1,3,8) )
     fac_chr = factor( c('foo','bar') )
     fac_chr_ordered = factor( c('a','b','c'), ordered = T )
 
-    expect_identical( f_manip_factor_2_numeric( fac_num ), c(1,3,8) )
-    expect_identical( f_manip_factor_2_numeric( fac_chr ), c(2,1) )
-    expect_identical( f_manip_factor_2_numeric( fac_chr_ordered ), c(1,2,3) )
+    expect_identical( manip_factor_2_numeric( fac_num ), c(1,3,8) )
+    expect_identical( manip_factor_2_numeric( fac_chr ), c(2,1) )
+    expect_identical( manip_factor_2_numeric( fac_chr_ordered ), c(1,2,3) )
 })
 
 
-test_that('f_manip_bin_numerics'
+test_that('manip_bin_numerics'
   ,{
 
   categoricals = c('cyl', 'vs', 'am', 'gear', 'carb')
@@ -24,7 +24,7 @@ test_that('f_manip_bin_numerics'
   data = mtcars %>%
     mutate_at( vars(categoricals), as.factor )
 
-  data_new = f_manip_bin_numerics(data)
+  data_new = manip_bin_numerics(data)
 
   numerics = data_new %>%
     select_if( is.numeric ) %>%
@@ -37,19 +37,19 @@ test_that('f_manip_bin_numerics'
 })
 
 
-test_that('f_manip_bin_numerics no numerics in data'
+test_that('manip_bin_numerics no numerics in data'
           ,{
 
   data = mtcars %>%
     mutate_all( as.factor )
 
-  data_new = f_manip_bin_numerics(data)
+  data_new = manip_bin_numerics(data)
 
   expect_identical(data, data_new)
 
 })
 
-test_that('f_manip_bin_numerics zero variance columns'
+test_that('manip_bin_numerics zero variance columns'
           ,{
 
   data = mtcars %>%
@@ -58,7 +58,7 @@ test_that('f_manip_bin_numerics zero variance columns'
             , zero = 0
             , near_zero_var = c( rep(1,nrow(.)-1), 0.9 ) )
 
-  data_new = f_manip_bin_numerics(data)
+  data_new = manip_bin_numerics(data)
 
   expect_identical( select(data, zero_var, zero)
                     , select(data_new, zero_var, zero) )

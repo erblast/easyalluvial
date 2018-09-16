@@ -6,16 +6,16 @@
 #' fac_chr = factor( c('foo','bar') )
 #' fac_chr_ordered = factor( c('a','b','c'), ordered = T )
 #'
-#' f_manip_factor_2_numeric( fac_num )
-#' f_manip_factor_2_numeric( fac_chr )
-#' f_manip_factor_2_numeric( fac_chr_ordered )
+#' manip_factor_2_numeric( fac_num )
+#' manip_factor_2_numeric( fac_chr )
+#' manip_factor_2_numeric( fac_chr_ordered )
 #' @seealso
 #'  \code{\link[stringr]{str_detect}}
-#' @rdname f_manip_factor_2_numeric
+#' @rdname manip_factor_2_numeric
 #' @export
 #' @importFrom stringr str_detect
 #' @import dplyr
-f_manip_factor_2_numeric = function(vec){
+manip_factor_2_numeric = function(vec){
 
   bool = as.character(vec) %>%
     stringr::str_detect('^\\d+$' ) %>%
@@ -53,11 +53,11 @@ f_manip_factor_2_numeric = function(vec){
 #'  #EXAMPLE1
 #'  }
 #' }
-#' @rdname f_manip_bin_numerics
+#' @rdname manip_bin_numerics
 #' @import recipes
 #' @import broom
 #' @export
-f_manip_bin_numerics = function(df
+manip_bin_numerics = function(df
                                 , bins = 5
                                 , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
                                 , center = T

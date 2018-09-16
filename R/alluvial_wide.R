@@ -136,7 +136,7 @@ alluvial_wide = function( data
   # transform numerical variables for binning
 
   data = data %>%
-    f_manip_bin_numerics( bins, bin_labels)
+    manip_bin_numerics( bins, bin_labels)
 
   data_trans = data %>%
     select( one_of(variables) ) %>%
@@ -208,7 +208,7 @@ alluvial_wide = function( data
 
   )
 
-  n_flows    = max( f_manip_factor_2_numeric( data_new$alluvial_id) )
+  n_flows    = max( manip_factor_2_numeric( data_new$alluvial_id) )
   reduced_to = round( n_flows/nrow(data) * 100, 1 )
   max_weight = max( data_new$n )
   max_weight_perc = round( max_weight/nrow(data) * 100, 1 )
@@ -289,7 +289,7 @@ alluvial_wide = function( data
   suppressMessages({
 
     data_key = data_new %>%
-      mutate( alluvial_id = f_manip_factor_2_numeric(alluvial_id) ) %>%
+      mutate( alluvial_id = manip_factor_2_numeric(alluvial_id) ) %>%
       left_join( data_alluvial ) %>%
       select( - fill_flow, -fill_value, -fill ) %>%
       spread( key = x, value = value ) %>%

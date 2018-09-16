@@ -156,7 +156,7 @@ alluvial_long = function( data
     mutate( !! key_str := as.factor( !! key )
             , !! id_str := as.factor( !! id )
             ) %>%
-    f_manip_bin_numerics( bins, bin_labels) %>%
+    manip_bin_numerics( bins, bin_labels) %>%
     mutate( !! value_str := as.factor( !! value ) )
 
   #complete data
@@ -295,7 +295,7 @@ alluvial_long = function( data
             ) %>%
     mutate( value =  forcats::fct_rev(value) )
 
-  n_flows    = max( f_manip_factor_2_numeric( data_new$alluvial_id) )
+  n_flows    = max( manip_factor_2_numeric( data_new$alluvial_id) )
   n_per_x    = nrow(data)/length( unique( select(data, !! key) ) )
   reduced_to = round( n_flows/ n_per_x * 100, 1 )
   max_weight = max( data_new$n )
