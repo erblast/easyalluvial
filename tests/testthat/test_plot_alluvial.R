@@ -58,7 +58,7 @@ test_that('f_plot_alluvial'
 
     variables = names(data)
 
-    p = f_plot_alluvial( data, col_id = 'name_x', max_variables = 5 )
+    p = f_plot_alluvial( data, id = 'name_x', max_variables = 5 )
 
     # check NA behavoir, rename label ando order to front
 
@@ -73,7 +73,7 @@ test_that('f_plot_alluvial'
   })
 
 
-test_that('f_plot_alluvial_1v1'
+test_that('alluvial_long'
           ,{
   # sample data
 
@@ -100,32 +100,32 @@ test_that('f_plot_alluvial_1v1'
 
   data = monthly_flights
 
-  col_x = 'qu'
-  col_y = 'mean_arr_delay'
-  col_fill = 'carrier'
-  col_id = 'tailnum'
+  key = 'qu'
+  value = 'mean_arr_delay'
+  fill = 'carrier'
+  id = 'tailnum'
 
   # flow coloring variants
-  p = f_plot_alluvial_1v1( data, col_x, col_y, col_id, col_fill )
-  p = f_plot_alluvial_1v1( data, col_x, col_y, col_id, fill_by = 'last_variable' )
-  p = f_plot_alluvial_1v1( data, col_x, col_y, col_id, fill_by = 'first_variable' )
-  p = f_plot_alluvial_1v1( data, col_x, col_y, col_id, fill_by = 'all_flows' )
-  p = f_plot_alluvial_1v1( data, col_x, col_y, col_id, fill_by = 'value' )
+  p = alluvial_long( data, key, value, id, fill )
+  p = alluvial_long( data, key, value, id, fill_by = 'last_variable' )
+  p = alluvial_long( data, key, value, id, fill_by = 'first_variable' )
+  p = alluvial_long( data, key, value, id, fill_by = 'all_flows' )
+  p = alluvial_long( data, key, value, id, fill_by = 'value' )
 
   # use same color coding for flows and y levels
-  p = f_plot_alluvial_1v1( data, col_x, col_y, col_id, fill_by = 'last_variable'
+  p = alluvial_long( data, key, value, id, fill_by = 'last_variable'
                        , col_vector_flow = f_plot_col_vector74()
                        , col_vector_value = f_plot_col_vector74() )
 
   # move fill variable to the left
-  p = f_plot_alluvial_1v1( data, col_x, col_y, col_id, col_fill, fill_right = F )
+  p = alluvial_long( data, key, value, id, fill, fill_right = F )
 
   # reorder levels
-  p = f_plot_alluvial_1v1( data, col_x, col_y, col_id, fill_by = 'first_variable'
-                       , order_levels_y = c('on_time', 'late') )
+  p = alluvial_long( data, key, value, id, fill_by = 'first_variable'
+                       , order_levels_value = c('on_time', 'late') )
 
-  p = f_plot_alluvial_1v1( data, col_x, col_y, col_id, fill_by = 'first_variable'
-                       , order_levels_x = c('Q4', 'Q3', 'Q2', 'Q1') )
+  p = alluvial_long( data, key, value, id, fill_by = 'first_variable'
+                       , order_levels_key = c('Q4', 'Q3', 'Q2', 'Q1') )
 
   order_by_carrier_size = data %>%
     group_by(carrier) %>%
@@ -133,7 +133,7 @@ test_that('f_plot_alluvial_1v1'
     arrange( desc(n) ) %>%
     .[['carrier']]
 
-  p = f_plot_alluvial_1v1( data, col_x, col_y, col_id, col_fill
+  p = alluvial_long( data, key, value, id, fill
                        , order_levels_fill = order_by_carrier_size )
 
 
@@ -146,14 +146,14 @@ test_that('f_plot_alluvial_1v1'
     select(tailnum, qu, mean_arr_delay, carrier) %>%
     sample_frac(0.9)
 
-  p = f_plot_alluvial_1v1( data, col_x, col_y, col_id, col_fill  = 'carrier'
+  p = alluvial_long( data, key, value, id, fill  = 'carrier'
                            , NA_label = 'none'
-                           , order_levels_y = 'none')
+                           , order_levels_value = 'none')
 
 
-  p = f_plot_alluvial_1v1( data, col_x, col_y, col_id, fill_by = 'last_variable'
+  p = alluvial_long( data, key, value, id, fill_by = 'last_variable'
                            , NA_label = 'none'
-                           , order_levels_y = 'none')
+                           , order_levels_value = 'none')
 
 })
 
