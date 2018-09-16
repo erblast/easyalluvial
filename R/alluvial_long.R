@@ -129,46 +129,53 @@ alluvial_long = function( data
                           , verbose = F
 ){
 
+  require(ggalluvial)
 
-  # symbols
+  # quosures
 
-  sym_x = as.name( key )
-  sym_y = as.name( value )
-  sym_id = as.name( id )
-  if( ! is.null(fill) ){
-    sym_fill = as.name( fill )
+  key = enquo( key )
+  value = enquo( value )
+  id = enquo( id )
+  fill = enquo( fill )
+
+  key_str = quo_name(key)
+  value_str = quo_name(value)
+  id_str = quo_name(id)
+
+  if( rlang::quo_is_null(fill) ){
+    fill_str = NULL
   }else{
-    sym_fill = NULL
+    fill_str = quo_name(fill)
   }
 
   # transform numerical variables for binning
 
   data_trans = data %>%
     ungroup() %>%
-    select( one_of(key, value, fill, id) ) %>%
-    mutate( !! sym_x := as.factor( !! sym_x )
-            , !! sym_id := as.factor( !! sym_id )
+    select( !! key, !! value, !! fill, !! id ) %>%
+    mutate( !! key_str := as.factor( !! key )
+            , !! id_str := as.factor( !! id )
             ) %>%
     f_manip_bin_numerics( bins, bin_labels) %>%
-    mutate( !! sym_y := as.factor( !! sym_y ) )
+    mutate( !! value_str := as.factor( !! value ) )
 
   #complete data
 
-  if( is.null(fill) ){
+  if( is.null(fill_str) ){
 
     data_trans = data_trans %>%
-      complete( !! sym_x , !! sym_id )
+      complete( !! key , !! id )
 
   }else{
 
     id_2_fill_keys = data_trans %>%
-      group_by( !! sym_id, !! sym_fill) %>%
+      group_by( !! id, !! fill) %>%
       summarise()
 
     suppressMessages({
       data_trans = data_trans %>%
-        complete( !! sym_x , !! sym_id ) %>% ## leaves NA values for fill
-        select( - one_of(fill) ) %>%     ## deselect and rejoin fill
+        complete( !! key , !! id ) %>% ## leaves NA values for fill
+        select( - !! fill ) %>%     ## deselect and rejoin fill
         left_join( id_2_fill_keys )
     })
 
@@ -176,17 +183,17 @@ alluvial_long = function( data
 
   # preserve order of categorical variables
 
-  ordered_levels_x = c( order_levels_key, levels( data_trans[[key]] ) ) %>% unique()
-  ordered_levels_y = c( order_levels_value, levels( data_trans[[value]] ) ) %>% unique()
+  ordered_levels_x = c( order_levels_key, levels( select(data_trans, !! key)[[1]] ) ) %>% unique()
+  ordered_levels_y = c( order_levels_value, levels( select(data_trans, !! value)[[1]] ) ) %>% unique()
 
-  if( ! is.null(fill) ){
-    ordered_levels_fill = c( order_levels_fill, levels( data_trans[[fill]] ) ) %>% unique()
+  if( ! rlang::quo_is_null(fill) ){
+    ordered_levels_fill = c( order_levels_fill, levels( select(data_trans, !! fill)[[1]] ) ) %>% unique()
     ordered_levels_y = c( ordered_levels_y, ordered_levels_fill)
 
     if(fill_right){
-      ordered_levels_x = c( ordered_levels_x, fill )
+      ordered_levels_x = c( ordered_levels_x, fill_str )
     }else{
-      ordered_levels_x = c( fill, ordered_levels_x )
+      ordered_levels_x = c( fill_str, ordered_levels_x )
     }
 
   }else{
@@ -196,26 +203,27 @@ alluvial_long = function( data
   # convert NA values in value to NA_label
 
   data_trans = data_trans %>%
-    mutate(   !! sym_y := as.character( !! sym_y )
-              , !! sym_y := ifelse( is.na( !!  sym_y ), NA_label, !! sym_y )
-              , !! sym_y := as.factor( !! sym_y) ) ##factor label will be restored further down
+    mutate(   !! value_str := as.character( !! value )
+              ,  !! value_str := ifelse( is.na( !!  value ), NA_label, !! value )
+              ,  !! value_str := as.factor( !! value) ) ##factor label will be restored further down
 
 
   suppressWarnings({
 
     # add alluvial ids
     data_spread = data_trans %>%
-      spread( key = !! sym_x, value = !! sym_y )
+      spread( key = !! key, value = !! value )
 
     data_alluvial_id = data_spread %>%
-      select( - one_of(id) ) %>%
+      select( - !! id ) %>%
       group_by_all() %>%
       count() %>%
       ungroup() %>%
       mutate( alluvial_id = row_number() )
 
     data_new = data_alluvial_id %>%
-      gather( key = 'x', value = 'value',  - one_of( c('alluvial_id', 'n', fill) ) ) %>%
+      gather( key = 'x', value = 'value'
+              , - one_of(c('alluvial_id','n', fill_str))  ) %>%
       mutate( x = as.factor(x)
               , x = forcats::fct_relevel(x, ordered_levels_x))
   })
@@ -226,13 +234,12 @@ alluvial_long = function( data
 
   first_x = levels(data_new$x)[1]
 
-  if( ! is.null(fill) ){
-
+  if( ! rlang::quo_is_null(fill) ){
 
     data_fill = data_new %>%
       filter( x == last_x ) %>%
-      mutate( value = !! sym_fill
-              , x = fill )
+      mutate( value = !! fill
+              , x = fill_str )
 
     suppressWarnings({
 
@@ -240,7 +247,7 @@ alluvial_long = function( data
         bind_rows( data_fill )
     })
 
-    data_new$fill = data_new[[fill]]
+    data_new$fill = select( data_new, !! fill)[[1]]
 
   }else if( fill_by %in% c( 'first_variable', 'last_variable') ) {
 
@@ -289,7 +296,7 @@ alluvial_long = function( data
     mutate( value =  forcats::fct_rev(value) )
 
   n_flows    = max( f_manip_factor_2_numeric( data_new$alluvial_id) )
-  n_per_x    = nrow(data)/length( unique(data[[key]] ) )
+  n_per_x    = nrow(data)/length( unique( select(data, !! key) ) )
   reduced_to = round( n_flows/ n_per_x * 100, 1 )
   max_weight = max( data_new$n )
   max_weight_perc = round( max_weight/n_per_x * 100, 1 )
@@ -335,10 +342,10 @@ alluvial_long = function( data
   })
 
 
-  if( ! is.null(fill) ){
+  if( ! rlang::quo_is_null(fill) ){
 
     data_new = data_new %>%
-      mutate( fill_value = ifelse( as.character(value) == as.character(rlang::UQ(sym_fill))
+      mutate( fill_value = ifelse( as.character(value) == as.character(rlang::UQ(fill))
                                    , fill_flow, fill_value ) )
   }
 

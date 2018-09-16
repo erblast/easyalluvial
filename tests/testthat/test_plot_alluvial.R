@@ -100,31 +100,26 @@ test_that('alluvial_long'
 
   data = monthly_flights
 
-  key = 'qu'
-  value = 'mean_arr_delay'
-  fill = 'carrier'
-  id = 'tailnum'
-
   # flow coloring variants
-  p = alluvial_long( data, key, value, id, fill )
-  p = alluvial_long( data, key, value, id, fill_by = 'last_variable' )
-  p = alluvial_long( data, key, value, id, fill_by = 'first_variable' )
-  p = alluvial_long( data, key, value, id, fill_by = 'all_flows' )
-  p = alluvial_long( data, key, value, id, fill_by = 'value' )
+  p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill = carrier )
+  p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'last_variable' )
+  p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'first_variable' )
+  p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'all_flows' )
+  p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'value' )
 
   # use same color coding for flows and y levels
-  p = alluvial_long( data, key, value, id, fill_by = 'last_variable'
+  p = alluvial_long( data, qu, mean_arr_delay, tailnum, fill_by = 'last_variable'
                        , col_vector_flow = f_plot_col_vector74()
                        , col_vector_value = f_plot_col_vector74() )
 
   # move fill variable to the left
-  p = alluvial_long( data, key, value, id, fill, fill_right = F )
+  p = alluvial_long( data, qu, mean_arr_delay, tailnum, carrier ,fill_right = F )
 
   # reorder levels
-  p = alluvial_long( data, key, value, id, fill_by = 'first_variable'
+  p = alluvial_long( data, qu, mean_arr_delay, tailnum, fill_by = 'first_variable'
                        , order_levels_value = c('on_time', 'late') )
 
-  p = alluvial_long( data, key, value, id, fill_by = 'first_variable'
+  p = alluvial_long( data, qu, mean_arr_delay, tailnum, fill_by = 'first_variable'
                        , order_levels_key = c('Q4', 'Q3', 'Q2', 'Q1') )
 
   order_by_carrier_size = data %>%
@@ -133,7 +128,7 @@ test_that('alluvial_long'
     arrange( desc(n) ) %>%
     .[['carrier']]
 
-  p = alluvial_long( data, key, value, id, fill
+  p = alluvial_long( data, qu, mean_arr_delay, tailnum, carrier
                        , order_levels_fill = order_by_carrier_size )
 
 
@@ -146,12 +141,12 @@ test_that('alluvial_long'
     select(tailnum, qu, mean_arr_delay, carrier) %>%
     sample_frac(0.9)
 
-  p = alluvial_long( data, key, value, id, fill  = 'carrier'
-                           , NA_label = 'none'
-                           , order_levels_value = 'none')
+  p = alluvial_long( data, qu, mean_arr_delay, tailnum, carrier
+                     , NA_label = 'none'
+                     , order_levels_value = 'none')
 
 
-  p = alluvial_long( data, key, value, id, fill_by = 'last_variable'
+  p = alluvial_long( data, qu, mean_arr_delay, tailnum, fill_by = 'last_variable'
                            , NA_label = 'none'
                            , order_levels_value = 'none')
 
