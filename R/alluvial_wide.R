@@ -1,11 +1,10 @@
 
 
-#' @title plot alluvial on tidy data
+#' @title alluvial plot of data in wide format
 #' @description plots a dataframe as an alluvial plot. All numerical variables
 #'   are scaled, centered and YeoJohnson transformed before binning.
 #' @param data a dataframe
-#' @param variables vector denoting names and order of the plotted variables,
-#'   Default: names(data)
+#' @param id character vector denoting id column
 #' @param max_variables maximum number of variables, Default: 20
 #' @param bins number of bins for numerical variables, Default: 5
 #' @param bin_labels labels for the bins from low to high, Default: c("LL",
@@ -18,7 +17,6 @@
 #'  f_plot_col_vector74(faint = F, greys = F)
 #'@param col_vector_value Hex colors for y levels/values, Default:
 #'  RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7, 5)]
-#'@param id character vector denoting id column
 #'@param verbose logical, print plot summary, Default: F
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
@@ -33,29 +31,29 @@
 #' max_variables = 5
 #' variables = c( data_ls$categoricals[1:3], data_ls$numericals[1:3] )
 #'
-#' f_plot_alluvial( data = data
+#' alluvial_wide( data = data
 #'                 , variables = variables
 #'                 , max_variables = max_variables
 #'                 , fill_by = 'first_variable' )
 #'
-#' f_plot_alluvial( data = data
+#' alluvial_wide( data = data
 #'                 , variables = variables
 #'                 , max_variables = max_variables
 #'                 , fill_by = 'last_variable' )
 #'
-#' f_plot_alluvial( data = data
+#' alluvial_wide( data = data
 #'                 , variables = variables
 #'                 , max_variables = max_variables
 #'                 , fill_by = 'all_flows' )
 #'
-#' f_plot_alluvial( data = data
+#' alluvial_wide( data = data
 #'                 , variables = variables
 #'                 , max_variables = max_variables
 #'                 , fill_by = 'first_variable' )
 #'
 #' # manually order variable values
 #'
-#' f_plot_alluvial( data = data
+#' alluvial_wide( data = data
 #'                  , variables = variables
 #'                  , max_variables = max_variables
 #'                  , fill_by = 'values'
@@ -65,13 +63,12 @@
 #' @seealso \code{\link[RColorBrewer]{brewer.pal}}
 #'   \code{\link[forcats]{fct_relevel}}
 #'   \code{\link[ggalluvial]{geom_flow}},\code{\link[ggalluvial]{geom_stratum}}
-#' @rdname f_plot_alluvial
+#' @rdname alluvial_wide
 #' @export
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom forcats fct_relevel
 #' @import ggalluvial
-f_plot_alluvial = function( data
-                            , variables = names(data)
+alluvial_wide = function( data
                             , id = NULL
                             , max_variables = 20
                             , bins = 5
@@ -87,9 +84,21 @@ f_plot_alluvial = function( data
   # ggalluvial package needs to be loaded entirely
   require(ggalluvial)
 
+  # quos
+
+  id = enquo( id )
+
+  if( rlang::quo_is_null(id) ){
+    id_str = NULL
+  }else{
+    id_str = quo_name(id)
+  }
+
   # remove  id from variables
 
-  if( ! is_empty(id %in% variables) ) variables = variables[ ! variables %in% id ]
+  variables = names(data)
+
+  if( ! is_empty(id_str %in% variables) ) variables = variables[ ! variables %in% id_str ]
 
   # adjust variable length
 
@@ -109,20 +118,20 @@ f_plot_alluvial = function( data
   # reduce data to selected variables
 
   data = data %>%
-    select( one_of(variables, id) )
+    select( one_of(variables, id_str) )
 
   # prepare ID column
 
-  if( is.null(id) ){
+  if( rlang::quo_is_null(id) ){
 
     data = data %>%
       mutate( ID = row_number() )
 
-    id = 'ID'
+    id_str = 'ID'
   }
 
    data = data %>%
-     mutate( !! as.name(id) := as.character( !! as.name(id) ) )
+     mutate( !! as.name(id_str) := as.character( !! as.name(id_str) ) )
 
   # transform numerical variables for binning
 
@@ -139,7 +148,7 @@ f_plot_alluvial = function( data
   suppressMessages({
     data_alluvial = data %>%
       left_join( data_trans ) %>%
-      select( one_of( id, 'alluvial_id') )
+      select( one_of( id_str, 'alluvial_id') )
   })
 
   # preserve order of categorical variables
@@ -206,7 +215,7 @@ f_plot_alluvial = function( data
 
   line1 = paste('Number of flows:', n_flows)
   line2 = paste('Original Dataframe reduced to', reduced_to, '%' )
-  line3 = paste('Maximum weight of a singfle flow', max_weight_perc, '%')
+  line3 = paste('Maximum weight of a single flow', max_weight_perc, '%')
 
   if( verbose ){
     print( line1 )
@@ -284,7 +293,7 @@ f_plot_alluvial = function( data
       left_join( data_alluvial ) %>%
       select( - fill_flow, -fill_value, -fill ) %>%
       spread( key = x, value = value ) %>%
-      select( one_of(id, variables, 'alluvial_id', 'n' ) )
+      select( one_of(id_str, variables, 'alluvial_id', 'n' ) )
   })
 
   p$data_key = data_key

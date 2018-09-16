@@ -1,5 +1,5 @@
 
-#'@title plot alluvial of gathered data
+#'@title alluvial plot of data in long format
 #'@description Plots two variables of a dataframe on an alluvial plot. A third
 #'  variable can be added either two the left or the right of the alluvial plot
 #'  to provide coloring of the flows. All numerical variables are scaled,
@@ -105,7 +105,7 @@
 #'@export
 #'@importFrom RColorBrewer brewer.pal
 #'@importFrom forcats fct_relevel fct_rev
-#'@importFrom rlang UQ
+#'@importFrom rlang UQ quo_is_null
 #'@import ggalluvial
 #'@import dplyr
 #'@import purrr
@@ -396,4 +396,3 @@ alluvial_long = function( data
 }
 
 
-#' @title plot alluvial on tidy data
