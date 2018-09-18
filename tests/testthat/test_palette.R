@@ -48,8 +48,8 @@ test_that('test f_plot_colvector'
   }
 
 
-  p = plot_rgb( col = f_plot_col_vector74() )
-  p = plot_rgb_sum( f_plot_col_vector74() )
+  p = plot_rgb( col = f_plot_col_vector74( only_unique = T ) )
+  p = plot_rgb_sum( f_plot_col_vector74( only_unique = T ) )
 
 
   p = plot_rgb( f_plot_col_vector74( reds = F) )
