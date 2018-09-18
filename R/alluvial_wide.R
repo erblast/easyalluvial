@@ -76,7 +76,7 @@ alluvial_wide = function( data
                             , NA_label = 'NA'
                             , order_levels = NULL
                             , fill_by = 'first_variable'
-                            , col_vector_flow = f_plot_col_vector74( faint = F, greys = F )
+                            , col_vector_flow = palette_qualitative() %>% palette_filter( greys = F)
                             , col_vector_value =  RColorBrewer::brewer.pal(9, 'Greys')[c(3,6,4,7,5)]
                             , verbose = F
 ){
@@ -229,7 +229,7 @@ alluvial_wide = function( data
 
   n_colors_needed = length( unique(data_new$fill) )
 
-  col_vector_flow = f_plot_adjust_col_vector_length( n_colors_needed, col_vector_flow )
+  col_vector_flow = palette_increase_length( col_vector_flow, n_colors_needed  )
 
   df_fill_flow = tibble( fill = unique(data_new$fill)
                          , fill_flow = col_vector_flow )
@@ -243,7 +243,7 @@ alluvial_wide = function( data
 
   n_colors_needed = length( unique(data_new$value) )
 
-  col_vector_value = f_plot_adjust_col_vector_length( n_colors_needed, col_vector_value )
+  col_vector_value = palette_increase_length( col_vector_value, n_colors_needed  )
 
   d_fill_value = tibble( value = unique(data_new$value)
                          , fill_value = col_vector_value )

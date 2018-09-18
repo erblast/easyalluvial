@@ -1,61 +1,43 @@
+context('palette functions')
 
-
-test_that('test f_plot_colvector'
+test_that('palettes'
   ,{
 
-  plot_rgb = function(col){
+    expect_equal( length( palette_increase_length() ), 100)
 
-    hex = tibble( hex = col ) %>%
-      mutate( RGB = map(hex, col2rgb)
-              , RGB = map(RGB, t)
-              , RGB = map(RGB, as_tibble)
-              ) %>%
-      # arrange(hex) %>%
-      mutate( hex = forcats::as_factor(hex) )
+    p = palette_qualitative() %>%
+      palette_filter() %>%
+      palette_plot_intensity()
 
-    col = hex %>%
-      unnest( RGB ) %>%
-      gather( key = 'RGB', value = 'value', - hex )
+    p = palette_qualitative() %>%
+      palette_plot_rgp()
 
-    ggplot( col, aes(hex, value, group = RGB, fill = hex) ) +
-    geom_col( position = 'dodge', color = 'white') +
-    coord_flip() +
-    scale_fill_manual( values = levels( hex$hex) )
-  }
+    p = palette_qualitative() %>%
+      palette_filter( reds = F, thresh_similar = 0) %>%
+      palette_plot_intensity()
 
-  plot_rgb_sum = function(col){
+    p = palette_qualitative() %>%
+      palette_filter( blues = F, thresh_similar = 0) %>%
+      palette_plot_intensity()
 
-    col = unique(col)
+    p = palette_qualitative() %>%
+      palette_filter( greens = F, thresh_similar = 0) %>%
+      palette_plot_intensity()
 
-    hex = tibble( hex = col ) %>%
-      mutate( RGB = map(hex, col2rgb)
-              , RGB = map(RGB, t)
-              , RGB = map(RGB, as_tibble)
-      ) %>%
-      mutate( hex = forcats::as_factor(hex) )
+    p = palette_qualitative() %>%
+      palette_filter( greys = F, thresh_similar = 0) %>%
+      palette_plot_intensity()
 
-    col = hex %>%
-      unnest( RGB ) %>%
-      gather( key = 'RGB', value = 'value', - hex ) %>%
-      group_by( hex ) %>%
-      summarise( sum = sum(value) ) %>%
-      mutate( hex = forcats::fct_reorder(hex, sum))
+    p = palette_qualitative() %>%
+      palette_filter( dark = F, thresh_similar = 0) %>%
+      palette_plot_intensity()
 
-    ggplot( col, aes(hex, sum, fill = hex) ) +
-      geom_col(  color = 'white') +
-      coord_flip() +
-      scale_fill_manual( values = levels( col$hex) )
-  }
+    p = palette_qualitative() %>%
+      palette_filter( medium = F, thresh_similar = 0) %>%
+      palette_plot_intensity()
 
-
-  p = plot_rgb( col = f_plot_col_vector74( only_unique = T ) )
-  p = plot_rgb_sum( f_plot_col_vector74( only_unique = T ) )
-
-
-  p = plot_rgb( f_plot_col_vector74( reds = F) )
-  p = plot_rgb( f_plot_col_vector74( greys = F) )
-  p = plot_rgb( f_plot_col_vector74( blues = F) )
-  p = plot_rgb( f_plot_col_vector74( greens = F) )
-  p = plot_rgb( f_plot_col_vector74( faint = F) )
+    p = palette_qualitative() %>%
+      palette_filter( bright = F, thresh_similar = 0) %>%
+      palette_plot_intensity()
 
 })

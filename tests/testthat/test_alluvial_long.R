@@ -37,9 +37,9 @@ test_that('alluvial_long'
   p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'value' )
 
   # use same color coding for flows and y levels
-  p = alluvial_long( data, qu, mean_arr_delay, tailnum, fill_by = 'last_variable'
-                       , col_vector_flow = f_plot_col_vector74()
-                       , col_vector_value = f_plot_col_vector74() )
+  p = alluvial_long( data, qu, mean_arr_delay, tailnum, fill_by = 'value'
+                       , col_vector_flow = palette_qualitative() %>% palette_filter(greys = F, bright = F)
+                       , col_vector_value = palette_qualitative() %>% palette_filter(greys = F, bright = F) )
 
   # move fill variable to the left
   p = alluvial_long( data, qu, mean_arr_delay, tailnum, carrier ,fill_right = F )
