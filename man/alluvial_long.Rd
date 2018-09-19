@@ -15,14 +15,14 @@ alluvial_long(data, key, value, id, fill = NULL, fill_right = T, bins = 5,
 \arguments{
 \item{data}{a dataframe}
 
-\item{key}{character vector denoting column for the x axis variable}
+\item{key}{unqoted column name of x axis variable}
 
-\item{value}{character vector denoting column for the y axis variable}
+\item{value}{unqoted column name of y axis variable}
 
-\item{id}{character vector denoting id column}
+\item{id}{unqoted column name of id column}
 
-\item{fill}{character vector denoting color fill variable for flows,
-Default: NULL}
+\item{fill}{unqoted column name of fill variable for which will be used to
+color flows, Default: NULL}
 
 \item{fill_right}{logical, TRUE fill variable is added to the right FALSE to
 the left, Default: T}
@@ -30,17 +30,17 @@ the left, Default: T}
 \item{bins}{number of bins for automatic binning of numerical variables,
 Default: 5}
 
-\item{bin_labels}{labesl for bins, Default: c("LL", "ML", "M", "MH", "HH")}
+\item{bin_labels}{labels for bins, Default: c("LL", "ML", "M", "MH", "HH")}
 
 \item{NA_label}{character vector define label for missing data}
 
-\item{order_levels_value}{character vector denoting order of y levels from low to
-high, does not have to be complete can also just be used to bring levels to
-the front, Default: NULL}
+\item{order_levels_value}{character vector denoting order of y levels from low
+to high, does not have to be complete can also just be used to bring levels
+to the front, Default: NULL}
 
-\item{order_levels_key}{character vector denoting order of x levels from low to
-high, does not have to be complete can also just be used to bring levels to
-the front, Default: NULL}
+\item{order_levels_key}{character vector denoting order of x levels from low
+to high, does not have to be complete can also just be used to bring levels
+to the front, Default: NULL}
 
 \item{order_levels_fill}{character vector denoting order of color fill
 variable levels from low to high, does not have to be complete can also just
@@ -51,11 +51,10 @@ be used to bring levels to the front, Default: NULL}
 \item{fill_by}{one_of(c('first_variable', 'last_variable', 'all_flows',
 'values')), Default: 'first_variable'}
 
-\item{col_vector_flow}{HEX colors for flows, Default:
-f_plot_col_vector74(faint = F, greys = F)}
+\item{col_vector_flow}{HEX color values for flows, Default: palette_filter( greys = F)}
 
-\item{col_vector_value}{Hex colors for y levels/values, Default:
-RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7, 5)]}
+\item{col_vector_value}{Hex color values  for y levels/values,
+Default:RColorBrewer::brewer.pal(9, 'Greys')[c(3,6,4,7,5)]}
 
 \item{verbose}{logical, print plot summary, Default: F}
 }
@@ -71,7 +70,8 @@ Plots two variables of a dataframe on an alluvial plot. A third
 \examples{
 \dontrun{
 if(interactive()){
-# sample data
+ # sample data-------------------------------------------------
+ require(tidyverse)
  monthly_flights = nycflights13::flights \%>\%
  group_by(month, tailnum, origin, dest, carrier) \%>\%
  summarise() \%>\%
@@ -89,52 +89,46 @@ if(interactive()){
  ungroup() \%>\%
  mutate( mean_arr_delay = ifelse( mean_arr_delay < 10, 'on_time', 'late' ) )
 
-levels(monthly_flights$qu) = c('Q1', 'Q2', 'Q3', 'Q4')
+ levels(monthly_flights$qu) = c('Q1', 'Q2', 'Q3', 'Q4')
 
-data = monthly_flights
+ data = monthly_flights
 
-key = 'qu'
-value = 'mean_arr_delay'
-fill = 'carrier'
-id = 'tailnum'
 
-# flow coloring variants
-alluvial_long( data, key, value, id, fill )
-alluvial_long( data, key, value, id, fill_by = 'last_variable' )
-alluvial_long( data, key, value, id, fill_by = 'first_variable' )
-alluvial_long( data, key, value, id, fill_by = 'all_flows' )
-alluvial_long( data, key, value, id, fill_by = 'value' )
+ # flow coloring variants -----------------------------------------
+ alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill = carrier )
+ alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'last_variable' )
+ alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'first_variable' )
+ alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'all_flows' )
+ alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'value' )
 
-# use same color coding for flows and y levels
-alluvial_long( data, key, value, id, fill_by = 'last_variable'
-                    , col_vector_flow = f_plot_col_vector74()
-                    , col_vector_value = f_plot_col_vector74() )
+ # use same color coding for flows and y levels -------------------
+ alluvial_long( data, qu, mean_arr_delay, tailnum, fill_by = 'value'
+ , col_vector_flow = palette_qualitative() \%>\% palette_filter(greys = F, bright = F)
+ , col_vector_value = palette_qualitative() \%>\% palette_filter(greys = F, bright = F) )
 
-# move fill variable to the left
-alluvial_long( data, key, value, id, fill, fill_right = F )
+ # move fill variable to the left ---------------------------------
+ alluvial_long( data, qu, mean_arr_delay, tailnum, carrier ,fill_right = F )
 
-# reorder levels
-alluvial_long( data, key, value, id, fill_by = 'first_variable'
-                    , order_levels_value = c('on_time', 'late') )
+ # reorder levels ------------------------------------------------
+ alluvial_long( data, qu, mean_arr_delay, tailnum, fill_by = 'first_variable'
+               , order_levels_value = c('on_time', 'late') )
 
-alluvial_long( data, key, value, id, fill_by = 'first_variable'
-                    , order_levels_key = c('Q4', 'Q3', 'Q2', 'Q1') )
+ alluvial_long( data, qu, mean_arr_delay, tailnum, fill_by = 'first_variable'
+               , order_levels_key = c('Q4', 'Q3', 'Q2', 'Q1') )
 
-order_by_carrier_size = data \%>\%
- group_by(carrier) \%>\%
- count() \%>\%
- arrange( desc(n) ) \%>\%
- .[['carrier']]
+ order_by_carrier_size = data \%>\%
+   group_by(carrier) \%>\%
+   count() \%>\%
+   arrange( desc(n) ) \%>\%
+   .[['carrier']]
 
-alluvial_long( data, key, value, id, fill
-                    , order_levels_fill = order_by_carrier_size )
+ alluvial_long( data, qu, mean_arr_delay, tailnum, carrier
+                , order_levels_fill = order_by_carrier_size )
 
-}
+ }
 }
 }
 \seealso{
-\code{\link[RColorBrewer]{brewer.pal}}
- \code{\link[forcats]{fct_relevel}},\code{\link[forcats]{fct_rev}}
- \code{\link[rlang]{UQ}}
+\code{\link[easyalluvial]{alluvial_wide}}
  \code{\link[ggalluvial]{geom_flow}},\code{\link[ggalluvial]{geom_stratum}}
 }

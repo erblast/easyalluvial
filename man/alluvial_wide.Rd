@@ -14,7 +14,7 @@ alluvial_wide(data, id = NULL, max_variables = 20, bins = 5,
 \arguments{
 \item{data}{a dataframe}
 
-\item{id}{character vector denoting id column}
+\item{id}{unquoted column name of id column}
 
 \item{max_variables}{maximum number of variables, Default: 20}
 
@@ -23,15 +23,14 @@ alluvial_wide(data, id = NULL, max_variables = 20, bins = 5,
 \item{bin_labels}{labels for the bins from low to high, Default: c("LL",
 "ML", "M", "MH", "HH")}
 
-\item{NA_label}{character vector define label for missing data}
+\item{NA_label}{character vector define label for missing data, Default: 'NA'}
 
 \item{order_levels}{character vector denoting levels to be reorderer from low to high}
 
 \item{fill_by}{one_of(c('first_variable', 'last_variable', 'all_flows',
 'values')), Default: 'first_variable'}
 
-\item{col_vector_flow}{HEX colors for flows, Default:
-f_plot_col_vector74(faint = F, greys = F)}
+\item{col_vector_flow}{HEX colors for flows, Default: palette_filter( greys = F)}
 
 \item{col_vector_value}{Hex colors for y levels/values, Default:
 RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7, 5)]}
@@ -39,50 +38,48 @@ RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7, 5)]}
 \item{verbose}{logical, print plot summary, Default: F}
 }
 \value{
-OUTPUT_DESCRIPTION
+alluvial plot
 }
 \description{
 plots a dataframe as an alluvial plot. All numerical variables
-  are scaled, centered and YeoJohnson transformed before binning.
-}
-\details{
-DETAILS
+  are scaled, centered and YeoJohnson transformed before binning. Plots all
+  variables in the sequence as they appear in the dataframe until maximum
+  number of values is reached.
 }
 \examples{
 \dontrun{
 if(interactive()){
 
-data_ls = mtcars \%>\%
-  f_clean_data()
+require(tidyverse)
 
-data = data_ls$data
+data = as_tibble(mtcars)
+categoricals = c('cyl', 'vs', 'am', 'gear', 'carb')
+numericals = c('mpg', 'cyl', 'disp', 'hp', 'drat', 'wt', 'qsec')
 max_variables = 5
-variables = c( data_ls$categoricals[1:3], data_ls$numericals[1:3] )
+
+data = data \%>\%
+  mutate_at( vars(categoricals), as.factor )
+
 
 alluvial_wide( data = data
-                , variables = variables
                 , max_variables = max_variables
                 , fill_by = 'first_variable' )
 
 alluvial_wide( data = data
-                , variables = variables
                 , max_variables = max_variables
                 , fill_by = 'last_variable' )
 
 alluvial_wide( data = data
-                , variables = variables
                 , max_variables = max_variables
                 , fill_by = 'all_flows' )
 
 alluvial_wide( data = data
-                , variables = variables
                 , max_variables = max_variables
                 , fill_by = 'first_variable' )
 
 # manually order variable values
 
 alluvial_wide( data = data
-                 , variables = variables
                  , max_variables = max_variables
                  , fill_by = 'values'
                  , order_levels = c('1', '0') )
@@ -90,7 +87,6 @@ alluvial_wide( data = data
 }
 }
 \seealso{
-\code{\link[RColorBrewer]{brewer.pal}}
-  \code{\link[forcats]{fct_relevel}}
+\code{\link[easyalluvial]{alluvial_wide}}
   \code{\link[ggalluvial]{geom_flow}},\code{\link[ggalluvial]{geom_stratum}}
 }

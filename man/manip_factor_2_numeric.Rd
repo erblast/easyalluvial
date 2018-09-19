@@ -2,7 +2,8 @@
 % Please edit documentation in R/manip.R
 \name{manip_factor_2_numeric}
 \alias{manip_factor_2_numeric}
-\title{converts factor to numeric preserving numeric levels and order in character levels}
+\title{converts factor to numeric preserving numeric levels and order in
+  character levels.}
 \usage{
 manip_factor_2_numeric(vec)
 }
@@ -12,10 +13,14 @@ manip_factor_2_numeric(vec)
 \value{
 vector
 }
+\description{
+before converting we check whether the levels contain a number,
+  if they do the number will be preserved.
+}
 \examples{
 fac_num = factor( c(1,3,8) )
 fac_chr = factor( c('foo','bar') )
-fac_chr_ordered = factor( c('a','b','c'), ordered = T )
+fac_chr_ordered = factor( c('a','b','c'), ordered = TRUE )
 
 manip_factor_2_numeric( fac_num )
 manip_factor_2_numeric( fac_chr )

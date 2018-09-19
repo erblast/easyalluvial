@@ -45,6 +45,8 @@ filters are based on rgb values
 \dontrun{
 if(interactive()){
 
+require(tidyverse)
+
 palette_qualitative() \%>\%
   palette_filter(thresh_similar = 0) \%>\%
   palette_plot_intensity()
@@ -54,7 +56,7 @@ palette_qualitative() \%>\%
   palette_plot_intensity()
 
 palette_qualitative() \%>\%
-  palette_filter(thresh_similar = 0, blues = F) \%>\%
+  palette_filter(thresh_similar = 0, blues = FALSE) \%>\%
   palette_plot_intensity()
 
  }

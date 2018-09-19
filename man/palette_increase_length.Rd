@@ -18,6 +18,9 @@ vector with increased length
 works for any vector
 }
 \examples{
+
+require(tidyverse)
+
 length(palette_qualitative())
 
 palette_qualitative() \%>\%

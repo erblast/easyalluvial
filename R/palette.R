@@ -40,6 +40,8 @@ palette_qualitative = function(){
 #' \dontrun{
 #' if(interactive()){
 #'
+#' require(tidyverse)
+#'
 #' palette_qualitative() %>%
 #'   palette_filter(thresh_similar = 0) %>%
 #'   palette_plot_intensity()
@@ -49,7 +51,7 @@ palette_qualitative = function(){
 #'   palette_plot_intensity()
 #'
 #' palette_qualitative() %>%
-#'   palette_filter(thresh_similar = 0, blues = F) %>%
+#'   palette_filter(thresh_similar = 0, blues = FALSE) %>%
 #'   palette_plot_intensity()
 #'
 #'  }
@@ -147,6 +149,9 @@ palette_filter = function( palette = palette_qualitative()
 #' @param n, int, length, Default: 100
 #' @return vector with increased length
 #' @examples
+#'
+#' require(tidyverse)
+#'
 #' length(palette_qualitative())
 #'
 #' palette_qualitative() %>%
@@ -166,7 +171,7 @@ palette_increase_length = function( palette = palette_qualitative(), n = 100 ){
 }
 
 #' @title plot rgb values of palette
-#' @description
+#' @description grouped bar chart
 #' @param palette any vector containing color hex values
 #' @return ggplot2 plot
 #' @examples
@@ -178,7 +183,7 @@ palette_increase_length = function( palette = palette_qualitative(), n = 100 ){
 #'  }
 #' }
 #' @seealso
-#'  \code{\link[easyaluvial]{palette_plot_intensity}}
+#'  \code{\link[easyalluvial]{palette_plot_intensity}}
 #' @rdname palette_plot_rgp
 #' @export
 #' @import forcats
@@ -224,7 +229,7 @@ palette_plot_rgp = function(palette){
 #'  }
 #' }
 #' @seealso
-#'  \code{\link[easyaluvial]{palette_plot_rgp}}
+#'  \code{\link[easyalluvial]{palette_plot_rgp}}
 #' @rdname palette_plot_intensity
 #' @export
 

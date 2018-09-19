@@ -25,5 +25,5 @@ palette_qualitative() \%>\%
 }
 }
 \seealso{
-\code{\link[easyaluvial]{palette_plot_rgp}}
+\code{\link[easyalluvial]{palette_plot_rgp}}
 }

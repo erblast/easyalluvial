@@ -12,6 +12,9 @@ palette_plot_rgp(palette)
 \value{
 ggplot2 plot
 }
+\description{
+grouped bar chart
+}
 \examples{
 \dontrun{
 if(interactive()){
@@ -22,5 +25,5 @@ palette_qualitative() \%>\%
 }
 }
 \seealso{
-\code{\link[easyaluvial]{palette_plot_intensity}}
+\code{\link[easyalluvial]{palette_plot_intensity}}
 }

@@ -1,4 +1,4 @@
 library(testthat)
-library(easyggalluvial)
+library(easyalluvial)
 
-test_check("easyggalluvial")
+test_check("easyalluvial")

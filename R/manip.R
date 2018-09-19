@@ -1,20 +1,25 @@
-#' @title converts factor to numeric preserving numeric levels and order in character levels
+#' @title converts factor to numeric preserving numeric levels and order in
+#'   character levels.
+#' @description before converting we check whether the levels contain a number,
+#'   if they do the number will be preserved.
 #' @param vec vector
 #' @return vector
 #' @examples
 #' fac_num = factor( c(1,3,8) )
 #' fac_chr = factor( c('foo','bar') )
-#' fac_chr_ordered = factor( c('a','b','c'), ordered = T )
+#' fac_chr_ordered = factor( c('a','b','c'), ordered = TRUE )
 #'
 #' manip_factor_2_numeric( fac_num )
 #' manip_factor_2_numeric( fac_chr )
 #' manip_factor_2_numeric( fac_chr_ordered )
-#' @seealso
-#'  \code{\link[stringr]{str_detect}}
+#' @seealso \code{\link[stringr]{str_detect}}
 #' @rdname manip_factor_2_numeric
 #' @export
 #' @importFrom stringr str_detect
 #' @import dplyr
+#' @importFrom grDevices boxplot.stats col2rgb rgb
+#' @importFrom stats var
+#' @importFrom utils head
 manip_factor_2_numeric = function(vec){
 
   bool = as.character(vec) %>%
@@ -47,12 +52,6 @@ manip_factor_2_numeric = function(vec){
 #' @param center boolean, Default: T
 #' @param transform boolean, Default: T
 #' @return dataframe
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @rdname manip_bin_numerics
 #' @import recipes
 #' @import broom
@@ -64,7 +63,7 @@ manip_bin_numerics = function(df
                                 , scale = T
                                 , transform = T){
 
-  require(recipes)
+  requireNamespace('recipes')
 
   if( length(bin_labels) != bins ){
     stop( 'bin_labes must be equal to bins')
