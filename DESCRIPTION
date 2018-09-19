@@ -32,4 +32,5 @@ Imports:
   , rlang
   , stringr
   , tidyverse
+  , ISLR
 
