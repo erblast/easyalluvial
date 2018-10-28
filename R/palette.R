@@ -1,4 +1,15 @@
 
+
+# satisfy CMDcheck
+# https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when
+
+
+if(getRversion() >= "2.15.1"){
+  utils::globalVariables( c('hex', 'red', 'green', 'blue', 'index', 'similar_index', 'RGB') )
+}
+
+
+
 #' @title compose palette from qualitative RColorBrewer palettes
 #' @description combines all unique values found in all qualitative RColorBrewer palettes
 

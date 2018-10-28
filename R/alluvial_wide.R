@@ -1,4 +1,13 @@
 
+# satisfy CMDcheck
+# https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when
+
+
+if(getRversion() >= "2.15.1"){
+  utils::globalVariables( c('x', '.', ':=', 'alluvial_id', 'fill_flow', 'fill_value', 'value') )
+}
+
+
 
 #' @title alluvial plot of data in wide format
 #' @description plots a dataframe as an alluvial plot. All numerical variables
@@ -66,7 +75,7 @@
 #' @export
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom forcats fct_relevel
-#' @import ggalluvial
+#' @importFrom ggalluvial stat_stratum geom_flow geom_stratum StatStratum
 alluvial_wide = function( data
                             , id = NULL
                             , max_variables = 20
@@ -79,9 +88,6 @@ alluvial_wide = function( data
                             , col_vector_value =  RColorBrewer::brewer.pal(9, 'Greys')[c(3,6,4,7,5)]
                             , verbose = F
 ){
-
-  # ggalluvial package needs to be loaded entirely
-  require('ggalluvial')
 
   # quos
 
@@ -266,7 +272,7 @@ alluvial_wide = function( data
     ggalluvial::geom_stratum(  aes(fill = fill_value
                                    , color = fill_value)
     ) +
-    geom_label( stat = 'stratum') +
+    geom_label( stat = ggalluvial::StatStratum ) +
     theme(legend.position = "none" ) +
     scale_fill_identity() +
     scale_color_identity() +
