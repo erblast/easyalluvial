@@ -51,7 +51,7 @@ palette_qualitative = function(){
 #' \dontrun{
 #' if(interactive()){
 #'
-#' require(tidyverse)
+#' require(magrittr)
 #'
 #' palette_qualitative() %>%
 #'   palette_filter(thresh_similar = 0) %>%
@@ -161,7 +161,7 @@ palette_filter = function( palette = palette_qualitative()
 #' @return vector with increased length
 #' @examples
 #'
-#' require(tidyverse)
+#' require(magrittr)
 #'
 #' length(palette_qualitative())
 #'

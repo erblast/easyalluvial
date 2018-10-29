@@ -50,7 +50,8 @@ plots a dataframe as an alluvial plot. All numerical variables
 \dontrun{
 if(interactive()){
 
-require(tidyverse)
+require(magrittr)
+require(dplyr)
 
 data = as_tibble(mtcars)
 categoricals = c('cyl', 'vs', 'am', 'gear', 'carb')

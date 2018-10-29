@@ -10,15 +10,15 @@ editor_options:
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
+  warning = FALSE,
   fig.path = "README-"
 )
 ```
 
 # easyalluvial
 
-[![Travis CI Build Status](https://travis-ci.org/erblast/easyalluvial.svg?branch=master)](https://travis-ci.org/erblast/easyalluvial)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&svg=true)](https://ci.appveyor.com/project/erblast/easyalluvial)
-[![Coverage Status](https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg)](https://codecov.io/github/erblast/easyalluvial?branch=master)
+[![Travis CI Build Status](https://travis-ci.org/erblast/easyalluvial.svg?branch=master)](https://travis-ci.org/erblast/easyalluvial) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&svg=true)](https://ci.appveyor.com/project/erblast/easyalluvial) 
+<!--[![Coverage Status](https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg)](https://codecov.io/github/erblast/easyalluvial?branch=master)-->
 
 
 Alluvial plots are a form of [sankey diagrams](https://en.wikipedia.org/wiki/Sankey_diagram) that are a great tool for exploring categorical
@@ -72,7 +72,7 @@ knitr::kable( head(monthly_flights) )
 
 #### Plot 
  
-```{r long}
+```{r plot_long}
 
 require(easyalluvial)
 
@@ -89,7 +89,7 @@ alluvial_long( monthly_flights
 
 #### Prepare sample data
 
-```{r}
+```{r wide}
 
 data = as_tibble(mtcars)
 categoricals = c('cyl', 'vs', 'am', 'gear', 'carb')
@@ -105,7 +105,7 @@ data = data %>%
 
 #### Plot
 
-```{r}
+```{r wide_plot }
 
 alluvial_wide( data = data
                 , max_variables = 5

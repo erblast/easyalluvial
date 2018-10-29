@@ -71,8 +71,13 @@ Plots two variables of a dataframe on an alluvial plot. A third
 \examples{
 \dontrun{
 if(interactive()){
+
  # sample data-------------------------------------------------
- require(tidyverse)
+
+ require(magrittr)
+ require(dplyr)
+ require(tidyr)
+
  monthly_flights = nycflights13::flights \%>\%
  group_by(month, tailnum, origin, dest, carrier) \%>\%
  summarise() \%>\%

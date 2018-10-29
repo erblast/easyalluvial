@@ -33,7 +33,8 @@ if(getRversion() >= "2.15.1"){
 #' \dontrun{
 #' if(interactive()){
 #'
-#' require(tidyverse)
+#' require(magrittr)
+#' require(dplyr)
 #'
 #' data = as_tibble(mtcars)
 #' categoricals = c('cyl', 'vs', 'am', 'gear', 'carb')
@@ -76,6 +77,7 @@ if(getRversion() >= "2.15.1"){
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom forcats fct_relevel
 #' @importFrom ggalluvial stat_stratum geom_flow geom_stratum StatStratum
+#' @importFrom  magrittr %>%
 alluvial_wide = function( data
                             , id = NULL
                             , max_variables = 20

@@ -32,5 +32,5 @@ Imports:
   , nycflights13
   , rlang
   , stringr
-  , tidyverse
   , ISLR
+  , magrittr

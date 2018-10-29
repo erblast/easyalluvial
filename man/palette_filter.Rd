@@ -45,7 +45,7 @@ filters are based on rgb values
 \dontrun{
 if(interactive()){
 
-require(tidyverse)
+require(magrittr)
 
 palette_qualitative() \%>\%
   palette_filter(thresh_similar = 0) \%>\%

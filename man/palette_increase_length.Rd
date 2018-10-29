@@ -19,7 +19,7 @@ works for any vector
 }
 \examples{
 
-require(tidyverse)
+require(magrittr)
 
 length(palette_qualitative())
 
