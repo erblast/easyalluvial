@@ -7,9 +7,9 @@
 alluvial_wide(data, id = NULL, max_variables = 20, bins = 5,
   bin_labels = c("LL", "ML", "M", "MH", "HH"), NA_label = "NA",
   order_levels = NULL, fill_by = "first_variable",
-  col_vector_flow = palette_qualitative() \%>\% palette_filter(greys = F),
-  col_vector_value = RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7, 5)],
-  verbose = F)
+  col_vector_flow = palette_qualitative() \%>\% palette_filter(greys =
+  F), col_vector_value = RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4,
+  7, 5)], verbose = F)
 }
 \arguments{
 \item{data}{a dataframe}

@@ -338,7 +338,7 @@ alluvial_long = function( data
   if( ! rlang::quo_is_null(fill) ){
 
     data_new = data_new %>%
-      mutate( fill_value = ifelse( as.character(value) == as.character(rlang::UQ(fill))
+      mutate( fill_value = ifelse( as.character(value) == as.character(!!fill)
                                    , fill_flow, fill_value ) )
   }
 

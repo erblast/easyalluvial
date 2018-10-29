@@ -4,9 +4,9 @@
 \alias{palette_filter}
 \title{color filters for any vector of hex color values}
 \usage{
-palette_filter(palette = palette_qualitative(), similar = F, greys = T,
-  reds = T, greens = T, blues = T, dark = T, medium = T, bright = T,
-  thresh_similar = 25)
+palette_filter(palette = palette_qualitative(), similar = F,
+  greys = T, reds = T, greens = T, blues = T, dark = T,
+  medium = T, bright = T, thresh_similar = 25)
 }
 \arguments{
 \item{palette}{any vector with hex color values, Default: palette_qualitative()}

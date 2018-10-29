@@ -4,13 +4,14 @@
 \alias{alluvial_long}
 \title{alluvial plot of data in long format}
 \usage{
-alluvial_long(data, key, value, id, fill = NULL, fill_right = T, bins = 5,
-  bin_labels = c("LL", "ML", "M", "MH", "HH"), NA_label = "NA",
-  order_levels_value = NULL, order_levels_key = NULL,
-  order_levels_fill = NULL, complete = TRUE, fill_by = "first_variable",
-  col_vector_flow = palette_qualitative() \%>\% palette_filter(greys = F),
-  col_vector_value = RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7, 5)],
-  verbose = F)
+alluvial_long(data, key, value, id, fill = NULL, fill_right = T,
+  bins = 5, bin_labels = c("LL", "ML", "M", "MH", "HH"),
+  NA_label = "NA", order_levels_value = NULL,
+  order_levels_key = NULL, order_levels_fill = NULL, complete = TRUE,
+  fill_by = "first_variable", col_vector_flow = palette_qualitative()
+  \%>\% palette_filter(greys = F),
+  col_vector_value = RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7,
+  5)], verbose = F)
 }
 \arguments{
 \item{data}{a dataframe}
