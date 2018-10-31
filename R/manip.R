@@ -44,7 +44,7 @@ manip_factor_2_numeric = function(vec){
 #' @description centers, scales and Yeo Johnson transforms numeric variables in
 #'   a dataframe before binning into n bins of eqal range. Outliers based on
 #'   boxplot stats are capped (set to min or max of boxplot stats).
-#' @param df dataframe with numeric variables
+#' @param x dataframe with numeric variables, or numeric vector
 #' @param bins number of bins for numerical variables, Default: 5
 #' @param bin_labels labels for the bins from low to high, Default: c("LL",
 #'   "ML", "M", "MH", "HH")#' @param center boolean, Default: T
@@ -55,13 +55,26 @@ manip_factor_2_numeric = function(vec){
 #' @rdname manip_bin_numerics
 #' @import recipes
 #' @import broom
+#' @importFrom purrr is_bare_numeric
+#' @importFrom tibble is_tibble
 #' @export
-manip_bin_numerics = function(df
+manip_bin_numerics = function(x
                                 , bins = 5
                                 , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
                                 , center = T
                                 , scale = T
                                 , transform = T){
+
+
+  if(purrr::is_bare_numeric(x)){
+    df = tibble( x = x )
+    input_vector = T
+  } else if( is.data.frame(x) | is_tibble(x) ){
+    df = x
+    input_vector = F
+  } else{
+    return(x)
+  }
 
   requireNamespace('recipes')
 
@@ -109,7 +122,11 @@ manip_bin_numerics = function(df
   mutate_at( vars(numerics), function(x) cut(x, breaks = bins) ) %>%
     mutate_at( vars(numerics),  rename_levels)
 
-  return(data_new)
+  if( input_vector ){
+    return( data_new$x )
+  }else{
+    return(data_new)
+  }
 
 }
 

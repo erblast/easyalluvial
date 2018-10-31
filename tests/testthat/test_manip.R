@@ -13,6 +13,7 @@ test_that( 'manip_factor_2_numeric'
     expect_identical( manip_factor_2_numeric( fac_num ), c(1,3,8) )
     expect_identical( manip_factor_2_numeric( fac_chr ), c(2,1) )
     expect_identical( manip_factor_2_numeric( fac_chr_ordered ), c(1,2,3) )
+
 })
 
 
@@ -67,3 +68,13 @@ test_that('manip_bin_numerics zero variance columns'
 
 })
 
+test_that('manip_bin_numerics with vector'
+          , {
+
+  vec = manip_bin_numerics(mtcars$mpg)
+  expect_true( is.factor(vec) )
+
+  vec = manip_bin_numerics( as.factor(mtcars$cyl) )
+  expect_identical( vec, as.factor(mtcars$cyl) )
+
+})

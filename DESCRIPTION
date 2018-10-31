@@ -1,7 +1,7 @@
 Package: easyalluvial
 Type: Package
 Title: provides an easy to use interface for ggalluvial
-Version: 0.1.0
+Version: 0.1.1
 Author: bjoern koneswarakantha
 Maintainer: bjoern koneswarakantha <datistics@gmail.com>
 Description: Alluvial plots are a form of sankey diagrams that are a great tool for exploring categorical
@@ -34,3 +34,4 @@ Imports:
   , stringr
   , ISLR
   , magrittr
+  , tibble
