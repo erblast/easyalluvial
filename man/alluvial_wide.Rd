@@ -14,7 +14,7 @@ alluvial_wide(data, id = NULL, max_variables = 20, bins = 5,
 \arguments{
 \item{data}{a dataframe}
 
-\item{id}{unquoted column name of id column}
+\item{id}{unquoted column name of id column or character vector with id column name}
 
 \item{max_variables}{maximum number of variables, Default: 20}
 

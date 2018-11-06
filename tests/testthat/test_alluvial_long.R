@@ -36,6 +36,10 @@ test_that('alluvial_long'
   p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'all_flows' )
   p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'value' )
 
+  # strings instead of unquoted expressions
+  p = alluvial_long( data, key = 'qu', value = 'mean_arr_delay', id = 'tailnum', fill = 'carrier' )
+
+
   # use same color coding for flows and y levels
   p = alluvial_long( data, qu, mean_arr_delay, tailnum, fill_by = 'value'
                        , col_vector_flow = palette_qualitative() %>% palette_filter(greys = F, bright = F)

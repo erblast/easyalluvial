@@ -15,7 +15,7 @@ if(getRversion() >= "2.15.1"){
 #'   variables in the sequence as they appear in the dataframe until maximum
 #'   number of values is reached.
 #' @param data a dataframe
-#' @param id unquoted column name of id column
+#' @param id unquoted column name of id column or character vector with id column name
 #' @param max_variables maximum number of variables, Default: 20
 #' @param bins number of bins for numerical variables, Default: 5
 #' @param bin_labels labels for the bins from low to high, Default: c("LL",

@@ -140,10 +140,20 @@ alluvial_long = function( data
   value_str = quo_name(value)
   id_str = quo_name(id)
 
+  # in order to make the function parameters compatible with strings we convert the strings
+  # extracted from the quosures to symbols and override the quosures
+
+  key = as.name( key_str )
+  value = as.name( value_str )
+  id = as.name( id_str )
+
+  # fill
+
   if( rlang::quo_is_null(fill) ){
     fill_str = NULL
   }else{
     fill_str = quo_name(fill)
+    fill = as.name( fill_str )
   }
 
   # transform numerical variables for binning
@@ -184,7 +194,7 @@ alluvial_long = function( data
   ordered_levels_x = c( order_levels_key, levels( select(data_trans, !! key)[[1]] ) ) %>% unique()
   ordered_levels_y = c( order_levels_value, levels( select(data_trans, !! value)[[1]] ) ) %>% unique()
 
-  if( ! rlang::quo_is_null(fill) ){
+  if( ! is.null(fill_str) ){
     ordered_levels_fill = c( order_levels_fill, levels( select(data_trans, !! fill)[[1]] ) ) %>% unique()
     ordered_levels_y = c( ordered_levels_y, ordered_levels_fill)
 
@@ -232,7 +242,7 @@ alluvial_long = function( data
 
   first_x = levels(data_new$x)[1]
 
-  if( ! rlang::quo_is_null(fill) ){
+  if( ! is.null(fill_str) ){
 
     data_fill = data_new %>%
       filter( x == last_x ) %>%
@@ -340,7 +350,7 @@ alluvial_long = function( data
   })
 
 
-  if( ! rlang::quo_is_null(fill) ){
+  if( ! is.null(fill_str) ){
 
     data_new = data_new %>%
       mutate( fill_value = ifelse( as.character(value) == as.character(!!fill)
