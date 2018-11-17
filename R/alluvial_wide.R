@@ -15,20 +15,30 @@ if(getRversion() >= "2.15.1"){
 #'   variables in the sequence as they appear in the dataframe until maximum
 #'   number of values is reached.
 #' @param data a dataframe
-#' @param id unquoted column name of id column or character vector with id column name
+#' @param id unquoted column name of id column or character vector with id
+#'   column name
 #' @param max_variables maximum number of variables, Default: 20
 #' @param bins number of bins for numerical variables, Default: 5
 #' @param bin_labels labels for the bins from low to high, Default: c("LL",
 #'   "ML", "M", "MH", "HH")
 #' @param NA_label character vector define label for missing data, Default: 'NA'
-#' @param order_levels character vector denoting levels to be reorderer from low to high
+#' @param order_levels character vector denoting levels to be reorderer from low
+#'   to high
 #' @param fill_by one_of(c('first_variable', 'last_variable', 'all_flows',
 #'   'values')), Default: 'first_variable'
-#' @param col_vector_flow HEX colors for flows, Default: palette_filter( greys = F)
+#' @param col_vector_flow HEX colors for flows, Default: palette_filter( greys =
+#'   F)
 #' @param col_vector_value Hex colors for y levels/values, Default:
-#'  RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7, 5)]
+#'   RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7, 5)]
 #' @param verbose logical, print plot summary, Default: F
 #' @return alluvial plot
+#' @details Under the hood this function converts the wide format into long
+#'   format. ggalluvial also offers a way to make alluvial plots directly from
+#'   wide format tables but it does not allow individual colouring of the
+#'   stratum segments. The tradeoff is that we can only order levels as a whole
+#'   and not individually by variable, Thus if some variables have levels with
+#'   the same name the order will be the same. If we want to change level order
+#'   independently we have to assign unique level names first.
 #' @examples
 #' \dontrun{
 #' if(interactive()){
@@ -69,8 +79,7 @@ if(getRversion() >= "2.15.1"){
 #'                  , order_levels = c('1', '0') )
 #' }
 #' }
-#' @seealso
-#'   \code{\link[easyalluvial]{alluvial_wide}}
+#' @seealso \code{\link[easyalluvial]{alluvial_wide}}
 #'   \code{\link[ggalluvial]{geom_flow}},\code{\link[ggalluvial]{geom_stratum}}
 #' @rdname alluvial_wide
 #' @export
@@ -87,7 +96,7 @@ alluvial_wide = function( data
                             , order_levels = NULL
                             , fill_by = 'first_variable'
                             , col_vector_flow = palette_qualitative() %>% palette_filter( greys = F)
-                            , col_vector_value =  RColorBrewer::brewer.pal(9, 'Greys')[c(3,6,4,7,5)]
+                            , col_vector_value =  RColorBrewer::brewer.pal(9, 'Greys')[c(4,7,5,8,6)]
                             , verbose = F
 ){
 
@@ -264,7 +273,7 @@ alluvial_wide = function( data
               aes(x = x
                   , stratum = value
                   , alluvium = alluvial_id
-                  , weight = n
+                  , y = n
                   , label = value)) +
     ggalluvial::geom_flow(stat = "alluvium"
                           , lode.guidance = "leftright"

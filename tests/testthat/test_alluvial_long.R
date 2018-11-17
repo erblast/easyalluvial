@@ -83,6 +83,11 @@ test_that('alluvial_long'
                            , NA_label = 'none'
                            , order_levels_value = 'none')
 
+  # check stratum options
+  p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill = carrier
+                     , stratum_labesl = FALSE, stratum_width = 1/20)
+
+
 })
 
 
