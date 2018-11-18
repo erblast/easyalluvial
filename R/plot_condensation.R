@@ -30,6 +30,10 @@ if(getRversion() >= "2.15.1"){
 #' @examples
 #' \dontrun{
 #' if(interactive()){
+#'
+#'  require(magrittr)
+#'  require(dplyr)
+#'
 #'  df = mtcars %>%
 #'    mutate( cyl = as.factor(cyl)
 #'           , gear = as.factor(gear)

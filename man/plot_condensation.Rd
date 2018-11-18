@@ -32,6 +32,10 @@ plotting the condensation potential is meant as a decision aid
 \examples{
 \dontrun{
 if(interactive()){
+
+ require(magrittr)
+ require(dplyr)
+
  df = mtcars \%>\%
    mutate( cyl = as.factor(cyl)
           , gear = as.factor(gear)

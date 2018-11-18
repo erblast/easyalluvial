@@ -84,6 +84,7 @@ if(interactive()){
  require(magrittr)
  require(dplyr)
  require(tidyr)
+ require(purrr)
 
  monthly_flights = nycflights13::flights \%>\%
  group_by(month, tailnum, origin, dest, carrier) \%>\%
