@@ -21,7 +21,8 @@ Encoding: UTF-8
 LazyData: true
 Suggests: testthat,
     covr,
-    ISLR
+    ISLR,
+    nycflights13
 RoxygenNote: 6.1.0
 Imports:
   purrr
@@ -32,7 +33,6 @@ Imports:
   , ggplot2
   , RColorBrewer
   , recipes
-  , nycflights13
   , rlang
   , stringr
   , magrittr
