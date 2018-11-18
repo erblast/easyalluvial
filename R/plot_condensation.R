@@ -16,7 +16,7 @@ if(getRversion() >= "2.15.1"){
 #'   transformed to categoric variables and then two variables are selected by
 #'   which the dataframe will be grouped and summarized by. The pair that
 #'   results in the greatest condensation of the original dataframe is selected.
-#'   Then the next variable which offers the greates condensation potential is
+#'   Then the next variable which offers the greatest condensation potential is
 #'   chosen until all variables have been added. The condensation in percent is
 #'   then plotted for each step along with the number of groups (flows) in the
 #'   dataframe. By experience it is not advisable to have more than 1500 flows
