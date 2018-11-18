@@ -11,7 +11,8 @@ alluvial_long(data, key, value, id, fill = NULL, fill_right = T,
   fill_by = "first_variable", col_vector_flow = palette_qualitative()
   \%>\% palette_filter(greys = F),
   col_vector_value = RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7,
-  5)], verbose = F)
+  5)], verbose = F, stratum_labels = T, stratum_width = 1/4,
+  auto_rotate_xlabs = T)
 }
 \arguments{
 \item{data}{a dataframe}
@@ -58,9 +59,15 @@ be used to bring levels to the front, Default: NULL}
 Default:RColorBrewer::brewer.pal(9, 'Greys')[c(3,6,4,7,5)]}
 
 \item{verbose}{logical, print plot summary, Default: F}
+
+\item{stratum_labels}{logical, Default: TRUE}
+
+\item{stratum_width}{double, Default: 1/4}
+
+\item{auto_rotate_xlabs}{logical, Default: TRUE}
 }
 \value{
-plot
+ggplot2 object
 }
 \description{
 Plots two variables of a dataframe on an alluvial plot. A third

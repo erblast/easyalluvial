@@ -8,13 +8,15 @@ alluvial_wide(data, id = NULL, max_variables = 20, bins = 5,
   bin_labels = c("LL", "ML", "M", "MH", "HH"), NA_label = "NA",
   order_levels = NULL, fill_by = "first_variable",
   col_vector_flow = palette_qualitative() \%>\% palette_filter(greys =
-  F), col_vector_value = RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4,
-  7, 5)], verbose = F)
+  F), col_vector_value = RColorBrewer::brewer.pal(9, "Greys")[c(4, 7, 5,
+  8, 6)], verbose = F, stratum_labels = T, stratum_width = 1/4,
+  auto_rotate_xlabs = T)
 }
 \arguments{
 \item{data}{a dataframe}
 
-\item{id}{unquoted column name of id column or character vector with id column name}
+\item{id}{unquoted column name of id column or character vector with id
+column name}
 
 \item{max_variables}{maximum number of variables, Default: 20}
 
@@ -25,26 +27,43 @@ alluvial_wide(data, id = NULL, max_variables = 20, bins = 5,
 
 \item{NA_label}{character vector define label for missing data, Default: 'NA'}
 
-\item{order_levels}{character vector denoting levels to be reorderer from low to high}
+\item{order_levels}{character vector denoting levels to be reorderer from low
+to high}
 
 \item{fill_by}{one_of(c('first_variable', 'last_variable', 'all_flows',
 'values')), Default: 'first_variable'}
 
-\item{col_vector_flow}{HEX colors for flows, Default: palette_filter( greys = F)}
+\item{col_vector_flow}{HEX colors for flows, Default: palette_filter( greys =
+F)}
 
 \item{col_vector_value}{Hex colors for y levels/values, Default:
 RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7, 5)]}
 
 \item{verbose}{logical, print plot summary, Default: F}
+
+\item{stratum_labels}{logical, Default: TRUE}
+
+\item{stratum_width}{double, Default: 1/4}
+
+\item{auto_rotate_xlabs}{logical, Default: TRUE}
 }
 \value{
-alluvial plot
+ggplot2 object
 }
 \description{
 plots a dataframe as an alluvial plot. All numerical variables
   are scaled, centered and YeoJohnson transformed before binning. Plots all
   variables in the sequence as they appear in the dataframe until maximum
   number of values is reached.
+}
+\details{
+Under the hood this function converts the wide format into long
+  format. ggalluvial also offers a way to make alluvial plots directly from
+  wide format tables but it does not allow individual colouring of the
+  stratum segments. The tradeoff is that we can only order levels as a whole
+  and not individually by variable, Thus if some variables have levels with
+  the same name the order will be the same. If we want to change level order
+  independently we have to assign unique level names first.
 }
 \examples{
 \dontrun{

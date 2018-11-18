@@ -84,9 +84,27 @@ test_that('alluvial_long'
                            , order_levels_value = 'none')
 
   # check stratum options
-  p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill = carrier
-                     , stratum_labesl = FALSE, stratum_width = 1/20)
 
+  p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill = carrier
+                     , stratum_labels = FALSE, stratum_width = 1/20)
+
+  # switch off automatic  label angling
+
+  p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill = carrier
+                     , auto_rotate_xlabs = F )
+
+  # test warnign for high number of flows
+
+  suppressWarnings({
+
+  data_highflow = ggplot2::diamonds %>%
+    mutate( id = as.factor( row_number() ) ) %>%
+    manip_bin_numerics() %>%
+    gather( key = 'key', value = 'value', -id)
+
+  })
+
+  expect_warning( alluvial_long( data_highflow,  key, value, id ) )
 
 })
 

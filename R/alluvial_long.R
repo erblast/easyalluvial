@@ -35,7 +35,7 @@
 #'@param stratum_labels logical, Default: TRUE
 #'@param stratum_width double, Default: 1/4
 #'@param auto_rotate_xlabs logical, Default: TRUE
-#'@return plot
+#'@return ggplot2 object
 #'@seealso \code{\link[easyalluvial]{alluvial_wide}}
 #'  \code{\link[ggalluvial]{geom_flow}},\code{\link[ggalluvial]{geom_stratum}}
 #' @examples
@@ -130,7 +130,7 @@ alluvial_long = function( data
                           , col_vector_flow = palette_qualitative() %>% palette_filter( greys = F)
                           , col_vector_value =  RColorBrewer::brewer.pal(9, 'Greys')[c(3,6,4,7,5)]
                           , verbose = F
-                          , stratum_labesl = T
+                          , stratum_labels = T
                           , stratum_width = 1/4
                           , auto_rotate_xlabs = T
 ){
@@ -328,7 +328,12 @@ alluvial_long = function( data
   caption = paste( line1, line2, line3, sep = '\n' )
 
   if(n_flows >= 1500){
-    warning( paste( nflows, ' flows are a lot and the plot will take a long time to render') )
+
+    print( line1 )
+    print( line2 )
+    print( line3 )
+
+    warning( paste( n_flows, ' flows are a lot and the plot will take a long time to render') )
   }
 
   #adjust col_vector length fill flows
@@ -388,7 +393,7 @@ alluvial_long = function( data
     scale_color_identity() +
     labs( x = '', y = 'count', caption = caption)
 
-  if(stratum_labesl){
+  if(stratum_labels){
     p = p + geom_label( stat = ggalluvial::StatStratum )
   }
 
@@ -400,7 +405,7 @@ alluvial_long = function( data
     max()
 
 
-  if( max_length_x_level > 5 & auto_rotate_xlabs = T ){
+  if( max_length_x_level > 5 & auto_rotate_xlabs ){
     p = p +
       theme( axis.text.x = element_text( angle = 90, vjust = 0.5 , hjust = 0 ) )
   }

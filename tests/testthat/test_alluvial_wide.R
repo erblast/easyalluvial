@@ -66,6 +66,8 @@ test_that('alluvial_wide'
 
     p = alluvial_wide( data, id = name_x, max_variables = 5 )
 
+    p = alluvial_wide( data, id = name_x, max_variables = 5, auto_rotate_xlabs = F )
+
     # check NA behavoir, rename label ando order to front
 
     data$cylinders[1:4] = NA
@@ -76,6 +78,19 @@ test_that('alluvial_wide'
                          , NA_label = 'none'
                          , order_levels = 'none' )
 
+
+    # test statum options
+
+    p = alluvial_wide( data = data
+                       , max_variables = max_variables
+                       , fill_by = 'first_variable'
+                       , stratum_labels = F
+                       , stratum_width = 1/20 )
+
+
+    # test warning for high flow numbers
+
+    expect_warning( alluvial_wide( data = ggplot2::diamonds) )
 
   })
 

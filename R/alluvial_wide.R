@@ -4,7 +4,7 @@
 
 
 if(getRversion() >= "2.15.1"){
-  utils::globalVariables( c('x', '.', ':=', 'alluvial_id', 'fill_flow', 'fill_value', 'value') )
+  utils::globalVariables( c('x', '.', ':=', 'alluvial_id', 'fill_flow', 'fill_value', 'value' ) )
 }
 
 
@@ -31,7 +31,10 @@ if(getRversion() >= "2.15.1"){
 #' @param col_vector_value Hex colors for y levels/values, Default:
 #'   RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7, 5)]
 #' @param verbose logical, print plot summary, Default: F
-#' @return alluvial plot
+#' @param stratum_labels logical, Default: TRUE
+#' @param stratum_width double, Default: 1/4
+#' @param auto_rotate_xlabs logical, Default: TRUE
+#' @return ggplot2 object
 #' @details Under the hood this function converts the wide format into long
 #'   format. ggalluvial also offers a way to make alluvial plots directly from
 #'   wide format tables but it does not allow individual colouring of the
@@ -98,6 +101,9 @@ alluvial_wide = function( data
                             , col_vector_flow = palette_qualitative() %>% palette_filter( greys = F)
                             , col_vector_value =  RColorBrewer::brewer.pal(9, 'Greys')[c(4,7,5,8,6)]
                             , verbose = F
+                            , stratum_labels = T
+                            , stratum_width = 1/4
+                            , auto_rotate_xlabs = T
 ){
 
   # quos
@@ -241,6 +247,15 @@ alluvial_wide = function( data
 
   caption = paste( line1, line2, line3, sep = '\n' )
 
+  if(n_flows >= 1500){
+
+    print( line1 )
+    print( line2 )
+    print( line3 )
+
+    warning( paste( n_flows, ' flows are a lot and the plot will take a long time to render') )
+  }
+
   #adjust col_vector length fill flows
 
   n_colors_needed = length( unique(data_new$fill) )
@@ -279,15 +294,20 @@ alluvial_wide = function( data
                           , lode.guidance = "leftright"
                           , aes( fill = fill_flow
                                  , color = fill_flow )
+                          , width = stratum_width
     ) +
     ggalluvial::geom_stratum(  aes(fill = fill_value
                                    , color = fill_value)
+                               , width = stratum_width
     ) +
-    geom_label( stat = ggalluvial::StatStratum ) +
     theme(legend.position = "none" ) +
     scale_fill_identity() +
     scale_color_identity() +
     labs( x = '', y = 'count', caption = caption)
+
+  if(stratum_labels){
+    p = p + geom_label( stat = ggalluvial::StatStratum )
+  }
 
   # angle x labels------------------------------------
 
@@ -295,7 +315,7 @@ alluvial_wide = function( data
     map_int( nchar ) %>%
     max()
 
-  if( max_length_x_level > 5 ){
+  if( max_length_x_level > 5 & auto_rotate_xlabs ){
     p = p +
       theme( axis.text.x = element_text( angle = 90 ) )
   }
