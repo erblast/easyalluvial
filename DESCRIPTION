@@ -1,7 +1,7 @@
 Package: easyalluvial
 Type: Package
 Title: Generate Alluvial Plots with a Single Line of Code
-Version: 0.1.900
+Version: 0.1.5
 Author: bjoern koneswarakantha
 Maintainer: bjoern koneswarakantha <datistics@gmail.com>
 Description: Alluvial plots are a form of sankey diagram that are a great tool for 
