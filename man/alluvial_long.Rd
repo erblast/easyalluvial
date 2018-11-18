@@ -17,13 +17,13 @@ alluvial_long(data, key, value, id, fill = NULL, fill_right = T,
 \arguments{
 \item{data}{a dataframe}
 
-\item{key}{unqoted column name of x axis variable}
+\item{key}{unqoted column name or string of x axis variable}
 
-\item{value}{unqoted column name of y axis variable}
+\item{value}{unqoted column name or string of y axis variable}
 
-\item{id}{unqoted column name of id column}
+\item{id}{unqoted column name or string of id column}
 
-\item{fill}{unqoted column name of fill variable for which will be used to
+\item{fill}{unqoted column name or string of fill variable which will be used to
 color flows, Default: NULL}
 
 \item{fill_right}{logical, TRUE fill variable is added to the right FALSE to
@@ -55,7 +55,7 @@ be used to bring levels to the front, Default: NULL}
 
 \item{col_vector_flow}{HEX color values for flows, Default: palette_filter( greys = F)}
 
-\item{col_vector_value}{Hex color values  for y levels/values,
+\item{col_vector_value}{HEX color values  for y levels/values,
 Default:RColorBrewer::brewer.pal(9, 'Greys')[c(3,6,4,7,5)]}
 
 \item{verbose}{logical, print plot summary, Default: F}
@@ -71,7 +71,7 @@ ggplot2 object
 }
 \description{
 Plots two variables of a dataframe on an alluvial plot. A third
- variable can be added either two the left or the right of the alluvial plot
+ variable can be added either to the left or the right of the alluvial plot
  to provide coloring of the flows. All numerical variables are scaled,
  centered and YeoJohnson transformed before binning.
 }
@@ -143,5 +143,5 @@ if(interactive()){
 }
 \seealso{
 \code{\link[easyalluvial]{alluvial_wide}}
- \code{\link[ggalluvial]{geom_flow}},\code{\link[ggalluvial]{geom_stratum}}
+ ,\code{\link[ggalluvial]{geom_flow}}, \code{\link[ggalluvial]{geom_stratum}}
 }

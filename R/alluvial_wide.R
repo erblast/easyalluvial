@@ -83,13 +83,13 @@ if(getRversion() >= "2.15.1"){
 #' }
 #' }
 #' @seealso \code{\link[easyalluvial]{alluvial_wide}}
-#'   \code{\link[ggalluvial]{geom_flow}},\code{\link[ggalluvial]{geom_stratum}}
+#'   , \code{\link[ggalluvial]{geom_flow}}, \code{\link[ggalluvial]{geom_stratum}}
 #' @rdname alluvial_wide
 #' @export
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom forcats fct_relevel
 #' @importFrom ggalluvial stat_stratum geom_flow geom_stratum StatStratum
-#' @importFrom  magrittr %>%
+#' @importFrom magrittr %>%
 alluvial_wide = function( data
                             , id = NULL
                             , max_variables = 20

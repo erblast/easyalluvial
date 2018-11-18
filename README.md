@@ -3,11 +3,20 @@
 easyalluvial
 ============
 
-[![Travis CI Build Status](https://travis-ci.org/erblast/easyalluvial.svg?branch=master)](https://travis-ci.org/erblast/easyalluvial) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&svg=true)](https://ci.appveyor.com/project/erblast/easyalluvial) [![Coverage Status](https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg)](https://codecov.io/github/erblast/easyalluvial?branch=master)
+[![Travis CI Build Status](https://travis-ci.org/erblast/easyalluvial.svg?branch=master)](https://travis-ci.org/erblast/easyalluvial) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&svg=true)](https://ci.appveyor.com/project/erblast/easyalluvial) <!--[![Coverage Status](https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg)](https://codecov.io/github/erblast/easyalluvial?branch=master)-->
 
-Alluvial Plots can be a powerfull tool to visualise categorical data. It will group observations that have similar values across a set of dimensions and visualise them as flows. The individual flows can be emphasised through different colouring options.
+<img src="https://www.datisticsblog.com/easyalluvial_logo_square.png" alt="logo" width="240" height="240"/>
 
-Alluvial plots are a form of [sankey diagrams](https://en.wikipedia.org/wiki/Sankey_diagram) that are a great tool for exploring categorical data. They group categorical data into flows that can easily be traced in the diagram. Other than sankey diagrams they are constrained to x-y dimensions, however their graphical grammar however is a bit mor complex then that of a regular x-y plot. The [`ggalluvial`](http://corybrunson.github.io/ggalluvial/) package made a great job of translating that grammar into ggplot2 synthax and gives you many option to tweak the appearance of a plot, nevertheless there still remains a multilayered complexity that makes it difficult to use `ggalluvial` for explorative data analysis. `easyalluvial` provides a simple interface to this package that allows you to put out a decent alluvial from any dataframe where data is stored in either long or wide format while automatically binning continuous data. It is meant to allow a quick visualisation of entire dataframes similar to the visualisations created by the [`tabplot`](https://github.com/mtennekes/tabplot) package providing different colouring options which give it the flexibility needed for data exploration.
+Alluvial plots are a form of [sankey diagrams](https://en.wikipedia.org/wiki/Sankey_diagram) that are a great tool for exploring categorical data. They group categorical data into flows that can easily be traced in the diagram. Other than sankey diagrams they are constrained to x-y dimensions, however their graphical grammar however is a bit more complex then that of a regular x-y plot. The [`ggalluvial`](http://corybrunson.github.io/ggalluvial/) package made a great job of translating that grammar into ggplot2 syntax and gives you many option to tweak the appearance of a plot, nevertheless there still remains a multi-layered complexity that makes it difficult to use `ggalluvial` for explorative data analysis. `easyalluvial` provides a simple interface to this package that allows you to put out a decent alluvial from any dataframe where data is stored in either long or wide format while automatically binning continuous data. It is meant to allow a quick visualisation of entire dataframes similar to the visualisations created by the [`tabplot`](https://github.com/mtennekes/tabplot) package providing different colouring options which give it the flexibility needed for data exploration.
+
+Features
+--------
+
+-   plot alluvial graph with a single line of code of a given dataframe
+-   support for wide and long data format [(wiki, wide vs. long/narrow data)](https://en.wikipedia.org/wiki/Wide_and_narrow_data)
+-   automatically transforms numerical to categorical data
+-   helper functions for variable selection
+-   convenient parameters for coloring and ordering
 
 Installation
 ------------
@@ -19,22 +28,48 @@ You can install easyalluvial from github with:
 devtools::install_github("erblast/easyalluvial")
 ```
 
+Tutorials
+---------
+
+-   [Data exploration with alluvial plots](https://www.datisticsblog.com/2018/10/intro_easyalluvial/#features)
+
+Examples
+--------
+
+### Alluvial from data in wide format
+
+#### Prepare sample data
+
+``` r
+
+suppressPackageStartupMessages( require(tidyverse) )
+suppressPackageStartupMessages( require(easyalluvial) )
+
+data = as_tibble(mtcars)
+categoricals = c('cyl', 'vs', 'am', 'gear', 'carb')
+numericals = c('mpg', 'cyl', 'disp', 'hp', 'drat', 'wt', 'qsec')
+
+data = data %>%
+  mutate_at( vars(categoricals), as.factor )
+```
+
+#### Plot
+
+``` r
+
+alluvial_wide( data = data
+                , max_variables = 5
+                , fill_by = 'first_variable' )
+```
+
+![](man/figures/README-wide_plot-1.png)
+
 ### Alluvial from data in long format
 
 #### Prepare sample data
 
 ``` r
 
-require(tidyverse)
-#> Loading required package: tidyverse
-#> -- Attaching packages ------------------------------------------------------------------------ tidyverse 1.2.1 --
-#> v ggplot2 3.1.0     v purrr   0.2.5
-#> v tibble  1.4.2     v dplyr   0.7.7
-#> v tidyr   0.8.2     v stringr 1.3.1
-#> v readr   1.1.1     v forcats 0.3.0
-#> -- Conflicts --------------------------------------------------------------------------- tidyverse_conflicts() --
-#> x dplyr::filter() masks stats::filter()
-#> x dplyr::lag()    masks stats::lag()
 
 monthly_flights = nycflights13::flights %>%
   group_by(month, tailnum, origin, dest, carrier) %>%
@@ -72,8 +107,7 @@ knitr::kable( head(monthly_flights) )
 
 ``` r
 
-require(easyalluvial)
-#> Loading required package: easyalluvial
+
 
 alluvial_long( monthly_flights
                , key = qu
@@ -82,29 +116,4 @@ alluvial_long( monthly_flights
                , fill = carrier )
 ```
 
-![](README-plot_long-1.png)
-
-### Alluvial from data in wide format
-
-#### Prepare sample data
-
-``` r
-
-data = as_tibble(mtcars)
-categoricals = c('cyl', 'vs', 'am', 'gear', 'carb')
-numericals = c('mpg', 'cyl', 'disp', 'hp', 'drat', 'wt', 'qsec')
-
-data = data %>%
-  mutate_at( vars(categoricals), as.factor )
-```
-
-#### Plot
-
-``` r
-
-alluvial_wide( data = data
-                , max_variables = 5
-                , fill_by = 'first_variable' )
-```
-
-![](README-wide_plot-1.png)
+![](man/figures/README-plot_long-1.png)

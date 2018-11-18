@@ -54,7 +54,6 @@ manip_factor_2_numeric = function(vec){
 #' @return dataframe
 #' @rdname manip_bin_numerics
 #' @import recipes
-#' @import broom
 #' @importFrom purrr is_bare_numeric
 #' @importFrom tibble is_tibble
 #' @export

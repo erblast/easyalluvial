@@ -108,5 +108,5 @@ alluvial_wide( data = data
 }
 \seealso{
 \code{\link[easyalluvial]{alluvial_wide}}
-  \code{\link[ggalluvial]{geom_flow}},\code{\link[ggalluvial]{geom_stratum}}
+  , \code{\link[ggalluvial]{geom_flow}}, \code{\link[ggalluvial]{geom_stratum}}
 }

@@ -1,5 +1,7 @@
 
 require(hexSticker)
+require(tidyverse)
+require(easyalluvial)
 
 monthly_flights = nycflights13::flights %>%
   group_by(month, tailnum, origin, dest, carrier) %>%

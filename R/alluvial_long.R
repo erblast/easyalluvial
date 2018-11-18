@@ -1,14 +1,14 @@
 
 #'@title alluvial plot of data in long format
 #'@description Plots two variables of a dataframe on an alluvial plot. A third
-#'  variable can be added either two the left or the right of the alluvial plot
+#'  variable can be added either to the left or the right of the alluvial plot
 #'  to provide coloring of the flows. All numerical variables are scaled,
 #'  centered and YeoJohnson transformed before binning.
 #'@param data a dataframe
-#'@param key unqoted column name of x axis variable
-#'@param value unqoted column name of y axis variable
-#'@param id unqoted column name of id column
-#'@param fill unqoted column name of fill variable for which will be used to
+#'@param key unqoted column name or string of x axis variable
+#'@param value unqoted column name or string of y axis variable
+#'@param id unqoted column name or string of id column
+#'@param fill unqoted column name or string of fill variable which will be used to
 #'  color flows, Default: NULL
 #'@param fill_right logical, TRUE fill variable is added to the right FALSE to
 #'  the left, Default: T
@@ -29,7 +29,7 @@
 #'@param fill_by one_of(c('first_variable', 'last_variable', 'all_flows',
 #'  'values')), Default: 'first_variable'
 #'@param col_vector_flow HEX color values for flows, Default: palette_filter( greys = F)
-#'@param col_vector_value Hex color values  for y levels/values,
+#'@param col_vector_value HEX color values  for y levels/values,
 #'  Default:RColorBrewer::brewer.pal(9, 'Greys')[c(3,6,4,7,5)]
 #'@param verbose logical, print plot summary, Default: F
 #'@param stratum_labels logical, Default: TRUE
@@ -37,7 +37,7 @@
 #'@param auto_rotate_xlabs logical, Default: TRUE
 #'@return ggplot2 object
 #'@seealso \code{\link[easyalluvial]{alluvial_wide}}
-#'  \code{\link[ggalluvial]{geom_flow}},\code{\link[ggalluvial]{geom_stratum}}
+#'  ,\code{\link[ggalluvial]{geom_flow}}, \code{\link[ggalluvial]{geom_stratum}}
 #' @examples
 #' \dontrun{
 #' if(interactive()){
@@ -47,6 +47,7 @@
 #'  require(magrittr)
 #'  require(dplyr)
 #'  require(tidyr)
+#'  require(purrr)
 #'
 #'  monthly_flights = nycflights13::flights %>%
 #'  group_by(month, tailnum, origin, dest, carrier) %>%
