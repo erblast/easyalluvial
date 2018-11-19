@@ -42,7 +42,7 @@ manip_factor_2_numeric = function(vec){
 
 #' @title bin numerical columns
 #' @description centers, scales and Yeo Johnson transforms numeric variables in
-#'   a dataframe before binning into n bins of eqal range. Outliers based on
+#'   a dataframe before binning into n bins of equal range. Outliers based on
 #'   boxplot stats are capped (set to min or max of boxplot stats).
 #' @param x dataframe with numeric variables, or numeric vector
 #' @param bins number of bins for numerical variables, Default: 5
