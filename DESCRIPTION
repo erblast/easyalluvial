@@ -23,7 +23,7 @@ Suggests: testthat,
     covr,
     ISLR,
     nycflights13
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Imports:
   purrr
   , tidyr
