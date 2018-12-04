@@ -30,8 +30,6 @@ plotting the condensation potential is meant as a decision aid
   chosen as a starting variable.
 }
 \examples{
-\dontrun{
-if(interactive()){
 
  require(magrittr)
  require(dplyr)
@@ -46,8 +44,6 @@ if(interactive()){
 
  plot_condensation(df, first = 'disp')
 
- }
-}
 }
 \seealso{
 \code{\link[rlang]{quosure}} \code{\link[purrr]{reexports}}

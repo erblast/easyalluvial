@@ -48,8 +48,6 @@ palette_qualitative = function(){
 #' @param thresh_similar, int, threshold for defining similar colours, see similar, Default: 25
 #' @return vector with hex colors
 #' @examples
-#' \dontrun{
-#' if(interactive()){
 #'
 #' require(magrittr)
 #'
@@ -65,8 +63,6 @@ palette_qualitative = function(){
 #'   palette_filter(thresh_similar = 0, blues = FALSE) %>%
 #'   palette_plot_intensity()
 #'
-#'  }
-#' }
 #' @rdname palette_filter
 #' @export
 palette_filter = function( palette = palette_qualitative()

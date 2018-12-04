@@ -39,41 +39,18 @@
 #'@seealso \code{\link[easyalluvial]{alluvial_wide}}
 #'  ,\code{\link[ggalluvial]{geom_flow}}, \code{\link[ggalluvial]{geom_stratum}}
 #' @examples
-#' \dontrun{
-#' if(interactive()){
-#'
 #'  # sample data-------------------------------------------------
 #'
 #'  require(magrittr)
-#'  require(dplyr)
-#'  require(tidyr)
-#'  require(purrr)
 #'
-#'  monthly_flights = nycflights13::flights %>%
-#'  group_by(month, tailnum, origin, dest, carrier) %>%
-#'  summarise() %>%
-#'  group_by( tailnum, origin, dest, carrier) %>%
-#'  count() %>%
-#'  filter( n == 12 ) %>%
-#'  select( - n ) %>%
-#'  left_join( nycflights13::flights ) %>%
-#'  .[complete.cases(.), ] %>%
-#'  ungroup() %>%
-#'  mutate( tailnum = pmap_chr(list(tailnum, origin, dest, carrier), paste )
-#'          , qu = cut(month, 4)) %>%
-#'  group_by(tailnum, carrier, origin, dest, qu ) %>%
-#'  summarise( mean_arr_delay = mean(arr_delay) ) %>%
-#'  ungroup() %>%
-#'  mutate( mean_arr_delay = ifelse( mean_arr_delay < 10, 'on_time', 'late' ) )
+#'  data = quarterly_flights
 #'
-#'  levels(monthly_flights$qu) = c('Q1', 'Q2', 'Q3', 'Q4')
-#'
-#'  data = monthly_flights
-#'
-#'
-#'  # flow coloring variants -----------------------------------------
-#'  alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill = carrier )
 #'  alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'last_variable' )
+#'
+#'\dontrun{
+#'
+#'  # more flow coloring variants ------------------------------------
+#'
 #'  alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'first_variable' )
 #'  alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'all_flows' )
 #'  alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'value' )
@@ -102,17 +79,17 @@
 #'  alluvial_long( data, qu, mean_arr_delay, tailnum, carrier
 #'                 , order_levels_fill = order_by_carrier_size )
 #'
-#'  }
-#' }
+#'}
+#'
 #'@rdname alluvial_long
 #'@export
 #'@importFrom RColorBrewer brewer.pal
 #'@importFrom forcats fct_relevel fct_rev
 #'@importFrom rlang UQ quo_is_null
+#'@importFrom tidyr unnest gather complete spread
 #'@import ggalluvial
 #'@import dplyr
 #'@import purrr
-#'@import tidyr
 #'@import ggplot2
 alluvial_long = function( data
                           , key

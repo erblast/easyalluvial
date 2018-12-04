@@ -4,7 +4,7 @@
 
 
 if(getRversion() >= "2.15.1"){
-  utils::globalVariables( c('x', '.', ':=', 'alluvial_id', 'fill_flow', 'fill_value', 'value' ) )
+  utils::globalVariables( c('x', '.', ':=', 'alluvial_id', 'fill_flow', 'fill_value', 'value', 'fill' ) )
 }
 
 
@@ -43,8 +43,6 @@ if(getRversion() >= "2.15.1"){
 #'   the same name the order will be the same. If we want to change level order
 #'   independently we have to assign unique level names first.
 #' @examples
-#' \dontrun{
-#' if(interactive()){
 #'
 #' require(magrittr)
 #' require(dplyr)
@@ -62,6 +60,9 @@ if(getRversion() >= "2.15.1"){
 #'                 , max_variables = max_variables
 #'                 , fill_by = 'first_variable' )
 #'
+#'\dontrun{
+#'
+#' # more coloring variants----------------------
 #' alluvial_wide( data = data
 #'                 , max_variables = max_variables
 #'                 , fill_by = 'last_variable' )
@@ -74,14 +75,14 @@ if(getRversion() >= "2.15.1"){
 #'                 , max_variables = max_variables
 #'                 , fill_by = 'first_variable' )
 #'
-#' # manually order variable values
+#' # manually order variable values---------------
 #'
 #' alluvial_wide( data = data
 #'                  , max_variables = max_variables
 #'                  , fill_by = 'values'
 #'                  , order_levels = c('1', '0') )
-#' }
-#' }
+#'}
+#'
 #' @seealso \code{\link[easyalluvial]{alluvial_wide}}
 #'   , \code{\link[ggalluvial]{geom_flow}}, \code{\link[ggalluvial]{geom_stratum}}
 #' @rdname alluvial_wide

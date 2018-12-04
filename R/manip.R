@@ -51,6 +51,9 @@ manip_factor_2_numeric = function(vec){
 #' @param scale boolean, Default: T
 #' @param center boolean, Default: T
 #' @param transform boolean, Default: T
+#' @examples
+#' summary( mtcars )
+#' summary( manip_bin_numerics(mtcars) )
 #' @return dataframe
 #' @rdname manip_bin_numerics
 #' @import recipes

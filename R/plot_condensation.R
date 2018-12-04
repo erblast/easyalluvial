@@ -28,8 +28,6 @@ if(getRversion() >= "2.15.1"){
 #'   picked for condensation, Default: NULL
 #' @return ggplot2 plot
 #' @examples
-#' \dontrun{
-#' if(interactive()){
 #'
 #'  require(magrittr)
 #'  require(dplyr)
@@ -44,8 +42,6 @@ if(getRversion() >= "2.15.1"){
 #'
 #'  plot_condensation(df, first = 'disp')
 #'
-#'  }
-#' }
 #' @seealso \code{\link[rlang]{quosure}} \code{\link[purrr]{reexports}}
 #'   \code{\link[RColorBrewer]{RColorBrewer}}
 #' @rdname plot_condensation

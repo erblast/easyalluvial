@@ -42,8 +42,6 @@ vector with hex colors
 filters are based on rgb values
 }
 \examples{
-\dontrun{
-if(interactive()){
 
 require(magrittr)
 
@@ -59,6 +57,4 @@ palette_qualitative() \%>\%
   palette_filter(thresh_similar = 0, blues = FALSE) \%>\%
   palette_plot_intensity()
 
- }
-}
 }

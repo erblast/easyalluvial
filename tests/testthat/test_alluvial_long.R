@@ -6,28 +6,7 @@ test_that('alluvial_long'
 
   # sample data
 
-  suppressMessages({
-    monthly_flights = nycflights13::flights %>%
-      group_by(month, tailnum, origin, dest, carrier) %>%
-      summarise() %>%
-      group_by( tailnum, origin, dest, carrier) %>%
-      count() %>%
-      filter( n == 12 ) %>%
-      select( - n ) %>%
-      left_join( nycflights13::flights ) %>%
-      .[complete.cases(.), ] %>%
-      ungroup() %>%
-      mutate( tailnum = pmap_chr(list(tailnum, origin, dest, carrier), paste )
-              , qu = cut(month, 4)) %>%
-      group_by(tailnum, carrier, origin, dest, qu ) %>%
-      summarise( mean_arr_delay = mean(arr_delay) ) %>%
-      ungroup() %>%
-      mutate( mean_arr_delay = ifelse( mean_arr_delay < 10, 'on_time', 'late' ) )
-  })
-
-  levels(monthly_flights$qu) = c('Q1', 'Q2', 'Q3', 'Q4')
-
-  data = monthly_flights
+  data = quarterly_flights
 
   # flow coloring variants
   p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill = carrier )
@@ -70,7 +49,7 @@ test_that('alluvial_long'
 
   #check with incomplete data
 
-  data = monthly_flights %>%
+  data = quarterly_flights %>%
     select(tailnum, qu, mean_arr_delay, carrier) %>%
     sample_frac(0.9)
 

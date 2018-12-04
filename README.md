@@ -3,8 +3,7 @@
 easyalluvial
 ============
 
-[![Travis CI Build Status](https://travis-ci.org/erblast/easyalluvial.svg?branch=master)](https://travis-ci.org/erblast/easyalluvial) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&svg=true)](https://ci.appveyor.com/project/erblast/easyalluvial) 
-[![Coverage Status](https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg)](https://codecov.io/github/erblast/easyalluvial?branch=master)
+[![Travis CI Build Status](https://travis-ci.org/erblast/easyalluvial.svg?branch=master)](https://travis-ci.org/erblast/easyalluvial) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&svg=true)](https://ci.appveyor.com/project/erblast/easyalluvial) [![Coverage Status](https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg)](https://codecov.io/github/erblast/easyalluvial?branch=master)
 
 <img src="https://www.datisticsblog.com/easyalluvial_logo_square.png" alt="logo" width="240" height="240"/>
 
@@ -67,32 +66,11 @@ alluvial_wide( data = data
 
 ### Alluvial from data in long format
 
-#### Prepare sample data
+#### Sample Data
 
 ``` r
 
-
-monthly_flights = nycflights13::flights %>%
-  group_by(month, tailnum, origin, dest, carrier) %>%
-  summarise() %>%
-  group_by( tailnum, origin, dest, carrier) %>%
-  count() %>%
-  filter( n == 12 ) %>%
-  select( - n ) %>%
-  left_join( nycflights13::flights ) %>%
-  .[complete.cases(.), ] %>%
-  ungroup() %>%
-  mutate( tailnum = pmap_chr(list(tailnum, origin, dest, carrier), paste )
-          , qu = cut(month, 4)) %>%
-  group_by(tailnum, carrier, origin, dest, qu ) %>%
-  summarise( mean_arr_delay = mean(arr_delay) ) %>%
-  ungroup() %>%
-  mutate( mean_arr_delay = ifelse( mean_arr_delay < 10, 'on_time', 'late' ) )
-#> Joining, by = c("tailnum", "origin", "dest", "carrier")
-  
-  levels(monthly_flights$qu) = c('Q1', 'Q2', 'Q3', 'Q4')
-  
-knitr::kable( head(monthly_flights) )
+knitr::kable( head(quarterly_flights) )
 ```
 
 | tailnum           | carrier | origin | dest | qu  | mean\_arr\_delay |
@@ -108,9 +86,7 @@ knitr::kable( head(monthly_flights) )
 
 ``` r
 
-
-
-alluvial_long( monthly_flights
+alluvial_long( quarterly_flights
                , key = qu
                , value = mean_arr_delay
                , id = tailnum

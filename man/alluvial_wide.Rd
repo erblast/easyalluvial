@@ -66,8 +66,6 @@ Under the hood this function converts the wide format into long
   independently we have to assign unique level names first.
 }
 \examples{
-\dontrun{
-if(interactive()){
 
 require(magrittr)
 require(dplyr)
@@ -85,6 +83,9 @@ alluvial_wide( data = data
                 , max_variables = max_variables
                 , fill_by = 'first_variable' )
 
+\dontrun{
+
+# more coloring variants----------------------
 alluvial_wide( data = data
                 , max_variables = max_variables
                 , fill_by = 'last_variable' )
@@ -97,14 +98,14 @@ alluvial_wide( data = data
                 , max_variables = max_variables
                 , fill_by = 'first_variable' )
 
-# manually order variable values
+# manually order variable values---------------
 
 alluvial_wide( data = data
                  , max_variables = max_variables
                  , fill_by = 'values'
                  , order_levels = c('1', '0') )
 }
-}
+
 }
 \seealso{
 \code{\link[easyalluvial]{alluvial_wide}}
