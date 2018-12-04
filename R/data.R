@@ -1,6 +1,6 @@
 
 
-#'Quarterly mean arrival delay times for a set of flights
+#'Quarterly mean arrival delay times for a set of 402 flights
 #'
 #'Created from nycflights13::flights
 #'

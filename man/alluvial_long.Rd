@@ -76,15 +76,12 @@ Plots two variables of a dataframe on an alluvial plot. A third
  centered and YeoJohnson transformed before binning.
 }
 \examples{
- # sample data-------------------------------------------------
 
- require(magrittr)
 
  data = quarterly_flights
 
  alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'last_variable' )
 
-\dontrun{
 
  # more flow coloring variants ------------------------------------
 
@@ -92,20 +89,29 @@ Plots two variables of a dataframe on an alluvial plot. A third
  alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'all_flows' )
  alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'value' )
 
- # use same color coding for flows and y levels -------------------
- alluvial_long( data, qu, mean_arr_delay, tailnum, fill_by = 'value'
- , col_vector_flow = palette_qualitative() \%>\% palette_filter(greys = F, bright = F)
- , col_vector_value = palette_qualitative() \%>\% palette_filter(greys = F, bright = F) )
+ # color by additional variable carrier ---------------------------
 
- # move fill variable to the left ---------------------------------
- alluvial_long( data, qu, mean_arr_delay, tailnum, carrier ,fill_right = F )
+ alluvial_long( data, key = qu, value = mean_arr_delay, fill = carrier, id = tailnum )
+
+ # use same color coding for flows and y levels -------------------
+
+ palette = c('green3', 'tomato')
+
+ alluvial_long( data, qu, mean_arr_delay, tailnum, fill_by = 'value'
+                , col_vector_flow = palette
+                , col_vector_value = palette )
+
 
  # reorder levels ------------------------------------------------
+
  alluvial_long( data, qu, mean_arr_delay, tailnum, fill_by = 'first_variable'
                , order_levels_value = c('on_time', 'late') )
 
  alluvial_long( data, qu, mean_arr_delay, tailnum, fill_by = 'first_variable'
                , order_levels_key = c('Q4', 'Q3', 'Q2', 'Q1') )
+
+require(dplyr)
+require(magrittr)
 
  order_by_carrier_size = data \%>\%
    group_by(carrier) \%>\%
@@ -116,7 +122,6 @@ Plots two variables of a dataframe on an alluvial plot. A third
  alluvial_long( data, qu, mean_arr_delay, tailnum, carrier
                 , order_levels_fill = order_by_carrier_size )
 
-}
 
 }
 \seealso{

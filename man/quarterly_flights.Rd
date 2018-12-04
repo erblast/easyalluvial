@@ -3,7 +3,7 @@
 \docType{data}
 \name{quarterly_flights}
 \alias{quarterly_flights}
-\title{Quarterly mean arrival delay times for a set of flights}
+\title{Quarterly mean arrival delay times for a set of 402 flights}
 \format{A data frame with 1608 rows and 6 variables
 \describe{
  \item{tailnum}{
