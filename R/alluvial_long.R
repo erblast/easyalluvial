@@ -5,10 +5,10 @@
 #'  to provide coloring of the flows. All numerical variables are scaled,
 #'  centered and YeoJohnson transformed before binning.
 #'@param data a dataframe
-#'@param key unqoted column name or string of x axis variable
-#'@param value unqoted column name or string of y axis variable
-#'@param id unqoted column name or string of id column
-#'@param fill unqoted column name or string of fill variable which will be used to
+#'@param key unquoted column name or string of x axis variable
+#'@param value unquoted column name or string of y axis variable
+#'@param id unquoted column name or string of id column
+#'@param fill unquoted column name or string of fill variable which will be used to
 #'  color flows, Default: NULL
 #'@param fill_right logical, TRUE fill variable is added to the right FALSE to
 #'  the left, Default: T

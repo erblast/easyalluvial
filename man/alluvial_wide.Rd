@@ -27,7 +27,7 @@ column name}
 
 \item{NA_label}{character vector define label for missing data, Default: 'NA'}
 
-\item{order_levels}{character vector denoting levels to be reorderer from low
+\item{order_levels}{character vector denoting levels to be reordered from low
 to high}
 
 \item{fill_by}{one_of(c('first_variable', 'last_variable', 'all_flows',

@@ -8,3 +8,12 @@
 * coverage -> 97%
 
 **There were no ERRORs, WARNINGs or NOTEs**
+
+# Resubmission
+
+*Examples generating plots where wrapped in  `\dontrun{if(interactive()){...}`*
+The `if(interactive())` was not necessary, however examples took a bit too long to execute, so they were wrapped in `\dontrun{}`. Adressed this now by allowing the first plot to render and then keeping the `\dontrun{}` wrapper for the plots that follow.
+
+
+*No citation of method in description field*
+Citation was added.

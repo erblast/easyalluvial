@@ -22,7 +22,7 @@ if(getRversion() >= "2.15.1"){
 #' @param bin_labels labels for the bins from low to high, Default: c("LL",
 #'   "ML", "M", "MH", "HH")
 #' @param NA_label character vector define label for missing data, Default: 'NA'
-#' @param order_levels character vector denoting levels to be reorderer from low
+#' @param order_levels character vector denoting levels to be reordered from low
 #'   to high
 #' @param fill_by one_of(c('first_variable', 'last_variable', 'all_flows',
 #'   'values')), Default: 'first_variable'

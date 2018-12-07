@@ -17,13 +17,13 @@ alluvial_long(data, key, value, id, fill = NULL, fill_right = T,
 \arguments{
 \item{data}{a dataframe}
 
-\item{key}{unqoted column name or string of x axis variable}
+\item{key}{unquoted column name or string of x axis variable}
 
-\item{value}{unqoted column name or string of y axis variable}
+\item{value}{unquoted column name or string of y axis variable}
 
-\item{id}{unqoted column name or string of id column}
+\item{id}{unquoted column name or string of id column}
 
-\item{fill}{unqoted column name or string of fill variable which will be used to
+\item{fill}{unquoted column name or string of fill variable which will be used to
 color flows, Default: NULL}
 
 \item{fill_right}{logical, TRUE fill variable is added to the right FALSE to
