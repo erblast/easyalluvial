@@ -49,6 +49,9 @@ palette_qualitative() \%>\%
   palette_filter(thresh_similar = 0) \%>\%
   palette_plot_intensity()
 
+\dontrun{
+# more examples---------------------------
+
 palette_qualitative() \%>\%
   palette_filter(thresh_similar = 25) \%>\%
   palette_plot_intensity()
@@ -56,5 +59,5 @@ palette_qualitative() \%>\%
 palette_qualitative() \%>\%
   palette_filter(thresh_similar = 0, blues = FALSE) \%>\%
   palette_plot_intensity()
-
+}
 }

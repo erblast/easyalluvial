@@ -45,7 +45,7 @@
 #'
 #'  alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'last_variable' )
 #'
-#'
+#' \dontrun{
 #'  # more flow coloring variants ------------------------------------
 #'
 #'  alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'first_variable' )
@@ -85,7 +85,7 @@
 #'  alluvial_long( data, qu, mean_arr_delay, tailnum, carrier
 #'                 , order_levels_fill = order_by_carrier_size )
 #'
-#'
+#' }
 #'@rdname alluvial_long
 #'@export
 #'@importFrom RColorBrewer brewer.pal

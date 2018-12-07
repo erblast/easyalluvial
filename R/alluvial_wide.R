@@ -59,6 +59,7 @@ if(getRversion() >= "2.15.1"){
 #' alluvial_wide( data = data
 #'                 , max_variables = max_variables
 #'                 , fill_by = 'first_variable' )
+#'\dontrun{
 #'
 #' # more coloring variants----------------------
 #' alluvial_wide( data = data
@@ -79,7 +80,7 @@ if(getRversion() >= "2.15.1"){
 #'                  , max_variables = max_variables
 #'                  , fill_by = 'values'
 #'                  , order_levels = c('1', '0') )
-#'
+#'}
 #' @seealso \code{\link[easyalluvial]{alluvial_wide}}
 #'   , \code{\link[ggalluvial]{geom_flow}}, \code{\link[ggalluvial]{geom_stratum}}
 #' @rdname alluvial_wide

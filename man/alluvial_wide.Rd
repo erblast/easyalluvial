@@ -82,6 +82,7 @@ data = data \%>\%
 alluvial_wide( data = data
                 , max_variables = max_variables
                 , fill_by = 'first_variable' )
+\dontrun{
 
 # more coloring variants----------------------
 alluvial_wide( data = data
@@ -102,7 +103,7 @@ alluvial_wide( data = data
                  , max_variables = max_variables
                  , fill_by = 'values'
                  , order_levels = c('1', '0') )
-
+}
 }
 \seealso{
 \code{\link[easyalluvial]{alluvial_wide}}

@@ -82,7 +82,7 @@ Plots two variables of a dataframe on an alluvial plot. A third
 
  alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'last_variable' )
 
-
+\dontrun{
  # more flow coloring variants ------------------------------------
 
  alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'first_variable' )
@@ -122,7 +122,7 @@ require(magrittr)
  alluvial_long( data, qu, mean_arr_delay, tailnum, carrier
                 , order_levels_fill = order_by_carrier_size )
 
-
+}
 }
 \seealso{
 \code{\link[easyalluvial]{alluvial_wide}}

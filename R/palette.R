@@ -55,6 +55,9 @@ palette_qualitative = function(){
 #'   palette_filter(thresh_similar = 0) %>%
 #'   palette_plot_intensity()
 #'
+#'\dontrun{
+#'# more examples---------------------------
+#'
 #' palette_qualitative() %>%
 #'   palette_filter(thresh_similar = 25) %>%
 #'   palette_plot_intensity()
@@ -62,7 +65,7 @@ palette_qualitative = function(){
 #' palette_qualitative() %>%
 #'   palette_filter(thresh_similar = 0, blues = FALSE) %>%
 #'   palette_plot_intensity()
-#'
+#'}
 #' @rdname palette_filter
 #' @export
 palette_filter = function( palette = palette_qualitative()

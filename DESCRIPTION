@@ -2,11 +2,12 @@ Package: easyalluvial
 Type: Package
 Title: Generate Alluvial Plots with a Single Line of Code
 Version: 0.1.6
-Author: bjoern koneswarakantha
+Author: person("Bjoern", "Koneswarakantha", comment = c(ORCID = " 0000-0003-4585-7799"))
+URL: https://github.com/erblast/easyalluvial
 Maintainer: bjoern koneswarakantha <datistics@gmail.com>
 Description: alluvial plots are similar to sankey diagrams and visualise categorical data 
     over multiple dimensions as flows. (Rosvall M, Bergstrom CT (2010) Mapping Change in 
-    Large Networks. PLoS ONE 5(1): e8694. https://doi.org/10.1371/journal.pone.0008694). 
+    Large Networks. PLoS ONE 5(1): e8694. <doi:10.1371/journal.pone.0008694> 
     Their graphical grammar however is a bit more complex then that of a regular x/y 
     plots. The 'ggalluvial' package made a great job of translating that grammar into 
     'ggplot2' syntax and gives you many option to tweak the appearance of an alluvial 
@@ -21,10 +22,12 @@ License: CC0
 Encoding: UTF-8
 LazyData: true
 Depends: R(>= 2.10)
-Suggests: testthat,
+Suggests: 
+    testthat,
     covr,
     ISLR,
-    nycflights13
+    nycflights13,
+    spelling
 RoxygenNote: 6.1.1
 Imports:
   purrr
@@ -39,3 +42,4 @@ Imports:
   , stringr
   , magrittr
   , tibble
+Language: en-US
