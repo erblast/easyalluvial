@@ -10,6 +10,9 @@
 
 # Resubmission
 
+*First word in description field in DESCRIPTION file starts with a small letter*
+Fixed
+
 *Examples generating plots were wrapped in  `\dontrun{if(interactive()){...}`*
 The `if(interactive())` was not necessary, however examples took a bit too long to execute, so they were wrapped in `\dontrun{}`. Adressed this now by allowing the first plot to render and then keeping the `\dontrun{}` wrapper for the plots that follow.
 
