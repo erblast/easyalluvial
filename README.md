@@ -3,11 +3,15 @@
 easyalluvial
 ============
 
-[![Travis CI Build Status](https://travis-ci.org/erblast/easyalluvial.svg?branch=master)](https://travis-ci.org/erblast/easyalluvial) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&svg=true)](https://ci.appveyor.com/project/erblast/easyalluvial) [![Coverage Status](https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg)](https://codecov.io/github/erblast/easyalluvial?branch=master)
+[![Travis CI Build Status](https://travis-ci.org/erblast/easyalluvial.svg?branch=master)](https://travis-ci.org/erblast/easyalluvial) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&svg=true)](https://ci.appveyor.com/project/erblast/easyalluvial) 
+[![Coverage Status](https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg)](https://codecov.io/github/erblast/easyalluvial?branch=master)
+[![CRAN last release](https://www.r-pkg.org/badges/last-release/easyalluvial)](https://CRAN.R-project.org/package=easyalluvial)
+[![CRAN total downloads](https://cranlogs.r-pkg.org/badges/grand-total/easyalluvial)](https://CRAN.R-project.org/package=easyalluvial)
+
 
 <img src="https://www.datisticsblog.com/easyalluvial_logo_square.png" alt="logo" width="240" height="240"/>
 
-Alluvial plots are a form of [sankey diagrams](https://en.wikipedia.org/wiki/Sankey_diagram) that are a great tool for exploring categorical data. They group categorical data into flows that can easily be traced in the diagram. Other than sankey diagrams they are constrained to x-y dimensions, however their graphical grammar however is a bit more complex then that of a regular x-y plot. The [`ggalluvial`](http://corybrunson.github.io/ggalluvial/) package made a great job of translating that grammar into ggplot2 syntax and gives you many option to tweak the appearance of a plot, nevertheless there still remains a multi-layered complexity that makes it difficult to use `ggalluvial` for explorative data analysis. `easyalluvial` provides a simple interface to this package that allows you to put out a decent alluvial from any dataframe where data is stored in either long or wide format while automatically binning continuous data. It is meant to allow a quick visualisation of entire dataframes similar to the visualisations created by the [`tabplot`](https://github.com/mtennekes/tabplot) package providing different colouring options which give it the flexibility needed for data exploration.
+Alluvial plots are similar to [sankey diagrams](https://en.wikipedia.org/wiki/Sankey_diagram) and visualise categorical data over multiple dimensions as flows. [Rosval et. al. 2010](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0008694) Their graphical grammar however is a bit more complex then that of a regular x/y plots. The [`ggalluvial`](http://corybrunson.github.io/ggalluvial/) package made a great job of translating that grammar into [`ggplot2`](https://github.com/tidyverse/ggplot2) syntax and gives you many option to tweak the appearance of an alluvial plot, however there still remains a multi-layered complexity that makes it difficult to use 'ggalluvial' for explorative data analysis. 'easyalluvial' provides a simple interface to this package that allows you to produce a decent alluvial plot from any dataframe in either long or wide format from a single line of code while also handling continuous data. It is meant to allow a quick visualisation of entire dataframes with a focus on different colouring options that can make alluvial plots a great tool for data exploration.
 
 Features
 --------
@@ -21,15 +25,22 @@ Features
 Installation
 ------------
 
-You can install easyalluvial from github with:
+### CRAN
 
 ``` r
-# install.packages("devtools")
+install.packages('easyalluvial')
+```
+
+### Development Version
+
+``` r
 devtools::install_github("erblast/easyalluvial")
 ```
 
 Tutorials
 ---------
+
+In order to learn about all the features an how they can be useful check out the following tutorials:
 
 -   [Data exploration with alluvial plots](https://www.datisticsblog.com/2018/10/intro_easyalluvial/#features)
 
@@ -54,6 +65,14 @@ data = data %>%
 ```
 
 #### Plot
+
+Continuous Variables will be automatically binned as follows.
+
+-   High, High (HH)
+-   Medium, High (MH)
+-   Medium (M)
+-   Medium, Low (ML)
+-   Low, Low (LL)
 
 ``` r
 
