@@ -8,7 +8,7 @@ Description: Alluvial plots are similar to sankey diagrams and visualise categor
     Large Networks. PLoS ONE 5(1): e8694. <doi:10.1371/journal.pone.0008694> 
     Their graphical grammar however is a bit more complex then that of a regular x/y 
     plots. The 'ggalluvial' package made a great job of translating that grammar into 
-    'ggplot2' syntax and gives you many option to tweak the appearance of an alluvial 
+    'ggplot2' syntax and gives you many options to tweak the appearance of an alluvial 
     plot, however there still remains a multi-layered complexity that makes it difficult
     to use 'ggalluvial' for explorative data analysis. 'easyalluvial' provides a simple 
     interface to this package that allows you to produce a decent alluvial plot from any 
