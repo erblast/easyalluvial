@@ -17,27 +17,37 @@ test_that('alluvial_wide'
     p = alluvial_wide( data = data
                     , max_variables = max_variables
                     , fill_by = 'first_variable' )
+    
+    
+    vdiffr::expect_doppelganger('wide_first', p)
 
     p = alluvial_wide( data = data
                     , max_variables = max_variables
                     , fill_by = 'last_variable' )
-
+    
+    vdiffr::expect_doppelganger('wide_last', p)
+    
     p = alluvial_wide( data = data
                     , max_variables = max_variables
                     , fill_by = 'all_flows' )
 
+    vdiffr::expect_doppelganger('wide_all_flows', p)
+    
     p = alluvial_wide( data = data
                     , max_variables = max_variables
                     , fill_by = 'values' )
 
+    vdiffr::expect_doppelganger('wide_values', p)
+    
     # manually order variable values
 
     p = alluvial_wide( data = data
                     , max_variables = max_variables
                     , fill_by = 'values'
                     , order_levels = c('8', '4', '6') )
-
-
+    
+    vdiffr::expect_doppelganger('wide_reorder_y_levels', p)
+    
     #check integritiy of returned dataframe
     expect_equal( nrow(data), nrow(p$data_key) )
 
@@ -64,10 +74,14 @@ test_that('alluvial_wide'
       select( - name ) %>%
       mutate_at( vars( c('cylinders', 'year', 'origin' ) ), as.factor  )
 
-    p = alluvial_wide( data, id = name_x, max_variables = 5 )
-
+    p = alluvial_wide( data, id = name_x, max_variables = 5 ) 
+    
+    vdiffr::expect_doppelganger('wide_ISLR_cars', p)
+    
     p = alluvial_wide( data, id = name_x, max_variables = 5, auto_rotate_xlabs = F )
-
+    
+    vdiffr::expect_doppelganger('wide_ISLR_cars_rotate_labels', p)
+    
     # check NA behavoir, rename label ando order to front
 
     data$cylinders[1:4] = NA
@@ -78,7 +92,8 @@ test_that('alluvial_wide'
                          , NA_label = 'none'
                          , order_levels = 'none' )
 
-
+    vdiffr::expect_doppelganger('wide_NA_label', p)
+    
     # test statum options
 
     p = alluvial_wide( data = data
@@ -86,7 +101,8 @@ test_that('alluvial_wide'
                        , fill_by = 'first_variable'
                        , stratum_labels = F
                        , stratum_width = 1/20 )
-
+    
+    vdiffr::expect_doppelganger('wide_Strat_width', p)
 
     # test warning for high flow numbers
 
