@@ -1,6 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-easyalluvial <img src="https://www.datisticsblog.com/easyalluvial_logo_square.png" alt="logo" width="240" height="240"/>
+easyalluvial <img src="https://www.datisticsblog.com/easyalluvial_logo_square.png" alt="logo" width="240" height="240 align="right"/>
 ============
 
 [![Travis CI Build Status](https://travis-ci.org/erblast/easyalluvial.svg?branch=master)](https://travis-ci.org/erblast/easyalluvial) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&svg=true)](https://ci.appveyor.com/project/erblast/easyalluvial) 
