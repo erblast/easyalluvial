@@ -210,13 +210,22 @@ alluvial_long = function( data
     # add alluvial ids
     data_spread = data_trans %>%
       spread( key = !! key, value = !! value )
-
+    
+    # to ensure dbplyr 0.8.0. compatibility we 
+    # transform factors to character before grouping
+    # and back after grouping
+    
+    factor_cols = names( select_if(data_spread, is.factor) )
+    
     data_alluvial_id = data_spread %>%
       select( - !! id ) %>%
+      mutate_at( .vars = vars( one_of(factor_cols) ), as.character ) %>%
       group_by_all() %>%
       count() %>%
       ungroup() %>%
-      mutate( alluvial_id = row_number() )
+      mutate( alluvial_id = row_number() ) %>%
+      mutate_at( .vars = vars( one_of(factor_cols) ), as.factor )
+      
 
     data_new = data_alluvial_id %>%
       gather( key = 'x', value = 'value'

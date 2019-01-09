@@ -67,7 +67,8 @@ plot_condensation = function(df, first = NULL){
 
   # Prep basis
 
-  df = manip_bin_numerics(df)
+  df = manip_bin_numerics(df) %>%
+    mutate_if(is.factor, as.character)
 
   if( purrr::is_null(first) ){
 

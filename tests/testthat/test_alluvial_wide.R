@@ -107,6 +107,9 @@ test_that('alluvial_wide'
     # test warning for high flow numbers
 
     expect_warning( alluvial_wide( data = ggplot2::diamonds) )
+    
+    alluvial_wide(data, max_variables = 3, col_vector_flow = c('red', 'green', 'orange', 'yellow', 'blue')
+    , col_vector_value =  c('red', 'green', 'orange', 'yellow', 'blue'), fill_by = 'last_variable' )
 
   })
 

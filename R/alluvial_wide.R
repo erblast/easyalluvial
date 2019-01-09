@@ -159,22 +159,33 @@ alluvial_wide = function( data
   data = data %>%
     manip_bin_numerics( bins, bin_labels)
 
+  # to ensure dbplyr 0.8.0. compatibility we 
+  # transform factors to character before grouping
+  # and back after grouping
+  
+  factor_cols = names( select_if(data, is.factor) )
+  factor_cols = factor_cols[ factor_cols %in% variables]
+  
   data_trans = data %>%
     select( one_of(variables) ) %>%
+    mutate_at( .vars = vars( one_of(factor_cols) ), as.character ) %>%
     group_by_all() %>%
     count() %>%
     ungroup() %>%
-    mutate( alluvial_id = row_number() )
+    mutate( alluvial_id = row_number() )  %>%
+    mutate_at( .vars = vars( one_of(factor_cols) ), as.factor )
 
   suppressMessages({
     data_alluvial = data %>%
-      left_join( data_trans ) %>%
+      mutate_if( is.factor, as.character ) %>%
+      left_join( mutate_if(data_trans, is.factor, as.character) ) %>%
       select( one_of( id_str, 'alluvial_id') )
   })
 
   # preserve order of categorical variables
 
-  ordered_levels = data_trans %>%
+  ordered_levels = data %>%
+    select( one_of(variables) ) %>%
     select_if( is.factor ) %>%
     head(1) %>%
     mutate_all( function(x) list(levels(x)) ) %>%
@@ -261,11 +272,16 @@ alluvial_wide = function( data
 
   col_vector_flow = palette_increase_length( col_vector_flow, n_colors_needed  )
 
-  df_fill_flow = tibble( fill = unique(data_new$fill)
-                         , fill_flow = col_vector_flow )
+  order_fill_cols = ordered_levels[ ordered_levels %in% unique(data_new$fill) ]
+  
+  df_fill_flow = tibble( fill = unique(data_new$fill) ) %>%
+    mutate( fill = fct_relevel(fill, order_fill_cols) ) %>%
+    arrange( fill ) %>%
+    mutate( fill_flow = col_vector_flow ) 
 
   suppressMessages({
     data_new = data_new %>%
+      mutate( fill = fct_relevel(fill, order_fill_cols) ) %>%
       left_join( df_fill_flow )
   })
 
@@ -274,15 +290,24 @@ alluvial_wide = function( data
   n_colors_needed = length( unique(data_new$value) )
 
   col_vector_value = palette_increase_length( col_vector_value, n_colors_needed  )
+  
+  order_value_cols = ordered_levels[ ordered_levels %in% unique(data_new$value) ]
 
-  d_fill_value = tibble( value = unique(data_new$value)
-                         , fill_value = col_vector_value )
-
+  df_fill_value = tibble( value = unique(data_new$value) ) %>%
+    mutate( value = fct_relevel(value, order_value_cols) ) %>%
+    arrange( value ) %>%
+    mutate( fill_value = col_vector_value ) 
+                         
   suppressMessages({
     data_new = data_new %>%
-      left_join( d_fill_value )
+      mutate( value = fct_relevel(value, order_value_cols) ) %>%
+      left_join( df_fill_value )
   })
 
+  data_new = data_new %>%
+    mutate( value = fct_rev(value)
+            , fill = fct_rev(fill) )
+  
   p <- ggplot(data_new,
               aes(x = x
                   , stratum = value
