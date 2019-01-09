@@ -13,11 +13,17 @@ test_that('plot condensation'
               , am = as.factor(am))
 
     p = plot_condensation(df)
-
+    
+    vdiffr::expect_doppelganger('cond', p)
+    
     p = plot_condensation(df, first = 'disp')
-
+    
+    vdiffr::expect_doppelganger('cond_with_first', p)
+    
     p = plot_condensation(ggplot2::diamonds, first = 'price')
-
+    
+    vdiffr::expect_doppelganger('cond_price_first', p)
+    
     # compare values from alluvial_wide and plot_condensation
 
     values = p$data %>%

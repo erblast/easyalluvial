@@ -24,7 +24,8 @@ Suggests:
     testthat,
     covr,
     ISLR,
-    nycflights13
+    nycflights13,
+    vdiffr
 RoxygenNote: 6.1.1
 Imports:
   purrr
