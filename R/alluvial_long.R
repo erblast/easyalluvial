@@ -136,6 +136,10 @@ alluvial_long = function( data
   value = as.name( value_str )
   id = as.name( id_str )
 
+  # ungroup
+  
+  data = ungroup(data)
+  
   # fill
 
   if( rlang::quo_is_null(fill) ){

@@ -101,6 +101,10 @@ test_that('alluvial_long'
   })
 
   expect_warning( alluvial_long( data_highflow,  key, value, id ) )
+  
+  #gouped df
+  p = alluvial_long( group_by(data, carrier), key = qu, value = mean_arr_delay, id = tailnum)
+  
 
 })
 

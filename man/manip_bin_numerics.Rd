@@ -5,7 +5,8 @@
 \title{bin numerical columns}
 \usage{
 manip_bin_numerics(x, bins = 5, bin_labels = c("LL", "ML", "M", "MH",
-  "HH"), center = T, scale = T, transform = T)
+  "HH"), center = T, scale = T, transform = T, round_numeric = T,
+  digits = 2)
 }
 \arguments{
 \item{x}{dataframe with numeric variables, or numeric vector}
@@ -13,13 +14,19 @@ manip_bin_numerics(x, bins = 5, bin_labels = c("LL", "ML", "M", "MH",
 \item{bins}{number of bins for numerical variables, Default: 5}
 
 \item{bin_labels}{labels for the bins from low to high, Default: c("LL",
-"ML", "M", "MH", "HH")#' @param center boolean, Default: T}
+"ML", "M", "MH", "HH"). Can also be one of c('mean', 'median', 'min_max',
+'cuts'), the corresppnding summary function will supply the labels.}
 
-\item{center}{boolean, Default: T}
+\item{center}{logical, Default: T}
 
-\item{scale}{boolean, Default: T}
+\item{scale}{logical, Default: T}
 
-\item{transform}{boolean, Default: T}
+\item{transform}{logical, apply Yeo Johnson Transformation, Default: T}
+
+\item{round_numeric, }{logical, rounds numeric results if bin_labels is
+supplied with a supported summary function name.}
+
+\item{digits, }{integer, number of digits to round to}
 }
 \value{
 dataframe
@@ -32,4 +39,7 @@ centers, scales and Yeo Johnson transforms numeric variables in
 \examples{
 summary( mtcars )
 summary( manip_bin_numerics(mtcars) )
+summary( manip_bin_numerics(mtcars, bin_labels = 'mean'))
+summary( manip_bin_numerics(mtcars, bin_labels = 'cuts'
+  , scale = FALSE, center = FALSE, transform = FALSE))
 }

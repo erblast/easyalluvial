@@ -34,7 +34,29 @@ test_that('manip_bin_numerics'
   expect_true( is_empty(numerics) )
   expect_true( ! is_empty(data_new) )
   expect_identical( names(data_new) , names(data) )
-
+  expect_true( ! 'easyalluvialid' %in% names(data_new) )
+  
+  bins_from_vec = manip_bin_numerics(data$disp)
+  expect_equal( levels(bins_from_vec), c("LL", "ML", "M",  "MH", "HH") )
+  
+  data_new_cuts = manip_bin_numerics(data, bin_labels = 'cuts')
+  
+  data_new_median = manip_bin_numerics(data, bin_labels = 'median')
+  
+  data_new_mean = manip_bin_numerics(data, bin_labels = 'mean')
+  
+  data_new_min_max = manip_bin_numerics(data, bin_labels = 'min_max')
+  
+  # p1 = alluvial_wide(data)
+  # 
+  # p2 = alluvial_wide(data, bin_labels = 'min_max')
+  # 
+  # gridExtra::grid.arrange(p1,p2)
+  
+  expect_false( identical(data_new_cuts, data_new_median) )
+  
+  expect_false( identical(data_new_mean, data_new_median) )
+  
 })
 
 

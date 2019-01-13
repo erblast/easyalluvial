@@ -18,7 +18,6 @@ test_that('alluvial_wide'
                     , max_variables = max_variables
                     , fill_by = 'first_variable' )
     
-    
     vdiffr::expect_doppelganger('wide_first', p)
 
     p = alluvial_wide( data = data
@@ -110,8 +109,12 @@ test_that('alluvial_wide'
 
     expect_warning( alluvial_wide( data = ggplot2::diamonds) )
     
-    alluvial_wide(data, max_variables = 3, col_vector_flow = c('red', 'green', 'orange', 'yellow', 'blue')
-    , col_vector_value =  c('red', 'green', 'orange', 'yellow', 'blue'), fill_by = 'last_variable' )
+    # alluvial_wide(data, max_variables = 3, col_vector_flow = c('red', 'green', 'orange', 'yellow', 'blue')
+    # , col_vector_value =  c('red', 'green', 'orange', 'yellow', 'blue'), fill_by = 'last_variable' )
+    
+    #gouped df
+    
+    p = alluvial_wide( group_by(data, cylinders) )
 
   })
 

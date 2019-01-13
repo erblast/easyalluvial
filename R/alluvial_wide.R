@@ -4,7 +4,7 @@
 
 
 if(getRversion() >= "2.15.1"){
-  utils::globalVariables( c('x', '.', ':=', 'alluvial_id', 'fill_flow', 'fill_value', 'value', 'fill' ) )
+  utils::globalVariables( c('x', '.', ':=', 'alluvial_id', 'fill_flow', 'fill_value', 'value', 'fill', 'easyalluvialid' ) )
 }
 
 
@@ -115,6 +115,10 @@ alluvial_wide = function( data
     id_str = quo_name(id)
   }
 
+  # ungroup
+  
+  data = ungroup(data)
+  
   # remove  id from variables
 
   variables = names(data)
