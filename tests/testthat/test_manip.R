@@ -98,5 +98,32 @@ test_that('manip_bin_numerics with vector'
 
   vec = manip_bin_numerics( as.factor(mtcars$cyl) )
   expect_identical( vec, as.factor(mtcars$cyl) )
-
+  
+  df = tibble( a = rnorm(50), b = rnorm(50) )
+  
+  df_v1 = manip_bin_numerics(df)
+  
+  df_v2 = df %>%
+    mutate( a = manip_bin_numerics(a)
+            , b = manip_bin_numerics(b))
+  
+  expect_identical( df_v1, df_v2)
+  
+  df_v1 = manip_bin_numerics(df, bin_labels = 'median')
+  
+  df_v2 = df %>%
+    mutate( a = manip_bin_numerics(a, bin_labels = 'median')
+            , b = manip_bin_numerics(b, bin_labels = 'median'))
+  
+  expect_identical( df_v1, df_v2)
+  
+  df_v1 = manip_bin_numerics(df, bin_labels = 'min_max')
+  
+  df_v2 = df %>%
+    mutate( a = manip_bin_numerics(a, bin_labels = 'min_max')
+            , b = manip_bin_numerics(b, bin_labels = 'min_max'))
+  
+  expect_identical( df_v1, df_v2)
+  
 })
+ 
