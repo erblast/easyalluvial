@@ -11,9 +11,7 @@ test_that('alluvial_model_response'
     
     m = randomForest::randomForest( lstat ~ ., df)
     
-    imp = tibble( vars = row.names( m$importance ), imp = m$importance[,1] ) %>%
-      arrange( desc(imp) ) %>%
-      mutate( cum_imp = cumsum(imp ) )
+    imp = tibble( vars = row.names( m$importance ), imp = m$importance[,1] )
     
     dspace = get_data_space(df, imp)
     

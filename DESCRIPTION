@@ -30,10 +30,10 @@ RoxygenNote: 6.1.1
 Imports:
   purrr
   , tidyr
-  , dplyr
+  , dplyr (>= 0.8.0)
   , forcats
-  , ggalluvial
-  , ggplot2
+  , ggalluvial (>= 0.9.1)
+  , ggplot2 (>= 3.1.0)
   , RColorBrewer
   , recipes
   , rlang

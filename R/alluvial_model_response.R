@@ -36,16 +36,15 @@ get_data_space = function(df,imp, degree = 3, bins = 5){
 alluvial_model_response = function(pred, dspace, imp, degree = 3, bins = 5){
   
   
-  make_level_labels = function(col, df_data_key){
+  make_level_labels = function(col, df){
     
-    df_data_key = df_data_key %>%
-      mutate_if( is.factor, fct_drop )
+    levels( df$pred ) <- c('LL:','ML:',' M:','MH:','HH:')
     
-    levels( df_data_key$pred ) <- rev( c('LL:','ML:',' M:','MH:','HH:') )
-    
-    labels = df_data_key %>%
+    labels = df %>%
       select(!! as.name(col), pred) %>%
+      # arrange( desc( !!as.name(col) ) ) %>%
       count(pred, !! as.name(col)) %>%
+      arrange( desc(pred) ) %>%
       group_by(pred) %>%
       mutate( total = sum(n) ) %>%
       ungroup() %>%
@@ -55,12 +54,13 @@ alluvial_model_response = function(pred, dspace, imp, degree = 3, bins = 5){
       summarise( label = paste( label, collapse = '\n')) %>%
       mutate( label = map2_chr(!! as.name(col), label
                                , function(x,y) paste( c(as.character(x),y), collapse = '\n') ) ) %>%
-      .$label
+      .$label 
     
-    return(labels)
+    return( labels)
   }
   
   df = dspace %>%
+    mutate_if( is.factor, fct_drop ) %>%
     mutate_all( as.factor ) %>%
     mutate( pred = pred ) %>%
     manip_bin_numerics( bin_labels = 'min_max' )
@@ -70,11 +70,11 @@ alluvial_model_response = function(pred, dspace, imp, degree = 3, bins = 5){
     
     labels = make_level_labels(col, df)
     
-    levels( df[[col]] ) <- rev( labels )
+    levels( df[[col]] ) <-  labels 
     
   }
   
-  # creat new label for response variable
+  # create new label for response variable
   
   new_levels =  tibble( lvl = levels(df$pred)
                         , prefix = c('LL','ML',' M','MH','HH') ) %>%
@@ -85,6 +85,35 @@ alluvial_model_response = function(pred, dspace, imp, degree = 3, bins = 5){
   
   p = select(df, pred, one_of( names( dspace[0:degree] ) ) ) %>%
     easyalluvial::alluvial_wide( fill_by = 'first_variable')
+  
+  # add info -----------------------------
+  
+  percent_imp = imp %>%
+    arrange( desc(imp) ) %>%
+    mutate( cum_imp = cumsum(imp )
+            , cum_imp_perc = cum_imp / max(cum_imp) ) %>%
+    .$cum_imp_perc %>%
+    .[degree]
+  
+  others = select(dspace, - one_of( names( dspace[0:degree] ) ) ) %>%
+    mutate_if( is.numeric, round, 3) %>%
+    mutate_all( as.character ) %>%
+    distinct() %>%
+    gather( key = 'variable', value = 'value') %>%
+    mutate( label = map2_chr(variable, value, function(x,y) paste0(x ,': ', y) ) ) %>%
+    summarise( label = paste(label, collapse = '; ') ) %>%
+    .$label
+  
+  title = 'Model Response Plot'
+
+  subtitle = paste('Presented Variables account for', round( percent_imp * 100, 1)
+                   , '% of Variable Importance')  
+  
+  caption = paste( 'Variables not shown have been set to median or mode:', others) %>%
+    str_wrap( width = 180 )
+    
+  p = p +
+    labs(title = title, subtitle = subtitle, caption = caption)
 
   return(p)
   
