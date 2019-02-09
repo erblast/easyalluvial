@@ -2,14 +2,11 @@ context('alluvial_model_response')
 
 test_that('alluvial_model_response'
           ,{
+
+                
+    df = select(mtcars_factor, -id)
     
-    require('mlbench')
-            
-    data('BostonHousing')
-    
-    df = as_tibble( BostonHousing )
-    
-    m = randomForest::randomForest( lstat ~ ., df)
+    m = randomForest::randomForest( disp ~ ., df)
     
     imp = m$importance
     
@@ -33,52 +30,57 @@ test_that('alluvial_model_response'
     expect_equivalent( levels(p$data$x)[2:( degree + 1 )],  arrange(imp_conv, desc(imp))$vars[1:degree] )
     
     
-    # with factor variable
+    # checks
     
-    m = randomForest::randomForest( lstat ~ chas + medv + rm, df)
+    # importance df contains unknown variable
+
+    imp_no_match = bind_rows(imp_conv, tibble( vars = 'xxx', imp = 0.99) )
     
-    imp = m$importance
+    expect_error( get_data_space(df, imp_no_match) )
+    expect_error( alluvial_model_response( pred, dspace, imp_no_match) )
+  
+    # importance as less variables then degrees
+    expect_warning( get_data_space(df, imp_conv[0:2,], degree = 3) )
+    expect_warning( alluvial_model_response(pred, dspace, imp_conv[0:2,], degree = 3) )
     
-    imp_df = check_imp(imp, df)
+    # number of flows to high
+    dspace = get_data_space(df, imp, degree = 6)
+    pred = predict(m, newdata = dspace)
+    expect_error( alluvial_model_response(pred, dspace, imp) )
+    
+    # ordered instead of factors
+    
+    df_ord = df %>%
+      mutate_if( is.factor, as.ordered ) 
+    
+    m = lm( disp ~ ., df_ord)
+    
+    imp = tibble( var = names( coef(m) )
+                  , imp = abs( coef(m) ) ) %>%
+      filter(var != '(Intercept)')
+    
+    imp_conv = check_imp(imp, df)
     
     dspace = get_data_space(df, imp)
     
     pred = predict(m, newdata = dspace)
     
-    p = alluvial_model_response(pred, dspace, imp)
+    degree = 3
     
-    expect_equivalent( levels(p$data$x)[2:( degree + 1 )],  arrange(imp_df, desc(imp))$vars[1:degree] )
-    
-    # checks
-    
-    imp_no_match = bind_rows(imp_df, tibble( vars = 'xxx', imp = 0.99) )
-    
-    expect_error( get_data_space(df, imp_no_match) )
-    expect_error( alluvial_model_response( pred, dspace, imp_no_match) )
-    
-    expect_warning( get_data_space(df, imp_df[0:2,], degree = 3) )
-    expect_warning( alluvial_model_response(pred, dspace, imp_df[0:2,], degree = 3) )
-    
-    m = randomForest::randomForest( lstat ~ ., df)
-    imp = m$importance
-    dspace = get_data_space(df, imp, degree = 6)
-    pred = predict(m, newdata = dspace)
-    expect_error( alluvial_model_response(pred, dspace, imp) )
+    p = alluvial_model_response(pred, dspace, imp, degree = degree)
     
     
-  })
+})
 
 test_that('alluvial_model_response_caret'
           , {
             
-  data('BostonHousing')
+  df = select(mtcars_factor, -id)
   
-  df = as_tibble( BostonHousing )
-  
-  train = caret::train( lstat ~ ., df, method = 'lm',trControl = trainControl(method = 'none') )
+  train = caret::train( disp ~ ., df, method = 'lm',trControl = caret::trainControl(method = 'none') )
   alluvial_model_response_caret(train)
   
-  train = caret::train( lstat ~ ., df, method = 'rf',trControl = trainControl(method = 'none'), importance = T )
+  train = caret::train( disp ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
   alluvial_model_response_caret(train)
   
 })

@@ -22,8 +22,7 @@ test_that('manip_bin_numerics'
 
   categoricals = c('cyl', 'vs', 'am', 'gear', 'carb')
 
-  data = mtcars %>%
-    mutate_at( vars(categoricals), as.factor )
+  data = mtcars_factor
 
   data_new = manip_bin_numerics(data)
 
@@ -99,13 +98,15 @@ test_that('manip_bin_numerics with vector'
   vec = manip_bin_numerics( as.factor(mtcars$cyl) )
   expect_identical( vec, as.factor(mtcars$cyl) )
   
-  df = tibble( a = rnorm(50), b = rnorm(50) )
+  df = tibble( a = rnorm(50), b = rnorm(50), c = seq(1:50) ) %>%
+    mutate( c = as.character(c) )
   
   df_v1 = manip_bin_numerics(df)
   
   df_v2 = df %>%
     mutate( a = manip_bin_numerics(a)
-            , b = manip_bin_numerics(b))
+            , b = manip_bin_numerics(b)
+            , c = as.character( seq(1:50) ) )
   
   expect_identical( df_v1, df_v2)
   
@@ -113,7 +114,8 @@ test_that('manip_bin_numerics with vector'
   
   df_v2 = df %>%
     mutate( a = manip_bin_numerics(a, bin_labels = 'median')
-            , b = manip_bin_numerics(b, bin_labels = 'median'))
+            , b = manip_bin_numerics(b, bin_labels = 'median')
+            , c = as.character( seq(1:50) ) )
   
   expect_identical( df_v1, df_v2)
   
@@ -121,9 +123,10 @@ test_that('manip_bin_numerics with vector'
   
   df_v2 = df %>%
     mutate( a = manip_bin_numerics(a, bin_labels = 'min_max')
-            , b = manip_bin_numerics(b, bin_labels = 'min_max'))
+            , b = manip_bin_numerics(b, bin_labels = 'min_max')
+            , c = as.character( seq(1:50) ) )
   
-  expect_identical( df_v1, df_v2)
+  expect_identical( df_v1, df_v2 )
   
 })
  

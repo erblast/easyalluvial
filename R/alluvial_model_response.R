@@ -9,7 +9,6 @@ check_degree = function(degree, imp, df){
   return(degree)
 }
 
-
 check_imp = function(imp, df){
   
   if( ! "data.frame" %in% class(imp) & ! 'matrix' %in% class(imp) ){
@@ -32,21 +31,33 @@ check_imp = function(imp, df){
   }
   
   # correct dummyvariable names back to original name
-  for( ori_var in names( select_if(df, is.factor) ) ){
+  
+  df_ori_var = tibble( ori_var = names( select_if(df, is.factor) ) ) %>%
+    mutate( len = map_int( ori_var, nchar ) ) %>%
+    arrange(len)
+  
+  imp = imp %>%
+    mutate( ori = vars )
+  
+  # go from shortest variabe name to longest, matches with longer variable
+  # names will overwrite matches from shorter variable names
+  
+  for( ori_var in df_ori_var$ori_var ){
     
-    for( lvl in levels(df[[ori_var]]) ){
-      
-      dummy_name = paste0(ori_var,lvl)
-      
-      imp = mutate(imp, vars = ifelse( vars == dummy_name, ori_var, vars) )
-      
-    }
-    
+    imp = imp %>%
+      mutate( ori = ifelse( str_detect(ori, ori_var), ori_var, ori ) )
   }
   
   imp = imp %>%
+    mutate( vars = ori ) %>%
+    select( - ori ) %>%
     group_by( vars ) %>%
-    summarise( imp = sum(imp) )
+    summarise( imp = sum(imp) ) %>%
+    arrange( desc(imp) )
+  
+  
+  
+  # final checks 
   
   if( ncol(imp) != 2 | ! all( c('vars', 'imp') %in% names(imp) ) ){
     stop( 'supplied imp data.frame could not be converted to right format' )
@@ -59,6 +70,22 @@ check_imp = function(imp, df){
   return(imp)
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param df PARAM_DESCRIPTION
+#' @param imp PARAM_DESCRIPTION
+#' @param degree PARAM_DESCRIPTION, Default: 3
+#' @param bins PARAM_DESCRIPTION, Default: 5
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname get_data_space
+#' @export 
 get_data_space = function(df,imp, degree = 3, bins = 5){
   
   imp = check_imp(imp, df)
@@ -74,12 +101,12 @@ get_data_space = function(df,imp, degree = 3, bins = 5){
   numerics_top = names( select_if( df_top, is.numeric ) )
   
   df_facs = manip_bin_numerics(df_top, bin_labels = 'median', bins = bins) %>%
-    mutate_if( is.factor, fct_lump, n = bins ) %>%
     group_by_all() %>%
     count() %>%
     ungroup() %>%
     mutate_at( vars(one_of(numerics_top)), function(x) as.numeric( as.character(x)) ) %>%
-    select(-n)
+    select(-n) %>%
+    mutate_if( is.factor, fct_lump, n = bins )
   
   mode = function(x) {
     ux = unique(x)
@@ -108,7 +135,27 @@ get_data_space = function(df,imp, degree = 3, bins = 5){
 }
 
 
-
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param pred PARAM_DESCRIPTION
+#' @param dspace PARAM_DESCRIPTION
+#' @param imp PARAM_DESCRIPTION
+#' @param degree PARAM_DESCRIPTION, Default: 3
+#' @param bins PARAM_DESCRIPTION, Default: 5
+#' @param force PARAM_DESCRIPTION, Default: FALSE
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @seealso 
+#'  \code{\link[easyalluvial]{alluvial_wide}}
+#' @rdname alluvial_model_response
+#' @export 
+#' @importFrom stringr str_wrap
 alluvial_model_response = function(pred, dspace, imp, degree = 3, bins = 5, force = FALSE){
   
   if( nrow(dspace) > 1500 & ! force){
@@ -216,7 +263,25 @@ alluvial_model_response = function(pred, dspace, imp, degree = 3, bins = 5, forc
 }
 
 
-
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param train PARAM_DESCRIPTION
+#' @param degree PARAM_DESCRIPTION, Default: 3
+#' @param bins PARAM_DESCRIPTION, Default: 5
+#' @param force PARAM_DESCRIPTION, Default: F
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @seealso 
+#'  \code{\link[caret]{varImp}},\code{\link[caret]{extractPrediction}}
+#' @rdname alluvial_model_response_caret
+#' @export 
+#' @importFrom caret varImp predict.train
 alluvial_model_response_caret = function(train, degree = 3, bins = 5, force = F){
   
   imp = caret::varImp( train )

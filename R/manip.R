@@ -98,6 +98,12 @@ manip_bin_numerics = function(x
     select_if( is.numeric ) %>%
     select_if( function(x) var(x) > 0 ) %>%  ##boxplotstats produces NA if var == 0
     names()
+  
+  characters = df %>%
+    select_if( is.character ) %>%
+    names()
+  
+  columns = names(df)
 
   if( is_empty(numerics) ){
     return( df )
@@ -106,7 +112,7 @@ manip_bin_numerics = function(x
   df = mutate(df, easyalluvialid = row_number() ) 
   
   rec = recipe(df) %>%
-    add_role( easyalluvialid, new_role = 'id variable')
+    add_role( easyalluvialid, new_role = 'id variable') 
 
   if( center ) rec = rec %>%
     step_center( one_of(numerics) )
@@ -130,11 +136,14 @@ manip_bin_numerics = function(x
                                                    , max(boxplot.stats(x)$stats)
                                                    , x)
                ) %>%
-  mutate_at( vars(numerics), function(x) ifelse( x < min(boxplot.stats(x)$stats)
-                                                 , min(boxplot.stats(x)$stats)
-                                                 , x)
-             ) %>%
-  mutate_at( vars(numerics), function(x) cut(x, breaks = bins) ) 
+    mutate_at( vars(numerics), function(x) ifelse( x < min(boxplot.stats(x)$stats)
+                                                   , min(boxplot.stats(x)$stats)
+                                                   , x)
+               ) %>%
+    mutate_at( vars(numerics), function(x) cut(x, breaks = bins) ) %>%
+    #bake() is converting character variables to factor which we need to revert
+    mutate_at( vars(characters), as.character ) 
+  
   
   summary_as_label = function(df, df_old, fun){
     # joins df with original dataframe. Groups by segments and calculates
@@ -199,12 +208,13 @@ manip_bin_numerics = function(x
     }
     
     data_new = data_new %>%
-      select( -ends_with('.x'), -ends_with('.y') )
+      select( -ends_with('.x'), -ends_with('.y') ) %>%
+      arrange( easyalluvialid )
   }
   
   
   #remove easyalluvialid
-  data_new = select(data_new, - easyalluvialid)
+  data_new = select(data_new, columns)
   
   if( input_vector ){
     return( data_new$x )

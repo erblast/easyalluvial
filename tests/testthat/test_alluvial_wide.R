@@ -4,8 +4,7 @@ context('alluvial wide')
 test_that('alluvial_wide'
   ,{
 
-    data = as_tibble(mtcars) %>%
-      mutate( ids = row_number() )
+    data = mtcars_factor
 
     categoricals = c('cyl', 'vs', 'am', 'gear', 'carb')
     numericals = c('mpg', 'cyl', 'disp', 'hp', 'drat', 'wt', 'qsec')
@@ -50,15 +49,15 @@ test_that('alluvial_wide'
     #check integritiy of returned dataframe
     expect_equal( nrow(data), nrow(p$data_key) )
 
-    # ids
+    # id
 
-    p = alluvial_wide(data, id = ids )
+    p = alluvial_wide(data, id = id )
     expect_true( ! 'ID' %in% names(p$data_key) )
-    expect_true( length(unique(p$data_key$ids) ) == nrow(p$data_key)  )
+    expect_true( length(unique(p$data_key$id) ) == nrow(p$data_key)  )
 
-    p = alluvial_wide(data, id = 'ids' )
+    p = alluvial_wide(data, id = 'id' )
     expect_true( ! 'ID' %in% names(p$data_key) )
-    expect_true( length(unique(p$data_key$ids) ) == nrow(p$data_key)  )
+    expect_true( length(unique(p$data_key$id) ) == nrow(p$data_key)  )
 
     p = alluvial_wide(data, id = NULL)
     expect_true( 'ID' %in% names(p$data_key) )
@@ -114,7 +113,7 @@ test_that('alluvial_wide'
     
     #gouped df
     
-    p = alluvial_wide( group_by(data, cylinders) )
+    p = alluvial_wide( group_by(mtcars_factor, cyl), max_variables = 3 )
 
   })
 
