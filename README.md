@@ -31,7 +31,13 @@ install.packages('easyalluvial')
 
 ### Development Version
 
+The current development version depends on the `dplyr 0.8.0` which is scheduled to be released soon.
+
 ``` r
+
+# install.packages("devtools")
+
+devtools::install_github("tidyverse/dplyr@rc_0.8.0")
 devtools::install_github("erblast/easyalluvial")
 ```
 
@@ -45,22 +51,42 @@ In order to learn about all the features an how they can be useful check out the
 Examples
 --------
 
+``` r
+suppressPackageStartupMessages( require(tidyverse) )
+suppressPackageStartupMessages( require(easyalluvial) )
+```
+
 ### Alluvial from data in wide format
 
-#### Prepare sample data
+#### Sample Data
 
 ``` r
 
-suppressPackageStartupMessages( require(tidyverse) )
-suppressPackageStartupMessages( require(easyalluvial) )
+## mtcars2 is included in the current development version
 
-data = as_tibble(mtcars)
-categoricals = c('cyl', 'vs', 'am', 'gear', 'carb')
-numericals = c('mpg', 'cyl', 'disp', 'hp', 'drat', 'wt', 'qsec')
+# mtcars2 <- within(mtcars, {
+#   vs <- factor(vs, labels = c("V", "S"))
+#   am <- factor(am, labels = c("automatic", "manual"))
+#   cyl  <- ordered(cyl)
+#   gear <- ordered(gear)
+#   carb <- ordered(carb)
+# })
+# 
+# mtcars2$id = row.names(mtcars)
+# 
+# mtcars2 = dplyr::as_tibble(mtcars2)
 
-data = data %>%
-  mutate_at( vars(categoricals), as.factor )
+knitr::kable( head(mtcars2) )
 ```
+
+|   mpg| cyl |  disp|   hp|  drat|     wt|   qsec| vs  | am        | gear | carb | id                |
+|-----:|:----|-----:|----:|-----:|------:|------:|:----|:----------|:-----|:-----|:------------------|
+|  21.0| 6   |   160|  110|  3.90|  2.620|  16.46| V   | manual    | 4    | 4    | Mazda RX4         |
+|  21.0| 6   |   160|  110|  3.90|  2.875|  17.02| V   | manual    | 4    | 4    | Mazda RX4 Wag     |
+|  22.8| 4   |   108|   93|  3.85|  2.320|  18.61| S   | manual    | 4    | 1    | Datsun 710        |
+|  21.4| 6   |   258|  110|  3.08|  3.215|  19.44| S   | automatic | 3    | 1    | Hornet 4 Drive    |
+|  18.7| 8   |   360|  175|  3.15|  3.440|  17.02| V   | automatic | 3    | 2    | Hornet Sportabout |
+|  18.1| 6   |   225|  105|  2.76|  3.460|  20.22| S   | automatic | 3    | 1    | Valiant           |
 
 #### Plot
 
@@ -74,7 +100,7 @@ Continuous Variables will be automatically binned as follows.
 
 ``` r
 
-alluvial_wide( data = data
+alluvial_wide( data = mtcars2
                 , max_variables = 5
                 , fill_by = 'first_variable' )
 ```
@@ -86,7 +112,6 @@ alluvial_wide( data = data
 #### Sample Data
 
 ``` r
-
 knitr::kable( head(quarterly_flights) )
 ```
 

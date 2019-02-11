@@ -45,7 +45,13 @@ install.packages('easyalluvial')
 
 ### Development Version
 
+The current development version depends on the `dplyr 0.8.0` which is scheduled to be released soon.
+
 ```{r gh-installation, eval = FALSE}
+
+# install.packages("devtools")
+
+devtools::install_github("tidyverse/dplyr@rc_0.8.0")
 devtools::install_github("erblast/easyalluvial")
 ```
 
@@ -57,25 +63,34 @@ In order to learn about all the features an how they can be useful check out the
 
 ## Examples
 
-### Alluvial from data in wide format
-
-#### Prepare sample data
-
-```{r wide}
-
+```{r}
 suppressPackageStartupMessages( require(tidyverse) )
 suppressPackageStartupMessages( require(easyalluvial) )
 
-data = as_tibble(mtcars)
-categoricals = c('cyl', 'vs', 'am', 'gear', 'carb')
-numericals = c('mpg', 'cyl', 'disp', 'hp', 'drat', 'wt', 'qsec')
-
-data = data %>%
-  mutate_at( vars(categoricals), as.factor )
+```
 
 
+### Alluvial from data in wide format
 
+#### Sample Data
 
+```{r wide}
+
+## mtcars2 is included in the current development version
+
+# mtcars2 <- within(mtcars, {
+#   vs <- factor(vs, labels = c("V", "S"))
+#   am <- factor(am, labels = c("automatic", "manual"))
+#   cyl  <- ordered(cyl)
+#   gear <- ordered(gear)
+#   carb <- ordered(carb)
+# })
+# 
+# mtcars2$id = row.names(mtcars)
+# 
+# mtcars2 = dplyr::as_tibble(mtcars2)
+
+knitr::kable( head(mtcars2) )
 ```
 
 #### Plot
@@ -90,7 +105,7 @@ Continuous Variables will be automatically binned as follows.
 
 ```{r wide_plot }
 
-alluvial_wide( data = data
+alluvial_wide( data = mtcars2
                 , max_variables = 5
                 , fill_by = 'first_variable' )
 
@@ -102,9 +117,7 @@ alluvial_wide( data = data
 #### Sample Data
 
 ```{r long}
-
 knitr::kable( head(quarterly_flights) )
-
 ```
 
 #### Plot 
