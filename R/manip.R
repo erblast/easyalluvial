@@ -57,10 +57,10 @@ manip_factor_2_numeric = function(vec){
 #' supplied with a supported summary function name.
 #' @param digits, integer, number of digits to round to
 #' @examples
-#' summary( mtcars )
-#' summary( manip_bin_numerics(mtcars) )
-#' summary( manip_bin_numerics(mtcars, bin_labels = 'mean'))
-#' summary( manip_bin_numerics(mtcars, bin_labels = 'cuts'
+#' summary( mtcars2 )
+#' summary( manip_bin_numerics(mtcars2) )
+#' summary( manip_bin_numerics(mtcars2, bin_labels = 'mean'))
+#' summary( manip_bin_numerics(mtcars2, bin_labels = 'cuts'
 #'   , scale = FALSE, center = FALSE, transform = FALSE))
 #' @return dataframe
 #' @rdname manip_bin_numerics

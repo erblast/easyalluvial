@@ -4,7 +4,9 @@
 
 
 if(getRversion() >= "2.15.1"){
-  utils::globalVariables( c('x', '.', ':=', 'alluvial_id', 'fill_flow', 'fill_value', 'value', 'fill', 'easyalluvialid' ) )
+  utils::globalVariables( c('x', '.', ':=', 'alluvial_id', 'fill_flow', 'fill_value', 'value'
+                            , 'fill', 'easyalluvialid', 'total', 'perc', 'label', 'prefix', 'lvl'
+                            , 'cum_imp', 'variable', 'label', 'len', 'ori') )
 }
 
 
@@ -44,42 +46,31 @@ if(getRversion() >= "2.15.1"){
 #'   independently we have to assign unique level names first.
 #' @examples
 #'
-#' require(magrittr)
-#' require(dplyr)
 #'
-#' data = as_tibble(mtcars)
-#' categoricals = c('cyl', 'vs', 'am', 'gear', 'carb')
-#' numericals = c('mpg', 'cyl', 'disp', 'hp', 'drat', 'wt', 'qsec')
-#' max_variables = 5
-#'
-#' data = data %>%
-#'   mutate_at( vars(categoricals), as.factor )
-#'
-#'
-#' alluvial_wide( data = data
-#'                 , max_variables = max_variables
+#' alluvial_wide( data = mtcars2, id = id
+#'                 , max_variables = 5
 #'                 , fill_by = 'first_variable' )
 #'\dontrun{
 #'
 #' # more coloring variants----------------------
-#' alluvial_wide( data = data
-#'                 , max_variables = max_variables
+#' alluvial_wide( data = mtcars2, id = id
+#'                 , max_variables = 5
 #'                 , fill_by = 'last_variable' )
 #'
-#' alluvial_wide( data = data
-#'                 , max_variables = max_variables
+#' alluvial_wide( data = mtcars2, id = id
+#'                 , max_variables = 5
 #'                 , fill_by = 'all_flows' )
 #'
-#' alluvial_wide( data = data
-#'                 , max_variables = max_variables
+#' alluvial_wide( data = mtcars2, id = id
+#'                 , max_variables = 5
 #'                 , fill_by = 'first_variable' )
 #'
-#' # manually order variable values---------------
+#' # manually order variable values and colour by stratum value
 #'
-#' alluvial_wide( data = data
-#'                  , max_variables = max_variables
+#' alluvial_wide( data = mtcars2, id = id
+#'                  , max_variables = 5
 #'                  , fill_by = 'values'
-#'                  , order_levels = c('1', '0') )
+#'                  , order_levels = c('4', '8', '6') )
 #'}
 #' @seealso \code{\link[easyalluvial]{alluvial_wide}}
 #'   , \code{\link[ggalluvial]{geom_flow}}, \code{\link[ggalluvial]{geom_stratum}}
@@ -119,7 +110,7 @@ alluvial_wide = function( data
   
   data = ungroup(data)
   
-  # remove  id from variables
+  # remove id from variables
 
   variables = names(data)
 

@@ -25,7 +25,8 @@ Suggests:
     covr,
     ISLR,
     nycflights13,
-    vdiffr
+    vdiffr,
+    randomForest
 RoxygenNote: 6.1.1
 Imports:
   purrr
@@ -40,4 +41,5 @@ Imports:
   , stringr
   , magrittr
   , tibble
+  , caret
 Language: en-US

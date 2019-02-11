@@ -67,42 +67,31 @@ Under the hood this function converts the wide format into long
 }
 \examples{
 
-require(magrittr)
-require(dplyr)
 
-data = as_tibble(mtcars)
-categoricals = c('cyl', 'vs', 'am', 'gear', 'carb')
-numericals = c('mpg', 'cyl', 'disp', 'hp', 'drat', 'wt', 'qsec')
-max_variables = 5
-
-data = data \%>\%
-  mutate_at( vars(categoricals), as.factor )
-
-
-alluvial_wide( data = data
-                , max_variables = max_variables
+alluvial_wide( data = mtcars2, id = id
+                , max_variables = 5
                 , fill_by = 'first_variable' )
 \dontrun{
 
 # more coloring variants----------------------
-alluvial_wide( data = data
-                , max_variables = max_variables
+alluvial_wide( data = mtcars2, id = id
+                , max_variables = 5
                 , fill_by = 'last_variable' )
 
-alluvial_wide( data = data
-                , max_variables = max_variables
+alluvial_wide( data = mtcars2, id = id
+                , max_variables = 5
                 , fill_by = 'all_flows' )
 
-alluvial_wide( data = data
-                , max_variables = max_variables
+alluvial_wide( data = mtcars2, id = id
+                , max_variables = 5
                 , fill_by = 'first_variable' )
 
-# manually order variable values---------------
+# manually order variable values and colour by stratum value
 
-alluvial_wide( data = data
-                 , max_variables = max_variables
+alluvial_wide( data = mtcars2, id = id
+                 , max_variables = 5
                  , fill_by = 'values'
-                 , order_levels = c('1', '0') )
+                 , order_levels = c('4', '8', '6') )
 }
 }
 \seealso{

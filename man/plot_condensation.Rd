@@ -31,18 +31,9 @@ plotting the condensation potential is meant as a decision aid
 }
 \examples{
 
- require(magrittr)
- require(dplyr)
+ plot_condensation(mtcars2)
 
- df = mtcars \%>\%
-   mutate( cyl = as.factor(cyl)
-          , gear = as.factor(gear)
-          , vs = as.factor(vs)
-          , am = as.factor(am))
-
- plot_condensation(df)
-
- plot_condensation(df, first = 'disp')
+ plot_condensation(mtcars2, first = 'disp')
 
 }
 \seealso{

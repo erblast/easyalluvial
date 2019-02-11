@@ -3,8 +3,7 @@ context('alluvial_model_response')
 test_that('alluvial_model_response'
           ,{
 
-                
-    df = select(mtcars_factor, -id)
+    df = select(mtcars2, -id)
     
     m = randomForest::randomForest( disp ~ ., df)
     
@@ -12,22 +11,23 @@ test_that('alluvial_model_response'
     
     imp_conv = check_imp(imp, df)
     
-    dspace = get_data_space(df, imp)
+    dspace = get_data_space(df, imp, degree = 3)
     
     expect_equal( length( names(dspace) ), length( imp_conv$vars ) )
     expect_true( all( names(dspace) %in% imp_conv$vars ) )
     
     pred = predict(m, newdata = dspace)
     
-    degree = 3
+    p = alluvial_model_response(pred, dspace, imp, degree = 3)
     
-    p = alluvial_model_response(pred, dspace, imp, degree = degree)
+    # renders differently on each run of vdiffr::manage_cases()
+    # vdiffr::expect_doppelganger('model_response', p)
     
-    expect_equal( length( levels(p$data$x) ) - 1, degree )
+    expect_equal( length( levels(p$data$x) ) - 1, 3 )
     
-    expect_equal( length( levels(p$data$x) ) - 1, length( arrange(imp_conv, desc(imp))$vars[1:degree] ) )
+    expect_equal( length( levels(p$data$x) ) - 1, length( arrange(imp_conv, desc(imp))$vars[1:3] ) )
     
-    expect_equivalent( levels(p$data$x)[2:( degree + 1 )],  arrange(imp_conv, desc(imp))$vars[1:degree] )
+    expect_equivalent( levels(p$data$x)[2:( 3 + 1 )],  arrange(imp_conv, desc(imp))$vars[1:3] )
     
     
     # checks
@@ -67,7 +67,13 @@ test_that('alluvial_model_response'
     
     degree = 3
     
-    p = alluvial_model_response(pred, dspace, imp, degree = degree)
+    p = alluvial_model_response(pred, dspace, imp, degree = 3)
+    
+    # change bin labels
+    
+    p = alluvial_model_response(pred, dspace, imp, bin_labels = c('A','B','C','D','E'), degree = 3 )
+    
+    vdiffr::expect_doppelganger('model_response_new_labs', p)
     
     
 })
@@ -75,19 +81,28 @@ test_that('alluvial_model_response'
 test_that('alluvial_model_response_caret'
           , {
             
-  df = select(mtcars_factor, -id)
+  df = select(mtcars2, -id)
   
   train = caret::train( disp ~ ., df, method = 'lm',trControl = caret::trainControl(method = 'none') )
-  alluvial_model_response_caret(train)
+  p = alluvial_model_response_caret(train, degree = 3)
+  
+  vdiffr::expect_doppelganger('model_response_caret_lm', p)
   
   train = caret::train( disp ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
-  alluvial_model_response_caret(train)
+  p = alluvial_model_response_caret(train, degree = 3)
   
+  # renders differently on each run of vdiffr::manage_cases()
+  # vdiffr::expect_doppelganger('model_response_caret_rf', p)
+  
+  # change bin labels
+  p = alluvial_model_response_caret(train, degree = 3, bin_labels =  c('A','B','C','D','E') )
+  
+  # renders differently on each run of vdiffr::manage_cases()
+  # vdiffr::expect_doppelganger('model_response_caret_new_labs', p)
+  
+
 })
 
 #TODO 
-# better colours
-#, pass ... to alluvial_wide
-#, change dataset for test
-#, documentation
-#, allow different bin labels
+# vdiffr
+# check

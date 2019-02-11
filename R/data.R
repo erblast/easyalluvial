@@ -16,3 +16,27 @@
 #'@source nycflights13::flights
 #'
 "quarterly_flights"
+
+
+
+
+#'mtcars dataset with cyl, vs, am ,gear, carb as factor variables and car model
+#'names as id
+#'@format A data frame with 32 rows and 12 variables
+#'\describe{
+#'
+#'\item{mpg}{Miles/(US) gallon}
+#'\item{cyl}{ Number of cylinders}
+#'\item{disp}{Displacement (cu.in.)}
+#'\item{hp}{Gross horsepower}
+#'\item{drat}{Rear axle ratio}
+#'\item{wt}{Weight (1000 lbs)}
+#'\item{qsec}{ 1/4 mile time}
+#'\item{vs}{Engine}
+#'\item{am}{Transmission}
+#'\item{gear}{Number of forward gears}
+#'\item{carb}{Number of carburetors}
+#'\item{id}{car model name}
+#'}
+#'@source datasets
+"mtcars2"

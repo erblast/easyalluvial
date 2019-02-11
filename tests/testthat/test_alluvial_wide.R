@@ -4,7 +4,7 @@ context('alluvial wide')
 test_that('alluvial_wide'
   ,{
 
-    data = mtcars_factor
+    data = mtcars2
 
     categoricals = c('cyl', 'vs', 'am', 'gear', 'carb')
     numericals = c('mpg', 'cyl', 'disp', 'hp', 'drat', 'wt', 'qsec')
@@ -113,7 +113,7 @@ test_that('alluvial_wide'
     
     #gouped df
     
-    p = alluvial_wide( group_by(mtcars_factor, cyl), max_variables = 3 )
+    p = alluvial_wide( group_by(mtcars2, cyl), max_variables = 3 )
 
   })
 

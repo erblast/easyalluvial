@@ -22,7 +22,7 @@ test_that('manip_bin_numerics'
 
   categoricals = c('cyl', 'vs', 'am', 'gear', 'carb')
 
-  data = mtcars_factor
+  data = mtcars2
 
   data_new = manip_bin_numerics(data)
 

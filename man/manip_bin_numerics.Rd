@@ -37,9 +37,9 @@ centers, scales and Yeo Johnson transforms numeric variables in
   boxplot stats are capped (set to min or max of boxplot stats).
 }
 \examples{
-summary( mtcars )
-summary( manip_bin_numerics(mtcars) )
-summary( manip_bin_numerics(mtcars, bin_labels = 'mean'))
-summary( manip_bin_numerics(mtcars, bin_labels = 'cuts'
+summary( mtcars2 )
+summary( manip_bin_numerics(mtcars2) )
+summary( manip_bin_numerics(mtcars2, bin_labels = 'mean'))
+summary( manip_bin_numerics(mtcars2, bin_labels = 'cuts'
   , scale = FALSE, center = FALSE, transform = FALSE))
 }

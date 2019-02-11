@@ -2,35 +2,58 @@
 % Please edit documentation in R/alluvial_model_response.R
 \name{alluvial_model_response_caret}
 \alias{alluvial_model_response_caret}
-\title{FUNCTION_TITLE}
+\title{create model response plot for caret models}
 \usage{
-alluvial_model_response_caret(train, degree = 3, bins = 5, force = F)
+alluvial_model_response_caret(train, degree = 4, bins = 5,
+  bin_labels = c("LL", "ML", "M", "MH", "HH"),
+  col_vector_flow = c("#FF0065", "#009850", "#A56F2B", "#005EAA",
+  "#710500"), force = F, ...)
 }
 \arguments{
-\item{train}{PARAM_DESCRIPTION}
+\item{train}{caret train object}
 
-\item{degree}{PARAM_DESCRIPTION, Default: 3}
+\item{degree}{integer,  number of top important variables to select. For
+plotting more than 4 will result in two many flows and the alluvial plot
+will not be very readable, Default: 4}
 
-\item{bins}{PARAM_DESCRIPTION, Default: 5}
+\item{bins}{integer, number of bins for numeric variables, increasing this
+number might result in too many flows, Default: 5}
 
-\item{force}{PARAM_DESCRIPTION, Default: F}
+\item{bin_labels}{labels for the bins from low to high, Default: c("LL",
+"ML", "M", "MH", "HH")}
+
+\item{col_vector_flow, }{character vector, defines flow colours, Default:
+c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')}
+
+\item{force}{logical, force plotting of over 1500 flows, Default: FALSE}
+
+\item{...}{additional parameters passed to
+\code{\link[easyalluvial]{alluvial_wide}}}
 }
 \value{
-OUTPUT_DESCRIPTION
+ggplot2 object
 }
 \description{
-FUNCTION_DESCRIPTION
+Wraps \code{\link[easyalluvial]{alluvial_model_response}} and
+  \code{\link[easyalluvial]{get_data_space}} into one call for caret models.
 }
 \details{
-DETAILS
+this model visualisation approach follows the "visualising the model
+  in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
+  (2015) Visualizing statistical models: Removing the blindfold. Statistical
+  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 }
 \examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+df = mtcars2[ ! names(mtcars2) \%in\% 'id' ]
+train = caret::train( disp ~ .
+                     , df
+                     , method = 'rf'
+                     , trControl = caret::trainControl( method = 'none' )
+                     , importance = TRUE )
+alluvial_model_response_caret(train, degree = 3)
 }
 \seealso{
-\code{\link[caret]{varImp}},\code{\link[caret]{extractPrediction}}
+\code{\link[easyalluvial]{alluvial_wide}},
+  \code{\link[easyalluvial]{get_data_space}}, \code{\link[caret]{varImp}},
+  \code{\link[caret]{extractPrediction}}
 }

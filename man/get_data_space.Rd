@@ -2,32 +2,54 @@
 % Please edit documentation in R/alluvial_model_response.R
 \name{get_data_space}
 \alias{get_data_space}
-\title{FUNCTION_TITLE}
+\title{calculate data space}
 \usage{
-get_data_space(df, imp, degree = 3, bins = 5)
+get_data_space(df, imp, degree = 4, bins = 5)
 }
 \arguments{
-\item{df}{PARAM_DESCRIPTION}
+\item{df}{dataframe, training data}
 
-\item{imp}{PARAM_DESCRIPTION}
+\item{imp}{dataframe, with not more then two columns one of them numeric
+containing importance measures and one character or factor column containing
+corresponding variable names as found in training data.}
 
-\item{degree}{PARAM_DESCRIPTION, Default: 3}
+\item{degree}{integer,  number of top important variables to select. For
+plotting more than 4 will result in two many flows and the alluvial plot
+will not be very readable, Default: 4}
 
-\item{bins}{PARAM_DESCRIPTION, Default: 5}
+\item{bins}{integer, number of bins for numeric variables, increasing this
+number might result in too many flows, Default: 5}
 }
 \value{
-OUTPUT_DESCRIPTION
+data frame
 }
 \description{
-FUNCTION_DESCRIPTION
+calculates a dataspace based on the modelling dataframe and the
+ importance of the explanatory variables. It selects a the most important
+ variables and calculates a set number of bins using
+ \code{\link[easyalluvial]{manip_bin_numerics}} for each numeric variable and
+ calculates the median of each bin. With the default setting this gives 5
+ values per numeric variable which are spread over its relevant range. These
+ values are then used to create all possible combinations of all values in
+ the set of the most important variables including factor variables. All
+ other variables which are not in the set of the most important variables are
+ set to median (numeric variables) of mode (factor variables). The result is
+ then returned as a dataframe that can be used to get prediction from a model
+ trained on the input data.
 }
 \details{
-DETAILS
+this model visualisation approach follows the "visualising the model
+ in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
+ (2015) Visualizing statistical models: Removing the blindfold. Statistical
+ Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 }
 \examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
+df = mtcars2[ ! names(mtcars2) \%in\% 'id' ]
+m = randomForest::randomForest( disp ~ ., df)
+imp = m$importance
+dspace = get_data_space(df, imp)
 }
+\seealso{
+\code{\link[easyalluvial]{alluvial_wide}},
+ \code{\link[easyalluvial]{manip_bin_numerics}}
 }

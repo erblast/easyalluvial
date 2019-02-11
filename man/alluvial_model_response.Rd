@@ -2,40 +2,70 @@
 % Please edit documentation in R/alluvial_model_response.R
 \name{alluvial_model_response}
 \alias{alluvial_model_response}
-\title{FUNCTION_TITLE}
+\title{create model response plot}
 \usage{
-alluvial_model_response(pred, dspace, imp, degree = 3, bins = 5,
-  force = FALSE)
+alluvial_model_response(pred, dspace, imp, degree = 4, bins = 5,
+  bin_labels = c("LL", "ML", "M", "MH", "HH"),
+  col_vector_flow = c("#FF0065", "#009850", "#A56F2B", "#005EAA",
+  "#710500"), force = FALSE, ...)
 }
 \arguments{
-\item{pred}{PARAM_DESCRIPTION}
+\item{pred}{vector, predictions}
 
-\item{dspace}{PARAM_DESCRIPTION}
+\item{dspace}{data frame, returned by
+\code{\link[easyalluvial]{get_data_space}}}
 
-\item{imp}{PARAM_DESCRIPTION}
+\item{imp}{dataframe, with not more then two columns one of them numeric
+containing importance measures and one character or factor column
+containing corresponding variable names as found in training data.}
 
-\item{degree}{PARAM_DESCRIPTION, Default: 3}
+\item{degree}{integer,  number of top important variables to select. For
+plotting more than 4 will result in two many flows and the alluvial plot
+will not be very readable, Default: 4}
 
-\item{bins}{PARAM_DESCRIPTION, Default: 5}
+\item{bins}{integer, number of bins for numeric variables, increasing this
+number might result in too many flows, Default: 5}
 
-\item{force}{PARAM_DESCRIPTION, Default: FALSE}
+\item{bin_labels}{labels for the bins from low to high, Default: c("LL",
+"ML", "M", "MH", "HH")}
+
+\item{col_vector_flow, }{character vector, defines flow colours, Default:
+c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')}
+
+\item{force}{logical, force plotting of over 1500 flows, Default: FALSE}
+
+\item{...}{additional parameters passed to
+\code{\link[easyalluvial]{alluvial_wide}}}
 }
 \value{
-OUTPUT_DESCRIPTION
+ggplot2 object
 }
 \description{
-FUNCTION_DESCRIPTION
+alluvial plots are capable of displaying higher dimensional data
+  on a plane, thus lend themselves to plot the response of a statistical
+  model to changes in the input data across multiple dimensions. The
+  practical limit here is 4 dimensions. We need the data space (a sensible
+  range of data calculated based on the importance of the explanatory
+  variables for the model created by
+  \code{\link[easyalluvial]{get_data_space}} and the predictions returned by
+  the model in response to the data space.
 }
 \details{
-DETAILS
+this model visualisation approach follows the "visualising the model
+  in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
+  (2015) Visualizing statistical models: Removing the blindfold. Statistical
+  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 }
 \examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+df = mtcars2[ ! names(mtcars2) \%in\% 'id' ]
+m = randomForest::randomForest( disp ~ ., df)
+imp = m$importance
+dspace = get_data_space(df, imp, degree = 3)
+pred = predict(m, newdata = dspace)
+alluvial_model_response(pred, dspace, imp, degree = 3)
 }
 \seealso{
-\code{\link[easyalluvial]{alluvial_wide}}
+\code{\link[easyalluvial]{alluvial_wide}},
+  \code{\link[easyalluvial]{get_data_space}},
+  \code{\link[easyalluvial]{alluvial_model_response_caret}}
 }
