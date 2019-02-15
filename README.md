@@ -31,13 +31,9 @@ install.packages('easyalluvial')
 
 ### Development Version
 
-The current development version depends on the `dplyr 0.8.0` which is scheduled to be released soon.
-
 ``` r
 
 # install.packages("devtools")
-
-devtools::install_github("tidyverse/dplyr@rc_0.8.0")
 devtools::install_github("erblast/easyalluvial")
 ```
 
