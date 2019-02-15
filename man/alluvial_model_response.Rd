@@ -7,17 +7,18 @@
 alluvial_model_response(pred, dspace, imp, degree = 4, bins = 5,
   bin_labels = c("LL", "ML", "M", "MH", "HH"),
   col_vector_flow = c("#FF0065", "#009850", "#A56F2B", "#005EAA",
-  "#710500"), force = FALSE, ...)
+  "#710500"), method = "median", force = FALSE, ...)
 }
 \arguments{
-\item{pred}{vector, predictions}
+\item{pred}{vector, predictions, if method = 'pdp' use
+\code{\link[easyalluvial]{get_pdp_predictions}} to calculate predictions}
 
 \item{dspace}{data frame, returned by
 \code{\link[easyalluvial]{get_data_space}}}
 
 \item{imp}{dataframe, with not more then two columns one of them numeric
-containing importance measures and one character or factor column
-containing corresponding variable names as found in training data.}
+containing importance measures and one character or factor column containing
+corresponding variable names as found in training data.}
 
 \item{degree}{integer,  number of top important variables to select. For
 plotting more than 4 will result in two many flows and the alluvial plot
@@ -26,11 +27,22 @@ will not be very readable, Default: 4}
 \item{bins}{integer, number of bins for numeric variables, increasing this
 number might result in too many flows, Default: 5}
 
-\item{bin_labels}{labels for the bins from low to high, Default: c("LL",
-"ML", "M", "MH", "HH")}
+\item{bin_labels}{labels for the bins from low to high, Default: c("LL", "ML",
+"M", "MH", "HH")}
 
 \item{col_vector_flow, }{character vector, defines flow colours, Default:
 c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')}
+
+\item{method, }{character vector, one of c('median', 'pdp') 
+\describe{
+ \item{median}{sets variables that are not displayed to median mode, use with
+ regular predictions} 
+ \item{pdp}{partial dependency plot method, for each
+ observation in the training data the displayed variableas are set to the
+ indicated values. The predict function is called for each modified
+ observation and the result is averaged, calculate predictions using
+ \code{\link[easyalluvial]{get_pdp_predictions}} }
+ }. Default: 'median'}
 
 \item{force}{logical, force plotting of over 1500 flows, Default: FALSE}
 
@@ -42,19 +54,18 @@ ggplot2 object
 }
 \description{
 alluvial plots are capable of displaying higher dimensional data
-  on a plane, thus lend themselves to plot the response of a statistical
-  model to changes in the input data across multiple dimensions. The
-  practical limit here is 4 dimensions. We need the data space (a sensible
-  range of data calculated based on the importance of the explanatory
-  variables for the model created by
-  \code{\link[easyalluvial]{get_data_space}} and the predictions returned by
-  the model in response to the data space.
+ on a plane, thus lend themselves to plot the response of a statistical model
+ to changes in the input data across multiple dimensions. The practical limit
+ here is 4 dimensions. We need the data space (a sensible range of data
+ calculated based on the importance of the explanatory variables of the
+ model as created by \code{\link[easyalluvial]{get_data_space}} and the
+ predictions returned by the model in response to the data space.
 }
 \details{
 this model visualisation approach follows the "visualising the model
-  in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
-  (2015) Visualizing statistical models: Removing the blindfold. Statistical
-  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
+ in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
+ (2015) Visualizing statistical models: Removing the blindfold. Statistical
+ Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 }
 \examples{
 df = mtcars2[ ! names(mtcars2) \%in\% 'id' ]
@@ -63,9 +74,20 @@ imp = m$importance
 dspace = get_data_space(df, imp, degree = 3)
 pred = predict(m, newdata = dspace)
 alluvial_model_response(pred, dspace, imp, degree = 3)
+
+# partial dependency plotting method
+\dontrun{
+ pred = get_pdp_predictions(df, imp
+                            , .f_predict = randomForest:::predict.randomForest
+                            , m
+                            , degree = 3
+                            , bins = 5)
+
+ alluvial_model_response(pred, dspace, imp, degree = 3, method = 'pdp')
+ }
 }
 \seealso{
 \code{\link[easyalluvial]{alluvial_wide}},
-  \code{\link[easyalluvial]{get_data_space}},
-  \code{\link[easyalluvial]{alluvial_model_response_caret}}
+ \code{\link[easyalluvial]{get_data_space}},
+ \code{\link[easyalluvial]{alluvial_model_response_caret}}
 }

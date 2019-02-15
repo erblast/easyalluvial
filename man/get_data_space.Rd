@@ -4,7 +4,7 @@
 \alias{get_data_space}
 \title{calculate data space}
 \usage{
-get_data_space(df, imp, degree = 4, bins = 5)
+get_data_space(df, imp, degree = 4, bins = 5, set_to_row_index = 0)
 }
 \arguments{
 \item{df}{dataframe, training data}
@@ -19,6 +19,11 @@ will not be very readable, Default: 4}
 
 \item{bins}{integer, number of bins for numeric variables, increasing this
 number might result in too many flows, Default: 5}
+
+\item{set_to_row_index}{integer, set variables which are not set as variable
+of top importance by the degree parameter are set to values found at this
+row index. If set_to_row_index = 0 median mode is calculated instead.
+Default: 0}
 }
 \value{
 data frame

@@ -1,8 +1,70 @@
 context('alluvial_model_response')
 
+# TODO:
+# sort out bin_numerics arguments
+# set seed in other tests
+# marginal histograms
+
+test_that('get_data_space'
+          ,{
+            
+  set.seed(0)
+            
+  df = select(mtcars2, -id)
+  m = randomForest::randomForest( disp ~ ., df)
+  imp = m$importance
+  
+  dspace = get_data_space(df, imp, degree = 3, set_to_row_index = 0)
+  
+  expect_true( all( complete.cases(dspace) ) )
+  
+  dspace = get_data_space(df, imp, degree = 3, set_to_row_index = 1)
+  
+  expect_true( all( complete.cases(dspace) ) )
+  
+  rest = dspace[1, 4:ncol(dspace) ]
+  
+  expect_equal( rest, select(df,one_of( names(rest) ) )[1,] )
+  
+  # check that correct number of combinations is returned
+  df_num = select_if(df, is.numeric )
+  m = randomForest::randomForest( disp ~ ., df_num)
+  imp = m$importance
+  
+  dspace = get_data_space(df_num, imp, degree = 3, set_to_row_index = 0)
+  
+  expect_equal( nrow(dspace), 5^3 )
+
+})
+
+test_that('pdp_methods'
+  ,{
+    
+    set.seed(0)
+    
+    df = select(mtcars2, -id)
+    m = randomForest::randomForest( disp ~ ., df)
+    imp = m$importance
+    
+    pred = get_pdp_predictions(df, imp
+                                , .f_predict = randomForest:::predict.randomForest
+                                , m
+                                , degree = 3
+                                , bins = 5)
+    
+    dspace = get_data_space(df, imp, degree = 3)
+    
+    p = alluvial_model_response(pred, dspace, imp, degree = 3, method = 'pdp')
+    
+    vdiffr::expect_doppelganger('model_response_pdb', p)
+    
+})
+
 test_that('alluvial_model_response'
           ,{
 
+    set.seed(0)
+            
     df = select(mtcars2, -id)
     
     m = randomForest::randomForest( disp ~ ., df)
@@ -20,8 +82,7 @@ test_that('alluvial_model_response'
     
     p = alluvial_model_response(pred, dspace, imp, degree = 3)
     
-    # renders differently on each run of vdiffr::manage_cases()
-    # vdiffr::expect_doppelganger('model_response', p)
+    vdiffr::expect_doppelganger('model_response', p)
     
     expect_equal( length( levels(p$data$x) ) - 1, 3 )
     
@@ -88,21 +149,22 @@ test_that('alluvial_model_response_caret'
   
   vdiffr::expect_doppelganger('model_response_caret_lm', p)
   
+  p = alluvial_model_response_caret(train, degree = 3, method = 'pdp')
+  vdiffr::expect_doppelganger('model_response_caret_lm_pdp', p)
+  
+  
+  set.seed(0)
+  
   train = caret::train( disp ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
   p = alluvial_model_response_caret(train, degree = 3)
   
-  # renders differently on each run of vdiffr::manage_cases()
-  # vdiffr::expect_doppelganger('model_response_caret_rf', p)
+  vdiffr::expect_doppelganger('model_response_caret_rf', p)
   
   # change bin labels
   p = alluvial_model_response_caret(train, degree = 3, bin_labels =  c('A','B','C','D','E') )
   
-  # renders differently on each run of vdiffr::manage_cases()
-  # vdiffr::expect_doppelganger('model_response_caret_new_labs', p)
+  vdiffr::expect_doppelganger('model_response_caret_new_labs', p)
   
 
 })
 
-#TODO 
-# vdiffr
-# check

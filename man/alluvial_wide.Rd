@@ -10,7 +10,7 @@ alluvial_wide(data, id = NULL, max_variables = 20, bins = 5,
   col_vector_flow = palette_qualitative() \%>\% palette_filter(greys =
   F), col_vector_value = RColorBrewer::brewer.pal(9, "Greys")[c(4, 7, 5,
   8, 6)], verbose = F, stratum_labels = T, stratum_width = 1/4,
-  auto_rotate_xlabs = T)
+  auto_rotate_xlabs = T, ...)
 }
 \arguments{
 \item{data}{a dataframe}
@@ -46,6 +46,8 @@ RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7, 5)]}
 \item{stratum_width}{double, Default: 1/4}
 
 \item{auto_rotate_xlabs}{logical, Default: TRUE}
+
+\item{...}{additional arguments passed to \code{\link[easyalluvial]{manip_bin_numerics}}}
 }
 \value{
 ggplot2 object
@@ -96,5 +98,7 @@ alluvial_wide( data = mtcars2, id = id
 }
 \seealso{
 \code{\link[easyalluvial]{alluvial_wide}}
-  , \code{\link[ggalluvial]{geom_flow}}, \code{\link[ggalluvial]{geom_stratum}}
+  , \code{\link[ggalluvial]{geom_flow}}
+  , \code{\link[ggalluvial]{geom_stratum}}
+  , \code{\link[easyalluvial]{manip_bin_numerics}}
 }

@@ -36,6 +36,7 @@ if(getRversion() >= "2.15.1"){
 #' @param stratum_labels logical, Default: TRUE
 #' @param stratum_width double, Default: 1/4
 #' @param auto_rotate_xlabs logical, Default: TRUE
+#' @param ... additional arguments passed to \code{\link[easyalluvial]{manip_bin_numerics}}
 #' @return ggplot2 object
 #' @details Under the hood this function converts the wide format into long
 #'   format. ggalluvial also offers a way to make alluvial plots directly from
@@ -73,7 +74,9 @@ if(getRversion() >= "2.15.1"){
 #'                  , order_levels = c('4', '8', '6') )
 #'}
 #' @seealso \code{\link[easyalluvial]{alluvial_wide}}
-#'   , \code{\link[ggalluvial]{geom_flow}}, \code{\link[ggalluvial]{geom_stratum}}
+#'   , \code{\link[ggalluvial]{geom_flow}}
+#'   , \code{\link[ggalluvial]{geom_stratum}}
+#'   , \code{\link[easyalluvial]{manip_bin_numerics}}
 #' @rdname alluvial_wide
 #' @export
 #' @importFrom RColorBrewer brewer.pal
@@ -94,6 +97,7 @@ alluvial_wide = function( data
                             , stratum_labels = T
                             , stratum_width = 1/4
                             , auto_rotate_xlabs = T
+                            , ...
                             ){
 
   # quos
@@ -152,7 +156,7 @@ alluvial_wide = function( data
   # transform numerical variables for binning
 
   data = data %>%
-    manip_bin_numerics( bins, bin_labels)
+    manip_bin_numerics( bins, bin_labels, ... )
 
   # to ensure dbplyr 0.8.0. compatibility we 
   # transform factors to character before grouping

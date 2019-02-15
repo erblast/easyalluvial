@@ -93,6 +93,10 @@ check_imp = function(imp, df){
 #'  will not be very readable, Default: 4
 #'@param bins integer, number of bins for numeric variables, increasing this
 #'  number might result in too many flows, Default: 5
+#'@param set_to_row_index integer, set variables which are not set as variable
+#'  of top importance by the degree parameter are set to values found at this
+#'  row index. If set_to_row_index = 0 median mode is calculated instead.
+#'  Default: 0
 #'@return data frame
 #'@details this model visualisation approach follows the "visualising the model
 #'  in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
@@ -107,7 +111,7 @@ check_imp = function(imp, df){
 #'@export
 #'@seealso \code{\link[easyalluvial]{alluvial_wide}},
 #'  \code{\link[easyalluvial]{manip_bin_numerics}}
-get_data_space = function(df,imp, degree = 4, bins = 5){
+get_data_space = function(df,imp, degree = 4, bins = 5, set_to_row_index = 0){
 
   degree = check_degree(degree, imp, df)
 
@@ -122,11 +126,9 @@ get_data_space = function(df,imp, degree = 4, bins = 5){
   numerics_top = names( select_if( df_top, is.numeric ) )
 
   df_facs = manip_bin_numerics(df_top, bin_labels = 'median', bins = bins) %>%
-    group_by_all() %>%
-    count() %>%
-    ungroup() %>%
+    distinct() %>%
+    tidyr::complete( !!! map( names(df_top) , as.name) ) %>%
     mutate_at( vars(one_of(numerics_top)), function(x) as.numeric( as.character(x)) ) %>%
-    select(-n) %>%
     mutate_if( is.factor, fct_lump, n = bins )
 
   mode = function(x) {
@@ -138,14 +140,21 @@ get_data_space = function(df,imp, degree = 4, bins = 5){
     imp_rest = imp[(degree + 1):nrow(imp), ]
 
     df_rest = select(df, one_of(imp_rest$vars) )
-
-    df_rest = df_rest %>%
-      mutate_if( is.numeric, median ) %>%
-      mutate_if( function(x) is.factor(x) | is.character(x), mode) %>%
-      head(1) %>%
-      sample_n(nrow(df_facs), replace = T)
+    
+    if( set_to_row_index == 0){
+      df_rest = df_rest %>%
+        mutate_if( is.numeric, median ) %>%
+        mutate_if( function(x) is.factor(x) | is.character(x), mode) %>%
+        head(1) %>%
+        sample_n(nrow(df_facs), replace = T)
+      
+    } else{
+      df_rest = df_rest[ set_to_row_index, ] %>%
+        sample_n(nrow(df_facs), replace = T)
+    }
 
     dspace = bind_cols( df_facs, df_rest)
+    
   }else{
     dspace = df_facs
   }
@@ -155,39 +164,113 @@ get_data_space = function(df,imp, degree = 4, bins = 5){
   return(dspace)
 }
 
+#'@title get predictions compatibel with the partial dependency plotting method
+#'@description the partial dependency plotting method uses the averaged
+#'  predictions of all observations in the training data in which the values of
+#'  the variables of interest have been modified. The variables of interest
+#'  being those for which we want to plot the model response. This is a wrapper
+#'  that iterates over all rows in the training data and calls
+#'  \code{\link[easyalluvial]{get_data_space}}, feeds it into the supplied
+#'  predict function and averages the results.
+#'@param df dataframe, training data
+#'@param imp dataframe, with not more then two columns one of them numeric
+#'  containing importance measures and one character or factor column containing
+#'  corresponding variable names as found in training data.
+#'@param degree integer,  number of top important variables to select. For
+#'  plotting more than 4 will result in two many flows and the alluvial plot
+#'  will not be very readable, Default: 4
+#'@param bins integer, number of bins for numeric variables, increasing this
+#'  number might result in too many flows, Default: 5
+#'@param .f_predict corresponding model predict() function. Often predict
+#'  functions are undocumented and can be found using `:::`. For example
+#'  `randomForest:::predict.randomForest`. Predictict functions needs to accept
+#'  `m` as the first parameter and use the `newdata` parameter. Supply a wrapper
+#'  for predict functions with x-y synthax.
+#'@param m model object
+#'@return vector, predictions
+#'@details DETAILS
+#' @examples
+#'  df = mtcars2[ ! names(mtcars2) %in% 'id' ]
+#'  m = randomForest::randomForest( disp ~ ., df)
+#'  imp = m$importance
+#'
+#'  pred = get_pdp_predictions(df, imp
+#'                             , .f_predict = randomForest:::predict.randomForest
+#'                             , m
+#'                             , degree = 3
+#'                             , bins = 5)
+#'
+#'  dspace = get_data_space(df, imp, degree = 3)
+#'
+#'  alluvial_model_response(pred, dspace, imp, degree = 3, method = 'pdp')
+#'@seealso \code{\link[progress]{progress_bar}}
+#'@rdname get_pdp_predictions
+#'@export
+#'@importFrom progress progress_bar
+get_pdp_predictions = function(df, imp, .f_predict, m, degree = 4, bins = 5){
+  
+  pb = progress::progress_bar$new(total = nrow(df))
+  
+  pred_results = rep(0, nrow(get_data_space(df, imp, degree, bins ) ) )
+  
+  for( i in seq(1, nrow(df) ) ){
+    
+    sub_dspace = get_data_space(df, imp, degree, bins, set_to_row_index = i)
+    
+    pred = .f_predict(m, newdata = sub_dspace)
+    
+    pred = pred * 1/nrow(df)
+    
+    pred_results = pred_results + pred
+    
+    pb$tick()
+  }
+  
+  return(pred_results)
+}
 
-#' @title create model response plot
-#' @description alluvial plots are capable of displaying higher dimensional data
-#'   on a plane, thus lend themselves to plot the response of a statistical
-#'   model to changes in the input data across multiple dimensions. The
-#'   practical limit here is 4 dimensions. We need the data space (a sensible
-#'   range of data calculated based on the importance of the explanatory
-#'   variables for the model created by
-#'   \code{\link[easyalluvial]{get_data_space}} and the predictions returned by
-#'   the model in response to the data space.
-#' @param pred vector, predictions
-#' @param dspace data frame, returned by
-#'   \code{\link[easyalluvial]{get_data_space}}
-#' @param imp dataframe, with not more then two columns one of them numeric
-#'   containing importance measures and one character or factor column
-#'   containing corresponding variable names as found in training data.
-#' @param degree integer,  number of top important variables to select. For
-#'   plotting more than 4 will result in two many flows and the alluvial plot
-#'   will not be very readable, Default: 4
-#' @param bins integer, number of bins for numeric variables, increasing this
-#'   number might result in too many flows, Default: 5
-#' @param bin_labels labels for the bins from low to high, Default: c("LL",
-#'   "ML", "M", "MH", "HH")
-#' @param col_vector_flow, character vector, defines flow colours, Default:
-#'   c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')
-#' @param force logical, force plotting of over 1500 flows, Default: FALSE
-#' @param ... additional parameters passed to
-#'   \code{\link[easyalluvial]{alluvial_wide}}
-#' @return ggplot2 object
-#' @details this model visualisation approach follows the "visualising the model
-#'   in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
-#'   (2015) Visualizing statistical models: Removing the blindfold. Statistical
-#'   Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
+#'@title create model response plot
+#'@description alluvial plots are capable of displaying higher dimensional data
+#'  on a plane, thus lend themselves to plot the response of a statistical model
+#'  to changes in the input data across multiple dimensions. The practical limit
+#'  here is 4 dimensions. We need the data space (a sensible range of data
+#'  calculated based on the importance of the explanatory variables of the
+#'  model as created by \code{\link[easyalluvial]{get_data_space}} and the
+#'  predictions returned by the model in response to the data space.
+#'@param pred vector, predictions, if method = 'pdp' use
+#'  \code{\link[easyalluvial]{get_pdp_predictions}} to calculate predictions
+#'@param dspace data frame, returned by
+#'  \code{\link[easyalluvial]{get_data_space}}
+#'@param imp dataframe, with not more then two columns one of them numeric
+#'  containing importance measures and one character or factor column containing
+#'  corresponding variable names as found in training data.
+#'@param degree integer,  number of top important variables to select. For
+#'  plotting more than 4 will result in two many flows and the alluvial plot
+#'  will not be very readable, Default: 4
+#'@param bins integer, number of bins for numeric variables, increasing this
+#'  number might result in too many flows, Default: 5
+#'@param bin_labels labels for the bins from low to high, Default: c("LL", "ML",
+#'  "M", "MH", "HH")
+#'@param col_vector_flow, character vector, defines flow colours, Default:
+#'  c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')
+#'@param method, character vector, one of c('median', 'pdp') 
+#'\describe{
+#'  \item{median}{sets variables that are not displayed to median mode, use with
+#'  regular predictions} 
+#'  \item{pdp}{partial dependency plot method, for each
+#'  observation in the training data the displayed variableas are set to the
+#'  indicated values. The predict function is called for each modified
+#'  observation and the result is averaged, calculate predictions using
+#'  \code{\link[easyalluvial]{get_pdp_predictions}} }
+#'  }. Default: 'median'
+#'@param force logical, force plotting of over 1500 flows, Default: FALSE
+#'@param ... additional parameters passed to
+#'  \code{\link[easyalluvial]{alluvial_wide}}
+#'@return ggplot2 object
+#'@details this model visualisation approach follows the "visualising the model
+#'  in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
+#'  (2015) Visualizing statistical models: Removing the blindfold. Statistical
+#'  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 #' @examples
 #' df = mtcars2[ ! names(mtcars2) %in% 'id' ]
 #' m = randomForest::randomForest( disp ~ ., df)
@@ -195,15 +278,27 @@ get_data_space = function(df,imp, degree = 4, bins = 5){
 #' dspace = get_data_space(df, imp, degree = 3)
 #' pred = predict(m, newdata = dspace)
 #' alluvial_model_response(pred, dspace, imp, degree = 3)
-#' @seealso \code{\link[easyalluvial]{alluvial_wide}},
-#'   \code{\link[easyalluvial]{get_data_space}},
-#'   \code{\link[easyalluvial]{alluvial_model_response_caret}}
-#' @rdname alluvial_model_response
-#' @export
-#' @importFrom stringr str_wrap
+#' 
+#' # partial dependency plotting method
+#' \dontrun{
+#'  pred = get_pdp_predictions(df, imp
+#'                             , .f_predict = randomForest:::predict.randomForest
+#'                             , m
+#'                             , degree = 3
+#'                             , bins = 5)
+#'
+#'  alluvial_model_response(pred, dspace, imp, degree = 3, method = 'pdp')
+#'  }
+#'@seealso \code{\link[easyalluvial]{alluvial_wide}},
+#'  \code{\link[easyalluvial]{get_data_space}},
+#'  \code{\link[easyalluvial]{alluvial_model_response_caret}}
+#'@rdname alluvial_model_response
+#'@export
+#'@importFrom stringr str_wrap
 alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
                                    , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
                                    , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')
+                                   , method = 'median'
                                    , force = FALSE, ...){
 
   # checks ----------------------------------------------------------------------------
@@ -226,6 +321,10 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
   if( length(pred) != nrow(dspace) ){
     stop('pred needs to be the same length as the number of rows in dspace')
   }
+  
+  if( ! method %in% c('median', 'pdp') ){
+    stop( paste('parameter method needs to be one of c("median","pdp") instead got:', method) )
+  }
 
   # internal function -------------------------------------------------------------------
   # will be applied to each column in df creates a suitable label
@@ -236,9 +335,10 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 
     labels = df %>%
       select(!! as.name(col), pred) %>%
-      # arrange( desc( !!as.name(col) ) ) %>%
       count(pred, !! as.name(col)) %>%
+      tidyr::complete(!! as.name(col), pred) %>%
       arrange( desc(pred) ) %>%
+      mutate( n = ifelse( is.na(n), 0 , n ) ) %>%
       group_by(pred) %>%
       mutate( total = sum(n) ) %>%
       ungroup() %>%
@@ -253,7 +353,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
     return( labels)
   }
 
-  # setup inpuf df for alluvial from dspace and apply make_level_labels() function -------------
+  # setup input df for alluvial from dspace and apply make_level_labels() function -------------
 
   df = dspace %>%
     mutate_if( is.factor, fct_drop ) %>%
@@ -288,7 +388,6 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 
   # add info to plot---------------------------------------------------------
 
-  title = 'Model Response Plot'
 
   percent_imp = imp %>%
     arrange( desc(imp) ) %>%
@@ -299,23 +398,36 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 
   subtitle = paste('Presented Variables account for', round( percent_imp * 100, 1)
                    , '% of Variable Importance')
-
-  if(ncol(dspace) > degree){
-
-    others = select(dspace, - one_of( names( dspace[0:degree] ) ) ) %>%
-      mutate_if( is.numeric, round, 3) %>%
-      mutate_all( as.character ) %>%
-      distinct() %>%
-      gather( key = 'variable', value = 'value') %>%
-      mutate( label = map2_chr(variable, value, function(x,y) paste0(x ,': ', y) ) ) %>%
-      summarise( label = paste(label, collapse = '; ') ) %>%
-      .$label
-
-    caption = paste( 'Variables not shown have been set to median or mode:', others) %>%
+  
+  if(method == 'median'){
+  
+    title = 'Model Response Plot'
+    
+    if(ncol(dspace) > degree){
+  
+      others = select(dspace, - one_of( names( dspace[0:degree] ) ) ) %>%
+        mutate_if( is.numeric, round, 3) %>%
+        mutate_all( as.character ) %>%
+        distinct() %>%
+        gather( key = 'variable', value = 'value') %>%
+        mutate( label = map2_chr(variable, value, function(x,y) paste0(x ,': ', y) ) ) %>%
+        summarise( label = paste(label, collapse = '; ') ) %>%
+        .$label
+  
+      caption = paste( 'Variables not shown have been set to median or mode:', others) %>%
+        str_wrap( width = 180 )
+  
+    }else{
+      caption = ''
+    }
+  
+  } else{
+    
+    title = 'Mean Model Response Plot'
+    caption = 'the indicated variables have been set to the indicated values for each 
+    observation in the data set and model response has been averaged' %>%
       str_wrap( width = 180 )
-
-  }else{
-    caption = ''
+    
   }
 
   p = p +
@@ -326,55 +438,104 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 }
 
 
-#' @title create model response plot for caret models
-#' @description Wraps \code{\link[easyalluvial]{alluvial_model_response}} and
-#'   \code{\link[easyalluvial]{get_data_space}} into one call for caret models.
-#' @param train caret train object
-#' @param degree integer,  number of top important variables to select. For
-#'   plotting more than 4 will result in two many flows and the alluvial plot
-#'   will not be very readable, Default: 4
-#' @param bins integer, number of bins for numeric variables, increasing this
-#'   number might result in too many flows, Default: 5
-#' @param bin_labels labels for the bins from low to high, Default: c("LL",
-#'   "ML", "M", "MH", "HH")
-#' @param col_vector_flow, character vector, defines flow colours, Default:
-#'   c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')
-#' @param force logical, force plotting of over 1500 flows, Default: FALSE
-#' @param ... additional parameters passed to
-#'   \code{\link[easyalluvial]{alluvial_wide}}
-#' @return ggplot2 object
-#' @details this model visualisation approach follows the "visualising the model
-#'   in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
-#'   (2015) Visualizing statistical models: Removing the blindfold. Statistical
-#'   Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
+#'@title create model response plot for caret models
+#'@description Wraps \code{\link[easyalluvial]{alluvial_model_response}} and
+#'  \code{\link[easyalluvial]{get_data_space}} into one call for caret models.
+#'@param train caret train object
+#'@param degree integer,  number of top important variables to select. For
+#'  plotting more than 4 will result in two many flows and the alluvial plot
+#'  will not be very readable, Default: 4
+#'@param bins integer, number of bins for numeric variables, increasing this
+#'  number might result in too many flows, Default: 5
+#'@param bin_labels labels for the bins from low to high, Default: c("LL", "ML",
+#'  "M", "MH", "HH")
+#'@param col_vector_flow, character vector, defines flow colours, Default:
+#'  c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')
+#'@param method, character vector, one of c('median', 'pdp') 
+#'\describe{
+#'  \item{median}{sets variables that are not displayed to median mode, use with
+#'  regular predictions} 
+#'  \item{pdp}{partial dependency plot method, for each
+#'  observation in the training data the displayed variableas are set to the
+#'  indicated values. The predict function is called for each modified
+#'  observation and the result is averaged} 
+#'  }. Default: 'median'
+#'@param force logical, force plotting of over 1500 flows, Default: FALSE
+#'@param ... additional parameters passed to
+#'  \code{\link[easyalluvial]{alluvial_wide}}
+#'@return ggplot2 object
+#'@details this model visualisation approach follows the "visualising the model
+#'  in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
+#'  (2015) Visualizing statistical models: Removing the blindfold. Statistical
+#'  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 #' @examples
 #' df = mtcars2[ ! names(mtcars2) %in% 'id' ]
+#' 
 #' train = caret::train( disp ~ .
 #'                      , df
 #'                      , method = 'rf'
 #'                      , trControl = caret::trainControl( method = 'none' )
 #'                      , importance = TRUE )
+#'                      
 #' alluvial_model_response_caret(train, degree = 3)
-#' @seealso \code{\link[easyalluvial]{alluvial_wide}},
-#'   \code{\link[easyalluvial]{get_data_space}}, \code{\link[caret]{varImp}},
-#'   \code{\link[caret]{extractPrediction}}
-#' @rdname alluvial_model_response_caret
-#' @export
-#' @importFrom caret varImp predict.train
+#' 
+#' # partial dependency plotting method
+#' \dontrun{
+#' alluvial_model_response_caret(train, degree = 3, method = 'pdp')
+#'  }
+#'@seealso \code{\link[easyalluvial]{alluvial_wide}},
+#'  \code{\link[easyalluvial]{get_data_space}}, \code{\link[caret]{varImp}},
+#'  \code{\link[caret]{extractPrediction}},
+#'  \code{\link[easyalluvial]{get_data_space}},
+#'  \code{\link[easyalluvial]{get_pdp_predictions}}
+#'@rdname alluvial_model_response_caret
+#'@export
+#'@importFrom caret varImp predict.train
 alluvial_model_response_caret = function(train, degree = 4, bins = 5
                                          , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
                                          , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')
+                                         , method = 'median'
                                          , force = F, ...){
 
   if( ! 'train' %in% class(train) ){
     stop( paste( 'train needs to be of class "train" instead got object of class'
                  , paste( class(train), collapse = ', ' ) ) )
   }
-
+  
+  if( ! method %in% c('median', 'pdp') ){
+    stop( paste('parameter method needs to be one of c("median","pdp") instead got:', method) )
+  }
+  
+  
   imp = caret::varImp( train )
   imp = imp$importance
   dspace = get_data_space(train$trainingData, imp, degree = degree, bins = bins)
-  pred = caret::predict.train(train, newdata = dspace)
-  p = alluvial_model_response(pred, dspace, imp, degree, bins, bin_labels, col_vector_flow, force, ... )
+  
+  if( method == 'median'){
+  
+    pred = caret::predict.train(train, newdata = dspace)
+  }
+  
+  if( method == 'pdp'){
+    
+    pred = get_pdp_predictions(train$trainingData, imp
+                               , .f_predict = caret::predict.train
+                               , m = train
+                               , degree = degree
+                               , bins = bins)
+    
+  }
+  
+  p = alluvial_model_response(pred = pred
+                              , dspace = dspace
+                              , imp = imp
+                              , degree = degree
+                              , bins = bins
+                              , bin_labels = bin_labels
+                              , col_vector_flow = col_vector_flow
+                              , method = method
+                              , force = force
+                              , ... )
+  
   return(p)
 }
