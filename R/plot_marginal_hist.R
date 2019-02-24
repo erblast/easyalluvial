@@ -131,7 +131,7 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
     dens_ori = density( df_ori$value)
     
 
-    # pred-train -------------------------------------
+    # pred_train -------------------------------------
     
     pred_train_from_plot = ! is_null(p$alluvial_params$pred_train)
     pred_train_as_arg = ! is_null(pred_train)
@@ -147,21 +147,47 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
                               , colors = 'lightgrey')
     }
     
-    if( pred_train_from_plot){
-      
-      df_pred_train = select(df_pred_train, - colors) %>%
-        mutate( rwn = apply_cuts(x, p$alluvial_params$new_cuts) 
-                , rwn = as.integer(rwn) ) %>%
-        left_join( df_col, by = c( 'rwn' = 'rwn') ) %>%
-        rename( colors = fill_value ) %>%
-        mutate( colors = as.character(colors) )
-    }
-    
+    # assemple df_plot ----------------------------
     df_plot = tibble( variable = 'pred'
                       , x = dens_pred$x
-                      , y = dens_pred$y ) %>%
+                      , y = dens_pred$y )
+    
+    if( pred_train_from_plot){
+      
+      df_plot = df_plot %>%
+        bind_rows( select(df_pred_train, - colors) )
+      
+    }
+    
+    # apply cuts and select colors -----------------
+    df_plot = df_plot%>%
       mutate( rwn = apply_cuts(x, p$alluvial_params$new_cuts) 
-              , rwn = as.integer(rwn) ) %>%
+              , rwn = as.integer(rwn) )
+    
+    min_rwn_pred = p$alluvial_params$pred %>%
+      apply_cuts( p$alluvial_params$new_cuts) %>%
+      as.integer() %>%
+      min()
+    
+    max_color = max(df_plot$rwn)
+    
+    df_col = df_col %>%
+      mutate( rwn = rwn + min_rwn_pred -1 ) 
+    
+    unused_colours = p$alluvial_params$col_vector_flow[ ! p$alluvial_params$col_vector_flow %in% df_col$fill_value]
+    unused_rwn = seq(1,max_color)
+    unused_rwn = unused_rwn[! unused_rwn %in% df_col$rwn]
+    
+    n_missing_colors = length(unused_rwn) - length(unused_colours)
+    n_missing_colors = ifelse(n_missing_colors < 0, 0, n_missing_colors)
+    
+    unused_colours = c( unused_colours, rep('grey', n_missing_colors) )
+    
+    df_col = df_col %>%
+      mutate( fill_value = as.character(fill_value) ) %>%
+      bind_rows( tibble(rwn = unused_rwn, fill_value = unused_colours[0:length( unused_rwn) ]) )
+      
+    df_plot = df_plot %>%
       left_join( df_col, by = c( 'rwn' = 'rwn') ) %>%
       rename( colors = fill_value ) %>%
       mutate( colors = as.character(colors) ) %>%
@@ -170,24 +196,28 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
                         , y = dens_ori$y
                         , colors = 'lightgrey') )
     
-    if( pred_train_from_plot | pred_train_as_arg ){
+      
+    if( pred_train_as_arg & (! pred_train_from_plot) ){
       df_plot = df_plot %>%
         bind_rows( df_pred_train )
     }
-      
-    df_plot = df_plot %>%
-      mutate( colors = as.factor(colors)
-              , variable = as.factor(variable) )
-              
+    
+    # adjust order of variables on y-axis ----------------------------
+
     if( is_null(pred_train) ){
       df_plot = mutate(df_plot, variable = fct_relevel(variable, 'pred') )
     }else{
       df_plot = mutate(df_plot, variable = fct_relevel(variable, 'pred', 'pred_train') )
     }
 
-
+  # plot ---------------------------------------------------------------
+    
     p = ggplot(df_plot) +
-      ggridges::geom_ridgeline_gradient(aes(x = x, y = variable, height = y, fill = colors, group = variable )
+      ggridges::geom_ridgeline_gradient(aes(x = x
+                                            , y = variable
+                                            , height = y
+                                            , fill = colors
+                                            , group = variable )
                               , scale = scale) +
       geom_rug( aes(x = value), data = df_pred ) +
       geom_rug( aes(x = value), data = df_ori, sides = 't' )
