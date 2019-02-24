@@ -7,7 +7,9 @@
 alluvial_model_response(pred, dspace, imp, degree = 4, bins = 5,
   bin_labels = c("LL", "ML", "M", "MH", "HH"),
   col_vector_flow = c("#FF0065", "#009850", "#A56F2B", "#005EAA",
-  "#710500"), method = "median", force = FALSE, ...)
+  "#710500", "#7B5380", "#00FFFF"), method = "median", force = FALSE,
+  params_bin_numeric_pred = list(center = T, transform = T, scale = T),
+  pred_train = NULL, ...)
 }
 \arguments{
 \item{pred}{vector, predictions, if method = 'pdp' use
@@ -33,18 +35,19 @@ number might result in too many flows, Default: 5}
 \item{col_vector_flow, }{character vector, defines flow colours, Default:
 c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')}
 
-\item{method, }{character vector, one of c('median', 'pdp') 
-\describe{
- \item{median}{sets variables that are not displayed to median mode, use with
- regular predictions} 
- \item{pdp}{partial dependency plot method, for each
- observation in the training data the displayed variableas are set to the
- indicated values. The predict function is called for each modified
- observation and the result is averaged, calculate predictions using
- \code{\link[easyalluvial]{get_pdp_predictions}} }
- }. Default: 'median'}
+\item{method, }{character vector, one of c('median', 'pdp') \describe{
+\item{median}{sets variables that are not displayed to median mode, use with
+regular predictions} \item{pdp}{partial dependency plot method, for each
+observation in the training data the displayed variableas are set to the
+indicated values. The predict function is called for each modified
+observation and the result is averaged, calculate predictions using
+\code{\link[easyalluvial]{get_pdp_predictions}} } }. Default: 'median'}
 
 \item{force}{logical, force plotting of over 1500 flows, Default: FALSE}
+
+\item{params_bin_numeric_pred}{list, additional parameters passed to
+\code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the
+pred parameter. Default: list( bins = 5, center = T, transform = T, scale = T)}
 
 \item{...}{additional parameters passed to
 \code{\link[easyalluvial]{alluvial_wide}}}
@@ -57,9 +60,9 @@ alluvial plots are capable of displaying higher dimensional data
  on a plane, thus lend themselves to plot the response of a statistical model
  to changes in the input data across multiple dimensions. The practical limit
  here is 4 dimensions. We need the data space (a sensible range of data
- calculated based on the importance of the explanatory variables of the
- model as created by \code{\link[easyalluvial]{get_data_space}} and the
- predictions returned by the model in response to the data space.
+ calculated based on the importance of the explanatory variables of the model
+ as created by \code{\link[easyalluvial]{get_data_space}} and the predictions
+ returned by the model in response to the data space.
 }
 \details{
 this model visualisation approach follows the "visualising the model
@@ -68,12 +71,13 @@ this model visualisation approach follows the "visualising the model
  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 }
 \examples{
-df = mtcars2[ ! names(mtcars2) \%in\% 'id' ]
+df = mtcars2[ ! names(mtcars2) \%in\% 'ids' ]
 m = randomForest::randomForest( disp ~ ., df)
 imp = m$importance
 dspace = get_data_space(df, imp, degree = 3)
 pred = predict(m, newdata = dspace)
-alluvial_model_response(pred, dspace, imp, degree = 3)
+pred_train = predict(m)
+alluvial_model_response(pred, pred_train, dspace, imp, degree = 3)
 
 # partial dependency plotting method
 \dontrun{

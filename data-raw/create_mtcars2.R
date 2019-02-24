@@ -9,8 +9,8 @@ mtcars2 <- within(mtcars, {
   carb <- ordered(carb)
 })
 
-mtcars2$id = row.names(mtcars)
+mtcars2$ids = row.names(mtcars)
 
 mtcars2 = dplyr::as_tibble(mtcars2)
 
-usethis::use_data( mtcars2 )
+usethis::use_data( mtcars2, overwrite = TRUE )

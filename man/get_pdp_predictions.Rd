@@ -44,7 +44,7 @@ the partial dependency plotting method uses the averaged
 DETAILS
 }
 \examples{
- df = mtcars2[ ! names(mtcars2) \%in\% 'id' ]
+ df = mtcars2[ ! names(mtcars2) \%in\% 'ids' ]
  m = randomForest::randomForest( disp ~ ., df)
  imp = m$importance
 

@@ -19,7 +19,7 @@ names as id}
 \item{am}{Transmission}
 \item{gear}{Number of forward gears}
 \item{carb}{Number of carburetors}
-\item{id}{car model name}
+\item{ids}{car model name}
 }}
 \source{
 datasets

@@ -7,7 +7,8 @@
 alluvial_model_response_caret(train, degree = 4, bins = 5,
   bin_labels = c("LL", "ML", "M", "MH", "HH"),
   col_vector_flow = c("#FF0065", "#009850", "#A56F2B", "#005EAA",
-  "#710500"), method = "median", force = F, ...)
+  "#710500"), method = "median", params_bin_numeric_pred = list(center
+  = T, transform = T, scale = T), force = F, ...)
 }
 \arguments{
 \item{train}{caret train object}
@@ -25,15 +26,18 @@ number might result in too many flows, Default: 5}
 \item{col_vector_flow, }{character vector, defines flow colours, Default:
 c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')}
 
-\item{method, }{character vector, one of c('median', 'pdp') 
+\item{method, }{character vector, one of c('median', 'pdp')
 \describe{
  \item{median}{sets variables that are not displayed to median mode, use with
- regular predictions} 
+ regular predictions}
  \item{pdp}{partial dependency plot method, for each
  observation in the training data the displayed variableas are set to the
  indicated values. The predict function is called for each modified
- observation and the result is averaged} 
- }. Default: 'median'}
+ observation and the result is averaged}
+ }. Default: 'median'
+#'@param params_bin_numeric_pred list, additional parameters passed to
+ \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the
+ pred parameter. Default: list( bins = 5, center = T, transform = T, scale = T)}
 
 \item{force}{logical, force plotting of over 1500 flows, Default: FALSE}
 
@@ -54,14 +58,14 @@ this model visualisation approach follows the "visualising the model
  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 }
 \examples{
-df = mtcars2[ ! names(mtcars2) \%in\% 'id' ]
+df = mtcars2[ -! names(mtcars2) \%in\% 'ids' ]
 
 train = caret::train( disp ~ .
                      , df
                      , method = 'rf'
                      , trControl = caret::trainControl( method = 'none' )
                      , importance = TRUE )
-                     
+
 alluvial_model_response_caret(train, degree = 3)
 
 # partial dependency plotting method

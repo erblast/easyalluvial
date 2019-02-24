@@ -103,7 +103,7 @@ check_imp = function(imp, df){
 #'  (2015) Visualizing statistical models: Removing the blindfold. Statistical
 #'  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 #' @examples
-#' df = mtcars2[ ! names(mtcars2) %in% 'id' ]
+#' df = mtcars2[ -! names(mtcars2) %in% 'ids' ]
 #' m = randomForest::randomForest( disp ~ ., df)
 #' imp = m$importance
 #' dspace = get_data_space(df, imp)
@@ -140,21 +140,21 @@ get_data_space = function(df,imp, degree = 4, bins = 5, set_to_row_index = 0){
     imp_rest = imp[(degree + 1):nrow(imp), ]
 
     df_rest = select(df, one_of(imp_rest$vars) )
-    
+
     if( set_to_row_index == 0){
       df_rest = df_rest %>%
         mutate_if( is.numeric, median ) %>%
         mutate_if( function(x) is.factor(x) | is.character(x), mode) %>%
         head(1) %>%
         sample_n(nrow(df_facs), replace = T)
-      
+
     } else{
       df_rest = df_rest[ set_to_row_index, ] %>%
         sample_n(nrow(df_facs), replace = T)
     }
 
     dspace = bind_cols( df_facs, df_rest)
-    
+
   }else{
     dspace = df_facs
   }
@@ -190,7 +190,7 @@ get_data_space = function(df,imp, degree = 4, bins = 5, set_to_row_index = 0){
 #'@return vector, predictions
 #'@details DETAILS
 #' @examples
-#'  df = mtcars2[ ! names(mtcars2) %in% 'id' ]
+#'  df = mtcars2[ ! names(mtcars2) %in% 'ids' ]
 #'  m = randomForest::randomForest( disp ~ ., df)
 #'  imp = m$importance
 #'
@@ -208,35 +208,65 @@ get_data_space = function(df,imp, degree = 4, bins = 5, set_to_row_index = 0){
 #'@export
 #'@importFrom progress progress_bar
 get_pdp_predictions = function(df, imp, .f_predict, m, degree = 4, bins = 5){
-  
+
   pb = progress::progress_bar$new(total = nrow(df))
-  
+
   pred_results = rep(0, nrow(get_data_space(df, imp, degree, bins ) ) )
-  
+
   for( i in seq(1, nrow(df) ) ){
-    
+
     sub_dspace = get_data_space(df, imp, degree, bins, set_to_row_index = i)
-    
+
     pred = .f_predict(m, newdata = sub_dspace)
-    
+
     pred = pred * 1/nrow(df)
-    
+
     pred_results = pred_results + pred
-    
+
     pb$tick()
   }
-  
+
   return(pred_results)
 }
+
+
+get_cuts = function( from, target, scale = T, center = T, transform = T, ... ){
+  
+  cuts = levels( manip_bin_numerics(from, bin_labels = 'min_max', ... ) )%>%
+    paste( collapse = ',') %>%
+    str_replace_all('\\ -\n ', ',') %>%
+    str_split(',') %>%
+    map(unique) %>%
+    map(as.numeric) %>%
+    map(sort) %>%
+    unlist()
+  
+  merge1 = seq(2, length(cuts)-1, 2 )
+  merge2 = seq(3, length(cuts)-1, 2 )
+  
+  merged = (cuts[merge1] + cuts[merge2]) / 2
+  
+  new_cuts = sort( c( cuts[1] - 1 , merged, cuts[length(cuts)] + 1 ) )
+  
+  if(min(target) < min(new_cuts)){
+    new_cuts[1] <- (min(target) - 1)
+  }
+  
+  if(max(target) > max(new_cuts)){
+    new_cuts[ length(new_cuts) ] <- (max(target) + 1)
+  }
+  
+  return(new_cuts)
+} 
 
 #'@title create model response plot
 #'@description alluvial plots are capable of displaying higher dimensional data
 #'  on a plane, thus lend themselves to plot the response of a statistical model
 #'  to changes in the input data across multiple dimensions. The practical limit
 #'  here is 4 dimensions. We need the data space (a sensible range of data
-#'  calculated based on the importance of the explanatory variables of the
-#'  model as created by \code{\link[easyalluvial]{get_data_space}} and the
-#'  predictions returned by the model in response to the data space.
+#'  calculated based on the importance of the explanatory variables of the model
+#'  as created by \code{\link[easyalluvial]{get_data_space}} and the predictions
+#'  returned by the model in response to the data space.
 #'@param pred vector, predictions, if method = 'pdp' use
 #'  \code{\link[easyalluvial]{get_pdp_predictions}} to calculate predictions
 #'@param dspace data frame, returned by
@@ -253,16 +283,16 @@ get_pdp_predictions = function(df, imp, .f_predict, m, degree = 4, bins = 5){
 #'  "M", "MH", "HH")
 #'@param col_vector_flow, character vector, defines flow colours, Default:
 #'  c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')
-#'@param method, character vector, one of c('median', 'pdp') 
-#'\describe{
+#'@param method, character vector, one of c('median', 'pdp') \describe{
 #'  \item{median}{sets variables that are not displayed to median mode, use with
-#'  regular predictions} 
-#'  \item{pdp}{partial dependency plot method, for each
+#'  regular predictions} \item{pdp}{partial dependency plot method, for each
 #'  observation in the training data the displayed variableas are set to the
 #'  indicated values. The predict function is called for each modified
 #'  observation and the result is averaged, calculate predictions using
-#'  \code{\link[easyalluvial]{get_pdp_predictions}} }
-#'  }. Default: 'median'
+#'  \code{\link[easyalluvial]{get_pdp_predictions}} } }. Default: 'median'
+#'@param params_bin_numeric_pred list, additional parameters passed to
+#'  \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the
+#'  pred parameter. Default: list( bins = 5, center = T, transform = T, scale = T)
 #'@param force logical, force plotting of over 1500 flows, Default: FALSE
 #'@param ... additional parameters passed to
 #'  \code{\link[easyalluvial]{alluvial_wide}}
@@ -272,13 +302,14 @@ get_pdp_predictions = function(df, imp, .f_predict, m, degree = 4, bins = 5){
 #'  (2015) Visualizing statistical models: Removing the blindfold. Statistical
 #'  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 #' @examples
-#' df = mtcars2[ ! names(mtcars2) %in% 'id' ]
+#' df = mtcars2[ ! names(mtcars2) %in% 'ids' ]
 #' m = randomForest::randomForest( disp ~ ., df)
 #' imp = m$importance
 #' dspace = get_data_space(df, imp, degree = 3)
 #' pred = predict(m, newdata = dspace)
-#' alluvial_model_response(pred, dspace, imp, degree = 3)
-#' 
+#' pred_train = predict(m)
+#' alluvial_model_response(pred, pred_train, dspace, imp, degree = 3)
+#'
 #' # partial dependency plotting method
 #' \dontrun{
 #'  pred = get_pdp_predictions(df, imp
@@ -294,13 +325,27 @@ get_pdp_predictions = function(df, imp, .f_predict, m, degree = 4, bins = 5){
 #'  \code{\link[easyalluvial]{alluvial_model_response_caret}}
 #'@rdname alluvial_model_response
 #'@export
-#'@importFrom stringr str_wrap
+#'@importFrom stringr str_wrap str_replace_all str_split
 alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
                                    , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
-                                   , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')
+                                   , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#00FFFF')
                                    , method = 'median'
-                                   , force = FALSE, ...){
+                                   , force = FALSE
+                                   , params_bin_numeric_pred = list( center = T, transform = T, scale = T)
+                                   , pred_train = NULL
+                                   , ...){
 
+  params = list(pred = pred
+                , pred_train = pred_train
+                , dspace = dspace
+                , imp = imp
+                , degree = degree
+                , bins = bins
+                , bin_labels = bin_labels
+                , col_vector_flow = col_vector_flow
+                , method = method
+                , params_bin_numeric_pred = params_bin_numeric_pred
+                , force = force)
   # checks ----------------------------------------------------------------------------
 
   if( length(bin_labels) != bins & ! bin_labels[1] %in% c('median', 'cuts', 'mean', 'min_max') ){
@@ -321,9 +366,13 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
   if( length(pred) != nrow(dspace) ){
     stop('pred needs to be the same length as the number of rows in dspace')
   }
-  
+
   if( ! method %in% c('median', 'pdp') ){
     stop( paste('parameter method needs to be one of c("median","pdp") instead got:', method) )
+  }
+  
+  if( bins > 7){
+    warning('if bins > 7 colors will be repeated, adjust "col_vector_flow" parameter manually')
   }
 
   # internal function -------------------------------------------------------------------
@@ -354,13 +403,24 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
   }
 
   # setup input df for alluvial from dspace and apply make_level_labels() function -------------
+  # make bins for the prediction either based on pred or pred_train if supplied
+  
+  if( is_null(pred_train) ){
+    pred_train = pred
+  }
+  
+  new_cuts = do.call( get_cuts, c(from = list(pred_train), target = list(pred)
+                                  , params_bin_numeric_pred, bins = bins) )
+  
+  params$new_cuts = new_cuts
 
   df = dspace %>%
     mutate_if( is.factor, fct_drop ) %>%
     mutate_all( as.factor ) %>%
     mutate( pred = pred ) %>%
-    manip_bin_numerics( bin_labels = 'min_max' )
-
+    manip_bin_numerics( bins = new_cuts, bin_labels = 'cuts'
+                        , scale = F, center = F, transform = F)
+  
   # create new factor labels for variables
   for(col in names(dspace[0:degree]) ){
 
@@ -384,6 +444,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
   p = select(df, pred, one_of( names( dspace[0:degree] ) ) ) %>%
     alluvial_wide( fill_by = 'first_variable'
                    , col_vector_flow = col_vector_flow
+                   , colorful_fill_variable_stratum = T
                    , ... )
 
   # add info to plot---------------------------------------------------------
@@ -398,13 +459,13 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 
   subtitle = paste('Presented Variables account for', round( percent_imp * 100, 1)
                    , '% of Variable Importance')
-  
+
   if(method == 'median'){
-  
+
     title = 'Model Response Plot'
-    
+
     if(ncol(dspace) > degree){
-  
+
       others = select(dspace, - one_of( names( dspace[0:degree] ) ) ) %>%
         mutate_if( is.numeric, round, 3) %>%
         mutate_all( as.character ) %>%
@@ -413,26 +474,29 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
         mutate( label = map2_chr(variable, value, function(x,y) paste0(x ,': ', y) ) ) %>%
         summarise( label = paste(label, collapse = '; ') ) %>%
         .$label
-  
+
       caption = paste( 'Variables not shown have been set to median or mode:', others) %>%
         str_wrap( width = 180 )
-  
+
     }else{
       caption = ''
     }
-  
+
   } else{
-    
+
     title = 'Mean Model Response Plot'
-    caption = 'the indicated variables have been set to the indicated values for each 
+    caption = 'the indicated variables have been set to the indicated values for each
     observation in the data set and model response has been averaged' %>%
       str_wrap( width = 180 )
-    
+
   }
 
   p = p +
     labs(title = title, subtitle = subtitle, caption = caption)
-
+  
+  p$alluvial_type = 'model_response'
+  p$alluvial_params = c(p$alluvial_params[! names(p$alluvial_params) %in% names(params)], params)
+  
   return(p)
 
 }
@@ -451,15 +515,18 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'  "M", "MH", "HH")
 #'@param col_vector_flow, character vector, defines flow colours, Default:
 #'  c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')
-#'@param method, character vector, one of c('median', 'pdp') 
+#'@param method, character vector, one of c('median', 'pdp')
 #'\describe{
 #'  \item{median}{sets variables that are not displayed to median mode, use with
-#'  regular predictions} 
+#'  regular predictions}
 #'  \item{pdp}{partial dependency plot method, for each
 #'  observation in the training data the displayed variableas are set to the
 #'  indicated values. The predict function is called for each modified
-#'  observation and the result is averaged} 
+#'  observation and the result is averaged}
 #'  }. Default: 'median'
+#'#'@param params_bin_numeric_pred list, additional parameters passed to
+#'  \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the
+#'  pred parameter. Default: list( bins = 5, center = T, transform = T, scale = T)
 #'@param force logical, force plotting of over 1500 flows, Default: FALSE
 #'@param ... additional parameters passed to
 #'  \code{\link[easyalluvial]{alluvial_wide}}
@@ -469,16 +536,16 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'  (2015) Visualizing statistical models: Removing the blindfold. Statistical
 #'  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 #' @examples
-#' df = mtcars2[ ! names(mtcars2) %in% 'id' ]
-#' 
+#' df = mtcars2[ -! names(mtcars2) %in% 'ids' ]
+#'
 #' train = caret::train( disp ~ .
 #'                      , df
 #'                      , method = 'rf'
 #'                      , trControl = caret::trainControl( method = 'none' )
 #'                      , importance = TRUE )
-#'                      
+#'
 #' alluvial_model_response_caret(train, degree = 3)
-#' 
+#'
 #' # partial dependency plotting method
 #' \dontrun{
 #' alluvial_model_response_caret(train, degree = 3, method = 'pdp')
@@ -493,39 +560,42 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'@importFrom caret varImp predict.train
 alluvial_model_response_caret = function(train, degree = 4, bins = 5
                                          , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
-                                         , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')
+                                         , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#00FFFF')
                                          , method = 'median'
+                                         , params_bin_numeric_pred = list( center = T, transform = T, scale = T)
+                                         , pred_train = NULL
                                          , force = F, ...){
 
+  
   if( ! 'train' %in% class(train) ){
     stop( paste( 'train needs to be of class "train" instead got object of class'
                  , paste( class(train), collapse = ', ' ) ) )
   }
-  
+
   if( ! method %in% c('median', 'pdp') ){
     stop( paste('parameter method needs to be one of c("median","pdp") instead got:', method) )
   }
-  
-  
+
+
   imp = caret::varImp( train )
   imp = imp$importance
   dspace = get_data_space(train$trainingData, imp, degree = degree, bins = bins)
-  
+
   if( method == 'median'){
-  
+
     pred = caret::predict.train(train, newdata = dspace)
   }
-  
+
   if( method == 'pdp'){
-    
+
     pred = get_pdp_predictions(train$trainingData, imp
                                , .f_predict = caret::predict.train
                                , m = train
                                , degree = degree
                                , bins = bins)
-    
+
   }
-  
+
   p = alluvial_model_response(pred = pred
                               , dspace = dspace
                               , imp = imp
@@ -534,8 +604,11 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
                               , bin_labels = bin_labels
                               , col_vector_flow = col_vector_flow
                               , method = method
+                              , params_bin_numeric_pred = params_bin_numeric_pred
                               , force = force
+                              , pred_train = pred_train
                               , ... )
+
   
   return(p)
 }

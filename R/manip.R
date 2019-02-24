@@ -90,7 +90,7 @@ manip_bin_numerics = function(x
 
   requireNamespace('recipes')
 
-  if( length(bin_labels) != bins & ! bin_labels[1] %in% c('median', 'cuts', 'mean', 'min_max') ){
+  if( length(bin_labels) != bins[1] & ! bin_labels[1] %in% c('median', 'cuts', 'mean', 'min_max') ){
     stop( "bin_labels length must be equal to bins or one of  c('median', 'cuts', 'mean', 'min_max')")
   }
 
@@ -177,7 +177,7 @@ manip_bin_numerics = function(x
     
   }
   
-  if( length(bin_labels) == bins ){
+  if( length(bin_labels) == bins[1] ){
     
     data_new = data_new %>%
       mutate_at( vars(numerics),  rename_levels)

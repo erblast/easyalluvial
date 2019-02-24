@@ -11,78 +11,78 @@ if(getRversion() >= "2.15.1"){
 
 
 
-#' @title alluvial plot of data in wide format
-#' @description plots a dataframe as an alluvial plot. All numerical variables
-#'   are scaled, centered and YeoJohnson transformed before binning. Plots all
-#'   variables in the sequence as they appear in the dataframe until maximum
-#'   number of values is reached.
-#' @param data a dataframe
-#' @param id unquoted column name of id column or character vector with id
-#'   column name
-#' @param max_variables maximum number of variables, Default: 20
-#' @param bins number of bins for numerical variables, Default: 5
-#' @param bin_labels labels for the bins from low to high, Default: c("LL",
-#'   "ML", "M", "MH", "HH")
-#' @param NA_label character vector define label for missing data, Default: 'NA'
-#' @param order_levels character vector denoting levels to be reordered from low
-#'   to high
-#' @param fill_by one_of(c('first_variable', 'last_variable', 'all_flows',
-#'   'values')), Default: 'first_variable'
-#' @param col_vector_flow HEX colors for flows, Default: palette_filter( greys =
-#'   F)
-#' @param col_vector_value Hex colors for y levels/values, Default:
-#'   RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7, 5)]
-#' @param verbose logical, print plot summary, Default: F
-#' @param stratum_labels logical, Default: TRUE
-#' @param stratum_width double, Default: 1/4
-#' @param auto_rotate_xlabs logical, Default: TRUE
-#' @param ... additional arguments passed to \code{\link[easyalluvial]{manip_bin_numerics}}
-#' @return ggplot2 object
-#' @details Under the hood this function converts the wide format into long
-#'   format. ggalluvial also offers a way to make alluvial plots directly from
-#'   wide format tables but it does not allow individual colouring of the
-#'   stratum segments. The tradeoff is that we can only order levels as a whole
-#'   and not individually by variable, Thus if some variables have levels with
-#'   the same name the order will be the same. If we want to change level order
-#'   independently we have to assign unique level names first.
+#'@title alluvial plot of data in wide format
+#'@description plots a dataframe as an alluvial plot. All numerical variables
+#'  are scaled, centered and YeoJohnson transformed before binning. Plots all
+#'  variables in the sequence as they appear in the dataframe until maximum
+#'  number of values is reached.
+#'@param data a dataframe
+#'@param id unquoted column name of id column or character vector with id column
+#'  name
+#'@param max_variables maximum number of variables, Default: 20
+#'@param bins number of bins for numerical variables, Default: 5
+#'@param bin_labels labels for the bins from low to high, Default: c("LL", "ML",
+#'  "M", "MH", "HH")
+#'@param NA_label character vector define label for missing data, Default: 'NA'
+#'@param order_levels character vector denoting levels to be reordered from low
+#'  to high
+#'@param fill_by one_of(c('first_variable', 'last_variable', 'all_flows',
+#'  'values')), Default: 'first_variable'
+#'@param col_vector_flow HEX colors for flows, Default: palette_filter( greys =
+#'  F)
+#'@param col_vector_value Hex colors for y levels/values, Default:
+#'  RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7, 5)]
+#'@param colorful_fill_variable_stratum logical, use flow colors to colorize
+#'  fill variable stratum, Default: FALSE
+#'@param verbose logical, print plot summary, Default: F
+#'@param stratum_labels logical, Default: TRUE
+#'@param stratum_width double, Default: 1/4
+#'@param auto_rotate_xlabs logical, Default: TRUE
+#'@param ... additional arguments passed to
+#'  \code{\link[easyalluvial]{manip_bin_numerics}}
+#'@return ggplot2 object
+#'@details Under the hood this function converts the wide format into long
+#'  format. ggalluvial also offers a way to make alluvial plots directly from
+#'  wide format tables but it does not allow individual colouring of the stratum
+#'  segments. The tradeoff is that we can only order levels as a whole and not
+#'  individually by variable, Thus if some variables have levels with the same
+#'  name the order will be the same. If we want to change level order
+#'  independently we have to assign unique level names first.
 #' @examples
-#'
-#'
-#' alluvial_wide( data = mtcars2, id = id
+#' alluvial_wide( data = mtcars2, id = ids
 #'                 , max_variables = 5
 #'                 , fill_by = 'first_variable' )
 #'\dontrun{
 #'
 #' # more coloring variants----------------------
-#' alluvial_wide( data = mtcars2, id = id
+#' alluvial_wide( data = mtcars2, id = ids
 #'                 , max_variables = 5
 #'                 , fill_by = 'last_variable' )
 #'
-#' alluvial_wide( data = mtcars2, id = id
+#' alluvial_wide( data = mtcars2, id = ids
 #'                 , max_variables = 5
 #'                 , fill_by = 'all_flows' )
 #'
-#' alluvial_wide( data = mtcars2, id = id
+#' alluvial_wide( data = mtcars2, id = ids
 #'                 , max_variables = 5
 #'                 , fill_by = 'first_variable' )
 #'
 #' # manually order variable values and colour by stratum value
 #'
-#' alluvial_wide( data = mtcars2, id = id
+#' alluvial_wide( data = mtcars2, id = ids
 #'                  , max_variables = 5
 #'                  , fill_by = 'values'
 #'                  , order_levels = c('4', '8', '6') )
 #'}
-#' @seealso \code{\link[easyalluvial]{alluvial_wide}}
-#'   , \code{\link[ggalluvial]{geom_flow}}
-#'   , \code{\link[ggalluvial]{geom_stratum}}
-#'   , \code{\link[easyalluvial]{manip_bin_numerics}}
-#' @rdname alluvial_wide
-#' @export
-#' @importFrom RColorBrewer brewer.pal
-#' @importFrom forcats fct_relevel
-#' @importFrom ggalluvial stat_stratum geom_flow geom_stratum StatStratum
-#' @importFrom magrittr %>%
+#'@seealso \code{\link[easyalluvial]{alluvial_wide}} ,
+#'  \code{\link[ggalluvial]{geom_flow}} , \code{\link[ggalluvial]{geom_stratum}}
+#'  , \code{\link[easyalluvial]{manip_bin_numerics}}
+#'@rdname alluvial_wide
+#'@export
+#'@importFrom RColorBrewer brewer.pal
+#'@importFrom forcats fct_relevel
+#'@importFrom ggalluvial stat_stratum geom_flow geom_stratum StatStratum
+#'@importFrom magrittr %>%
 alluvial_wide = function( data
                             , id = NULL
                             , max_variables = 20
@@ -93,66 +93,91 @@ alluvial_wide = function( data
                             , fill_by = 'first_variable'
                             , col_vector_flow = palette_qualitative() %>% palette_filter( greys = F)
                             , col_vector_value =  RColorBrewer::brewer.pal(9, 'Greys')[c(4,7,5,8,6)]
+                            , colorful_fill_variable_stratum = F
                             , verbose = F
                             , stratum_labels = T
                             , stratum_width = 1/4
                             , auto_rotate_xlabs = T
                             , ...
                             ){
-
   # quos
-
+  
   id = enquo( id )
-
+  
   if( rlang::quo_is_null(id) ){
     id_str = NULL
   }else{
     id_str = quo_name(id)
   }
-
-  # ungroup
   
-  data = ungroup(data)
+  # save params to attach to plot later
+  params = list(
+    id = id_str
+    , max_variables = max_variables
+    , bins = bins
+    , bin_labels = bin_labels
+    , NA_label = NA_label
+    , order_levels = order_levels
+    , fill_by = fill_by
+    , col_vector_flow = col_vector_flow
+    , col_vector_value =  col_vector_value
+    , verbose = verbose
+    , stratum_labels = stratum_labels
+    , stratum_width = stratum_width
+    , auto_rotate_xlabs = auto_rotate_xlabs
+  )
   
-  # remove id from variables
-
+  
+  # get variables
+  
   variables = names(data)
-
+  
   if( ! is_empty(id_str %in% variables) ) variables = variables[ ! variables %in% id_str ]
-
+  
   # adjust variable length
-
+  
   if( max_variables > length(variables) ) max_variables = length(variables)
-
+  
   variables = unique(variables)
-
+  
   variables = variables[1:max_variables]
+  
+  
+  # prepare ID column
+  
+  if( rlang::quo_is_null(id) ){
+    
+    data = data %>%
+      mutate( ID = row_number() )
+    
+    id_str = 'ID'
+  }
+  
+  data = data %>%
+    mutate( !! as.name(id_str) := as.character( !! as.name(id_str) ) )
 
+    # organise fill argument
+  
   fill_by =  switch (fill_by
                      , first_variable  = variables[1]
                      , last_variable   = variables[ length(variables) ]
                      , all_flows       = 'alluvial_id'
                      , values          = 'value'
   )
-
+  
   # reduce data to selected variables
-
+  
   data = data %>%
     select( one_of(variables, id_str) )
+  
+  # ungroup
+  
+  data = ungroup(data)
 
-  # prepare ID column
-
-  if( rlang::quo_is_null(id) ){
-
-    data = data %>%
-      mutate( ID = row_number() )
-
-    id_str = 'ID'
-  }
-
-   data = data %>%
-     mutate( !! as.name(id_str) := as.character( !! as.name(id_str) ) )
-
+  # save input data to attach to plot later
+   
+  data_input = data
+    
   # transform numerical variables for binning
 
   data = data %>%
@@ -307,6 +332,11 @@ alluvial_wide = function( data
     mutate( value = fct_rev(value)
             , fill = fct_rev(fill) )
   
+  if(colorful_fill_variable_stratum){
+    data_new = data_new %>%
+      mutate( fill_value = ifelse( x == fill_by, fill_flow, fill_value) )
+  }
+  
   p <- ggplot(data_new,
               aes(x = x
                   , stratum = value
@@ -352,12 +382,16 @@ alluvial_wide = function( data
       left_join( data_alluvial ) %>%
       select( - fill_flow, -fill_value, -fill ) %>%
       spread( key = x, value = value ) %>%
-      select( one_of(id_str, variables, 'alluvial_id', 'n' ) )
+      select( one_of(id_str, variables, 'alluvial_id', 'n' ) ) %>%
+      mutate_if( is.factor, fct_drop)
+    
   })
 
   p$data_key = data_key
-
-
+  p$data_input = data_input
+  p$alluvial_type = 'wide'
+  p$alluvial_params = params
+  
   return(p)
 }
 

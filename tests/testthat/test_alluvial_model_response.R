@@ -1,16 +1,11 @@
 context('alluvial_model_response')
 
-# TODO:
-# sort out bin_numerics arguments
-# set seed in other tests
-# marginal histograms
-
 test_that('get_data_space'
           ,{
             
   set.seed(0)
             
-  df = select(mtcars2, -id)
+  df = select(mtcars2, -ids)
   m = randomForest::randomForest( disp ~ ., df)
   imp = m$importance
   
@@ -42,7 +37,7 @@ test_that('pdp_methods'
     
     set.seed(0)
     
-    df = select(mtcars2, -id)
+    df = select(mtcars2, -ids)
     m = randomForest::randomForest( disp ~ ., df)
     imp = m$importance
     
@@ -65,7 +60,7 @@ test_that('alluvial_model_response'
 
     set.seed(0)
             
-    df = select(mtcars2, -id)
+    df = select(mtcars2, -ids)
     
     m = randomForest::randomForest( disp ~ ., df)
     
@@ -136,13 +131,40 @@ test_that('alluvial_model_response'
     
     vdiffr::expect_doppelganger('model_response_new_labs', p)
     
+    # change bin_numerics parameter for pred
+    
+    p = alluvial_model_response(pred, dspace, imp, degree = 3
+                                , bins = 3
+                                , bin_labels = c('L','M', 'H')
+                                , params_bin_numeric_pred = list(center = F, scale = F, transform = F) )
+    
+    vdiffr::expect_doppelganger('model_response_new_change_bins_params', p)
+    
+    p = alluvial_model_response(pred, dspace, imp, degree = 3
+                                , bins = 3
+                                , bin_labels = c('L','M', 'H') )
+    
+    expect_true( p$alluvial_params$bins == 3 )
+    
+    vdiffr::expect_doppelganger('model_response_new_change_bins', p)
+    
+    dspace = get_data_space(df, imp, degree = 4)
+    pred = predict(m, newdata = dspace)
+    alluvial_model_response(pred, dspace, imp, degree = 4, bins = 7, c('LLL','LL', 'ML', 'M', 'MH', 'HH', 'HHH') )
+    
+    pred_train = predict(m)
+    
+    p = alluvial_model_response(pred, dspace, imp, degree = 4, bins = 7
+                            , bin_labels = c('LLL','LL', 'ML', 'M', 'MH', 'HH', 'HHH')
+                            , pred_train = pred_train )
+    
     
 })
 
 test_that('alluvial_model_response_caret'
           , {
             
-  df = select(mtcars2, -id)
+  df = select(mtcars2, -ids)
   
   train = caret::train( disp ~ ., df, method = 'lm',trControl = caret::trainControl(method = 'none') )
   p = alluvial_model_response_caret(train, degree = 3)

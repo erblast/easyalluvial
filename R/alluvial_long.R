@@ -35,9 +35,11 @@
 #'@param stratum_labels logical, Default: TRUE
 #'@param stratum_width double, Default: 1/4
 #'@param auto_rotate_xlabs logical, Default: TRUE
+#'@param ... additional parameter passed to \code{\link[easyalluvial]{manip_bin_numerics}}
 #'@return ggplot2 object
 #'@seealso \code{\link[easyalluvial]{alluvial_wide}}
 #'  ,\code{\link[ggalluvial]{geom_flow}}, \code{\link[ggalluvial]{geom_stratum}}
+#'  ,\code{\link[easyalluvial]{manip_bin_numerics}}
 #' @examples
 #'
 #'
@@ -116,6 +118,7 @@ alluvial_long = function( data
                           , stratum_labels = T
                           , stratum_width = 1/4
                           , auto_rotate_xlabs = T
+                          , ...
 ){
 
   # quosures
@@ -136,28 +139,57 @@ alluvial_long = function( data
   value = as.name( value_str )
   id = as.name( id_str )
 
-  # ungroup
-  
-  data = ungroup(data)
-  
   # fill
-
+  
   if( rlang::quo_is_null(fill) ){
     fill_str = NULL
   }else{
     fill_str = quo_name(fill)
     fill = as.name( fill_str )
   }
+  
+  # store params to attach to plot
+  
+  params = list(
+  key = key_str
+  , value = value_str
+  , id = id_str
+  , fill = fill_str
+  , fill_right = fill_right
+  , bins = bins
+  , bin_labels = bin_labels
+  , NA_label = NA_label
+  , order_levels_value = order_levels_value
+  , order_levels_key = order_levels_key
+  , order_levels_fill = order_levels_fill
+  , complete = complete
+  , fill_by = fill_by
+  , col_vector_flow = col_vector_flow
+  , col_vector_value =  col_vector_value
+  , verbose = verbose
+  , stratum_labels = stratum_labels
+  , stratum_width = stratum_width
+  , auto_rotate_xlabs = auto_rotate_xlabs
+  )
+  
+  # ungroup
+  
+  data = ungroup(data)
 
   # transform numerical variables for binning
 
-  data_trans = data %>%
+  data = data %>%
     ungroup() %>%
     select( one_of( c(key_str, value_str, id_str, fill_str) ) ) %>%
     mutate( !! key_str := as.factor( !! key )
             , !! id_str := as.factor( !! id )
-            ) %>%
-    manip_bin_numerics( bins, bin_labels) %>%
+            )
+  
+  # attach data input to plot later
+  data_input = data
+  
+  data_trans = data %>%
+    manip_bin_numerics( bins, bin_labels, ... ) %>%
     mutate( !! value_str := as.factor( !! value ) )
 
   #complete data
@@ -243,7 +275,8 @@ alluvial_long = function( data
   suppressMessages({
 
     data_key = data_spread %>%
-      left_join( data_alluvial_id )
+      left_join( data_alluvial_id ) %>%
+      mutate_if( is.factor, fct_drop)
 
   })
 
@@ -416,6 +449,9 @@ alluvial_long = function( data
   }
 
   p$data_key = data_key
+  p$data_input = data_input
+  p$alluvial_type = 'long'
+  p$alluvial_params = params
 
   return(p)
 }

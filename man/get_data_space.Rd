@@ -49,7 +49,7 @@ this model visualisation approach follows the "visualising the model
  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 }
 \examples{
-df = mtcars2[ ! names(mtcars2) \%in\% 'id' ]
+df = mtcars2[ -! names(mtcars2) \%in\% 'ids' ]
 m = randomForest::randomForest( disp ~ ., df)
 imp = m$importance
 dspace = get_data_space(df, imp)
