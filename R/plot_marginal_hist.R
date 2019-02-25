@@ -25,6 +25,10 @@ plot_hist = function( var, p, data_input, ... ){
     
     p = plot_hist_model_response( var, p_ori, data_input, ...)
     
+  } else if(p$alluvial_type == 'long'){
+    
+    p = plot_hist_long( var, p_ori, data_input)
+    
   }else{
     stop('Plot not supported')
   }
@@ -47,6 +51,57 @@ plot_hist = function( var, p, data_input, ... ){
   }
   
   return(p)
+}
+
+plot_hist_long = function(var, p, data_input){
+  
+  is_num = is.numeric(data_input[[p$alluvial_params$value]])
+  key_str = as.character(p$alluvial_params$key)
+  id_str = as.character(p$alluvial_params$id)
+  value_str = as.character(p$alluvial_params$value)
+  
+  var_order = levels(p$data$value)
+  
+  data_input[[id_str]] <- as.character( data_input[[id_str]] )
+  data_input[[key_str]] <- as.character( data_input[[key_str]] )
+  
+  df_col = p$data %>%
+    select(value, fill_value) %>%
+    distinct() %>%
+    arrange(value) %>%
+    mutate(rwn = row_number() ) %>%
+    select( - value )
+
+  suppressMessages({
+    df_match = p$data_key %>%
+      select( -n, -alluvial_id) %>%
+      gather( key = !! as.name(key_str), value = 'bin', - !! as.name(id_str) ) %>%
+      mutate( !! as.name(id_str) := as.character(!! as.name(id_str) )
+              , !! as.name(key_str) := as.character(!! as.name(key_str) )) %>%
+      left_join( select(data_input, one_of( c(key_str, value_str, id_str) ) ) )  %>%
+      rename( value = !! as.name(value_str) ) %>%
+      mutate( bin = as.factor(bin)
+              , bin = fct_relevel(bin, var_order) )
+  })
+  
+  m = randomForest::randomForest(bin ~ value, df_match)
+  
+  df_filt = data_input %>%
+    filter( !! as.name(key_str) == var )
+  
+  dens_var = density(df_filt[[value_str]])
+  
+  df_plot = tibble(x = dens_var$x
+                   , y = dens_var$y ) %>%
+    mutate( bin = predict(m, tibble( value = x) )
+            , rwn = as.integer(bin) ) %>%
+    left_join(df_col, by=c('rwn' = 'rwn') )
+  
+  p = ggplot(df_plot ) +
+    geom_ribbon( aes(x, fill = fill_value, color = fill_value, ymin = 0, ymax = y) ) +
+    geom_rug( data = df_filt, mapping = aes_string(value_str), sides = 'b')
+  
+  
 }
 
 plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale = 400){

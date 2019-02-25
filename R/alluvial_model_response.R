@@ -313,7 +313,7 @@ get_cuts = function( from, target, scale = T, center = T, transform = T, ... ){
 #' # partial dependency plotting method
 #' \dontrun{
 #'  pred = get_pdp_predictions(df, imp
-#'                             , .f_predict = randomForest:::predict.randomForest
+#'                             , .f_predict = randomForest:::predict.randomForestc("#FFFFFF", "#FFFFFF", "#FFFFFF")
 #'                             , m
 #'                             , degree = 3
 #'                             , bins = 5)
@@ -328,7 +328,7 @@ get_cuts = function( from, target, scale = T, center = T, transform = T, ... ){
 #'@importFrom stringr str_wrap str_replace_all str_split
 alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
                                    , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
-                                   , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#00FFFF')
+                                   , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#9DD1D1')
                                    , method = 'median'
                                    , force = FALSE
                                    , params_bin_numeric_pred = list( center = T, transform = T, scale = T)
@@ -560,7 +560,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'@importFrom caret varImp predict.train
 alluvial_model_response_caret = function(train, degree = 4, bins = 5
                                          , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
-                                         , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#00FFFF')
+                                         , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#9DD1D1')
                                          , method = 'median'
                                          , params_bin_numeric_pred = list( center = T, transform = T, scale = T)
                                          , pred_train = NULL

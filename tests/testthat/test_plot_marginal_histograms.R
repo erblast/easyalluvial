@@ -15,7 +15,26 @@ test_that('plot_hist_as_margins',{
   plot_hist('disp',p, mtcars2)
   plot_hist_wide('disp',p, mtcars2)
   
-  p_grid = add_marginal_histograms(p, mtcars2) 
+  p_grid = add_marginal_histograms(p, mtcars2)
+  
+  # long numeric
+  df = tibble( spots = sunspots
+               , time = time(sunspots)
+               , year = as.integer(time)
+               , month = time %% 1 ) %>%
+    mutate( month = month * 1000
+            , month = as.integer(month)
+            , month = as.factor(month) ) 
+  
+  levels(df$month) <- month.abb
+  
+  p = alluvial_long(df, month, spots, id = year)
+  
+  plot_hist('Jan', p, df)
+  
+  add_marginal_histograms(p, df)
+  
+  # long categoric
   
   # model response
   df = select(mtcars2, -ids)
