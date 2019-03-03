@@ -60,46 +60,100 @@ plot_hist_long = function(var, p, data_input){
   id_str = as.character(p$alluvial_params$id)
   value_str = as.character(p$alluvial_params$value)
   
+  if( is_null(p$alluvial_params$fill) ){
+    var_is_fill = F
+    var_has_fill = F
+    fill_str = NULL
+  }else{
+    var_has_fill = T
+    fill_str = p$alluvial_params$fill
+    if( fill_str == var ){
+      var_is_fill = T
+    }else{
+      var_is_fill = F
+    }
+  }
+  
   var_order = levels(p$data$value)
   
   data_input[[id_str]] <- as.character( data_input[[id_str]] )
   data_input[[key_str]] <- as.character( data_input[[key_str]] )
   
-  df_col = p$data %>%
+  df_col = p$data
+  
+  if(var_is_fill){
+    df_col = df_col %>%
+      filter( x == fill_str)
+  }else{
+    df_col = df_col %>%
+      filter( x %in% unique(data_input[[key_str]]) )
+  }
+  
+  df_col = df_col %>%
     select(value, fill_value) %>%
     distinct() %>%
     arrange(value) %>%
     mutate(rwn = row_number() ) %>%
-    select( - value )
+    mutate_if(is.factor, as.character)
+  
+  if( ! var_is_fill ){
+  df_filt = data_input %>%
+    filter( !! as.name(key_str) == var )
+  }else{
+    df_filt = data_input
+  }
 
-  suppressMessages({
+  if(is_num){
+    
+    cols_to_gather = unique(data_input[[key_str]])
+    
     df_match = p$data_key %>%
       select( -n, -alluvial_id) %>%
-      gather( key = !! as.name(key_str), value = 'bin', - !! as.name(id_str) ) %>%
+      gather( key = !! as.name(key_str), value = 'bin'
+              , !!! map(cols_to_gather, as.name) ) %>%
       mutate( !! as.name(id_str) := as.character(!! as.name(id_str) )
               , !! as.name(key_str) := as.character(!! as.name(key_str) )) %>%
-      left_join( select(data_input, one_of( c(key_str, value_str, id_str) ) ) )  %>%
+      left_join( select(data_input, one_of( c(key_str, value_str, id_str) ) )
+                 , by = c(id_str, key_str))  %>%
       rename( value = !! as.name(value_str) ) %>%
       mutate( bin = as.factor(bin)
               , bin = fct_relevel(bin, var_order) )
-  })
+
+    m = randomForest::randomForest(bin ~ value, df_match)
+    
+    
+    dens_var = density(df_filt[[value_str]])
+    
+    df_plot = tibble(x = dens_var$x
+                     , y = dens_var$y ) %>%
+      mutate( bin = predict(m, tibble( value = x) )
+              , rwn = as.integer(bin) ) %>%
+      left_join(df_col, by=c('rwn' = 'rwn') )
+    
+    p = ggplot(df_plot ) +
+      geom_ribbon( aes(x, fill = fill_value, color = fill_value, ymin = 0, ymax = y) ) +
+      geom_rug( data = df_filt, mapping = aes_string(value_str), sides = 'b')
   
-  m = randomForest::randomForest(bin ~ value, df_match)
-  
-  df_filt = data_input %>%
-    filter( !! as.name(key_str) == var )
-  
-  dens_var = density(df_filt[[value_str]])
-  
-  df_plot = tibble(x = dens_var$x
-                   , y = dens_var$y ) %>%
-    mutate( bin = predict(m, tibble( value = x) )
-            , rwn = as.integer(bin) ) %>%
-    left_join(df_col, by=c('rwn' = 'rwn') )
-  
-  p = ggplot(df_plot ) +
-    geom_ribbon( aes(x, fill = fill_value, color = fill_value, ymin = 0, ymax = y) ) +
-    geom_rug( data = df_filt, mapping = aes_string(value_str), sides = 'b')
+  }else if(var_is_fill){
+    df_plot = df_filt %>%
+      select( one_of( id_str, var) ) %>%
+      distinct() %>%
+      rename(  value_col =  !! as.name(var) ) %>%
+      mutate( value_col = as.character(value_col) ) %>%
+      left_join( df_col, by = c( 'value_col' = 'value') ) 
+    
+    p = ggplot(df_plot, aes(value_col, fill = fill_value) ) +
+      geom_bar( width = 1/2 ) 
+    
+  }else{
+    df_plot = df_filt %>%
+      rename(  value_col =  !! as.name(value_str) ) %>%
+      mutate( value_col = as.character(value_col) ) %>%
+      left_join( df_col, by = c( 'value_col' = 'value') ) 
+    
+    p = ggplot(df_plot, aes(value_col, fill = fill_value) ) +
+      geom_bar( width = 1/2 ) 
+  }
   
   
 }

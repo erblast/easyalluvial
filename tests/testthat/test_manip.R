@@ -46,12 +46,6 @@ test_that('manip_bin_numerics'
   
   data_new_min_max = manip_bin_numerics(data, bin_labels = 'min_max')
   
-  # p1 = alluvial_wide(data)
-  # 
-  # p2 = alluvial_wide(data, bin_labels = 'min_max')
-  # 
-  # gridExtra::grid.arrange(p1,p2)
-  
   expect_false( identical(data_new_cuts, data_new_median) )
   
   expect_false( identical(data_new_mean, data_new_median) )

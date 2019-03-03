@@ -1,5 +1,21 @@
 
 
+#'Quarterly mean relative sunspots number from 1749-1983
+#'
+#'
+#'@format A data frame with 940 rows and 4 variables
+#'\describe{
+#'  \item{year}{}
+#'  \item{qu}{quarter} \item{spots}{total number of sunspots}
+#'  \item{max_spots_per_year}{} \item{min_spots_per_year}{}
+#'  \item{mean_spots_per_year}{}
+#'
+#'  }
+#'@source Andrews, D. F. and Herzberg, A. M. (1985) Data: A Collection of Problems from Many Fields for the Student and Research Worker. New York: Springer-Verlag.
+#'
+"quarterly_sunspots"
+
+
 #'Quarterly mean arrival delay times for a set of 402 flights
 #'
 #'Created from nycflights13::flights

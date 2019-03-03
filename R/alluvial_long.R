@@ -148,6 +148,7 @@ alluvial_long = function( data
     fill = as.name( fill_str )
   }
   
+
   # store params to attach to plot
   
   params = list(
@@ -185,13 +186,18 @@ alluvial_long = function( data
             , !! id_str := as.factor( !! id )
             )
   
-  # attach data input to plot later
-  data_input = data
-  
+
   data_trans = data %>%
     manip_bin_numerics( bins, bin_labels, ... ) %>%
     mutate( !! value_str := as.factor( !! value ) )
 
+  if( ! is_null(fill_str) ){
+    if( fill_str %in% levels(data_trans[[key_str]]) ){
+      stop( paste( 'Name of fill variable/column:', fill_str, ', cannot be one of'
+                   , levels(data_tran[[key_str]]) ) )
+    }
+  }
+  
   #complete data
 
   if( is.null(fill_str) ){
@@ -205,12 +211,10 @@ alluvial_long = function( data
       group_by( !! id, !! fill) %>%
       summarise()
 
-    suppressMessages({
-      data_trans = data_trans %>%
-        complete( !! key , !! id ) %>% ## leaves NA values for fill
-        select( - !! fill ) %>%     ## deselect and rejoin fill
-        left_join( id_2_fill_keys )
-    })
+    data_trans = data_trans %>%
+      complete( !! key , !! id ) %>% ## leaves NA values for fill
+      select( - !! fill ) %>%     ## deselect and rejoin fill
+      left_join( id_2_fill_keys, by = id_str )
 
   }
 
@@ -221,7 +225,7 @@ alluvial_long = function( data
 
   if( ! is.null(fill_str) ){
     ordered_levels_fill = c( order_levels_fill, levels( select(data_trans, !! fill)[[1]] ) ) %>% unique()
-    ordered_levels_y = c( ordered_levels_y, ordered_levels_fill)
+    ordered_levels_y = c( ordered_levels_y, ordered_levels_fill) %>% unique()
 
     if(fill_right){
       ordered_levels_x = c( ordered_levels_x, fill_str )
@@ -249,13 +253,14 @@ alluvial_long = function( data
     
     # to ensure dbplyr 0.8.0. compatibility we 
     # transform factors to character before grouping
-    # and back after grouping
+    # and back after grouping. The default behaviour has
+    # changed so we comment out the to character transformation
     
     factor_cols = names( select_if(data_spread, is.factor) )
     
     data_alluvial_id = data_spread %>%
       select( - !! id ) %>%
-      mutate_at( .vars = vars( one_of(factor_cols) ), as.character ) %>%
+      # mutate_at( .vars = vars( one_of(factor_cols) ), as.character ) %>%
       group_by_all() %>%
       count() %>%
       ungroup() %>%
@@ -272,13 +277,12 @@ alluvial_long = function( data
 
   # attach alluvial_id to id keys
   # will be attached to plot later
-  suppressMessages({
-
-    data_key = data_spread %>%
-      left_join( data_alluvial_id ) %>%
-      mutate_if( is.factor, fct_drop)
-
-  })
+  
+  join_by = names(data_spread)[names(data_spread) %in% names(data_alluvial_id)]
+  
+  data_key = data_spread %>%
+    left_join( data_alluvial_id, by =  join_by) %>%
+    mutate_if( is.factor, fct_drop)
 
   # compose fill columns
 
@@ -317,11 +321,12 @@ alluvial_long = function( data
       select( alluvial_id, value ) %>%
       rename( fill = value )
 
-    suppressMessages({
-      data_new = data_new %>%
-        left_join( data_fill )
-    })
+    join_by = names(data_new)[names(data_new) %in% names(data_fill)]
+    
+    data_new = data_new %>%
+      left_join( data_fill, by = join_by )
 
+          
   } else if( fill_by == 'all_flows'){
 
     data_new$fill = data_new$alluvial_id %>%
@@ -383,10 +388,8 @@ alluvial_long = function( data
   df_fill_flow = tibble( fill = unique(data_new$fill)
                          , fill_flow = col_vector_flow )
 
-  suppressMessages({
-    data_new = data_new %>%
-      left_join( df_fill_flow )
-  })
+  data_new = data_new %>%
+      left_join( df_fill_flow, by = 'fill' )
 
   # adjust col_vector length fill value
 
@@ -397,16 +400,15 @@ alluvial_long = function( data
   d_fill_value = tibble( value = unique(data_new$value)
                          , fill_value = col_vector_value )
 
-  suppressMessages({
-    data_new = data_new %>%
-      left_join( d_fill_value )
-  })
+  data_new = data_new %>%
+    left_join( d_fill_value, by = 'value' )
 
 
   if( ! is.null(fill_str) ){
 
     data_new = data_new %>%
       mutate( fill_value = ifelse( as.character(value) == as.character(!!fill)
+                                   & x == fill_str
                                    , fill_flow, fill_value ) )
   }
 
@@ -449,7 +451,6 @@ alluvial_long = function( data
   }
 
   p$data_key = data_key
-  p$data_input = data_input
   p$alluvial_type = 'long'
   p$alluvial_params = params
 

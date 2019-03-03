@@ -106,7 +106,15 @@ test_that('alluvial_long'
   p = alluvial_long( group_by(data, carrier), key = qu, value = mean_arr_delay, id = tailnum)
   
   # plot attachments
-  expect_true( all( c('data_key', 'data_input', 'alluvial_type', 'alluvial_params') %in% names(p) ) )
+  expect_true( all( c('data_key', 'alluvial_type', 'alluvial_params') %in% names(p) ) )
+  
+  # numeric sample data
+  
+  p = alluvial_long(quarterly_sunspots, key = qu, value = spots, id = year)
+  vdiffr::expect_doppelganger('long_all_nums', p)
+  
+  p = alluvial_long(quarterly_sunspots, key = qu, value = spots, id = year, fill = mean_spots_per_year)
+  vdiffr::expect_doppelganger('long_all_nums_plus_fill', p)
   
 
 })
