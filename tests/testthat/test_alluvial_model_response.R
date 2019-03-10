@@ -59,15 +59,10 @@ test_that('alluvial_model_response'
           ,{
 
     set.seed(0)
-            
     df = select(mtcars2, -ids)
-    
     m = randomForest::randomForest( disp ~ ., df)
-    
     imp = m$importance
-    
     imp_conv = check_imp(imp, df)
-    
     dspace = get_data_space(df, imp, degree = 3)
     
     expect_equal( length( names(dspace) ), length( imp_conv$vars ) )
@@ -84,7 +79,6 @@ test_that('alluvial_model_response'
     expect_equal( length( levels(p$data$x) ) - 1, length( arrange(imp_conv, desc(imp))$vars[1:3] ) )
     
     expect_equivalent( levels(p$data$x)[2:( 3 + 1 )],  arrange(imp_conv, desc(imp))$vars[1:3] )
-    
     
     # checks
     
@@ -131,22 +125,17 @@ test_that('alluvial_model_response'
     
     vdiffr::expect_doppelganger('model_response_new_labs', p)
     
-    # change bin_numerics parameter for pred
+    # change bin_numerics parameter for pred and bins
     
     p = alluvial_model_response(pred, dspace, imp, degree = 3
                                 , bins = 3
                                 , bin_labels = c('L','M', 'H')
                                 , params_bin_numeric_pred = list(center = F, scale = F, transform = F) )
     
-    vdiffr::expect_doppelganger('model_response_new_change_bins_params', p)
-    
-    p = alluvial_model_response(pred, dspace, imp, degree = 3
-                                , bins = 3
-                                , bin_labels = c('L','M', 'H') )
-    
+
     expect_true( p$alluvial_params$bins == 3 )
     
-    vdiffr::expect_doppelganger('model_response_new_change_bins', p)
+    vdiffr::expect_doppelganger('model_response_new_change_bins_3', p)
     
     dspace = get_data_space(df, imp, degree = 4)
     pred = predict(m, newdata = dspace)
@@ -158,6 +147,33 @@ test_that('alluvial_model_response'
                             , bin_labels = c('LLL','LL', 'ML', 'M', 'MH', 'HH', 'HHH')
                             , pred_train = pred_train )
     
+    vdiffr::expect_doppelganger('model_response_new_change_bins_7', p)
+    
+    # bivariate categorical response
+    
+    set.seed(0)
+    df = select(mtcars2, -ids)
+    m = randomForest::randomForest( am ~ ., df)
+    imp = m$importance
+    dspace = get_data_space(df, imp, degree = 3)
+    
+    pred = predict(m, newdata = dspace,type = 'response')
+    p = alluvial_model_response(pred, dspace, imp, degree = 3)
+    
+    vdiffr::expect_doppelganger('model_response_cat_bi', p)
+    
+    # multivariate categorical response
+    
+    set.seed(0)
+    df = select(mtcars2, -ids)
+    m = randomForest::randomForest( cyl ~ ., df)
+    imp = m$importance
+    dspace = get_data_space(df, imp, degree = 3)
+    
+    pred = predict(m, newdata = dspace,type = 'response')
+    p = alluvial_model_response(pred, dspace, imp, degree = 3)
+    
+    vdiffr::expect_doppelganger('model_response_cat_multi', p)
     
 })
 
@@ -187,6 +203,19 @@ test_that('alluvial_model_response_caret'
   
   vdiffr::expect_doppelganger('model_response_caret_new_labs', p)
   
-
-})
+  # categorical bivariate response 
+  
+  train = caret::train( am ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
+  p = alluvial_model_response_caret(train, degree = 3)
+  vdiffr::expect_doppelganger('model_response_caret_cat_bi', p)
+  
+  
+  # categorical multivariate response
+  
+  train = caret::train( cyl ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
+  p = alluvial_model_response_caret(train, degree = 3)
+  vdiffr::expect_doppelganger('model_response_caret_cat_multi', p)
+  
+          
+  })
 

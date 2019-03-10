@@ -15,9 +15,16 @@ check_imp = function(imp, df){
     stop( paste('imp needs to be of class "data.frame" instead passed object of class'
                 , paste( class(imp), collapse = ', ' ) ) )
   }
+  
+  imp = as.data.frame(imp)
 
-  if( ncol(imp) > 2 ){
-    stop('imp must not have more than 2 columns')
+  if( ncol( select_if(imp, is.numeric) ) != 1 ){
+    stop( paste('"imp" must have at least one but not more than one numeric columns.'
+                , 'Number numeric columns:', ncol( select_if(imp, is.numeric)) ) )
+  }
+  
+  if( ncol( select_if(imp, is.character) ) > 1 ){
+    stop('"imp" must not have more than one character column')
   }
 
   if( ncol(imp) == 2 ){
@@ -351,6 +358,14 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
   if( length(bin_labels) != bins & ! bin_labels[1] %in% c('median', 'cuts', 'mean', 'min_max') ){
     stop( "bin_labels length must be equal to bins or one of  c('median', 'cuts', 'mean', 'min_max')")
   }
+  
+  if( is.factor(pred) ){
+    bin_labels = abbreviate( levels(pred), minlength = 1 )
+  }
+  
+  if( ! is.numeric(pred) & ! is.factor(pred) ){
+    stop( '"pred" needs to be a numeric or a factor vector')
+  }
 
   if( nrow(dspace) > 1500 & ! force){
     stop( paste('this plot will produce', nrow(dspace), 'flows. More than 1500 flows are not'
@@ -372,8 +387,10 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
   }
   
   if( bins > 7){
-    warning('if bins > 7 colors will be repeated, adjust "col_vector_flow" parameter manually')
+    warning('if bins > 7 default colors will be repeated, adjust "col_vector_flow" parameter manually')
   }
+  
+  
 
   # internal function -------------------------------------------------------------------
   # will be applied to each column in df creates a suitable label
@@ -405,23 +422,43 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
   # setup input df for alluvial from dspace and apply make_level_labels() function -------------
   # make bins for the prediction either based on pred or pred_train if supplied
   
-  if( is_null(pred_train) ){
-    pred_train = pred
-  }
-  
-  new_cuts = do.call( get_cuts, c(from = list(pred_train), target = list(pred)
-                                  , params_bin_numeric_pred, bins = bins) )
-  
-  params$new_cuts = new_cuts
-
+  # setup input df for alluvial plot from dspace ----------------
   df = dspace %>%
     mutate_if( is.factor, fct_drop ) %>%
     mutate_all( as.factor ) %>%
-    mutate( pred = pred ) %>%
-    manip_bin_numerics( bins = new_cuts, bin_labels = 'cuts'
-                        , scale = F, center = F, transform = F)
+    mutate( pred = pred )
   
-  # create new factor labels for variables
+  # prepare bins for numerical pred ----------------------------
+  
+  if( is.numeric(pred) ){
+  
+    if( is_null(pred_train) ){
+      pred_train = pred
+    }
+    
+    new_cuts = do.call( get_cuts, c(from = list(pred_train), target = list(pred)
+                                    , params_bin_numeric_pred, bins = bins) )
+    
+    params$new_cuts = new_cuts
+  
+    df = df %>%
+      manip_bin_numerics( bins = new_cuts, bin_labels = 'cuts'
+                          , scale = F, center = F, transform = F)
+    
+    # create new label for response variable -----------------------------
+    
+    new_levels =  tibble( lvl = levels(df$pred)
+                          , prefix = bin_labels ) %>%
+      mutate( new = map2_chr( prefix, lvl, function(x,y) paste0(x,'\n',y) ) ) %>%
+      .$new
+    
+    levels(df$pred) <- new_levels
+    
+    
+  }
+    
+  # create new factor labels for variables --------------------------------
+  
   for(col in names(dspace[0:degree]) ){
 
     labels = make_level_labels(col, df, bin_labels)
@@ -430,14 +467,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 
   }
 
-  # create new label for response variable -----------------------------------
-
-  new_levels =  tibble( lvl = levels(df$pred)
-                        , prefix = bin_labels ) %>%
-    mutate( new = map2_chr( prefix, lvl, function(x,y) paste0(x,'\n',y) ) ) %>%
-    .$new
-
-  levels(df$pred) <- new_levels
+  
 
   # create alluvial plot ---------------------------------------------------
 
@@ -579,7 +609,15 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 
   imp = caret::varImp( train )
   imp = imp$importance
-  dspace = get_data_space(train$trainingData, imp, degree = degree, bins = bins)
+  
+  # for categorical response imp is calculated for each value
+  # and has is own column in imp. In this case we average them
+  
+  imp_df = tibble( var = row.names(imp)
+                   , imp = apply(imp, 1, sum) / ncol(imp) )
+  
+
+  dspace = get_data_space(train$trainingData, imp_df, degree = degree, bins = bins)
 
   if( method == 'median'){
 
@@ -588,7 +626,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 
   if( method == 'pdp'){
 
-    pred = get_pdp_predictions(train$trainingData, imp
+    pred = get_pdp_predictions(train$trainingData, imp_df
                                , .f_predict = caret::predict.train
                                , m = train
                                , degree = degree
@@ -598,7 +636,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 
   p = alluvial_model_response(pred = pred
                               , dspace = dspace
-                              , imp = imp
+                              , imp = imp_df
                               , degree = degree
                               , bins = bins
                               , bin_labels = bin_labels
