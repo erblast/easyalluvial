@@ -209,7 +209,7 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
     }
   }
   
-  if( ! is_num & ! is_pred){
+  if( ! is_num & ! is_pred ){
     
     df_plot = data_input %>%
       select( !! var_quo ) %>%
@@ -220,6 +220,57 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
     p = ggplot(df_plot, aes_string(var_str, fill = 'fill_value') ) +
       geom_bar( width = 1/2 ) 
     
+  }
+  
+  if( ! is_num & is_pred){
+    
+    var_str = ori_name
+    
+    df_input = data_input %>%
+      select( !! as.name(var_str) ) %>%
+      mutate( variable = var_str ) %>%
+      rename( value = !! as.name(var_str) ) 
+    
+    df_resp = p$data %>%
+      filter( x == 'pred') %>%
+      select( x, value ) %>%
+      rename( variable = x) %>%
+      mutate( variable = as.character(variable)
+              , value = fct_drop(value) )
+
+    df_plot = df_input %>%
+      bind_rows(df_resp)
+    
+    # df_plot = df_input
+    
+    if( ! is_null(pred_train) ){
+      df_plot = df_plot %>%
+        bind_rows( tibble(variable = 'pred_train'
+                        , value = pred_train) ) %>%
+        mutate( variable = as.factor(variable)
+                , variable = fct_relevel(variable, c(var_str, 'pred_train', 'pred') ) )
+      
+      strip_pos = 'top'
+    }else{
+      df_plot = df_plot %>%
+        mutate( variable = as.factor(variable)
+                , variable = fct_relevel(variable, c(var_str), 'pred' ) )
+      strip_pos = 'top'
+    }
+    
+    df_plot = df_plot %>%
+      mutate( colors = value
+              , colors = as.integer(colors) ) %>%
+      left_join( df_col, by = c( 'colors' = 'rwn') ) %>%
+      group_by( variable, value, fill_value ) %>%
+      count() %>%
+      group_by( variable ) %>%
+      mutate( perc = n / sum(n) )
+    
+    p = ggplot(df_plot ) +
+      geom_col( aes( x = value, y = perc, fill = fill_value), width = 1/2 ) +
+      facet_wrap(~variable, nrow = 1, strip.position = strip_pos) +
+      theme( axis.text.y = element_blank() )
   }
   
   if( is_num & is_pred ){

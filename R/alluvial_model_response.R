@@ -9,7 +9,7 @@ check_degree = function(degree, imp, df){
   return(degree)
 }
 
-check_imp = function(imp, df){
+check_imp = function(imp, df, .f = max){
 
   if( ! "data.frame" %in% class(imp) & ! 'matrix' %in% class(imp) ){
     stop( paste('imp needs to be of class "data.frame" instead passed object of class'
@@ -60,7 +60,7 @@ check_imp = function(imp, df){
     mutate( vars = ori ) %>%
     select( - ori ) %>%
     group_by( vars ) %>%
-    summarise( imp = sum(imp) ) %>%
+    summarise( imp = .f(imp) ) %>%
     arrange( desc(imp) )
 
 
@@ -118,7 +118,7 @@ check_imp = function(imp, df){
 #'@export
 #'@seealso \code{\link[easyalluvial]{alluvial_wide}},
 #'  \code{\link[easyalluvial]{manip_bin_numerics}}
-get_data_space = function(df,imp, degree = 4, bins = 5, set_to_row_index = 0){
+get_data_space = function(df, imp, degree = 4, bins = 5, set_to_row_index = 0){
 
   degree = check_degree(degree, imp, df)
 

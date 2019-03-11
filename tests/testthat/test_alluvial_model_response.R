@@ -182,6 +182,7 @@ test_that('alluvial_model_response_caret'
             
   df = select(mtcars2, -ids)
   
+  set.seed(1)
   train = caret::train( disp ~ ., df, method = 'lm',trControl = caret::trainControl(method = 'none') )
   p = alluvial_model_response_caret(train, degree = 3)
   
@@ -192,7 +193,6 @@ test_that('alluvial_model_response_caret'
   
   
   set.seed(0)
-  
   train = caret::train( disp ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
   p = alluvial_model_response_caret(train, degree = 3)
   
@@ -204,14 +204,14 @@ test_that('alluvial_model_response_caret'
   vdiffr::expect_doppelganger('model_response_caret_new_labs', p)
   
   # categorical bivariate response 
-  
+  set.seed(1)
   train = caret::train( am ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
   p = alluvial_model_response_caret(train, degree = 3)
   vdiffr::expect_doppelganger('model_response_caret_cat_bi', p)
   
   
   # categorical multivariate response
-  
+  set.seed(1)
   train = caret::train( cyl ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
   p = alluvial_model_response_caret(train, degree = 3)
   vdiffr::expect_doppelganger('model_response_caret_cat_multi', p)

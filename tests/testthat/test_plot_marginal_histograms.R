@@ -21,7 +21,9 @@ test_that('plot_hist_as_margins',{
   
   set.seed(1)
   p = add_marginal_histograms(p_wide, mtcars2)
-  vdiffr::expect_doppelganger('marg_hist_wide', p)
+  
+  # gtables not yet supported by vdiffr
+  # vdiffr::expect_doppelganger('marg_hist_wide', p)
   
   
   # long numeric---------------------------------------
@@ -35,7 +37,9 @@ test_that('plot_hist_as_margins',{
   
   set.seed(1)
   p = add_marginal_histograms(p_long, quarterly_sunspots)
-  vdiffr::expect_doppelganger('marg_hist_long', p)
+  
+  # gtables not yet supported by vdiffr
+  # vdiffr::expect_doppelganger('marg_hist_long', p)
   
   p_long = alluvial_long(quarterly_sunspots, key = qu, value = spots
                      , id = year, fill = mean_spots_per_year)
@@ -49,7 +53,9 @@ test_that('plot_hist_as_margins',{
   
   set.seed(1)
   p = add_marginal_histograms(p_long, quarterly_sunspots)
-  vdiffr::expect_doppelganger('marg_hist_long_num_fill', p)
+  
+  # gtables not yet supported by vdiffr
+  # vdiffr::expect_doppelganger('marg_hist_long_num_fill', p)
   
   
   # long categoric --------------------------------------
@@ -67,58 +73,69 @@ test_that('plot_hist_as_margins',{
   
   set.seed(1)
   p = add_marginal_histograms(p_long, quarterly_flights)
-  vdiffr::expect_doppelganger('marg_hist_long_cat-fill', p)
+  
+  # gtables not yet supported by vdiffr
+  # vdiffr::expect_doppelganger('marg_hist_long_cat-fill', p)
   
   # model response numeric ----------------------------------
-  # set.seed(1)
-  # df = select(mtcars2, -ids)
-  # train = caret::train( disp ~ ., df, method = 'lm',trControl = caret::trainControl(method = 'none') )
-  # p = alluvial_model_response_caret(train, degree = 3)
-  # p = add_marginal_histograms(p, df)
-  # 
-  # plot_hist('cyl', p, df)
-  # plot_hist('wt',p, df)
-  # plot_hist('pred', p, df)
-  # 
-  # pred_train = caret::predict.train(train)
-  # plot_hist('pred', p, df, pred_train = pred_train)
-  # plot_hist('carb', p, df)
-  # plot_hist_model_response('pred', p, df)
-  # 
-  # train = caret::train( disp ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
-  # 
-  # p = alluvial_model_response_caret(train, degree = 3, pred_train = pred_train
-  #                                   , bins = 7, c('LLL','LL', 'ML', 'M', 'MH', 'HH', 'HHH'))
-  # 
-  # plot_hist('pred', p, df)
-  # 
-  # 
-  # add_marginal_histograms(p, df)
-  # add_marginal_histograms(p, df, pred_train = pred_train)
-  # add_marginal_histograms(p, df, pred_train = pred_train, keep_labels = T)
-  # 
-  # add_marginal_histograms(p, mtcars2)
-  # 
-  # train = caret::train( disp ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
-  # p = alluvial_model_response_caret(train, degree = 3)
-  # add_marginal_histograms(p, df, pred_train = predict(train) )
-  # 
-  # train = caret::train( disp ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
-  # p = alluvial_model_response_caret(train, degree = 4, method = 'pdp')
-  # add_marginal_histograms(p, df)
-  # 
-  # train = caret::train( cyl ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
-  # p = alluvial_model_response_caret(train, degree = 3)
-  # add_marginal_histograms(p, df)
-  # 
-  # df = select(mtcars2, disp, cyl, carb, mpg, wt)
-  # train = caret::train( disp ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
-  # p = alluvial_model_response_caret(train, degree = 3)
-  # add_marginal_histograms(p, df)
-  # 
-  # df = ggplot2::diamonds
-  # train = caret::train( price ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
-  # p = alluvial_model_response_caret(train, degree = 4, method = 'pdp')
-  # add_marginal_histograms(p, df)
+  set.seed(1)
+  df = select(mtcars2, -ids)
+  train = caret::train( disp ~ .
+                        , df, method = 'lm'
+                        ,trControl = caret::trainControl(method = 'none') )
+  
+  p_mod_num = alluvial_model_response_caret(train, degree = 3)
+  
+  p = plot_hist('pred', p_mod_num, df)
+  vdiffr::expect_doppelganger('mod_num_pred', p)
+  
+  p = plot_hist('carb', p_mod_num, df)
+  vdiffr::expect_doppelganger('mod_num_cat', p)
+
+  p = plot_hist('wt', p_mod_num, df)
+  vdiffr::expect_doppelganger('mod_num_num', p)
+  
+  p_grid = add_marginal_histograms(p_mod_num, df)
+  
+  # gtables not yet supported by vdiffr
+  # vdiffr::expect_doppelganger('marg_hist_mod_num', p_grid)
+  
+  p_grid = add_marginal_histograms(p_mod_num, df, keep_labels = T)
+  
+  # gtables not yet supported by vdiffr
+  # vdiffr::expect_doppelganger('marg_hist_mod_num_labels', p_grid)
+  
+  p_mod_num = alluvial_model_response_caret(train, degree = 3
+                                    , pred_train = predict(train, mtcars2))
+  
+  p = plot_hist('pred', p_mod_num, df)
+  vdiffr::expect_doppelganger('mod_num_pred_train', p)
+  
+  p_grid = add_marginal_histograms(p_mod_num, df, keep_labels = T)
+  
+  # gtables not yet supported by vdiffr
+  # vdiffr::expect_doppelganger('marg_hist_mod_num_pred_train', p_grid)
+
+  # model response categoric --------------------------------
+  
+  set.seed(1)
+  df = select(mtcars2, -ids)
+  train = caret::train( cyl ~ .
+                        , df, method = 'rf'
+                        , trControl = caret::trainControl(method = 'none')
+                        , importance = T)
+  
+  p_mod_cat = alluvial_model_response_caret(train, degree = 3)
+  
+  p = plot_hist('pred', p_mod_cat, df, pred_train = predict(train, mtcars2))
+  vdiffr::expect_doppelganger('mod_cat_pred_train', p)
+  
+  p = plot_hist('pred', p_mod_cat, df )
+  vdiffr::expect_doppelganger('mod_cat_pred', p)
+  
+  p_grid = add_marginal_histograms(p_mod_cat, df, keep_labels = T, pred_train = predict(train, mtcars2) )
+
+  # gtables not yet supported by vdiffr
+  # vdiffr::expect_doppelganger('marg_hist_mod_cat_pred_train', p_grid)
   
 })
