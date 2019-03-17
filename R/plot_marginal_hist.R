@@ -13,6 +13,15 @@ apply_cuts = function(x, cuts){
   
 }
 
+#' @title plot histogram of alluvial plot variable
+#' @description helper function used by add_marginal_histograms
+#' @param var character vector, variable name
+#' @param p alluvial plot
+#' @param data_input datafram used to create alluvial plot
+#' @param ... additional arguments for specific alluvial plot types: pred_train
+#'   can be used to pass training predictions for model response alluvials
+#' @return ggplot object
+#' @rdname plot_hist
 plot_hist = function( var, p, data_input, ... ){
   
   p_ori = p
@@ -121,7 +130,6 @@ plot_hist_long = function(var, p, data_input){
 
     m = randomForest::randomForest(bin ~ value, df_match)
     
-    
     dens_var = density(df_filt[[value_str]])
     
     df_plot = tibble(x = dens_var$x
@@ -159,10 +167,7 @@ plot_hist_long = function(var, p, data_input){
 }
 
 plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale = 400){
-  # get stratum color from p$data
-  # get median values from dspace
-  # detect pred original variable 
-  
+
   var_str = var
   var_quo = as.name(var_str)
   
@@ -198,7 +203,7 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
       bind_cols(df_col)
     
     p = ggplot(data_input, aes_string( x = var_str ) ) +
-      geom_density( aes( y = ..density..), size = 1 ) +
+      geom_density( aes_string( y = '..density..'), size = 1 ) +
       geom_rug()
     
     for( i in seq(1, nrow(df_median) ) ){
@@ -457,7 +462,25 @@ plot_hist_wide = function( var, p, data_input){
   return(p)
 }
 
-
+#' @title add marginal histograms to alluvial plot
+#' @description will add density histograms and frequency plots of original data to alluvial plot
+#' @param p alluvial plot
+#' @param data_input dataframe, input data that was used to create dataframe
+#' @param top logical, position of histograms, if FALSE adds them at the bottom,
+#'   Default: TRUE
+#' @param keep_labels logical, keep title and caption, Default: FALSE
+#' @param ... additional arguments for specific alluvial plot types: pred_train
+#'   can be used to pass training predictions for model response alluvials
+#' @return gtable
+#' @examples
+#' p = alluvial_wide(mtcars2, max_variables = 4)
+#' p = add_marginal_histograms(p, mtcars2)
+#' @seealso \code{\link[gridExtra]{arrangeGrob}}
+#' @rdname add_marginal_histograms
+#' @export
+#' @importFrom gridExtra grid.arrange
+#' @importFrom ggridges geom_ridgeline_gradient
+#' @importFrom stats density
 add_marginal_histograms = function(p, data_input, top = TRUE, keep_labels = FALSE, ...){
   
   vars = levels( p$data$x )

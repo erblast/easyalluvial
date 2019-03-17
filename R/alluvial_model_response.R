@@ -110,7 +110,7 @@ check_imp = function(imp, df, .f = max){
 #'  (2015) Visualizing statistical models: Removing the blindfold. Statistical
 #'  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 #' @examples
-#' df = mtcars2[ -! names(mtcars2) %in% 'ids' ]
+#' df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
 #' m = randomForest::randomForest( disp ~ ., df)
 #' imp = m$importance
 #' dspace = get_data_space(df, imp)
@@ -197,7 +197,7 @@ get_data_space = function(df, imp, degree = 4, bins = 5, set_to_row_index = 0){
 #'@return vector, predictions
 #'@details DETAILS
 #' @examples
-#'  df = mtcars2[ ! names(mtcars2) %in% 'ids' ]
+#'  df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
 #'  m = randomForest::randomForest( disp ~ ., df)
 #'  imp = m$importance
 #'
@@ -207,9 +207,6 @@ get_data_space = function(df, imp, degree = 4, bins = 5, set_to_row_index = 0){
 #'                             , degree = 3
 #'                             , bins = 5)
 #'
-#'  dspace = get_data_space(df, imp, degree = 3)
-#'
-#'  alluvial_model_response(pred, dspace, imp, degree = 3, method = 'pdp')
 #'@seealso \code{\link[progress]{progress_bar}}
 #'@rdname get_pdp_predictions
 #'@export
@@ -298,8 +295,11 @@ get_cuts = function( from, target, scale = T, center = T, transform = T, ... ){
 #'  observation and the result is averaged, calculate predictions using
 #'  \code{\link[easyalluvial]{get_pdp_predictions}} } }. Default: 'median'
 #'@param params_bin_numeric_pred list, additional parameters passed to
-#'  \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the
-#'  pred parameter. Default: list( bins = 5, center = T, transform = T, scale = T)
+#'  \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
+#'  parameter. Default: list( bins = 5, center = T, transform = T, scale = T)
+#'@param pred_train numeric vector, base the automated binning of the pred vector on
+#'  the distribution of the training predictions. This is useful if marginal
+#'  histograms are added to the plot later. Default = NULL
 #'@param force logical, force plotting of over 1500 flows, Default: FALSE
 #'@param ... additional parameters passed to
 #'  \code{\link[easyalluvial]{alluvial_wide}}
@@ -309,21 +309,21 @@ get_cuts = function( from, target, scale = T, center = T, transform = T, ... ){
 #'  (2015) Visualizing statistical models: Removing the blindfold. Statistical
 #'  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 #' @examples
-#' df = mtcars2[ ! names(mtcars2) %in% 'ids' ]
+#' df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
 #' m = randomForest::randomForest( disp ~ ., df)
 #' imp = m$importance
 #' dspace = get_data_space(df, imp, degree = 3)
 #' pred = predict(m, newdata = dspace)
-#' pred_train = predict(m)
-#' alluvial_model_response(pred, pred_train, dspace, imp, degree = 3)
+#' alluvial_model_response(pred, dspace, imp, degree = 3)
 #'
 #' # partial dependency plotting method
 #' \dontrun{
 #'  pred = get_pdp_predictions(df, imp
-#'                             , .f_predict = randomForest:::predict.randomForestc("#FFFFFF", "#FFFFFF", "#FFFFFF")
+#'                             , .f_predict = randomForest:::predict.randomForest
 #'                             , m
 #'                             , degree = 3
 #'                             , bins = 5)
+#'
 #'
 #'  alluvial_model_response(pred, dspace, imp, degree = 3, method = 'pdp')
 #'  }
@@ -545,19 +545,19 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'  "M", "MH", "HH")
 #'@param col_vector_flow, character vector, defines flow colours, Default:
 #'  c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')
-#'@param method, character vector, one of c('median', 'pdp')
-#'\describe{
+#'@param method, character vector, one of c('median', 'pdp') \describe{
 #'  \item{median}{sets variables that are not displayed to median mode, use with
-#'  regular predictions}
-#'  \item{pdp}{partial dependency plot method, for each
+#'  regular predictions} \item{pdp}{partial dependency plot method, for each
 #'  observation in the training data the displayed variableas are set to the
 #'  indicated values. The predict function is called for each modified
-#'  observation and the result is averaged}
-#'  }. Default: 'median'
-#'#'@param params_bin_numeric_pred list, additional parameters passed to
-#'  \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the
-#'  pred parameter. Default: list( bins = 5, center = T, transform = T, scale = T)
+#'  observation and the result is averaged} }. Default: 'median'
+#'@param params_bin_numeric_pred list, additional parameters passed to
+#'  \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
+#'  parameter. Default: list( bins = 5, center = T, transform = T, scale = T)
 #'@param force logical, force plotting of over 1500 flows, Default: FALSE
+#'@param pred_train numeric vector, base the automated binning of the pred vector on
+#'  the distribution of the training predictions. This is useful if marginal
+#'  histograms are added to the plot later. Default = NULL
 #'@param ... additional parameters passed to
 #'  \code{\link[easyalluvial]{alluvial_wide}}
 #'@return ggplot2 object
@@ -566,7 +566,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'  (2015) Visualizing statistical models: Removing the blindfold. Statistical
 #'  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 #' @examples
-#' df = mtcars2[ -! names(mtcars2) %in% 'ids' ]
+#' df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
 #'
 #' train = caret::train( disp ~ .
 #'                      , df

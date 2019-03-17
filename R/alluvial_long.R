@@ -194,7 +194,7 @@ alluvial_long = function( data
   if( ! is_null(fill_str) ){
     if( fill_str %in% levels(data_trans[[key_str]]) ){
       stop( paste( 'Name of fill variable/column:', fill_str, ', cannot be one of'
-                   , levels(data_tran[[key_str]]) ) )
+                   , levels(data_trans[[key_str]]) ) )
     }
   }
   

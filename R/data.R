@@ -7,7 +7,6 @@
 #'\describe{
 #'  \item{year}{}
 #'  \item{qu}{quarter} \item{spots}{total number of sunspots}
-#'  \item{max_spots_per_year}{} \item{min_spots_per_year}{}
 #'  \item{mean_spots_per_year}{}
 #'
 #'  }

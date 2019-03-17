@@ -7,7 +7,7 @@
 alluvial_model_response(pred, dspace, imp, degree = 4, bins = 5,
   bin_labels = c("LL", "ML", "M", "MH", "HH"),
   col_vector_flow = c("#FF0065", "#009850", "#A56F2B", "#005EAA",
-  "#710500", "#7B5380", "#00FFFF"), method = "median", force = FALSE,
+  "#710500", "#7B5380", "#9DD1D1"), method = "median", force = FALSE,
   params_bin_numeric_pred = list(center = T, transform = T, scale = T),
   pred_train = NULL, ...)
 }
@@ -46,8 +46,12 @@ observation and the result is averaged, calculate predictions using
 \item{force}{logical, force plotting of over 1500 flows, Default: FALSE}
 
 \item{params_bin_numeric_pred}{list, additional parameters passed to
-\code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the
-pred parameter. Default: list( bins = 5, center = T, transform = T, scale = T)}
+\code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
+parameter. Default: list( bins = 5, center = T, transform = T, scale = T)}
+
+\item{pred_train}{numeric vector, base the automated binning of the pred vector on
+the distribution of the training predictions. This is useful if marginal
+histograms are added to the plot later. Default = NULL}
 
 \item{...}{additional parameters passed to
 \code{\link[easyalluvial]{alluvial_wide}}}
@@ -71,13 +75,12 @@ this model visualisation approach follows the "visualising the model
  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 }
 \examples{
-df = mtcars2[ ! names(mtcars2) \%in\% 'ids' ]
+df = mtcars2[, ! names(mtcars2) \%in\% 'ids' ]
 m = randomForest::randomForest( disp ~ ., df)
 imp = m$importance
 dspace = get_data_space(df, imp, degree = 3)
 pred = predict(m, newdata = dspace)
-pred_train = predict(m)
-alluvial_model_response(pred, pred_train, dspace, imp, degree = 3)
+alluvial_model_response(pred, dspace, imp, degree = 3)
 
 # partial dependency plotting method
 \dontrun{
@@ -86,6 +89,7 @@ alluvial_model_response(pred, pred_train, dspace, imp, degree = 3)
                             , m
                             , degree = 3
                             , bins = 5)
+
 
  alluvial_model_response(pred, dspace, imp, degree = 3, method = 'pdp')
  }

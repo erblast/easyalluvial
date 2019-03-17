@@ -35,6 +35,7 @@ Imports:
   , forcats
   , ggalluvial (>= 0.9.1)
   , ggplot2 (>= 3.1.0)
+  , ggridges
   , RColorBrewer
   , recipes
   , rlang
@@ -43,4 +44,5 @@ Imports:
   , tibble
   , caret
   , progress
+  , gridExtra
 Language: en-US

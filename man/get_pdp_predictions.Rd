@@ -44,7 +44,7 @@ the partial dependency plotting method uses the averaged
 DETAILS
 }
 \examples{
- df = mtcars2[ ! names(mtcars2) \%in\% 'ids' ]
+ df = mtcars2[, ! names(mtcars2) \%in\% 'ids' ]
  m = randomForest::randomForest( disp ~ ., df)
  imp = m$importance
 
@@ -54,9 +54,6 @@ DETAILS
                             , degree = 3
                             , bins = 5)
 
- dspace = get_data_space(df, imp, degree = 3)
-
- alluvial_model_response(pred, dspace, imp, degree = 3, method = 'pdp')
 }
 \seealso{
 \code{\link[progress]{progress_bar}}
