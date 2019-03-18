@@ -175,10 +175,6 @@ alluvial_wide = function( data
   
   data = ungroup(data)
 
-  # save input data to attach to plot later
-   
-  data_input = data
-    
   # transform numerical variables for binning
 
   data = data %>%
@@ -389,7 +385,6 @@ alluvial_wide = function( data
   })
 
   p$data_key = data_key
-  p$data_input = data_input
   p$alluvial_type = 'wide'
   p$alluvial_params = params
   
