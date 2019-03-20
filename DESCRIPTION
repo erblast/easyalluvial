@@ -25,8 +25,7 @@ Suggests:
     covr,
     ISLR,
     nycflights13,
-    vdiffr,
-    randomForest
+    vdiffr
 RoxygenNote: 6.1.1
 Imports:
   purrr
@@ -45,4 +44,6 @@ Imports:
   , caret
   , progress
   , gridExtra
+  , randomForest
+  , e1071
 Language: en-US
