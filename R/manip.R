@@ -112,7 +112,7 @@ manip_bin_numerics = function(x
   df = mutate(df, easyalluvialid = row_number() ) 
   
   rec = recipe(df) %>%
-    add_role( easyalluvialid, new_role = 'id variable') 
+    update_role( easyalluvialid, new_role = 'id variable') 
 
   if( center ) rec = rec %>%
     step_center( one_of(numerics) )
