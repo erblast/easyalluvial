@@ -74,7 +74,7 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
             )
   
   
-  ggplot(imp_df, aes_string('vars', 'perc', fill = 'plotted')) +
+  p_imp = ggplot(imp_df, aes_string('vars', 'perc', fill = 'plotted')) +
     geom_col( color = color
               , show.legend = F
               , size = 1) +
@@ -84,14 +84,18 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
     labs( x = '', y = 'Percent Importance') +
     scale_y_continuous( position = 'right', limits = c(0,1) ) +
     geom_text( aes( label = round(perc,3) )
-               , hjust = 0) +
-    geom_label( aes( y = 1, label = const_values)
+               , hjust = 0) 
+  
+  if(p$alluvial_params$method == 'median'){
+    p_imp = p_imp +
+      geom_label( aes( y = 1, label = const_values)
                 , data = filter(imp_df, ! is.na(const_values) )
                 , show.legend = F
                 , hjust = 1
                 , label.r = unit(0.07, "lines"))
+  }
     
-
+  return(p)
 }
 
 #' @title add bar plot of important features to model response alluvial plot
