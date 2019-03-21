@@ -139,7 +139,9 @@ test_that('alluvial_model_response'
     
     dspace = get_data_space(df, imp, degree = 4)
     pred = predict(m, newdata = dspace)
-    alluvial_model_response(pred, dspace, imp, degree = 4, bins = 7, c('LLL','LL', 'ML', 'M', 'MH', 'HH', 'HHH') )
+    p = alluvial_model_response(pred, dspace, imp, degree = 4
+                                , bins = 7, c('LLL','LL', 'ML', 'M', 'MH', 'HH', 'HHH')
+                                , stratum_label_size = 3.5)
     
     pred_train = predict(m)
     
