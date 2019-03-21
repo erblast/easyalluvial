@@ -9,7 +9,7 @@ alluvial_model_response_caret(train, degree = 4, bins = 5,
   col_vector_flow = c("#FF0065", "#009850", "#A56F2B", "#005EAA",
   "#710500", "#7B5380", "#9DD1D1"), method = "median",
   params_bin_numeric_pred = list(center = T, transform = T, scale = T),
-  pred_train = NULL, force = F, ...)
+  pred_train = NULL, stratum_label_size = 3.5, force = F, ...)
 }
 \arguments{
 \item{train}{caret train object}
@@ -41,6 +41,8 @@ parameter. Default: list( bins = 5, center = T, transform = T, scale = T)}
 \item{pred_train}{numeric vector, base the automated binning of the pred vector on
 the distribution of the training predictions. This is useful if marginal
 histograms are added to the plot later. Default = NULL}
+
+\item{stratum_label_size}{numeric, Default: 3.5}
 
 \item{force}{logical, force plotting of over 1500 flows, Default: FALSE}
 
