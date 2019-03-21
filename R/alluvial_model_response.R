@@ -477,6 +477,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
     alluvial_wide( fill_by = 'first_variable'
                    , col_vector_flow = col_vector_flow
                    , colorful_fill_variable_stratum = T
+                   , stratum_label_size = stratum_label_size
                    , ... )
 
   # add info to plot---------------------------------------------------------

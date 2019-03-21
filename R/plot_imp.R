@@ -95,7 +95,7 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
                 , label.r = unit(0.07, "lines"))
   }
     
-  return(p)
+  return(p_imp)
 }
 
 #' @title add bar plot of important features to model response alluvial plot
