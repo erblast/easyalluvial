@@ -124,3 +124,34 @@ test_that('manip_bin_numerics with vector'
   
 })
  
+test_that('manip_bin_numerics_NA',{
+  
+  v =  rnorm(10)
+  x = manip_bin_numerics( c( v, NA) )
+  expect_true( is.factor(x) )
+  expect_true( 'NA' %in% levels(x) )
+  
+  test_bin_labels = function( bin_label){
+    x = manip_bin_numerics( c( v, NA), bin_labels = bin_label )
+    expect_true( 'NA' %in% levels(x) )
+    y = manip_bin_numerics( v, bin_labels = bin_label )
+    expect_true( all( levels(y) %in% levels(x) ) )
+    expect_false( all( levels(x) %in% levels(y) ) )
+  }
+  
+  test_bin_labels('median')
+  test_bin_labels('mean')
+  test_bin_labels('min_max')
+  test_bin_labels('cuts')
+  
+  df = mtcars2 %>%
+    bind_rows( mtcars2['cyl'][1,] ) %>%
+    manip_bin_numerics() %>%
+    select( - cyl ) %>%
+    select_if( is.factor) %>%
+    summarise_all( function(x) list(levels(x)) ) %>%
+    summarise_all( function(x) 'NA' %in% unlist(x) )
+  
+  expect_true( all( as.matrix( df[1,] ) ) )
+  
+})

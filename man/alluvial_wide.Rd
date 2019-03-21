@@ -26,7 +26,7 @@ name}
 \item{bin_labels}{labels for the bins from low to high, Default: c("LL", "ML",
 "M", "MH", "HH")}
 
-\item{NA_label}{character vector define label for missing data, Default: 'NA'}
+\item{NA_label}{character vector, define label for missing data, Default: 'NA'}
 
 \item{order_levels}{character vector denoting levels to be reordered from low
 to high}

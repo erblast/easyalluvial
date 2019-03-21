@@ -190,7 +190,7 @@ alluvial_long = function( data
   
 
   data_trans = data %>%
-    manip_bin_numerics( bins, bin_labels, ... ) %>%
+    manip_bin_numerics( bins, bin_labels, NA_label = NA_label, ... ) %>%
     mutate( !! value_str := as.factor( !! value ) )
 
   if( ! is_null(fill_str) ){

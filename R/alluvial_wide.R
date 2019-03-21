@@ -25,7 +25,7 @@ if(getRversion() >= "2.15.1"){
 #'@param bins number of bins for numerical variables, Default: 5
 #'@param bin_labels labels for the bins from low to high, Default: c("LL", "ML",
 #'  "M", "MH", "HH")
-#'@param NA_label character vector define label for missing data, Default: 'NA'
+#'@param NA_label character vector, define label for missing data, Default: 'NA'
 #'@param order_levels character vector denoting levels to be reordered from low
 #'  to high
 #'@param fill_by one_of(c('first_variable', 'last_variable', 'all_flows',
@@ -181,7 +181,7 @@ alluvial_wide = function( data
   # transform numerical variables for binning
 
   data = data %>%
-    manip_bin_numerics( bins, bin_labels, ... )
+    manip_bin_numerics( bins, bin_labels, NA_label = NA_label, ... )
 
   # to ensure dbplyr 0.8.0. compatibility we 
   # transform factors to character before grouping
