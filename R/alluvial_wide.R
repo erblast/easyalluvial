@@ -7,7 +7,8 @@ if(getRversion() >= "2.15.1"){
   utils::globalVariables( c('x', '.', ':=', 'alluvial_id', 'fill_flow', 'fill_value', 'value'
                             , 'fill', 'easyalluvialid', 'total', 'perc', 'label', 'prefix', 'lvl'
                             , 'cum_imp', 'variable', 'label', 'len', 'ori', 'bin'
-                            , 'colors', 'rwn', 'value_col', 'var_num', 'y', 'predict') )
+                            , 'colors', 'rwn', 'value_col', 'var_num', 'y', 'predict', 'plotted'
+                            , 'const_values') )
 }
 
 
@@ -175,10 +176,6 @@ alluvial_wide = function( data
   
   data = ungroup(data)
 
-  # save input data to attach to plot later
-   
-  data_input = data
-    
   # transform numerical variables for binning
 
   data = data %>%
@@ -389,7 +386,6 @@ alluvial_wide = function( data
   })
 
   p$data_key = data_key
-  p$data_input = data_input
   p$alluvial_type = 'wide'
   p$alluvial_params = params
   
