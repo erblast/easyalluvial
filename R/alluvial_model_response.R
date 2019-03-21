@@ -9,20 +9,39 @@ check_degree = function(degree, imp, df){
   return(degree)
 }
 
-check_imp = function(imp, df, .f = max){
+#' @title tidy up dataframe containing model feature importance
+#' @description returns dataframe with exactly two columns, vars and imp and
+#'   aggregates dummy encoded variables. Helper function called by all functions
+#'   that take an imp parameter. Can be called manually if formula for
+#'   aggregating dummy encoded variables must be modified.
+#' @param imp dataframe or matrix with feature importance information
+#' @param df dataframe, modelling training data
+#' @param .f window function, Default: max
+#' @return dataframe \describe{ \item{vars}{character column with feature names}
+#'   \item{imp}{numerical column, importance values} }
+#' @examples
+#' # randomforest
+#' df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
+#' m = randomForest::randomForest( disp ~ ., df)
+#' imp = m$importance
+#' tidy_imp(imp, mtcars2)
+#' 
+#' @rdname tidy_imp
+#' @export
+tidy_imp = function(imp, df, .f = max){
 
   if( ! "data.frame" %in% class(imp) & ! 'matrix' %in% class(imp) ){
     stop( paste('imp needs to be of class "data.frame" instead passed object of class'
                 , paste( class(imp), collapse = ', ' ) ) )
   }
-  
+
   imp = as.data.frame(imp)
 
   if( ncol( select_if(imp, is.numeric) ) != 1 ){
     stop( paste('"imp" must have at least one but not more than one numeric columns.'
                 , 'Number numeric columns:', ncol( select_if(imp, is.numeric)) ) )
   }
-  
+
   if( ncol( select_if(imp, is.character) ) > 1 ){
     stop('"imp" must not have more than one character column')
   }
@@ -122,7 +141,7 @@ get_data_space = function(df, imp, degree = 4, bins = 5, set_to_row_index = 0){
 
   degree = check_degree(degree, imp, df)
 
-  imp = check_imp(imp, df)
+  imp = tidy_imp(imp, df)
 
   imp = arrange(imp, desc(imp) )
 
@@ -235,7 +254,7 @@ get_pdp_predictions = function(df, imp, .f_predict, m, degree = 4, bins = 5){
 
 
 get_cuts = function( from, target, scale = T, center = T, transform = T, ... ){
-  
+
   cuts = levels( manip_bin_numerics(from, bin_labels = 'min_max', ... ) )%>%
     paste( collapse = ',') %>%
     str_replace_all('\\ -\n ', ',') %>%
@@ -244,24 +263,24 @@ get_cuts = function( from, target, scale = T, center = T, transform = T, ... ){
     map(as.numeric) %>%
     map(sort) %>%
     unlist()
-  
+
   merge1 = seq(2, length(cuts)-1, 2 )
   merge2 = seq(3, length(cuts)-1, 2 )
-  
+
   merged = (cuts[merge1] + cuts[merge2]) / 2
-  
+
   new_cuts = sort( c( cuts[1] - 1 , merged, cuts[length(cuts)] + 1 ) )
-  
+
   if(min(target) < min(new_cuts)){
     new_cuts[1] <- (min(target) - 1)
   }
-  
+
   if(max(target) > max(new_cuts)){
     new_cuts[ length(new_cuts) ] <- (max(target) + 1)
   }
-  
+
   return(new_cuts)
-} 
+}
 
 #'@title create model response plot
 #'@description alluvial plots are capable of displaying higher dimensional data
@@ -360,11 +379,11 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
   if( length(bin_labels) != bins & ! bin_labels[1] %in% c('median', 'cuts', 'mean', 'min_max') ){
     stop( "bin_labels length must be equal to bins or one of  c('median', 'cuts', 'mean', 'min_max')")
   }
-  
+
   if( is.factor(pred) ){
     bin_labels = abbreviate( levels(pred), minlength = 1 )
   }
-  
+
   if( ! is.numeric(pred) & ! is.factor(pred) ){
     stop( '"pred" needs to be a numeric or a factor vector')
   }
@@ -376,7 +395,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
                 , 'forced by setting force = TRUE.') )
   }
 
-  imp = check_imp(imp, dspace)
+  imp = tidy_imp(imp, dspace)
 
   degree = check_degree(degree, imp, dspace)
 
@@ -387,12 +406,12 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
   if( ! method %in% c('median', 'pdp') ){
     stop( paste('parameter method needs to be one of c("median","pdp") instead got:', method) )
   }
-  
+
   if( bins > 7){
     warning('if bins > 7 default colors will be repeated, adjust "col_vector_flow" parameter manually')
   }
-  
-  
+
+
 
   # internal function -------------------------------------------------------------------
   # will be applied to each column in df creates a suitable label
@@ -423,44 +442,44 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 
   # setup input df for alluvial from dspace and apply make_level_labels() function -------------
   # make bins for the prediction either based on pred or pred_train if supplied
-  
+
   # setup input df for alluvial plot from dspace ----------------
   df = dspace %>%
     mutate_if( is.factor, fct_drop ) %>%
     mutate_all( as.factor ) %>%
     mutate( pred = pred )
-  
+
   # prepare bins for numerical pred ----------------------------
-  
+
   if( is.numeric(pred) ){
-  
+
     if( is_null(pred_train) ){
       pred_train = pred
     }
-    
+
     new_cuts = do.call( get_cuts, c(from = list(pred_train), target = list(pred)
                                     , params_bin_numeric_pred, bins = bins) )
-    
+
     params$new_cuts = new_cuts
-  
+
     df = df %>%
       manip_bin_numerics( bins = new_cuts, bin_labels = 'cuts'
                           , scale = F, center = F, transform = F)
-    
+
     # create new label for response variable -----------------------------
-    
+
     new_levels =  tibble( lvl = levels(df$pred)
                           , prefix = bin_labels ) %>%
       mutate( new = map2_chr( prefix, lvl, function(x,y) paste0(x,'\n',y) ) ) %>%
       .$new
-    
+
     levels(df$pred) <- new_levels
-    
-    
+
+
   }
-    
+
   # create new factor labels for variables --------------------------------
-  
+
   for(col in names(dspace[0:degree]) ){
 
     labels = make_level_labels(col, df, bin_labels)
@@ -469,7 +488,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 
   }
 
-  
+
 
   # create alluvial plot ---------------------------------------------------
 
@@ -526,10 +545,10 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 
   p = p +
     labs(title = title, subtitle = subtitle, caption = caption)
-  
+
   p$alluvial_type = 'model_response'
   p$alluvial_params = c(p$alluvial_params[! names(p$alluvial_params) %in% names(params)], params)
-  
+
   return(p)
 
 }
@@ -601,7 +620,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
                                          , stratum_label_size = 3.5
                                          , force = F, ...){
 
-  
+
   if( ! 'train' %in% class(train) ){
     stop( paste( 'train needs to be of class "train" instead got object of class'
                  , paste( class(train), collapse = ', ' ) ) )
@@ -614,13 +633,13 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 
   imp = caret::varImp( train )
   imp = imp$importance
-  
+
   # for categorical response imp is calculated for each value
   # and has is own column in imp. In this case we average them
-  
+
   imp_df = tibble( var = row.names(imp)
                    , imp = apply(imp, 1, sum) / ncol(imp) )
-  
+
 
   dspace = get_data_space(train$trainingData, imp_df, degree = degree, bins = bins)
 
@@ -653,6 +672,6 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
                               , stratum_label_size = stratum_label_size
                               , ... )
 
-  
+
   return(p)
 }

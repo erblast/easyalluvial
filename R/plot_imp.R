@@ -47,7 +47,7 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
     levels() %>%
     .[ ! . == 'pred']
   
-  imp_df = check_imp(imp, data_input) %>%
+  imp_df = tidy_imp(imp, data_input) %>%
     mutate( perc = imp/ sum(imp)
             , plotted = ifelse( vars %in% all_vars, 'y', 'n') )
   

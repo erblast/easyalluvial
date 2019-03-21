@@ -62,7 +62,7 @@ test_that('alluvial_model_response'
     df = select(mtcars2, -ids)
     m = randomForest::randomForest( disp ~ ., df)
     imp = m$importance
-    imp_conv = check_imp(imp, df)
+    imp_conv = tidy_imp(imp, df)
     dspace = get_data_space(df, imp, degree = 3)
     
     expect_equal( length( names(dspace) ), length( imp_conv$vars ) )
@@ -109,7 +109,7 @@ test_that('alluvial_model_response'
                   , imp = abs( coef(m) ) ) %>%
       filter(var != '(Intercept)')
     
-    imp_conv = check_imp(imp, df)
+    imp_conv = tidy_imp(imp, df)
     
     dspace = get_data_space(df, imp)
     

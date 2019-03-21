@@ -36,6 +36,8 @@ test_that('add_importance_plot'
   
   p_grid = add_marginal_histograms(p, data_input = df)
   
+  expect_true( 'gtable' %in% class(p_grid) )
+  
   p_grid = add_imp_plot(p_grid, p, data_input = df)
   
   p_grid = add_imp_plot(p, data_input = df)
