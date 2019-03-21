@@ -35,9 +35,10 @@ if(getRversion() >= "2.15.1"){
 #'@param col_vector_value Hex colors for y levels/values, Default:
 #'  RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7, 5)]
 #'@param colorful_fill_variable_stratum logical, use flow colors to colorize
-#'  fill variable stratum, Default: FALSE
+#'  fill variable stratum, Default: TRUE
 #'@param verbose logical, print plot summary, Default: F
 #'@param stratum_labels logical, Default: TRUE
+#'@param stratum_label_size numeric, Default: 4.5
 #'@param stratum_width double, Default: 1/4
 #'@param auto_rotate_xlabs logical, Default: TRUE
 #'@param ... additional arguments passed to
@@ -95,9 +96,10 @@ alluvial_wide = function( data
                             , fill_by = 'first_variable'
                             , col_vector_flow = palette_qualitative() %>% palette_filter( greys = F)
                             , col_vector_value =  RColorBrewer::brewer.pal(9, 'Greys')[c(4,7,5,8,6)]
-                            , colorful_fill_variable_stratum = F
+                            , colorful_fill_variable_stratum = T
                             , verbose = F
                             , stratum_labels = T
+                            , stratum_label_size = 4.5
                             , stratum_width = 1/4
                             , auto_rotate_xlabs = T
                             , ...
@@ -357,7 +359,8 @@ alluvial_wide = function( data
     labs( x = '', y = 'count', caption = caption)
 
   if(stratum_labels){
-    p = p + geom_label( stat = ggalluvial::StatStratum )
+    p = p + geom_label( stat = ggalluvial::StatStratum
+                        , size = stratum_label_size )
   }
 
   # angle x labels------------------------------------

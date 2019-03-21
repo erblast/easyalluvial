@@ -301,6 +301,7 @@ get_cuts = function( from, target, scale = T, center = T, transform = T, ... ){
 #'  the distribution of the training predictions. This is useful if marginal
 #'  histograms are added to the plot later. Default = NULL
 #'@param force logical, force plotting of over 1500 flows, Default: FALSE
+#'@param stratum_label_size numeric, Default: 3.5
 #'@param ... additional parameters passed to
 #'  \code{\link[easyalluvial]{alluvial_wide}}
 #'@return ggplot2 object
@@ -340,6 +341,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
                                    , force = FALSE
                                    , params_bin_numeric_pred = list( center = T, transform = T, scale = T)
                                    , pred_train = NULL
+                                   , stratum_label_size = 3.5
                                    , ...){
 
   params = list(pred = pred
@@ -475,6 +477,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
     alluvial_wide( fill_by = 'first_variable'
                    , col_vector_flow = col_vector_flow
                    , colorful_fill_variable_stratum = T
+                   , stratum_label_size = stratum_label_size
                    , ... )
 
   # add info to plot---------------------------------------------------------
@@ -558,6 +561,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'@param pred_train numeric vector, base the automated binning of the pred vector on
 #'  the distribution of the training predictions. This is useful if marginal
 #'  histograms are added to the plot later. Default = NULL
+#'@param stratum_label_size numeric, Default: 3.5
 #'@param ... additional parameters passed to
 #'  \code{\link[easyalluvial]{alluvial_wide}}
 #'@return ggplot2 object
@@ -594,6 +598,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
                                          , method = 'median'
                                          , params_bin_numeric_pred = list( center = T, transform = T, scale = T)
                                          , pred_train = NULL
+                                         , stratum_label_size = 3.5
                                          , force = F, ...){
 
   
@@ -645,6 +650,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
                               , params_bin_numeric_pred = params_bin_numeric_pred
                               , force = force
                               , pred_train = pred_train
+                              , stratum_label_size = stratum_label_size
                               , ... )
 
   

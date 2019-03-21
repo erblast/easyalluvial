@@ -1,6 +1,6 @@
 context('plot_imp')
 
-test_that('plot_hist'
+test_that('plot_imp'
           ,{
             
   df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
