@@ -7,7 +7,8 @@ if(getRversion() >= "2.15.1"){
   utils::globalVariables( c('x', '.', ':=', 'alluvial_id', 'fill_flow', 'fill_value', 'value'
                             , 'fill', 'easyalluvialid', 'total', 'perc', 'label', 'prefix', 'lvl'
                             , 'cum_imp', 'variable', 'label', 'len', 'ori', 'bin'
-                            , 'colors', 'rwn', 'value_col', 'var_num', 'y', 'predict') )
+                            , 'colors', 'rwn', 'value_col', 'var_num', 'y', 'predict', 'plotted'
+                            , 'const_values') )
 }
 
 

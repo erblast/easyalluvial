@@ -4,7 +4,7 @@ test_that('plot_hist'
           ,{
             
   df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
-  
+  set.seed(1)
   train = caret::train( disp ~ .
                       , df
                       , method = 'rf'
@@ -13,5 +13,31 @@ test_that('plot_hist'
   
   p = alluvial_model_response_caret(train, degree = 3)
   
-  plot_imp(p)          
+  p_imp = plot_imp(p, mtcars2)
+  
+  vdiffr::expect_doppelganger('plot_imp', p_imp)
+  
+})
+
+test_that('add_importance_plot'
+          ,{
+            
+  df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
+  
+  train = caret::train( disp ~ .
+                        , df
+                        , method = 'rf'
+                        , trControl = caret::trainControl( method = 'none' )
+                        , importance = TRUE )
+  
+  pred_train = caret::predict.train(train, df)
+  
+  p = alluvial_model_response_caret(train, degree = 4, pred_train = pred_train)
+  
+  p_grid = add_marginal_histograms(p, data_input = df)
+  
+  p_grid = add_imp_plot(p_grid, p, data_input = df)
+  
+  p_grid = add_imp_plot(p, data_input = df)
+  
 })
