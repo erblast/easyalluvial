@@ -231,24 +231,32 @@ get_data_space = function(df, imp, degree = 4, bins = 5, set_to_row_index = 0){
 #'@export
 #'@importFrom progress progress_bar
 get_pdp_predictions = function(df, imp, .f_predict, m, degree = 4, bins = 5){
-
+  
   pb = progress::progress_bar$new(total = nrow(df))
-
-  pred_results = rep(0, nrow(get_data_space(df, imp, degree, bins ) ) )
-
+  
+  dspace = get_data_space(df, imp, degree, bins)
+  
+  pred_results = rep(0, nrow(dspace ) )
+  
+  df_trunc = select(df, one_of( names(dspace)[(degree + 1) : ncol(dspace)] ) )
+  
   for( i in seq(1, nrow(df) ) ){
-
-    sub_dspace = get_data_space(df, imp, degree, bins, set_to_row_index = i)
-
+    
+    sub_dspace = df_trunc[i,] %>%
+      sample_n( nrow(dspace), replace = T )
+    
+    sub_dspace = dspace[,1:degree] %>%
+      bind_cols(sub_dspace)
+    
     pred = .f_predict(m, newdata = sub_dspace)
-
+    
     pred = pred * 1/nrow(df)
-
+    
     pred_results = pred_results + pred
-
+    
     pb$tick()
   }
-
+  
   return(pred_results)
 }
 

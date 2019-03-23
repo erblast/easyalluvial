@@ -103,9 +103,6 @@ test_that('alluvial_wide'
 
     expect_warning( alluvial_wide( data = ggplot2::diamonds) )
     
-    # alluvial_wide(data, max_variables = 3, col_vector_flow = c('red', 'green', 'orange', 'yellow', 'blue')
-    # , col_vector_value =  c('red', 'green', 'orange', 'yellow', 'blue'), fill_by = 'last_variable' )
-    
     #gouped df
     
     p = alluvial_wide( group_by(mtcars2, cyl), max_variables = 3 )
