@@ -518,5 +518,35 @@ add_marginal_histograms = function(p, data_input, top = TRUE, keep_labels = FALS
   
 }
 
+#' @title plot marginal histograms of alluvial plot
+#' @description will create gtable with densitiy histograms and frequency plots
+#'   of all variables of a given alluvial plot.
+#' @param p alluvial plot
+#' @param data_input dataframe, input data that was used to create dataframe
+#' @param top logical, position of histograms, if FALSE adds them at the bottom,
+#'   Default: TRUE
+#' @param keep_labels logical, keep title and caption, Default: FALSE
+#' @param ... additional arguments for specific alluvial plot types: pred_train
+#'   can be used to pass training predictions for model response alluvials
+#' @return gtable
+#' @examples
+#' p = alluvial_wide(mtcars2, max_variables = 4)
+#' plot_all_hists(p, mtcars2)
+#' @seealso \code{\link[gridExtra]{arrangeGrob}}
+#' @seealso \code{\link[easyalluvial]{add_marginal_histograms}}
+#' @rdname plot_all_hists
+#' @export
+#' @importFrom gridExtra grid.arrange
+#' @importFrom ggridges geom_ridgeline_gradient
+#' @importFrom stats density
+plot_all_hists = function(p, data_input, top = TRUE, keep_labels = FALSE, ...){
+  
+  vars = levels( p$data$x )
+  
+  hists = map( vars, plot_hist, p = p, data_input = data_input, ...)
+  
+  p_margin = do.call( gridExtra::grid.arrange, c( hists, nrow = 1) )
+  
+}
 
 
