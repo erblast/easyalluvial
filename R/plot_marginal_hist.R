@@ -469,6 +469,7 @@ plot_hist_wide = function( var, p, data_input){
 #' @param top logical, position of histograms, if FALSE adds them at the bottom,
 #'   Default: TRUE
 #' @param keep_labels logical, keep title and caption, Default: FALSE
+#' @param plot logical if plot should be drawn or not
 #' @param ... additional arguments for specific alluvial plot types: pred_train
 #'   can be used to pass training predictions for model response alluvials
 #' @return gtable
@@ -478,16 +479,22 @@ plot_hist_wide = function( var, p, data_input){
 #' @seealso \code{\link[gridExtra]{arrangeGrob}}
 #' @rdname add_marginal_histograms
 #' @export
-#' @importFrom gridExtra grid.arrange
+#' @importFrom gridExtra grid.arrange arrangeGrob
 #' @importFrom ggridges geom_ridgeline_gradient
 #' @importFrom stats density
-add_marginal_histograms = function(p, data_input, top = TRUE, keep_labels = FALSE, ...){
+add_marginal_histograms = function(p, data_input, top = TRUE, keep_labels = FALSE, plot = TRUE, ...){
+  
+  if(plot){
+    .f = gridExtra::grid.arrange
+  }else{
+    .f = gridExtra::arrangeGrob
+  }
   
   vars = levels( p$data$x )
 
   hists = map( vars, plot_hist, p = p, data_input = data_input, ...)
   
-  p_margin = do.call( gridExtra::grid.arrange, c( hists, nrow = 1) )
+  p_margin = do.call( gridExtra::arrangeGrob, c( hists, nrow = 1) )
   
   if(keep_labels){
     params = list( top = paste( p$labels$title, '-', p$labels$subtitle ), bottom = p$labels$caption  )
@@ -504,8 +511,8 @@ add_marginal_histograms = function(p, data_input, top = TRUE, keep_labels = FALS
   if(! top){
     layout = as.matrix( data.frame( x = c(1,1,1,1,1,1,1,2) ) )
     
-    p_full = do.call( gridExtra::grid.arrange, c( list(p, p_margin) , ncol = 1, params
-                                                  , layout_matrix = list(layout) ) )
+    p_full = do.call( .f, c( list(p, p_margin), ncol = 1, params
+                      , layout_matrix = list(layout) ) )
     
   }else{
 

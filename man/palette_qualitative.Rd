@@ -10,7 +10,8 @@ palette_qualitative()
 vector with hex values
 }
 \description{
-combines all unique values found in all qualitative RColorBrewer palettes
+uses c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#9DD1D1')
+and then adds all unique values found in all qualitative RColorBrewer palettes
 }
 \examples{
 palette_qualitative()
