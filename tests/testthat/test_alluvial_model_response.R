@@ -9,24 +9,16 @@ test_that('get_data_space'
   m = randomForest::randomForest( disp ~ ., df)
   imp = m$importance
   
-  dspace = get_data_space(df, imp, degree = 3, set_to_row_index = 0)
+  dspace = get_data_space(df, imp, degree = 3)
   
   expect_true( all( complete.cases(dspace) ) )
-  
-  dspace = get_data_space(df, imp, degree = 3, set_to_row_index = 1)
-  
-  expect_true( all( complete.cases(dspace) ) )
-  
-  rest = dspace[1, 4:ncol(dspace) ]
-  
-  expect_equal( rest, select(df,one_of( names(rest) ) )[1,] )
   
   # check that correct number of combinations is returned
   df_num = select_if(df, is.numeric )
   m = randomForest::randomForest( disp ~ ., df_num)
   imp = m$importance
   
-  dspace = get_data_space(df_num, imp, degree = 3, set_to_row_index = 0)
+  dspace = get_data_space(df_num, imp, degree = 3)
   
   expect_equal( nrow(dspace), 5^3 )
 

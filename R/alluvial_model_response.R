@@ -99,17 +99,23 @@ tidy_imp = function(imp, df, .f = max){
 
 #'@title calculate data space
 #'@description calculates a dataspace based on the modelling dataframe and the
-#'  importance of the explanatory variables. It selects a the most important
-#'  variables and calculates a set number of bins using
-#'  \code{\link[easyalluvial]{manip_bin_numerics}} for each numeric variable and
-#'  calculates the median of each bin. With the default setting this gives 5
-#'  values per numeric variable which are spread over its relevant range. These
-#'  values are then used to create all possible combinations of all values in
-#'  the set of the most important variables including factor variables. All
-#'  other variables which are not in the set of the most important variables are
-#'  set to median (numeric variables) of mode (factor variables). The result is
-#'  then returned as a dataframe that can be used to get prediction from a model
-#'  trained on the input data.
+#'  importance of the explanatory variables. It only considers the most
+#'  important variables as defined by the degree parameter. It selects a number
+#'  (defined by bins) of sensible single values spread over the range of the
+#'  numeric variables and creates all possible value combinations among the most
+#'  important variables. The values of the remaining variables are set to
+#'  mode(factors) or median(numerics).
+#'@details It selects a the top most important variables based on the degree
+#'  parameter and bins the numeric variables using
+#'  \code{\link[easyalluvial]{manip_bin_numerics}}, while leaving categoric
+#'  variables unchanged. The number of bins for each numeric variable is set to
+#'  bins -2. Next the median is picked for each of the bins and the min and the
+#'  max value is added for each numeric variable So that we get { median(bin) X
+#'  bins -2, max, min} for each numeric variable. Then all possible combinations
+#'  between those values and the  categoric factor levels are created. The total
+#'  number of all possible combinations defines the range of the data space. The
+#'  values of the remaining variables are set to mode(factors) or
+#'  median(numerics).
 #'@param df dataframe, training data
 #'@param imp dataframe, with not more then two columns one of them numeric
 #'  containing importance measures and one character or factor column containing
@@ -119,10 +125,6 @@ tidy_imp = function(imp, df, .f = max){
 #'  will not be very readable, Default: 4
 #'@param bins integer, number of bins for numeric variables, increasing this
 #'  number might result in too many flows, Default: 5
-#'@param set_to_row_index integer, set variables which are not set as variable
-#'  of top importance by the degree parameter are set to values found at this
-#'  row index. If set_to_row_index = 0 median mode is calculated instead.
-#'  Default: 0
 #'@return data frame
 #'@details this model visualisation approach follows the "visualising the model
 #'  in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
@@ -137,7 +139,7 @@ tidy_imp = function(imp, df, .f = max){
 #'@export
 #'@seealso \code{\link[easyalluvial]{alluvial_wide}},
 #'  \code{\link[easyalluvial]{manip_bin_numerics}}
-get_data_space = function(df, imp, degree = 4, bins = 5, set_to_row_index = 0){
+get_data_space = function(df, imp, degree = 4, bins = 5){
 
   degree = check_degree(degree, imp, df)
 
@@ -151,12 +153,32 @@ get_data_space = function(df, imp, degree = 4, bins = 5, set_to_row_index = 0){
 
   numerics_top = names( select_if( df_top, is.numeric ) )
 
-  df_facs = manip_bin_numerics(df_top, bin_labels = 'median', bins = bins) %>%
+  # variant 1
+  df_facs = manip_bin_numerics(df_top, bin_labels = 'median', bins = bins-2) %>%
     distinct() %>%
+    mutate_if( ~ ! is.ordered(.), ~ as.numeric( as.character(.) ) ) %>%
+    bind_rows( summarise_all(df_top, max) ) %>%
+    bind_rows( summarise_all(df_top, min) ) %>%
+    mutate_if( ~ ! is.ordered(.), as.factor ) %>%
     tidyr::complete( !!! map( names(df_top) , as.name) ) %>%
     mutate_at( vars(one_of(numerics_top)), function(x) as.numeric( as.character(x)) ) %>%
     mutate_if( is.factor, fct_lump, n = bins )
-
+  
+  # variant 2
+  # df_facs = manip_bin_numerics(df_top, bin_labels = 'median', bins = bins) %>%
+  #   distinct() %>%
+  #   mutate_if( ~ ! is.ordered(.), ~ as.numeric( as.character(.) ) ) %>%
+  #   #summary()
+  #   filter_all( all_vars( . > min(.) ) ) %>%
+  #   filter_all( all_vars( . < max(.) ) ) %>%
+  #   # summary()
+  #   bind_rows( summarise_all(df_top, max) ) %>%
+  #   bind_rows( summarise_all(df_top, min) ) %>%
+  #   mutate_if( ~ ! is.ordered(.), as.factor ) %>%
+  #   tidyr::complete( !!! map( names(df_top) , as.name) ) %>%
+  #   mutate_at( vars(one_of(numerics_top)), function(x) as.numeric( as.character(x)) ) %>%
+  #   mutate_if( is.factor, fct_lump, n = bins )
+  
   mode = function(x) {
     ux = unique(x)
     ux[which.max(tabulate(match(x, ux)))]
@@ -167,17 +189,11 @@ get_data_space = function(df, imp, degree = 4, bins = 5, set_to_row_index = 0){
 
     df_rest = select(df, one_of(imp_rest$vars) )
 
-    if( set_to_row_index == 0){
-      df_rest = df_rest %>%
-        mutate_if( is.numeric, median ) %>%
-        mutate_if( function(x) is.factor(x) | is.character(x), mode) %>%
-        head(1) %>%
-        sample_n(nrow(df_facs), replace = T)
-
-    } else{
-      df_rest = df_rest[ set_to_row_index, ] %>%
-        sample_n(nrow(df_facs), replace = T)
-    }
+    df_rest = df_rest %>%
+      mutate_if( is.numeric, median ) %>%
+      mutate_if( function(x) is.factor(x) | is.character(x), mode) %>%
+      head(1) %>%
+      sample_n(nrow(df_facs), replace = T)
 
     dspace = bind_cols( df_facs, df_rest)
 

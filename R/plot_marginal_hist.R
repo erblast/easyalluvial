@@ -177,7 +177,8 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
     ori_name = names(data_input)[ ! names(data_input) %in% names(p$alluvial_params$dspace) ] %>% unlist()
     
     if( length(ori_name) > 1){
-      stop( paste('data_input must only contain explanatory and predictive variables, found:', paste( ori_name, collapse = ',') ) )
+      stop( paste('data_input must only contain explanatory and predictive variables, so predictive variable can 
+                  be inferred. Potential predictive variables:', paste( ori_name, collapse = ',') ) )
     }
     
     is_num = is.numeric( data_input[[ori_name]] )
