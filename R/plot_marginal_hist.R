@@ -521,7 +521,7 @@ add_marginal_histograms = function(p, data_input, top = TRUE, keep_labels = FALS
 
     layout = as.matrix( data.frame( x = c(1,2,2,2,2,2,2,2) ) )
     
-    p_full = do.call( gridExtra::grid.arrange, c( list(p_margin, p) , ncol = 1, params
+    p_full = do.call( .f, c( list(p_margin, p) , ncol = 1, params
                                                   , layout_matrix = list(layout) ) )
     
   }
