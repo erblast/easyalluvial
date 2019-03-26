@@ -277,7 +277,7 @@ get_pdp_predictions = function(df, imp, .f_predict, m, degree = 4, bins = 5){
 }
 
 
-get_cuts = function( from, target, scale = T, center = T, transform = T, ... ){
+get_cuts = function( from, target, ... ){
 
   cuts = levels( manip_bin_numerics(from, bin_labels = 'min_max', ... ) )%>%
     paste( collapse = ',') %>%

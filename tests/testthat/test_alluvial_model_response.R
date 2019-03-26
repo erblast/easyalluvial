@@ -212,3 +212,39 @@ test_that('alluvial_model_response_caret'
           
   })
 
+test('params_bin_numeric_pred',{
+  
+  # alluvial_model_response_caret
+  set.seed(1)
+  df = select(mtcars2, -ids)
+  train = caret::train( disp ~ .
+                        , df, method = 'rf'
+                        , trControl = caret::trainControl(method = 'none')
+                        , importance = T)
+  
+  p_trans = alluvial_model_response_caret(train, degree = 4)
+  
+  p_no_trans = alluvial_model_response_caret(train, degree = 4
+                                             , params_bin_numeric_pred = list(transform = F, center = F, scale = F) )
+  
+  expect_true( ! all(levels(p_trans$data_key$pred) == levels(p_no_trans$data_key$pred)) )
+  
+  # alluvial_model_response_caret
+  set.seed(0)
+  df = select(mtcars2, -ids)
+  m = randomForest::randomForest( disp ~ ., df)
+  imp = m$importance
+  dspace = get_data_space(df, imp, degree = 3)
+  
+  pred = predict(m, newdata = dspace)
+  
+  p_trans = alluvial_model_response(pred, dspace, imp, degree = 3)
+  
+  p_no_trans = alluvial_model_response(pred, dspace, imp, degree = 3
+                                       , params_bin_numeric_pred = list(transform = F, center = F, scale = F))
+  
+  expect_true( ! all(levels(p_trans$data_key$pred) == levels(p_no_trans$data_key$pred)) )
+  
+  
+  
+})

@@ -464,7 +464,8 @@ plot_hist_wide = function( var, p, data_input){
 }
 
 #' @title add marginal histograms to alluvial plot
-#' @description will add density histograms and frequency plots of original data to alluvial plot
+#' @description will add density histograms and frequency plots of original data
+#'   to alluvial plot
 #' @param p alluvial plot
 #' @param data_input dataframe, input data that was used to create dataframe
 #' @param top logical, position of histograms, if FALSE adds them at the bottom,
@@ -472,7 +473,8 @@ plot_hist_wide = function( var, p, data_input){
 #' @param keep_labels logical, keep title and caption, Default: FALSE
 #' @param plot logical if plot should be drawn or not
 #' @param ... additional arguments for specific alluvial plot types: pred_train
-#'   can be used to pass training predictions for model response alluvials
+#'   can be used to pass training predictions for model response alluvials,
+#'   scale to adjust the y-axis distance between the ridge plots, Default: 400
 #' @return gtable
 #' @examples
 #' p = alluvial_wide(mtcars2, max_variables = 4)
