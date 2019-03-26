@@ -229,7 +229,7 @@ test_that('params_bin_numeric_pred',{
   
   expect_true( ! all(levels(p_trans$data_key$pred) == levels(p_no_trans$data_key$pred)) )
   
-  # alluvial_model_response_caret
+  # alluvial_model_response
   set.seed(0)
   df = select(mtcars2, -ids)
   m = randomForest::randomForest( disp ~ ., df)
@@ -245,6 +245,25 @@ test_that('params_bin_numeric_pred',{
   
   expect_true( ! all(levels(p_trans$data_key$pred) == levels(p_no_trans$data_key$pred)) )
   
+})
+
+test_that('n_feats == degree',{
   
+  set.seed(0)
+  df = select(mtcars2, drat, mpg, qsec, wt, disp)
+  m = randomForest::randomForest( disp ~ ., df)
+  imp = m$importance
+  dspace = get_data_space(df, imp, degree = 3)
   
+  pred = predict(m, newdata = dspace)
+  
+  expect_silent( pred <- get_pdp_predictions(df, imp, .f_predict = randomForest:::predict.randomForest
+                                             , m = m, degree = 3) )
+  
+  p = alluvial_model_response(pred, dspace, imp, degree = 3)
+  
+  p_imp = plot_imp(p, df)
+  
+  vdiffr::expect_doppelganger('p_imp_nfeats_equal_degree', p_imp)
+
 })

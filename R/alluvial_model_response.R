@@ -252,9 +252,13 @@ get_pdp_predictions = function(df, imp, .f_predict, m, degree = 4, bins = 5){
   
   dspace = get_data_space(df, imp, degree, bins)
   
-  pred_results = rep(0, nrow(dspace ) )
+  if(degree == nrow(imp) ){
+    return( .f_predict(m, newdata = dspace) )
+  }
   
   df_trunc = select(df, one_of( names(dspace)[(degree + 1) : ncol(dspace)] ) )
+  
+  pred_results = rep(0, nrow(dspace ) )
   
   for( i in seq(1, nrow(df) ) ){
     

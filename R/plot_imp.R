@@ -65,8 +65,14 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
   imp_df = imp_df %>%
     bind_rows( tibble( vars = 'total\nalluvial'
                        , perc = perc_total_plotted
-                       , plotted = 'y') ) %>%
-    left_join(constant_values, by = 'vars') %>%
+                       , plotted = 'y') )
+  
+  if( ! is_empty(constant_values) ){
+    imp_df = imp_df %>%
+      left_join(constant_values, by = 'vars')
+  }
+  
+  imp_df = imp_df %>%
     mutate( vars = as_factor(vars)
             , vars = fct_relevel(vars, 'total\nalluvial')
             , vars = fct_rev(vars)
@@ -77,8 +83,17 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
   p_imp = ggplot(imp_df, aes_string('vars', 'perc', fill = 'plotted')) +
     geom_col( color = color
               , show.legend = F
-              , size = 1) +
-    scale_fill_manual( values = c('white', color) ) +
+              , size = 1) 
+  
+  if(! is_empty(constant_values) ){
+    p_imp = p_imp +
+      scale_fill_manual( values = c('white', color) )
+  }else{
+    p_imp = p_imp +
+      scale_fill_manual( values = c(color, 'white') ) 
+  }
+  
+  p_imp = p_imp +
     coord_flip() +
     theme_minimal() +
     labs( x = '', y = 'Percent Importance') +
@@ -86,7 +101,7 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
     geom_text( aes( label = round(perc,3) )
                , hjust = 0) 
   
-  if(p$alluvial_params$method == 'median'){
+  if(p$alluvial_params$method == 'median' & ! is_empty(constant_values) ){
     p_imp = p_imp +
       geom_label( aes( y = 1, label = const_values)
                 , data = filter(imp_df, ! is.na(const_values) )

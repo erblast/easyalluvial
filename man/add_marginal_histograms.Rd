@@ -20,13 +20,15 @@ Default: TRUE}
 \item{plot}{logical if plot should be drawn or not}
 
 \item{...}{additional arguments for specific alluvial plot types: pred_train
-can be used to pass training predictions for model response alluvials}
+can be used to pass training predictions for model response alluvials,
+scale to adjust the y-axis distance between the ridge plots, Default: 400}
 }
 \value{
 gtable
 }
 \description{
-will add density histograms and frequency plots of original data to alluvial plot
+will add density histograms and frequency plots of original data
+  to alluvial plot
 }
 \examples{
 p = alluvial_wide(mtcars2, max_variables = 4)

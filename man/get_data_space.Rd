@@ -4,7 +4,7 @@
 \alias{get_data_space}
 \title{calculate data space}
 \usage{
-get_data_space(df, imp, degree = 4, bins = 5, set_to_row_index = 0)
+get_data_space(df, imp, degree = 4, bins = 5)
 }
 \arguments{
 \item{df}{dataframe, training data}
@@ -19,30 +19,32 @@ will not be very readable, Default: 4}
 
 \item{bins}{integer, number of bins for numeric variables, increasing this
 number might result in too many flows, Default: 5}
-
-\item{set_to_row_index}{integer, set variables which are not set as variable
-of top importance by the degree parameter are set to values found at this
-row index. If set_to_row_index = 0 median mode is calculated instead.
-Default: 0}
 }
 \value{
 data frame
 }
 \description{
 calculates a dataspace based on the modelling dataframe and the
- importance of the explanatory variables. It selects a the most important
- variables and calculates a set number of bins using
- \code{\link[easyalluvial]{manip_bin_numerics}} for each numeric variable and
- calculates the median of each bin. With the default setting this gives 5
- values per numeric variable which are spread over its relevant range. These
- values are then used to create all possible combinations of all values in
- the set of the most important variables including factor variables. All
- other variables which are not in the set of the most important variables are
- set to median (numeric variables) of mode (factor variables). The result is
- then returned as a dataframe that can be used to get prediction from a model
- trained on the input data.
+ importance of the explanatory variables. It only considers the most
+ important variables as defined by the degree parameter. It selects a number
+ (defined by bins) of sensible single values spread over the range of the
+ numeric variables and creates all possible value combinations among the most
+ important variables. The values of the remaining variables are set to
+ mode(factors) or median(numerics).
 }
 \details{
+It selects a the top most important variables based on the degree
+ parameter and bins the numeric variables using
+ \code{\link[easyalluvial]{manip_bin_numerics}}, while leaving categoric
+ variables unchanged. The number of bins for each numeric variable is set to
+ bins -2. Next the median is picked for each of the bins and the min and the
+ max value is added for each numeric variable So that we get { median(bin) X
+ bins -2, max, min} for each numeric variable. Then all possible combinations
+ between those values and the  categoric factor levels are created. The total
+ number of all possible combinations defines the range of the data space. The
+ values of the remaining variables are set to mode(factors) or
+ median(numerics).
+
 this model visualisation approach follows the "visualising the model
  in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
  (2015) Visualizing statistical models: Removing the blindfold. Statistical
