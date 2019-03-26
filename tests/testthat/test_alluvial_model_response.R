@@ -212,7 +212,7 @@ test_that('alluvial_model_response_caret'
           
   })
 
-test('params_bin_numeric_pred',{
+test_that('params_bin_numeric_pred',{
   
   # alluvial_model_response_caret
   set.seed(1)
