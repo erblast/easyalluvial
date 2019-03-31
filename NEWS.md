@@ -1,4 +1,4 @@
-# Version 0.2.0 submitted to CRAN XXX
+# Version 0.2.0 submitted to CRAN 20190331
 Mayor changes:
 - Default plotting colours have been improved
 - for alluvial_wide() stratum fill color of variable determining flow is now matched with flow color
@@ -6,13 +6,15 @@ Mayor changes:
 
 New features:
 - marginal histograms
-- alluvial flavoured partial dependency and model response plots
+- alluvial flavoured partial dependency and model response alluvial plots
+- new datasets mtcars2, quarterly_sunspots
 
 Bug Fixes:
 - Compatibility with `recipes 0.1.5`
 - NA values in numerical columns are excepted
 - correct ggplot2 and ggalluvial versions added as dependencies
 - p$data_key does not contain comlumns with empty levels anyomore
+- better support for numerical variables for alluvial_long()
 
 # Version: 0.1.8, submitted to CRAN 20190115
 - `dplyr 0.8.0.` compatibility

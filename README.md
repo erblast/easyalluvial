@@ -3,11 +3,11 @@
 easyalluvial <img src="https://www.datisticsblog.com/easyalluvial_logo_square.png" alt="logo" width="180" height="180" align = "right"/>
 ========================================================================================================================================
 
-[![Travis CI Build Status](https://travis-ci.org/erblast/easyalluvial.svg?branch=master)](https://travis-ci.org/erblast/easyalluvial) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&svg=true)](https://ci.appveyor.com/project/erblast/easyalluvial) 
+[![Travis CI Build Status](https://travis-ci.org/erblast/easyalluvial.svg?branch=master)](https://travis-ci.org/erblast/easyalluvial) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&svg=true)](https://ci.appveyor.com/project/erblast/easyalluvial) <!--
 [![Coverage Status](https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg)](https://codecov.io/github/erblast/easyalluvial?branch=master)
 [![CRAN last release](https://www.r-pkg.org/badges/last-release/easyalluvial)](https://CRAN.R-project.org/package=easyalluvial)
 [![CRAN total downloads](https://cranlogs.r-pkg.org/badges/grand-total/easyalluvial)](https://CRAN.R-project.org/package=easyalluvial)
-
+-->
 
 Alluvial plots are similar to [sankey diagrams](https://en.wikipedia.org/wiki/Sankey_diagram) and visualise categorical data over multiple dimensions as flows. [Rosval et. al. 2010](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0008694) Their graphical grammar however is a bit more complex then that of a regular x/y plots. The [`ggalluvial`](http://corybrunson.github.io/ggalluvial/) package made a great job of translating that grammar into [`ggplot2`](https://github.com/tidyverse/ggplot2) syntax and gives you many option to tweak the appearance of an alluvial plot, however there still remains a multi-layered complexity that makes it difficult to use 'ggalluvial' for explorative data analysis. 'easyalluvial' provides a simple interface to this package that allows you to produce a decent alluvial plot from any dataframe in either long or wide format from a single line of code while also handling continuous data. It is meant to allow a quick visualisation of entire dataframes with a focus on different colouring options that can make alluvial plots a great tool for data exploration.
 
@@ -19,6 +19,8 @@ Features
 -   automatically transforms numerical to categorical data
 -   helper functions for variable selection
 -   convenient parameters for coloring and ordering
+-   marginal histograms
+-   **model agnostic partial dependence and model response alluvial plots with 4 dimensions**
 
 Installation
 ------------
@@ -43,6 +45,7 @@ Tutorials
 In order to learn about all the features an how they can be useful check out the following tutorials:
 
 -   [Data exploration with alluvial plots](https://www.datisticsblog.com/2018/10/intro_easyalluvial/#features)
+-   [Visualise model response with alluvial plots](https://www.datisticsblog.com/page/visualising-model-response-with-easyalluvial/)
 
 Examples
 --------
@@ -58,24 +61,10 @@ suppressPackageStartupMessages( require(easyalluvial) )
 
 ``` r
 
-## mtcars2 is included in the current development version
-
-# mtcars2 <- within(mtcars, {
-#   vs <- factor(vs, labels = c("V", "S"))
-#   am <- factor(am, labels = c("automatic", "manual"))
-#   cyl  <- ordered(cyl)
-#   gear <- ordered(gear)
-#   carb <- ordered(carb)
-# })
-# 
-# mtcars2$id = row.names(mtcars)
-# 
-# mtcars2 = dplyr::as_tibble(mtcars2)
-
 knitr::kable( head(mtcars2) )
 ```
 
-|   mpg| cyl |  disp|   hp|  drat|     wt|   qsec| vs  | am        | gear | carb | id                |
+|   mpg| cyl |  disp|   hp|  drat|     wt|   qsec| vs  | am        | gear | carb | ids               |
 |-----:|:----|-----:|----:|-----:|------:|------:|:----|:----------|:-----|:-----|:------------------|
 |  21.0| 6   |   160|  110|  3.90|  2.620|  16.46| V   | manual    | 4    | 4    | Mazda RX4         |
 |  21.0| 6   |   160|  110|  3.90|  2.875|  17.02| V   | manual    | 4    | 4    | Mazda RX4 Wag     |
@@ -132,3 +121,47 @@ alluvial_long( quarterly_flights
 ```
 
 ![](man/figures/README-plot_long-1.png)
+
+### Marginal Histograms
+
+``` r
+alluvial_wide( data = mtcars2
+                , max_variables = 5
+                , fill_by = 'first_variable' ) %>%
+  add_marginal_histograms(mtcars2)
+```
+
+![](man/figures/README-unnamed-chunk-3-1.png)
+
+### Partial Dependence Alluvial Plots
+
+Alluvial plots are capable of displaying higher dimensional data on a plane, thus lend themselves to plot the response of a statistical model to changes in the input data across multiple dimensions. The practical limit here is 4 dimensions while conventional partial dependence plots are limited to 2 dimensions.
+
+Briefly the 4 variables with the highest feature importance for a given model are selected and 5 values spread over the variable range are selected for each. Then a grid of all possible combinations is created. All none-plotted variables are set to the values found in the first row of the training data set. Using this artificial data space model predictions are being generated. This process is then repeated for each row in the training data set and the overall model response is averaged in the end. Each of the possible combinations is plotted as a flow which is coloured by the bin corresponding to the average model response generated by that particular combination.
+
+-   [more on partial dependence plots (ebook)](https://christophm.github.io/interpretable-ml-book/)
+-   [Tutorial](https://www.datisticsblog.com/page/visualising-model-response-with-easyalluvial/)
+
+``` r
+
+df = select(mtcars2, -ids)
+m = randomForest::randomForest( disp ~ ., df)
+imp = m$importance
+
+dspace = get_data_space(df, imp, degree = 4)
+
+pred = get_pdp_predictions(df, imp
+                           , m
+                           , degree = 4
+                           , bins = 5)
+
+
+p = alluvial_model_response(pred, dspace, imp
+                            , degree = 4, method = 'pdp'
+                            , stratum_label_size = 2.75)
+
+p_grid = add_marginal_histograms(p, df, plot = F) %>%
+  add_imp_plot(p, df)
+```
+
+![](man/figures/README-unnamed-chunk-4-1.png)
