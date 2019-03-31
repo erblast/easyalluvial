@@ -1,5 +1,5 @@
 # Version 0.2.0 submitted to CRAN 20190331
-Mayor changes:
+Minor changes:
 - Default plotting colours have been improved
 - for alluvial_wide() stratum fill color of variable determining flow is now matched with flow color
 - `parameter_label_size` allows to adjust the label fint size, as a result label size has been slightly increased
