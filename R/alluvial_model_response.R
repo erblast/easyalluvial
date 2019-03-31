@@ -700,3 +700,17 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 
   return(p)
 }
+
+#' @title calls e1071::skewness
+#' @description if e1071 is not listed a a dependency I get an error. I assume
+#'   caret uses it to calculate feature importance. However, e1071 is not listed
+#'   as a caret dependency. I have to add a function that directly calls it, so
+#'   I do not get a NOTE from RMD Check on Linux.
+#' @param x PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @seealso \code{\link[e1071]{skewness}}
+#' @rdname use_e1071
+#' @importFrom e1071 skewness
+use_e1071 = function(x){
+  e1071::skewness(x)
+}
