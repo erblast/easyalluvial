@@ -4,7 +4,8 @@
 \alias{get_pdp_predictions}
 \title{get predictions compatibel with the partial dependency plotting method}
 \usage{
-get_pdp_predictions(df, imp, .f_predict, m, degree = 4, bins = 5)
+get_pdp_predictions(df, imp, m, degree = 4, bins = 5,
+  .f_predict = predict)
 }
 \arguments{
 \item{df}{dataframe, training data}
@@ -12,12 +13,6 @@ get_pdp_predictions(df, imp, .f_predict, m, degree = 4, bins = 5)
 \item{imp}{dataframe, with not more then two columns one of them numeric
 containing importance measures and one character or factor column containing
 corresponding variable names as found in training data.}
-
-\item{.f_predict}{corresponding model predict() function. Often predict
-functions are undocumented and can be found using `:::`. For example
-`randomForest:::predict.randomForest`. Predictict functions needs to accept
-`m` as the first parameter and use the `newdata` parameter. Supply a wrapper
-for predict functions with x-y synthax.}
 
 \item{m}{model object}
 
@@ -27,6 +22,10 @@ will not be very readable, Default: 4}
 
 \item{bins}{integer, number of bins for numeric variables, increasing this
 number might result in too many flows, Default: 5}
+
+\item{.f_predict}{corresponding model predict() function. Needs to accept
+`m` as the first parameter and use the `newdata` parameter. Supply a wrapper
+for predict functions with x-y synthax.}
 }
 \value{
 vector, predictions
@@ -49,7 +48,6 @@ DETAILS
  imp = m$importance
 
  pred = get_pdp_predictions(df, imp
-                            , .f_predict = randomForest:::predict.randomForest
                             , m
                             , degree = 3
                             , bins = 5)

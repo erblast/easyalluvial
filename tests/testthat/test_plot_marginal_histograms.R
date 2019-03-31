@@ -20,7 +20,7 @@ test_that('plot_hist_as_margins',{
   vdiffr::expect_doppelganger('plot_hist_wide_num', p)
   
   set.seed(1)
-  p = add_marginal_histograms(p_wide, mtcars2)
+  p = add_marginal_histograms(p_wide, mtcars2, plot = F)
   
   # gtables not yet supported by vdiffr
   # vdiffr::expect_doppelganger('marg_hist_wide', p)
@@ -36,7 +36,7 @@ test_that('plot_hist_as_margins',{
   vdiffr::expect_doppelganger('plot_hist_long_num', p)
   
   set.seed(1)
-  p = add_marginal_histograms(p_long, quarterly_sunspots)
+  p = add_marginal_histograms(p_long, quarterly_sunspots, plot = F)
   
   # gtables not yet supported by vdiffr
   # vdiffr::expect_doppelganger('marg_hist_long', p)
@@ -52,7 +52,7 @@ test_that('plot_hist_as_margins',{
   vdiffr::expect_doppelganger('plot_hist_long_num_is_fill', p)
   
   set.seed(1)
-  p = add_marginal_histograms(p_long, quarterly_sunspots)
+  p = add_marginal_histograms(p_long, quarterly_sunspots, plot = F)
   
   # gtables not yet supported by vdiffr
   # vdiffr::expect_doppelganger('marg_hist_long_num_fill', p)
@@ -72,7 +72,7 @@ test_that('plot_hist_as_margins',{
   vdiffr::expect_doppelganger('plot_hist_long_cat_fill', p)
   
   set.seed(1)
-  p = add_marginal_histograms(p_long, quarterly_flights)
+  p = add_marginal_histograms(p_long, quarterly_flights, plot = F)
   
   # gtables not yet supported by vdiffr
   # vdiffr::expect_doppelganger('marg_hist_long_cat-fill', p)
@@ -95,12 +95,12 @@ test_that('plot_hist_as_margins',{
   p = plot_hist('wt', p_mod_num, df)
   vdiffr::expect_doppelganger('mod_num_num', p)
   
-  p_grid = add_marginal_histograms(p_mod_num, df)
+  p_grid = add_marginal_histograms(p_mod_num, df, plot = F)
   
   # gtables not yet supported by vdiffr
   # vdiffr::expect_doppelganger('marg_hist_mod_num', p_grid)
   
-  p_grid = add_marginal_histograms(p_mod_num, df, keep_labels = T)
+  p_grid = add_marginal_histograms(p_mod_num, df, keep_labels = T, plot = F)
   
   # gtables not yet supported by vdiffr
   # vdiffr::expect_doppelganger('marg_hist_mod_num_labels', p_grid)
@@ -111,7 +111,7 @@ test_that('plot_hist_as_margins',{
   p = plot_hist('pred', p_mod_num, df)
   vdiffr::expect_doppelganger('mod_num_pred_train', p)
   
-  p_grid = add_marginal_histograms(p_mod_num, df, keep_labels = T)
+  p_grid = add_marginal_histograms(p_mod_num, df, keep_labels = T, plot = F)
   
   # gtables not yet supported by vdiffr
   # vdiffr::expect_doppelganger('marg_hist_mod_num_pred_train', p_grid)
@@ -133,9 +133,28 @@ test_that('plot_hist_as_margins',{
   p = plot_hist('pred', p_mod_cat, df )
   vdiffr::expect_doppelganger('mod_cat_pred', p)
   
-  p_grid = add_marginal_histograms(p_mod_cat, df, keep_labels = T, pred_train = predict(train, mtcars2) )
+  p_grid = add_marginal_histograms(p_mod_cat, df, keep_labels = T, pred_train = predict(train, mtcars2), plot = F )
 
   # gtables not yet supported by vdiffr
   # vdiffr::expect_doppelganger('marg_hist_mod_cat_pred_train', p_grid)
   
 })
+
+test_that('model response marginal hists, extra columns in df',{
+  
+  set.seed(1)
+  df = select(mtcars2, -ids)
+  train = caret::train( disp ~ mpg + wt + cyl + qsec + carb
+                        , df, method = 'lm'
+                        ,trControl = caret::trainControl(method = 'none') )
+  
+  p_mod_num = alluvial_model_response_caret(train, degree = 3)
+  
+  expect_error( p = plot_hist('pred', p_mod_num, df) )
+  
+  p = plot_hist('pred', p_mod_num, df, pred_var = 'disp')
+  
+
+})
+
+

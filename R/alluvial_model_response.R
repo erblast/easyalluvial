@@ -223,9 +223,7 @@ get_data_space = function(df, imp, degree = 4, bins = 5){
 #'  will not be very readable, Default: 4
 #'@param bins integer, number of bins for numeric variables, increasing this
 #'  number might result in too many flows, Default: 5
-#'@param .f_predict corresponding model predict() function. Often predict
-#'  functions are undocumented and can be found using `:::`. For example
-#'  `randomForest:::predict.randomForest`. Predictict functions needs to accept
+#'@param .f_predict corresponding model predict() function. Needs to accept
 #'  `m` as the first parameter and use the `newdata` parameter. Supply a wrapper
 #'  for predict functions with x-y synthax.
 #'@param m model object
@@ -237,7 +235,6 @@ get_data_space = function(df, imp, degree = 4, bins = 5){
 #'  imp = m$importance
 #'
 #'  pred = get_pdp_predictions(df, imp
-#'                             , .f_predict = randomForest:::predict.randomForest
 #'                             , m
 #'                             , degree = 3
 #'                             , bins = 5)
@@ -246,7 +243,7 @@ get_data_space = function(df, imp, degree = 4, bins = 5){
 #'@rdname get_pdp_predictions
 #'@export
 #'@importFrom progress progress_bar
-get_pdp_predictions = function(df, imp, .f_predict, m, degree = 4, bins = 5){
+get_pdp_predictions = function(df, imp, m, degree = 4, bins = 5, .f_predict = predict){
   
   pb = progress::progress_bar$new(total = nrow(df))
   
@@ -287,7 +284,7 @@ get_cuts = function( from, target, ... ){
     paste( collapse = ',') %>%
     str_replace_all('\\ -\n ', ',') %>%
     str_split(',') %>%
-    map(unique) %>%
+    # map(unique) %>%
     map(as.numeric) %>%
     map(sort) %>%
     unlist()
@@ -673,13 +670,13 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 
   if( method == 'median'){
 
-    pred = caret::predict.train(train, newdata = dspace)
+    pred = predict(train, newdata = dspace)
   }
 
   if( method == 'pdp'){
 
     pred = get_pdp_predictions(train$trainingData, imp_df
-                               , .f_predict = caret::predict.train
+                               , .f_predict = predict
                                , m = train
                                , degree = degree
                                , bins = bins)

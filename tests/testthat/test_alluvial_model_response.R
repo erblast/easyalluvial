@@ -34,7 +34,7 @@ test_that('pdp_methods'
     imp = m$importance
     
     pred = get_pdp_predictions(df, imp
-                                , .f_predict = randomForest:::predict.randomForest
+                                #, .f_predict = predict
                                 , m
                                 , degree = 3
                                 , bins = 5)

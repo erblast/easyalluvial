@@ -4,7 +4,7 @@
 \alias{add_imp_plot}
 \title{add bar plot of important features to model response alluvial plot}
 \usage{
-add_imp_plot(grid, p = NULL, data_input, ...)
+add_imp_plot(grid, p = NULL, data_input, plot = T, ...)
 }
 \arguments{
 \item{grid}{gtable or ggplot}
@@ -12,6 +12,8 @@ add_imp_plot(grid, p = NULL, data_input, ...)
 \item{p}{alluvial plot, optional if alluvial plot has already been passed as grid.  Default: NULL}
 
 \item{data_input}{dataframe used to generate alluvial plot}
+
+\item{plot}{logical if plot should be drawn or not}
 
 \item{...}{additional parameters passed to \code{\link[easyalluvial]{plot_imp}}}
 }

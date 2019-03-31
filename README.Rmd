@@ -73,20 +73,6 @@ suppressPackageStartupMessages( require(easyalluvial) )
 
 ```{r wide}
 
-## mtcars2 is included in the current development version
-
-# mtcars2 <- within(mtcars, {
-#   vs <- factor(vs, labels = c("V", "S"))
-#   am <- factor(am, labels = c("automatic", "manual"))
-#   cyl  <- ordered(cyl)
-#   gear <- ordered(gear)
-#   carb <- ordered(carb)
-# })
-# 
-# mtcars2$id = row.names(mtcars)
-# 
-# mtcars2 = dplyr::as_tibble(mtcars2)
-
 knitr::kable( head(mtcars2) )
 ```
 
@@ -131,4 +117,15 @@ alluvial_long( quarterly_flights
 
 
 
+### Marginal Histograms
+
+```{r}
+alluvial_wide( data = mtcars2
+                , max_variables = 5
+                , fill_by = 'first_variable' ) %>%
+  add_marginal_histograms(mtcars2)
+
+```
+
+### Partial Dependence Plots
 

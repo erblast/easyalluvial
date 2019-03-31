@@ -1,4 +1,9 @@
 
+# Update 0.2.0
+
+## Test Environments
+* local Win10x64 R 3.5.3
+
 # Update to ensure `dplyr 0.8.0.` compatibility 
 
 ## Test environments

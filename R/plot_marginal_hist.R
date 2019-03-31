@@ -22,6 +22,7 @@ apply_cuts = function(x, cuts){
 #'   can be used to pass training predictions for model response alluvials
 #' @return ggplot object
 #' @rdname plot_hist
+#' @export
 plot_hist = function( var, p, data_input, ... ){
   
   p_ori = p
@@ -166,7 +167,7 @@ plot_hist_long = function(var, p, data_input){
   
 }
 
-plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale = 400){
+plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale = 400, pred_var = NULL){
 
   var_str = var
   var_quo = as.name(var_str)
@@ -174,11 +175,24 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
   is_pred = var == 'pred'
   
   if(is_pred){
-    ori_name = names(data_input)[ ! names(data_input) %in% names(p$alluvial_params$dspace) ] %>% unlist()
+    
+    # set ori_name -----------------------------------------------
+    ori_name = NULL
+    if( ! is_null(pred_var) ){
+      if( pred_var %in% names(data_input) ){
+        ori_name = pred_var
+      }
+    }
+    
+    if( is_null(ori_name)){
+      ori_name = names(data_input)[ ! names(data_input) %in% names(p$alluvial_params$dspace) ] %>% unlist()
+    }
+    
     
     if( length(ori_name) > 1){
-      stop( paste('data_input must only contain explanatory and predictive variables, so predictive variable can 
-                  be inferred. Potential predictive variables:', paste( ori_name, collapse = ',') ) )
+      stop( paste('\n"data_input" should only contain explanatory and response variables, so response variable can be inferred.
+                  \nPotential response variables:', paste( ori_name, collapse = ', ')
+                  , '\nPlease pass correct response variable as string using the "pred_var" parameter.' ) )
     }
     
     is_num = is.numeric( data_input[[ori_name]] )
@@ -463,28 +477,32 @@ plot_hist_wide = function( var, p, data_input){
   return(p)
 }
 
-#' @title add marginal histograms to alluvial plot
-#' @description will add density histograms and frequency plots of original data
-#'   to alluvial plot
-#' @param p alluvial plot
-#' @param data_input dataframe, input data that was used to create dataframe
-#' @param top logical, position of histograms, if FALSE adds them at the bottom,
-#'   Default: TRUE
-#' @param keep_labels logical, keep title and caption, Default: FALSE
-#' @param plot logical if plot should be drawn or not
-#' @param ... additional arguments for specific alluvial plot types: pred_train
-#'   can be used to pass training predictions for model response alluvials,
-#'   scale to adjust the y-axis distance between the ridge plots, Default: 400
-#' @return gtable
+#'@title add marginal histograms to alluvial plot
+#'@description will add density histograms and frequency plots of original data
+#'  to alluvial plot
+#'@param p alluvial plot
+#'@param data_input dataframe, input data that was used to create dataframe
+#'@param top logical, position of histograms, if FALSE adds them at the bottom,
+#'  Default: TRUE
+#'@param keep_labels logical, keep title and caption, Default: FALSE
+#'@param plot logical if plot should be drawn or not
+#'@param ... additional arguments for model response alluvial plot concerning
+#'  the response variable \describe{ \item{pred_train}{display training
+#'  prediction, not necessary if pred_train has already been passed to
+#'  alluvial_model_response()} \item{scale}{int, y-axis distance between the
+#'  ridge plots, Default: 400 } \item{pred_var}{character vector, specify
+#'  response variable in data_input, if not set response variable will try to be
+#'  inferred, Default: NULL } }
+#'@return gtable
 #' @examples
 #' p = alluvial_wide(mtcars2, max_variables = 4)
-#' p = add_marginal_histograms(p, mtcars2)
-#' @seealso \code{\link[gridExtra]{arrangeGrob}}
-#' @rdname add_marginal_histograms
-#' @export
-#' @importFrom gridExtra grid.arrange arrangeGrob
-#' @importFrom ggridges geom_ridgeline_gradient
-#' @importFrom stats density
+#' p_grid = add_marginal_histograms(p, mtcars2)
+#'@seealso \code{\link[gridExtra]{arrangeGrob}}
+#'@rdname add_marginal_histograms
+#'@export
+#'@importFrom gridExtra grid.arrange arrangeGrob
+#'@importFrom ggridges geom_ridgeline_gradient
+#'@importFrom stats density
 add_marginal_histograms = function(p, data_input, top = TRUE, keep_labels = FALSE, plot = TRUE, ...){
   
   if(plot){

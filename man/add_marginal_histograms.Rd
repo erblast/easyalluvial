@@ -19,20 +19,24 @@ Default: TRUE}
 
 \item{plot}{logical if plot should be drawn or not}
 
-\item{...}{additional arguments for specific alluvial plot types: pred_train
-can be used to pass training predictions for model response alluvials,
-scale to adjust the y-axis distance between the ridge plots, Default: 400}
+\item{...}{additional arguments for model response alluvial plot concerning
+the response variable \describe{ \item{pred_train}{display training
+prediction, not necessary if pred_train has already been passed to
+alluvial_model_response()} \item{scale}{int, y-axis distance between the
+ridge plots, Default: 400 } \item{pred_var}{character vector, specify
+response variable in data_input, if not set response variable will try to be
+inferred, Default: NULL } }}
 }
 \value{
 gtable
 }
 \description{
 will add density histograms and frequency plots of original data
-  to alluvial plot
+ to alluvial plot
 }
 \examples{
 p = alluvial_wide(mtcars2, max_variables = 4)
-p = add_marginal_histograms(p, mtcars2)
+p_grid = add_marginal_histograms(p, mtcars2)
 }
 \seealso{
 \code{\link[gridExtra]{arrangeGrob}}

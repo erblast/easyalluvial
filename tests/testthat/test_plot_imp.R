@@ -34,12 +34,13 @@ test_that('add_importance_plot'
   
   p = alluvial_model_response_caret(train, degree = 4, pred_train = pred_train)
   
-  p_grid = add_marginal_histograms(p, data_input = df)
+  p_grid = add_marginal_histograms(p, data_input = df, plot = F)
   
   expect_true( 'gtable' %in% class(p_grid) )
   
-  p_grid = add_imp_plot(p_grid, p, data_input = df)
+  p_grid = add_imp_plot(p_grid, p, data_input = df, plot = F)
   
-  p_grid = add_imp_plot(p, data_input = df)
+  p_grid = add_imp_plot(p, data_input = df, plot = F)
   
 })
+

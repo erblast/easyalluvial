@@ -118,6 +118,7 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
 #' @param grid gtable or ggplot
 #' @param p alluvial plot, optional if alluvial plot has already been passed as grid.  Default: NULL
 #' @param data_input dataframe used to generate alluvial plot
+#' @param plot logical if plot should be drawn or not
 #' @param ... additional parameters passed to \code{\link[easyalluvial]{plot_imp}}
 #' @return gtable
 #' @examples 
@@ -144,7 +145,14 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
 #' @rdname add_imp_plot
 #' @export 
 #' @importFrom gridExtra grid.arrange
-add_imp_plot = function(grid, p = NULL, data_input, ... ){
+add_imp_plot = function(grid, p = NULL, data_input, plot = T, ... ){
+  
+  if(plot){
+    .f = gridExtra::grid.arrange
+  }else{
+    .f = gridExtra::arrangeGrob
+  }
+  
   
   if( is_null(p) ){
     if( class(grid)[1] %in% c('gg','ggplot') ){
@@ -159,6 +167,6 @@ add_imp_plot = function(grid, p = NULL, data_input, ... ){
   
   p_imp = plot_imp(p, data_input, ... )
   
-  gridExtra::grid.arrange( grid, p_imp, layout_matrix = t( as.matrix( c(1,1,1,1,1,2) ) ) )
+  .f( grid, p_imp, layout_matrix = t( as.matrix( c(1,1,1,1,1,2) ) ) )
   
 }
