@@ -168,6 +168,19 @@ test_that('alluvial_model_response'
     
     vdiffr::expect_doppelganger('model_response_cat_multi', p)
     
+    # all factors
+    
+    set.seed(0)
+    m = randomForest::randomForest( Survived ~ ., titanic_fac)
+    imp = m$importance
+    
+    expect_warning( {dspace = get_data_space(titanic_fac, imp, degree = 3, max_levels = 5)} )
+    
+    expect_true( nrow(dspace) == 30 )
+    
+    pred = predict(m, newdata = dspace,type = 'response')
+    p = alluvial_model_response(pred, dspace, imp, degree = 3)
+    
 })
 
 test_that('alluvial_model_response_caret'

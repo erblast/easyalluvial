@@ -123,8 +123,10 @@ tidy_imp = function(imp, df, .f = max){
 #'@param degree integer,  number of top important variables to select. For
 #'  plotting more than 4 will result in two many flows and the alluvial plot
 #'  will not be very readable, Default: 4
-#'@param bins integer, number of bins for numeric variables, increasing this
-#'  number might result in too many flows, Default: 5
+#'@param bins integer, number of bins for numeric variables, and maximum number
+#'  of levels for factor variables, increasing this number might result in too
+#'  many flows, Default: 5
+#'@param max_levels integer, maximum number of levels per factor variable, Default: 10
 #'@return data frame
 #'@details this model visualisation approach follows the "visualising the model
 #'  in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
@@ -139,7 +141,7 @@ tidy_imp = function(imp, df, .f = max){
 #'@export
 #'@seealso \code{\link[easyalluvial]{alluvial_wide}},
 #'  \code{\link[easyalluvial]{manip_bin_numerics}}
-get_data_space = function(df, imp, degree = 4, bins = 5){
+get_data_space = function(df, imp, degree = 4, bins = 5, max_levels = 10){
 
   degree = check_degree(degree, imp, df)
 
@@ -152,17 +154,62 @@ get_data_space = function(df, imp, degree = 4, bins = 5){
   df_top = select(df, one_of(imp_top$vars) )
 
   numerics_top = names( select_if( df_top, is.numeric ) )
-
+  factors_top = names( select_if( df_top, is.factor) )
+  
+  # generate warning if number of levels is > max_levels
+  n_levels = select(df, one_of(factors_top) ) %>%
+    summarise_all( ~ length( levels(.) ) ) %>%
+    unlist() 
+  
+  most_levels = n_levels[ which(n_levels == max(n_levels)) ]
+  
+  if(most_levels > max_levels){
+    warning( paste('factor', names(most_levels), 'contains', most_levels
+                   , 'levels. Data space will only be created for top', max_levels
+                   , 'levels. Adjust this behaviour using the `max_levels` parameter ') )
+  }
+  
+  summarise_top = function(x, agg){
+    if(is.numeric(x)){
+      return( agg(x) )
+    }
+    else{
+      return( x[1] )
+    }
+  }
+  
   # variant 1
-  df_facs = manip_bin_numerics(df_top, bin_labels = 'median', bins = bins-2) %>%
-    distinct() %>%
-    mutate_if( ~ ! is.ordered(.), ~ as.numeric( as.character(.) ) ) %>%
-    bind_rows( summarise_all(df_top, max) ) %>%
-    bind_rows( summarise_all(df_top, min) ) %>%
-    mutate_if( ~ ! is.ordered(.), as.factor ) %>%
-    tidyr::complete( !!! map( names(df_top) , as.name) ) %>%
-    mutate_at( vars(one_of(numerics_top)), function(x) as.numeric( as.character(x)) ) %>%
-    mutate_if( is.factor, fct_lump, n = bins )
+  
+  if(! is_empty(numerics_top)){
+    
+    factors_top = NULL
+  
+    df_facs = manip_bin_numerics(df_top, bin_labels = 'median', bins = bins-2) %>%
+      mutate_if( is.factor, fct_lump, n = max_levels, other_level = 'easyalluvial_factor_cap' ) %>%
+      distinct() %>%
+      mutate_at( vars( one_of(numerics_top) ), ~ as.numeric( as.character(.) ) ) %>%
+      bind_rows( summarise_all(df_top, summarise_top, agg = max) ) %>%
+      bind_rows( summarise_all(df_top, summarise_top, agg = min) ) %>%
+      mutate_at( vars( one_of(numerics_top) ), as.factor ) %>%
+      tidyr::complete( !!! map( names(df_top) , as.name) ) %>%
+      mutate_at( vars(one_of(numerics_top)), function(x) as.numeric( as.character(x)) ) %>%
+      filter_at( vars(one_of(factors_top)), ~ . != 'easyalluvial_factor_cap') %>%
+      mutate_at(vars(one_of(factors_top)), fct_drop )
+    
+  }else{
+    df_facs = df_top %>%
+      mutate_if( is.factor, fct_lump, n = max_levels, other_level = 'easyalluvial_factor_cap' ) %>%
+      distinct() %>%
+      tidyr::complete( !!! map( names(df_top) , as.name) ) %>%
+      filter_at( vars(one_of(factors_top)), ~ . != 'easyalluvial_factor_cap') %>%
+      mutate_at(vars(one_of(factors_top)), fct_drop )
+  }
+  
+  # make sure levels are the same as in input data
+  for(fac in factors_top){
+    missing_levels = levels(df[[fac]])[ ! levels(df[[fac]]) %in% levels(df_facs[[fac]]) ]
+    df_facs[[fac]] = fct_expand(df_facs[[fac]], missing_levels)
+  }
   
   # variant 2
   # df_facs = manip_bin_numerics(df_top, bin_labels = 'median', bins = bins) %>%
