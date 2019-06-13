@@ -4,7 +4,7 @@
 \alias{get_data_space}
 \title{calculate data space}
 \usage{
-get_data_space(df, imp, degree = 4, bins = 5)
+get_data_space(df, imp, degree = 4, bins = 5, max_levels = 10)
 }
 \arguments{
 \item{df}{dataframe, training data}
@@ -17,8 +17,11 @@ corresponding variable names as found in training data.}
 plotting more than 4 will result in two many flows and the alluvial plot
 will not be very readable, Default: 4}
 
-\item{bins}{integer, number of bins for numeric variables, increasing this
-number might result in too many flows, Default: 5}
+\item{bins}{integer, number of bins for numeric variables, and maximum number
+of levels for factor variables, increasing this number might result in too
+many flows, Default: 5}
+
+\item{max_levels}{integer, maximum number of levels per factor variable, Default: 10}
 }
 \value{
 data frame

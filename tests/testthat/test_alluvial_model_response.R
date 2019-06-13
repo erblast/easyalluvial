@@ -168,20 +168,40 @@ test_that('alluvial_model_response'
     
     vdiffr::expect_doppelganger('model_response_cat_multi', p)
     
-    # all factors
+    # all factors -----------------------------------------------
     
     set.seed(0)
-    m = randomForest::randomForest( Survived ~ ., titanic_fac)
+    
+    df = titanic %>%
+      select_if(is.factor)
+    
+    set.seed(0)
+    m = randomForest::randomForest( Survived ~ ., df)
     imp = m$importance
     
-    expect_warning( {dspace = get_data_space(titanic_fac, imp, degree = 3, max_levels = 5)} )
+    expect_warning( {dspace = get_data_space(df, imp, degree = 3, max_levels = 5)} )
     
     expect_true( nrow(dspace) == 30 )
     
     pred = predict(m, newdata = dspace,type = 'response')
     p = alluvial_model_response(pred, dspace, imp, degree = 3)
+    vdiffr::expect_doppelganger('model_response_all_facs', p)
     
-})
+    # all numerics ----------------------------------------------
+    
+    set.seed(0)
+    df = select(mtcars2, -ids) %>%
+      select_if(is.numeric)
+    
+    m = randomForest::randomForest( disp ~ ., df)
+    imp = m$importance
+    dspace = get_data_space(df, imp, degree = 3)
+
+    pred = predict(m, newdata = dspace)
+    
+    p = alluvial_model_response(pred, dspace, imp, degree = 3)
+    vdiffr::expect_doppelganger('model_response_all_nums', p)
+          })
 
 test_that('alluvial_model_response_caret'
           , {
@@ -222,7 +242,26 @@ test_that('alluvial_model_response_caret'
   p = alluvial_model_response_caret(train, degree = 3)
   vdiffr::expect_doppelganger('model_response_caret_cat_multi', p)
   
-          
+  # all facs
+  set.seed(1)
+  
+  df = titanic %>%
+    select_if( is.factor )
+  
+  train = caret::train( Survived ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
+  p = alluvial_model_response_caret(train, degree = 3)
+  vdiffr::expect_doppelganger('all_facs_caret', p)
+  
+  # all nums
+  set.seed(1)
+  
+  df = select(mtcars2, -ids) %>%
+    select_if( is.numeric )
+  
+  train = caret::train( disp ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
+  p = alluvial_model_response_caret(train, degree = 3)
+  vdiffr::expect_doppelganger('all_nums_caret', p)
+  
   })
 
 test_that('params_bin_numeric_pred',{

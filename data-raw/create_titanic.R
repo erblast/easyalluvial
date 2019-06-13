@@ -1,6 +1,5 @@
 data("titanic_train",package="titanic")
 library(tidyverse)
-str(titanic_train)
 
 d <- titanic_train %>% as_tibble %>%
   mutate(title=str_replace_all(string = Name, # extract title as general feature
@@ -22,8 +21,6 @@ table(d$title,d$Sex) # look on title distribution
 caret::nearZeroVar(x = d,saveMetrics = T) # search and drop some unusefull features (PassengerId,Name,Ticket)
 d <- d %>% select_at(vars(-c(PassengerId,Name,Ticket)))
 
-titanic_fac = d %>%
-  mutate_if(is.character, as.factor) %>%
-  select( - Cabin, - Fare, - Age, -SibSp, - Parch)
+titanic = d
 
-usethis::use_data( titanic_fac, overwrite = TRUE )
+usethis::use_data( titanic, overwrite = TRUE )

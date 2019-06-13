@@ -34,7 +34,6 @@
 
 
 
-
 #'mtcars dataset with cyl, vs, am ,gear, carb as factor variables and car model
 #'names as id
 #'@format A data frame with 32 rows and 12 variables
@@ -55,3 +54,22 @@
 #'}
 #'@source datasets
 "mtcars2"
+
+
+#'titanic data set'
+#'@format A data frame with 891 rows and 10 variables
+#'\describe{
+#'
+#'\item{Survived}{Survived}
+#'\item{Pclass}{Pclass}
+#'\item{Sex}{Sex}
+#'\item{Age}{Age}
+#'\item{SibSp}{SibSp}
+#'\item{Parch}{Parch}
+#'\item{Fare}{Fare}
+#'\item{Cabin}{Cabin}
+#'\item{Embarked}{Embarked}
+#'\item{title}{title}
+#'}
+#'@source datasets
+"titanic"

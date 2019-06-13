@@ -157,16 +157,20 @@ get_data_space = function(df, imp, degree = 4, bins = 5, max_levels = 10){
   factors_top = names( select_if( df_top, is.factor) )
   
   # generate warning if number of levels is > max_levels
-  n_levels = select(df, one_of(factors_top) ) %>%
+  if( ! is_empty(factors_top) ){
+    
+    n_levels = select(df, one_of(factors_top) ) %>%
     summarise_all( ~ length( levels(.) ) ) %>%
     unlist() 
   
-  most_levels = n_levels[ which(n_levels == max(n_levels)) ]
+    most_levels = n_levels[ which(n_levels == max(n_levels)) ]
   
-  if(most_levels > max_levels){
-    warning( paste('factor', names(most_levels), 'contains', most_levels
-                   , 'levels. Data space will only be created for top', max_levels
-                   , 'levels. Adjust this behaviour using the `max_levels` parameter ') )
+  
+    if(most_levels[1] > max_levels){
+      warning( paste('factor', names(most_levels), 'contains', most_levels
+                     , 'levels. Data space will only be created for top', max_levels
+                     , 'levels. Adjust this behaviour using the `max_levels` parameter ') )
+    }
   }
   
   summarise_top = function(x, agg){
@@ -178,12 +182,9 @@ get_data_space = function(df, imp, degree = 4, bins = 5, max_levels = 10){
     }
   }
   
-  # variant 1
-  
-  if(! is_empty(numerics_top)){
+  # mix factors and numerics in df_top -----------------------------------------------------------
+  if( ! is_empty(numerics_top) & ! is_empty(factors_top) ){
     
-    factors_top = NULL
-  
     df_facs = manip_bin_numerics(df_top, bin_labels = 'median', bins = bins-2) %>%
       mutate_if( is.factor, fct_lump, n = max_levels, other_level = 'easyalluvial_factor_cap' ) %>%
       distinct() %>%
@@ -195,37 +196,41 @@ get_data_space = function(df, imp, degree = 4, bins = 5, max_levels = 10){
       mutate_at( vars(one_of(numerics_top)), function(x) as.numeric( as.character(x)) ) %>%
       filter_at( vars(one_of(factors_top)), ~ . != 'easyalluvial_factor_cap') %>%
       mutate_at(vars(one_of(factors_top)), fct_drop )
+  
+  # only factors ---------------------------------------------------------------------------------  
+  }else if( ! is_empty(factors_top) ){
     
-  }else{
     df_facs = df_top %>%
       mutate_if( is.factor, fct_lump, n = max_levels, other_level = 'easyalluvial_factor_cap' ) %>%
       distinct() %>%
       tidyr::complete( !!! map( names(df_top) , as.name) ) %>%
       filter_at( vars(one_of(factors_top)), ~ . != 'easyalluvial_factor_cap') %>%
       mutate_at(vars(one_of(factors_top)), fct_drop )
+    
   }
   
-  # make sure levels are the same as in input data
-  for(fac in factors_top){
-    missing_levels = levels(df[[fac]])[ ! levels(df[[fac]]) %in% levels(df_facs[[fac]]) ]
-    df_facs[[fac]] = fct_expand(df_facs[[fac]], missing_levels)
+  # make sure levels are the same as in input data ---------------------------------------------
+  if(  ! is_empty(factors_top) ){
+    for(fac in factors_top){
+      missing_levels = levels(df[[fac]])[ ! levels(df[[fac]]) %in% levels(df_facs[[fac]]) ]
+      df_facs[[fac]] = fct_expand(df_facs[[fac]], missing_levels)
+    }
   }
   
-  # variant 2
-  # df_facs = manip_bin_numerics(df_top, bin_labels = 'median', bins = bins) %>%
-  #   distinct() %>%
-  #   mutate_if( ~ ! is.ordered(.), ~ as.numeric( as.character(.) ) ) %>%
-  #   #summary()
-  #   filter_all( all_vars( . > min(.) ) ) %>%
-  #   filter_all( all_vars( . < max(.) ) ) %>%
-  #   # summary()
-  #   bind_rows( summarise_all(df_top, max) ) %>%
-  #   bind_rows( summarise_all(df_top, min) ) %>%
-  #   mutate_if( ~ ! is.ordered(.), as.factor ) %>%
-  #   tidyr::complete( !!! map( names(df_top) , as.name) ) %>%
-  #   mutate_at( vars(one_of(numerics_top)), function(x) as.numeric( as.character(x)) ) %>%
-  #   mutate_if( is.factor, fct_lump, n = bins )
+  # only numerics ------------------------------------------------------------------------------
+  if( ! is_empty(numerics_top) ){
+    
+    df_facs = manip_bin_numerics(df_top, bin_labels = 'median', bins = bins-2) %>%
+      distinct() %>%
+      mutate_at( vars( one_of(numerics_top) ), ~ as.numeric( as.character(.) ) ) %>%
+      bind_rows( summarise_all(df_top, summarise_top, agg = max) ) %>%
+      bind_rows( summarise_all(df_top, summarise_top, agg = min) ) %>%
+      mutate_at( vars( one_of(numerics_top) ), as.factor ) %>%
+      tidyr::complete( !!! map( names(df_top) , as.name) ) %>%
+      mutate_at( vars(one_of(numerics_top)), function(x) as.numeric( as.character(x)) )
+  }
   
+  # Add remaining features as mode or median -----------------------------------------
   mode = function(x) {
     ux = unique(x)
     ux[which.max(tabulate(match(x, ux)))]
