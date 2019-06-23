@@ -187,6 +187,7 @@ test_that('alluvial_model_response'
     p = alluvial_model_response(pred, dspace, imp, degree = 3)
     vdiffr::expect_doppelganger('model_response_all_facs', p)
     
+
     # all numerics ----------------------------------------------
     
     set.seed(0)
@@ -262,6 +263,18 @@ test_that('alluvial_model_response_caret'
   p = alluvial_model_response_caret(train, degree = 3)
   vdiffr::expect_doppelganger('all_nums_caret', p)
   
+  # titanic example, + mix of factor and character features
+  # regular random Forest will not allow this caret works around it
+  
+  trc <- caret::trainControl(method = "none")
+  
+  df = titanic %>%
+    select(Survived, Sex, Embarked, title)
+  
+  m <- caret::train(Survived~.,data = df, method="rf",trControl=trc,importance=T)
+  p = alluvial_model_response_caret(train = m,degree = 3,bins=5,stratum_label_size = 2.8) 
+  
+
   })
 
 test_that('params_bin_numeric_pred',{

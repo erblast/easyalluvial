@@ -59,7 +59,7 @@ tidy_imp = function(imp, df, .f = max){
 
   # correct dummyvariable names back to original name
 
-  df_ori_var = tibble( ori_var = names( select_if(df, is.factor) ) ) %>%
+  df_ori_var = tibble( ori_var = names( select_if(df, ~ is.factor(.) | is.character(.) ) ) ) %>%
     mutate( len = map_int( ori_var, nchar ) ) %>%
     arrange(len)
 
