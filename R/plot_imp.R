@@ -35,7 +35,7 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
     stop('plot must be alluvial plot of type model_response')
   }
   
-  if( nrow(p$alluvial_params$imp) > truncate_at ){
+  if( nrow(p$alluvial_params$imp %>% tidy_imp(df = data_input) ) > truncate_at ){
     warning( paste('More than', truncate_at, 'features detected, they will be truncated. 
                    Adjust threshold using the truncate_at parameter') )
   }

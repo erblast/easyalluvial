@@ -274,6 +274,8 @@ test_that('alluvial_model_response_caret'
   m <- caret::train(Survived~.,data = df, method="rf",trControl=trc,importance=T)
   p = alluvial_model_response_caret(train = m,degree = 3,bins=5,stratum_label_size = 2.8) 
   
+  p_grid = add_marginal_histograms(p, data_input = df, plot = F) %>%
+    add_imp_plot(p, df)
 
   })
 

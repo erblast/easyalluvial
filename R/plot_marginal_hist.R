@@ -25,6 +25,9 @@ apply_cuts = function(x, cuts){
 #' @export
 plot_hist = function( var, p, data_input, ... ){
   
+  data_input = data_input %>%
+    mutate_if(is.character, as.factor)
+  
   p_ori = p
   
   if( p$alluvial_type == 'wide'){
