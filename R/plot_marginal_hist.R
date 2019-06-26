@@ -436,7 +436,15 @@ plot_hist_wide = function( var, p, data_input){
       mutate( ID = as.character(row_number() ) )
   }
   
-  df = left_join(data_input, p$data_key, by = p$alluvial_params$id) %>%
+  # in order not to produce a warning we change joining
+  # variable to character 
+  df_left = data_input %>%
+    mutate( !! as.name(p$alluvial_params$id) := as.character(!! as.name(p$alluvial_params$id)) )
+  
+  df_right = p$data_key %>%
+    mutate( !! as.name(p$alluvial_params$id) := as.character(!! as.name(p$alluvial_params$id)) )
+  
+  df = left_join(df_left, df_right, by = p$alluvial_params$id) %>%
     select( starts_with('var') ) 
   
   df_col = p$data %>%

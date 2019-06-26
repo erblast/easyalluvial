@@ -25,7 +25,7 @@ Suggests:
     covr,
     ISLR,
     nycflights13,
-    vdiffr
+    vdiffr (>= 0.3.1)
 RoxygenNote: 6.1.1
 Imports:
   purrr
@@ -33,7 +33,7 @@ Imports:
   , dplyr
   , forcats
   , ggalluvial (>= 0.9.1)
-  , ggplot2 (>= 3.1.0)
+  , ggplot2 (>= 3.2.0)
   , ggridges
   , RColorBrewer
   , recipes (>= 0.1.5)
