@@ -1,3 +1,9 @@
+# Version 0.2.1 submitted to CRAN 20190907
+Bug Fixes:
+- compatibility with `tidyr 1.0.0`
+- compatibility with `ggalluvial 0.10.0`
+- alluvial_model_response() had issues with factors https://github.com/erblast/easyalluvial/issues/13 which is now fixed
+
 # Version 0.2.0 submitted to CRAN 20190331
 Minor changes:
 - Default plotting colours have been improved

@@ -214,7 +214,7 @@ alluvial_wide = function( data
     head(1) %>%
     mutate_all( function(x) list(levels(x)) ) %>%
     gather( key = 'key', value = 'levels') %>%
-    unnest(levels) %>%
+    unnest( c(levels) ) %>%
     .$levels %>%
     unique()
 

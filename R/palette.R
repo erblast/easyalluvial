@@ -85,7 +85,7 @@ palette_filter = function( palette = palette_qualitative()
     mutate( rgb = map(hex, col2rgb)
             , rgb = map(rgb, t)
             , rgb = map(rgb, as_tibble) ) %>%
-    unnest( rgb )
+    unnest( c(rgb) )
 
   # for greys R == G == B
   if( greys == F ){
@@ -123,29 +123,29 @@ palette_filter = function( palette = palette_qualitative()
       filter( (red + green + blue ) > 420 )
   }
 
-  if( similar == F ){
+  if( similar == F & thresh_similar > 0){
 
-  get_similar = function(i, r, g, b, df, thresh_similar ){
-
-    df %>%
-      filter( i != index ) %>%
-      filter( red >= (r - thresh_similar), red <= (r + thresh_similar) ) %>%
-      filter( green >= (g - thresh_similar), green <= (g + thresh_similar) ) %>%
-      filter( blue >= (b - thresh_similar), blue <= (b + thresh_similar) ) %>%
-      .$index
-  }
-
-  palette = mutate(palette, index = row_number() )
-
-  filter_indeces = palette %>%
-    mutate( similar_index = pmap( list(index, red, green, blue), get_similar, palette, thresh_similar ) ) %>%
-    unnest( similar_index ) %>%
-    mutate( larger_index = ifelse( similar_index > index, similar_index, index) ) %>%
-    .[['larger_index']] %>%
-    unique()
-
-  palette = palette %>%
-    filter( ! index %in% filter_indeces )
+    get_similar = function(i, r, g, b, df, thresh_similar ){
+  
+      df %>%
+        filter( i != index ) %>%
+        filter( red >= (r - thresh_similar), red <= (r + thresh_similar) ) %>%
+        filter( green >= (g - thresh_similar), green <= (g + thresh_similar) ) %>%
+        filter( blue >= (b - thresh_similar), blue <= (b + thresh_similar) ) %>%
+        .$index
+    }
+  
+    palette = mutate(palette, index = row_number() )
+  
+    filter_indeces = palette %>%
+      mutate( similar_index = pmap( list(index, red, green, blue), get_similar, palette, thresh_similar ) ) %>%
+      unnest( c(similar_index) ) %>%
+      mutate( larger_index = ifelse( similar_index > index, similar_index, index) ) %>%
+      .[['larger_index']] %>%
+      unique()
+  
+    palette = palette %>%
+      filter( ! index %in% filter_indeces )
 
   }
 
@@ -211,7 +211,7 @@ palette_plot_rgp = function(palette){
     mutate( hex = forcats::as_factor(hex) )
 
   palette = hex %>%
-    unnest( RGB ) %>%
+    unnest( c(RGB) ) %>%
     gather( key = 'RGB', value = 'value', - hex ) %>%
     group_by(hex) %>%
     mutate( sum = sum(value) ) %>%
@@ -256,7 +256,7 @@ palette_plot_intensity = function(palette){
     mutate( hex = forcats::as_factor(hex) )
 
   palette = hex %>%
-    unnest( RGB ) %>%
+    unnest( c(RGB) ) %>%
     gather( key = 'RGB', value = 'value', - hex ) %>%
     group_by( hex ) %>%
     summarise( sum = sum(value) ) %>%

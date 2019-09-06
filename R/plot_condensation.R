@@ -65,8 +65,8 @@ plot_condensation = function(df, first = NULL){
 
     df_comb = tibble( var1 = list( names(df) )
                       , var2 = list( names(df) ) ) %>%
-      unnest(var1, .drop = F) %>%
-      unnest(var2) %>%
+      unnest( c(var1) ) %>%
+      unnest( c(var2) ) %>%
       filter( var1 != var2 ) %>%
       mutate( comb = map2(var1, var2, function(x,y) sort( c(x, y) )  )
               , var1 = map_chr( comb, function(x) x[1] )
@@ -85,7 +85,7 @@ plot_condensation = function(df, first = NULL){
 
 
     df_comb = tibble( var1 = first, var2 = list( names(df) )) %>%
-      unnest(var2, .drop = F) %>%
+      unnest( c(var2) ) %>%
       filter(var1 != var2 ) %>%
       mutate( comb = map2(var1, var2, function(x,y) c(x, y)) )
 
@@ -127,7 +127,7 @@ plot_condensation = function(df, first = NULL){
     remaining = names(df)[ ! names(df) %in% group ]
 
     df_comb = tibble( comb = list(group), vars = list(remaining) ) %>%
-      unnest(vars, .drop = F) %>%
+      unnest( c(vars) ) %>%
       mutate( comb = map2(comb, vars, function(x,y) c(x,y) )
               , condensed = map(comb, condense)
               , condensation = map_dbl(condensed, 'condensation')

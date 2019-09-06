@@ -15,7 +15,11 @@ test_that('palettes'
     p = palette_qualitative() %>%
       palette_filter( reds = F, thresh_similar = 0) %>%
       palette_plot_intensity()
-
+    
+    p = palette_qualitative() %>%
+      palette_filter( reds = F) %>%
+      palette_plot_intensity()
+    
     p = palette_qualitative() %>%
       palette_filter( blues = F, thresh_similar = 0) %>%
       palette_plot_intensity()

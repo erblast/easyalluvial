@@ -187,6 +187,19 @@ test_that('alluvial_model_response'
     p = alluvial_model_response(pred, dspace, imp, degree = 3)
     vdiffr::expect_doppelganger('model_response_all_facs', p)
     
+    # factors as character ---------------------------------------
+    
+    df = titanic %>%
+      select_if(is.factor) %>%
+      mutate_at( vars(Pclass, Sex, title), as.character() )
+    
+    m = randomForest::randomForest( Survived ~ ., df)
+    imp = m$importance
+    
+    expect_warning( {dspace = get_data_space(df, imp, degree = 3, max_levels = 5)} )
+    
+    pred = predict(m, newdata = dspace,type = 'response')
+    p = alluvial_model_response(pred, dspace, imp, degree = 3)
 
     # all numerics ----------------------------------------------
     

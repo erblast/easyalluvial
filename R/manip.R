@@ -90,8 +90,6 @@ manip_bin_numerics = function(x
     return(x)
   }
 
-  requireNamespace('recipes')
-
   if( length(bin_labels) != bins[1] & ! bin_labels[1] %in% c('median', 'cuts', 'mean', 'min_max') ){
     stop( "bin_labels length must be equal to bins or one of  c('median', 'cuts', 'mean', 'min_max')")
   }
@@ -114,39 +112,45 @@ manip_bin_numerics = function(x
   # we need to assign an ID to restore the correct order at the end
   df = mutate(df, easyalluvialid = row_number() ) 
   
-  rec = recipe(df) %>%
-    update_role( easyalluvialid, new_role = 'id variable') 
+  suppressWarnings({
+    
+    # recipes 0.1.6 uses old unnest()/nest() API which throws warnings
+    requireNamespace('recipes')
+    
+    rec = recipe(df) %>%
+      update_role( easyalluvialid, new_role = 'id variable') 
 
-  if( center ) rec = rec %>%
-    step_center( one_of(numerics) )
-
-  if( scale ) rec = rec  %>%
-    step_scale( one_of(numerics) )
-
-  if( transform ) rec = rec %>%
-    step_YeoJohnson( one_of(numerics) )
-
-  rec = rec %>%
-    prep()
-
-  rename_levels = function(x){
-    levels(x) = bin_labels
-    return(x)
-  }
-
-  data_new <- bake(rec, df ) %>%
-    mutate_at( vars(numerics), function(x) ifelse( x > max(boxplot.stats(x)$stats)
-                                                   , max(boxplot.stats(x)$stats)
-                                                   , x)
-               ) %>%
-    mutate_at( vars(numerics), function(x) ifelse( x < min(boxplot.stats(x)$stats)
-                                                   , min(boxplot.stats(x)$stats)
-                                                   , x)
-               ) %>%
-    mutate_at( vars(numerics), function(x) cut(x, breaks = bins) ) %>%
-    #bake() is converting character variables to factor which we need to revert
-    mutate_at( vars(characters), as.character ) 
+    if( center ) rec = rec %>%
+      step_center( one_of(numerics) )
   
+    if( scale ) rec = rec  %>%
+      step_scale( one_of(numerics) )
+  
+    if( transform ) rec = rec %>%
+      step_YeoJohnson( one_of(numerics) )
+  
+      rec = rec %>%
+        prep()
+  
+    rename_levels = function(x){
+      levels(x) = bin_labels
+      return(x)
+    }
+  
+    data_new <- bake(rec, df ) %>%
+      mutate_at( vars(numerics), function(x) ifelse( x > max(boxplot.stats(x)$stats)
+                                                     , max(boxplot.stats(x)$stats)
+                                                     , x)
+                 ) %>%
+      mutate_at( vars(numerics), function(x) ifelse( x < min(boxplot.stats(x)$stats)
+                                                     , min(boxplot.stats(x)$stats)
+                                                     , x)
+                 ) %>%
+      mutate_at( vars(numerics), function(x) cut(x, breaks = bins) ) %>%
+      #bake() is converting character variables to factor which we need to revert
+      mutate_at( vars(characters), as.character ) 
+  
+  })
   
   summary_as_label = function(df, df_old, fun){
     # joins df with original dataframe. Groups by segments and calculates
