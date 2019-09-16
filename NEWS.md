@@ -1,4 +1,4 @@
-# Version 0.2.1 submitted to CRAN 20190907
+# Version 0.2.1 submitted to CRAN 20190916
 Bug Fixes:
 - compatibility with `tidyr 1.0.0`
 - compatibility with `ggalluvial 0.10.0`
