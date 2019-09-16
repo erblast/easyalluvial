@@ -19,4 +19,3 @@ matrix:
   - r: release
     name: tidyr-devel
     before_script: Rscript -e "remotes::install_github('tidyverse/tidyr')"
-  - r: oldrel

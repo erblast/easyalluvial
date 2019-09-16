@@ -29,7 +29,7 @@ Suggests:
 RoxygenNote: 6.1.1
 Imports:
   purrr
-  , tidyr
+  , tidyr (>= 1.0.0)
   , dplyr
   , forcats
   , ggalluvial (>= 0.9.1)
