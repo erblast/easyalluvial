@@ -1,5 +1,10 @@
 
 # Update 0.2.1
+* local x86_64-w64-mingw32/x64 (64-bit) R 3.6.1
+* Appveyor x86_64-w64-mingw32/x64 (64-bit) R 3.6.1
+* Travis CI Ubuntu 16.04.6 LTS x86_64-pc-linux-gnu (64-bit) R 3.6.1
+* Travis CI Ubuntu 16.04.6 LTS x86_64-pc-linux-gnu (64-bit) R-devel
+
 
 ## Test Environments
 * local x86_64-w64-mingw32/x64 (64-bit) R 3.5.3
