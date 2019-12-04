@@ -1,5 +1,5 @@
 
-# Update 0.2.1
+# Update 0.2.2
 
 ## Test Environments
 * local x86_64-w64-mingw32/x64 (64-bit) R 3.6.1

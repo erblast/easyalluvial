@@ -4,12 +4,20 @@
 \alias{alluvial_model_response_caret}
 \title{create model response plot for caret models}
 \usage{
-alluvial_model_response_caret(train, degree = 4, bins = 5,
+alluvial_model_response_caret(
+  train,
+  degree = 4,
+  bins = 5,
   bin_labels = c("LL", "ML", "M", "MH", "HH"),
-  col_vector_flow = c("#FF0065", "#009850", "#A56F2B", "#005EAA",
-  "#710500", "#7B5380", "#9DD1D1"), method = "median",
+  col_vector_flow = c("#FF0065", "#009850", "#A56F2B", "#005EAA", "#710500", "#7B5380",
+    "#9DD1D1"),
+  method = "median",
   params_bin_numeric_pred = list(center = T, transform = T, scale = T),
-  pred_train = NULL, stratum_label_size = 3.5, force = F, ...)
+  pred_train = NULL,
+  stratum_label_size = 3.5,
+  force = F,
+  ...
+)
 }
 \arguments{
 \item{train}{caret train object}

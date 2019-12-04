@@ -4,15 +4,30 @@
 \alias{alluvial_long}
 \title{alluvial plot of data in long format}
 \usage{
-alluvial_long(data, key, value, id, fill = NULL, fill_right = T,
-  bins = 5, bin_labels = c("LL", "ML", "M", "MH", "HH"),
-  NA_label = "NA", order_levels_value = NULL,
-  order_levels_key = NULL, order_levels_fill = NULL, complete = TRUE,
-  fill_by = "first_variable", col_vector_flow = palette_qualitative()
-  \%>\% palette_filter(greys = F),
-  col_vector_value = RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7,
-  5)], verbose = F, stratum_labels = T, stratum_label_size = 4.5,
-  stratum_width = 1/4, auto_rotate_xlabs = T, ...)
+alluvial_long(
+  data,
+  key,
+  value,
+  id,
+  fill = NULL,
+  fill_right = T,
+  bins = 5,
+  bin_labels = c("LL", "ML", "M", "MH", "HH"),
+  NA_label = "NA",
+  order_levels_value = NULL,
+  order_levels_key = NULL,
+  order_levels_fill = NULL,
+  complete = TRUE,
+  fill_by = "first_variable",
+  col_vector_flow = palette_qualitative() \%>\% palette_filter(greys = F),
+  col_vector_value = RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7, 5)],
+  verbose = F,
+  stratum_labels = T,
+  stratum_label_size = 4.5,
+  stratum_width = 1/4,
+  auto_rotate_xlabs = T,
+  ...
+)
 }
 \arguments{
 \item{data}{a dataframe}
@@ -117,10 +132,10 @@ Plots two variables of a dataframe on an alluvial plot. A third
 require(dplyr)
 require(magrittr)
 
- order_by_carrier_size = data \%>\%
-   group_by(carrier) \%>\%
-   count() \%>\%
-   arrange( desc(n) ) \%>\%
+ order_by_carrier_size = data %>%
+   group_by(carrier) %>%
+   count() %>%
+   arrange( desc(n) ) %>%
    .[['carrier']]
 
  alluvial_long( data, qu, mean_arr_delay, tailnum, carrier

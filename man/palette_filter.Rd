@@ -4,9 +4,18 @@
 \alias{palette_filter}
 \title{color filters for any vector of hex color values}
 \usage{
-palette_filter(palette = palette_qualitative(), similar = F,
-  greys = T, reds = T, greens = T, blues = T, dark = T,
-  medium = T, bright = T, thresh_similar = 25)
+palette_filter(
+  palette = palette_qualitative(),
+  similar = F,
+  greys = T,
+  reds = T,
+  greens = T,
+  blues = T,
+  dark = T,
+  medium = T,
+  bright = T,
+  thresh_similar = 25
+)
 }
 \arguments{
 \item{palette}{any vector with hex color values, Default: palette_qualitative()}
@@ -52,12 +61,12 @@ palette_qualitative() \%>\%
 \dontrun{
 # more examples---------------------------
 
-palette_qualitative() \%>\%
-  palette_filter(thresh_similar = 25) \%>\%
+palette_qualitative() %>%
+  palette_filter(thresh_similar = 25) %>%
   palette_plot_intensity()
 
-palette_qualitative() \%>\%
-  palette_filter(thresh_similar = 0, blues = FALSE) \%>\%
+palette_qualitative() %>%
+  palette_filter(thresh_similar = 0, blues = FALSE) %>%
   palette_plot_intensity()
 }
 }

@@ -4,9 +4,17 @@
 \alias{manip_bin_numerics}
 \title{bin numerical columns}
 \usage{
-manip_bin_numerics(x, bins = 5, bin_labels = c("LL", "ML", "M", "MH",
-  "HH"), center = T, scale = T, transform = T, round_numeric = T,
-  digits = 2, NA_label = "NA")
+manip_bin_numerics(
+  x,
+  bins = 5,
+  bin_labels = c("LL", "ML", "M", "MH", "HH"),
+  center = T,
+  scale = T,
+  transform = T,
+  round_numeric = T,
+  digits = 2,
+  NA_label = "NA"
+)
 }
 \arguments{
 \item{x}{dataframe with numeric variables, or numeric vector}

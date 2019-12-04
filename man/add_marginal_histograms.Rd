@@ -4,8 +4,14 @@
 \alias{add_marginal_histograms}
 \title{add marginal histograms to alluvial plot}
 \usage{
-add_marginal_histograms(p, data_input, top = TRUE, keep_labels = FALSE,
-  plot = TRUE, ...)
+add_marginal_histograms(
+  p,
+  data_input,
+  top = TRUE,
+  keep_labels = FALSE,
+  plot = TRUE,
+  ...
+)
 }
 \arguments{
 \item{p}{alluvial plot}

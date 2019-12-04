@@ -25,7 +25,7 @@ adds bar plot of important features to model respoinse alluvial plot
 }
 \examples{
 \dontrun{
-df = mtcars2[, ! names(mtcars2) \%in\% 'ids' ]
+df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
 
 train = caret::train( disp ~ .
                      , df

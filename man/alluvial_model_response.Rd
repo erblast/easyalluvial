@@ -4,12 +4,22 @@
 \alias{alluvial_model_response}
 \title{create model response plot}
 \usage{
-alluvial_model_response(pred, dspace, imp, degree = 4, bins = 5,
+alluvial_model_response(
+  pred,
+  dspace,
+  imp,
+  degree = 4,
+  bins = 5,
   bin_labels = c("LL", "ML", "M", "MH", "HH"),
-  col_vector_flow = c("#FF0065", "#009850", "#A56F2B", "#005EAA",
-  "#710500", "#7B5380", "#9DD1D1"), method = "median", force = FALSE,
+  col_vector_flow = c("#FF0065", "#009850", "#A56F2B", "#005EAA", "#710500", "#7B5380",
+    "#9DD1D1"),
+  method = "median",
+  force = FALSE,
   params_bin_numeric_pred = list(center = T, transform = T, scale = T),
-  pred_train = NULL, stratum_label_size = 3.5, ...)
+  pred_train = NULL,
+  stratum_label_size = 3.5,
+  ...
+)
 }
 \arguments{
 \item{pred}{vector, predictions, if method = 'pdp' use

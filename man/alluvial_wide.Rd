@@ -4,14 +4,25 @@
 \alias{alluvial_wide}
 \title{alluvial plot of data in wide format}
 \usage{
-alluvial_wide(data, id = NULL, max_variables = 20, bins = 5,
-  bin_labels = c("LL", "ML", "M", "MH", "HH"), NA_label = "NA",
-  order_levels = NULL, fill_by = "first_variable",
-  col_vector_flow = palette_qualitative() \%>\% palette_filter(greys =
-  F), col_vector_value = RColorBrewer::brewer.pal(9, "Greys")[c(4, 7, 5,
-  8, 6)], colorful_fill_variable_stratum = T, verbose = F,
-  stratum_labels = T, stratum_label_size = 4.5, stratum_width = 1/4,
-  auto_rotate_xlabs = T, ...)
+alluvial_wide(
+  data,
+  id = NULL,
+  max_variables = 20,
+  bins = 5,
+  bin_labels = c("LL", "ML", "M", "MH", "HH"),
+  NA_label = "NA",
+  order_levels = NULL,
+  fill_by = "first_variable",
+  col_vector_flow = palette_qualitative() \%>\% palette_filter(greys = F),
+  col_vector_value = RColorBrewer::brewer.pal(9, "Greys")[c(4, 7, 5, 8, 6)],
+  colorful_fill_variable_stratum = T,
+  verbose = F,
+  stratum_labels = T,
+  stratum_label_size = 4.5,
+  stratum_width = 1/4,
+  auto_rotate_xlabs = T,
+  ...
+)
 }
 \arguments{
 \item{data}{a dataframe}

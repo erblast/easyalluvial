@@ -4,8 +4,7 @@
 \alias{get_pdp_predictions}
 \title{get predictions compatibel with the partial dependence plotting method}
 \usage{
-get_pdp_predictions(df, imp, m, degree = 4, bins = 5,
-  .f_predict = predict)
+get_pdp_predictions(df, imp, m, degree = 4, bins = 5, .f_predict = predict)
 }
 \arguments{
 \item{df}{dataframe, training data}

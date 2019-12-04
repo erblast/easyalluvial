@@ -18,8 +18,8 @@ grouped bar chart
 \examples{
 \dontrun{
 if(interactive()){
-palette_qualitative() \%>\%
-  palette_filter( thresh = 50) \%>\%
+palette_qualitative() %>%
+  palette_filter( thresh = 50) %>%
   palette_plot_rgp()
  }
 }
