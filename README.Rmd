@@ -35,6 +35,7 @@ Alluvial plots are similar to [sankey diagrams](https://en.wikipedia.org/wiki/Sa
 - convenient parameters for coloring and ordering
 - marginal histograms
 - **model agnostic partial dependence and model response alluvial plots with 4 dimensions**
+- **[interactive plots with `easyalluvial` and `parcats`](https://erblast.github.io/parcats/articles/parcats.html)**
 
 ## Installation
 
@@ -130,6 +131,23 @@ alluvial_wide( data = mtcars2
 
 ```
 
+### Interactive Graphs
+
+```{r eval = F}
+
+suppressPackageStartupMessages( require(parcats) )
+
+p = alluvial_wide(mtcars2, max_variables = 5)
+
+parcats(p, marginal_histograms = TRUE, data_input = mtcars2)
+
+```
+
+![demo](https://erblast.github.io/parcats/demo1.gif)
+
+- **[Live Widget](https://erblast.github.io/parcats/articles/parcats.html)**
+
+
 ### Partial Dependence Alluvial Plots
 
 Alluvial plots are capable of displaying higher dimensional data on a plane, thus lend themselves to plot the response of a statistical model to changes in the input data across multiple dimensions. The practical limit here is 4 dimensions while conventional partial dependence plots are limited to 2 dimensions.
@@ -164,3 +182,18 @@ p_grid = add_marginal_histograms(p, df, plot = F) %>%
 
 ```
 
+### Interactive Partial Dependene Plot
+
+```{r eval = F}
+df = select(mtcars2, -ids )
+m = randomForest::randomForest( disp ~ ., df)
+imp = m$importance
+dspace = get_data_space(df, imp, degree = 3)
+pred = predict(m, newdata = dspace)
+p = alluvial_model_response(pred, dspace, imp, degree = 3)
+
+parcats(p, marginal_histograms = TRUE, imp = TRUE, data_input = df)
+```
+
+![demo](https://erblast.github.io/parcats/demo2.gif)  
+- **[Live Widget](https://erblast.github.io/parcats/articles/parcats.html)**  

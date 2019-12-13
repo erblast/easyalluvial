@@ -43,6 +43,8 @@ for data exploration.
   - marginal histograms
   - **model agnostic partial dependence and model response alluvial
     plots with 4 dimensions**
+  - **[interactive plots with `easyalluvial` and
+    `parcats`](https://erblast.github.io/parcats/articles/parcats.html)**
 
 ## Installation
 
@@ -157,6 +159,22 @@ alluvial_wide( data = mtcars2
 
 ![](man/figures/README-unnamed-chunk-3-1.png)<!-- -->
 
+### Interactive Graphs
+
+``` r
+
+suppressPackageStartupMessages( require(parcats) )
+
+p = alluvial_wide(mtcars2, max_variables = 5)
+
+parcats(p, marginal_histograms = TRUE, data_input = mtcars2)
+```
+
+![demo](https://erblast.github.io/parcats/demo1.gif)
+
+  - **[Live
+    Widget](https://erblast.github.io/parcats/articles/parcats.html)**
+
 ### Partial Dependence Alluvial Plots
 
 Alluvial plots are capable of displaying higher dimensional data on a
@@ -204,4 +222,21 @@ p_grid = add_marginal_histograms(p, df, plot = F) %>%
   add_imp_plot(p, df)
 ```
 
-![](man/figures/README-unnamed-chunk-4-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-5-1.png)<!-- -->
+
+### Interactive Partial Dependene Plot
+
+``` r
+df = select(mtcars2, -ids )
+m = randomForest::randomForest( disp ~ ., df)
+imp = m$importance
+dspace = get_data_space(df, imp, degree = 3)
+pred = predict(m, newdata = dspace)
+p = alluvial_model_response(pred, dspace, imp, degree = 3)
+
+parcats(p, marginal_histograms = TRUE, imp = TRUE, data_input = df)
+```
+
+![demo](https://erblast.github.io/parcats/demo2.gif)  
+\- **[Live
+Widget](https://erblast.github.io/parcats/articles/parcats.html)**
