@@ -2,7 +2,7 @@
 
 language: R
 R:
-  - 3.5.3
+  - 3.6.3
 sudo: false
 cache: packages
 
@@ -19,3 +19,6 @@ matrix:
   - r: release
     name: tidyr-devel
     before_script: Rscript -e "remotes::install_github('tidyverse/tidyr')"
+  - r: release
+    name: dplyr-devel
+    before_script: Rscript -e "remotes::install_github('tidyverse/dplyr')"

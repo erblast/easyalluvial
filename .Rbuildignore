@@ -10,3 +10,5 @@
 ^README\.Rmd$
 ^README-.*\.png$
 ^cran-comments\.md$
+^docker-compose\.yml$
+^docker$

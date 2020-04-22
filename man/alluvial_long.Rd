@@ -132,10 +132,10 @@ Plots two variables of a dataframe on an alluvial plot. A third
 require(dplyr)
 require(magrittr)
 
- order_by_carrier_size = data %>%
-   group_by(carrier) %>%
-   count() %>%
-   arrange( desc(n) ) %>%
+ order_by_carrier_size = data \%>\%
+   group_by(carrier) \%>\%
+   count() \%>\%
+   arrange( desc(n) ) \%>\%
    .[['carrier']]
 
  alluvial_long( data, qu, mean_arr_delay, tailnum, carrier

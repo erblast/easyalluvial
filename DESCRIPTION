@@ -26,7 +26,7 @@ Suggests:
     ISLR,
     nycflights13,
     vdiffr (>= 0.3.1)
-RoxygenNote: 7.0.0
+RoxygenNote: 7.1.0
 Imports:
   purrr
   , tidyr (>= 1.0.0)
