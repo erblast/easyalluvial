@@ -12,3 +12,7 @@
 ^cran-comments\.md$
 ^docker-compose\.yml$
 ^docker$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^vignettes$

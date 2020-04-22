@@ -4,3 +4,8 @@
 .Ruserdata
 dependencies/
 revdep/
+docs/
+*.rdx
+*.RData
+*.rdb
+vignettes/model_response_cache/
