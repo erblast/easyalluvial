@@ -7,4 +7,5 @@ RUN git clone https://github.com/tidyverse/tidyr.git /home/rstudio/tidyr
 RUN git clone https://github.com/tidyverse/dplyr.git /home/rstudio/dplyr
 RUN R -e "devtools::install('/home/rstudio/tidyr')"
 RUN R -e "devtools::install('/home/rstudio/dplyr')"
+RUN R -e "devtools::install('/home/rstudio/parcats')"
 CMD R -e "devtools::check('.')" -e "devtools::install(.)" -e "devtools::check('/home/rstudio/parcats')"

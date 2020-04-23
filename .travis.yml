@@ -16,9 +16,17 @@ matrix:
   - r: release
     after_success:
     - Rscript -e 'covr::codecov()'
+    - Rscript -e 'pkgdown::build_site(run_dont_run = TRUE)'
   - r: release
     name: tidyr-devel
     before_script: Rscript -e "remotes::install_github('tidyverse/tidyr')"
   - r: release
     name: dplyr-devel
     before_script: Rscript -e "remotes::install_github('tidyverse/dplyr')"
+    
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep_history: true
+  local-dir: docs
