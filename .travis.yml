@@ -31,7 +31,12 @@ matrix:
     - export PKGDOWN=no
   - r: release
     name: parcats-devel
-    before_script: Rscript -e "remotes::install_github('erblast/parcats')"
+    before_script:
+      - git clone https://github.com/erblast/parcats.git
+      - Rscript -e "remotes::install_github('erblast/parcats')"
+    script:
+      - Rscript -e "devtools::check('.')"
+      - Rscript -e "devtools::check('parcats/')"
     after_success:
     - export PKGDOWN=no
     

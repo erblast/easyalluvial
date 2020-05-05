@@ -26,8 +26,7 @@ Suggests:
     ISLR,
     nycflights13,
     vdiffr (>= 0.3.1),
-    parcats,
-    pkgdown
+    parcats
 RoxygenNote: 7.1.0
 Imports:
   purrr
