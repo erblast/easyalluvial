@@ -1,3 +1,10 @@
+# Version 0.2.3 submitted to CRAN
+Bug Fixes:
+- compatibility with `dplyr 1.0.0`
+
+New features:
+- `pkgdown` website
+
 # Version 0.2.1 submitted to CRAN 20190917
 Bug Fixes:
 - compatibility with `tidyr 1.0.0`

@@ -2,7 +2,7 @@
 
 language: R
 R:
-  - 3.6.3
+  - 4.0.0
 sudo: false
 cache: packages
 
@@ -15,7 +15,7 @@ matrix:
     after_success:
     - export PKGDOWN=no
   - r: release
-    before_script: Rscript -e 'install.packages(c("earth", "tidyverse", "mlbench"))'
+    before_script: Rscript -e 'install.packages(c("earth", "tidyverse", "mlbench", "pkgdown"))'
     after_success:
     - Rscript -e 'covr::codecov()'
     - Rscript -e 'pkgdown::build_site(run_dont_run = TRUE)' && export PKGDOWN=yes
@@ -29,7 +29,12 @@ matrix:
     before_script: Rscript -e "remotes::install_github('tidyverse/dplyr')"
     after_success:
     - export PKGDOWN=no
-
+  - r: release
+    name: parcats-devel
+    before_script: Rscript -e "remotes::install_github('erblast/parcats')"
+    after_success:
+    - export PKGDOWN=no
+    
 deploy:
   provider: pages
   skip_cleanup: true

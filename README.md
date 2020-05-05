@@ -69,9 +69,12 @@ devtools::install_github("erblast/easyalluvial")
 ## Documentation
 
   - [pkgdown website](https://erblast.github.io/easyalluvial/)
-  - [Data Exploration with Alluvial Plots]()
-  - [Visualising Model Response]()
-  - [Interactive Plots with parcats]()
+      - [Data Exploration with Alluvial
+        Plots](https://erblast.github.io/easyalluvial/articles/data_exploration.html)
+      - [Visualising Model
+        Response](https://erblast.github.io/easyalluvial/articles/model_response.html)
+      - [Interactive Plots with
+        parcats](https://erblast.github.io/easyalluvial/articles/parcats.html)
 
 ## Examples
 
