@@ -16,3 +16,4 @@
 ^docs$
 ^pkgdown$
 ^vignettes$
+^tests/figs/$
