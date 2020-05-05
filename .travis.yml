@@ -18,7 +18,7 @@ matrix:
     before_script: Rscript -e 'install.packages(c("earth", "tidyverse", "mlbench"))'
     after_success:
     - Rscript -e 'covr::codecov()'
-    - Rscript -e 'pkgdown::build_site(run_dont_run = TRUE) && PKGDOWN=yes'
+    - Rscript -e 'pkgdown::build_site(run_dont_run = TRUE) && echo PKGDOWN=yes'
   - r: release
     name: tidyr-devel
     before_script: Rscript -e "remotes::install_github('tidyverse/tidyr')"
