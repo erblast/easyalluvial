@@ -7,12 +7,11 @@
 Status](https://travis-ci.org/erblast/easyalluvial.svg?branch=master)](https://travis-ci.org/erblast/easyalluvial)
 [![AppVeyor Build
 Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&svg=true)](https://ci.appveyor.com/project/erblast/easyalluvial)
-
+<!--
 [![Coverage Status](https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg)](https://codecov.io/github/erblast/easyalluvial?branch=master)
 [![CRAN last release](https://www.r-pkg.org/badges/last-release/easyalluvial)](https://CRAN.R-project.org/package=easyalluvial)
-[![CRAN monthly downloads](https://cranlogs.r-pkg.org/badges/easyalluvial)](https://cran.r-project.org/package=easyalluvial)
 [![CRAN total downloads](https://cranlogs.r-pkg.org/badges/grand-total/easyalluvial)](https://CRAN.R-project.org/package=easyalluvial)
-
+-->
 
 Alluvial plots are similar to [sankey
 diagrams](https://en.wikipedia.org/wiki/Sankey_diagram) and visualise
@@ -63,15 +62,12 @@ install.packages('easyalluvial')
 devtools::install_github("erblast/easyalluvial")
 ```
 
-## Tutorials
+## Documentation
 
-In order to learn about all the features an how they can be useful check
-out the following tutorials:
-
-  - [Data exploration with alluvial
-    plots](https://www.datisticsblog.com/2018/10/intro_easyalluvial/#features)
-  - [Visualise model response with alluvial
-    plots](https://www.datisticsblog.com/2019/04/visualising-model-response-with-easyalluvial/)
+  - [pkgdown website](https://erblast.github.io/easyalluvial/)
+  - [Data Exploration with Alluvial Plots]()
+  - [Visualising Model Response]()
+  - [Interactive Plots with parcats]()
 
 ## Examples
 
