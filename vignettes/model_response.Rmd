@@ -4,11 +4,8 @@ author: Bjönr Koneswarakantha
 output: 
     html_document:
         toc: true
-<<<<<<< HEAD
 editor_options: 
   chunk_output_type: console
-=======
->>>>>>> 7dd4bf65626f89d1cebf9c73233158f21e67745b
 ---
 In this tutorial I want to show how you can use alluvial plots to visualise model response in up to 4 dimensions. `easyalluvial` generates an artificial data space using fixed values for unplotted variables or uses the partial dependence plotting method. It is model agnostic but offers some convenient wrappers for `caret` models.
 <!--more-->
@@ -224,12 +221,6 @@ Calculating feature importance in a dataset with strongly correlating variables 
 
 ```{r warning = F, message = F, fig.width=12, fig.height=9, cache = T}
 
-<<<<<<< HEAD
-=======
-suppressPackageStartupMessages( require(recipes) )
-
-
->>>>>>> 7dd4bf65626f89d1cebf9c73233158f21e67745b
 # filter correlating variables recipe- ------------------------------
 # caret tends to complain if recipe filters any variables, therefore
 # we use two recipes

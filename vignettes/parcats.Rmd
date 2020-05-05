@@ -1,6 +1,6 @@
 ---
 output: html_document
-title: Live Widget
+title: Interactive Plots with parcats
 always_allow_html: no
 editor_options: 
   chunk_output_type: console

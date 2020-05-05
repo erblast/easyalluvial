@@ -1,5 +1,5 @@
 ---
-title: Data exploration with Alluvial Plots
+title: Data Exploration with Alluvial Plots
 author: Björn Koneswarakantha
 output: 
     html_document:
