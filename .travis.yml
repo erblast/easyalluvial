@@ -35,6 +35,9 @@ matrix:
       - git clone https://github.com/erblast/parcats.git
       - Rscript -e "remotes::install_github('erblast/parcats')"
     script:
+      - Rscript -e "devtools::install_dev('.')"
+      - Rscript -e "devtools::install_dev('parcats/')"
+      - Rscript -e "devtools::install('.')"
       - Rscript -e "devtools::check('.')"
       - Rscript -e "devtools::check('parcats/')"
     after_success:
