@@ -4,3 +4,5 @@
 .Ruserdata
 dependencies/
 revdep/
+docs/
+vignettes/model_response_cache/
