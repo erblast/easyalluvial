@@ -1,6 +1,6 @@
 Package: easyalluvial
 Title: Generate Alluvial Plots with a Single Line of Code
-Version: 0.2.2.900
+Version: 0.2.3
 Authors@R: person( "Bjoern", "Koneswarakantha", role = c("aut","cre"), email = "datistics@gmail.com", comment = c(ORCID = "0000-0003-4585-7799") )
 URL: https://github.com/erblast/easyalluvial
 Description: Alluvial plots are similar to sankey diagrams and visualise categorical data 
@@ -25,8 +25,9 @@ Suggests:
     covr,
     ISLR,
     nycflights13,
-    vdiffr (>= 0.3.1)
-RoxygenNote: 7.0.0
+    vdiffr (>= 0.3.1),
+    parcats
+RoxygenNote: 7.1.0
 Imports:
   purrr
   , tidyr (>= 1.0.0)

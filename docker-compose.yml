@@ -1,0 +1,47 @@
+  
+version: '3.7'
+services:
+  build_latest:
+    build:
+      context: .
+      dockerfile: docker/latest.dockerfile
+    image: 'easyalluvial_latest'
+
+  build_devel:
+    build:
+      context: .
+      dockerfile: docker/devel.dockerfile
+    image: 'easyalluvial_devel'
+
+  rstudio_latest:
+    image: 'easyalluvial_latest'
+    ports: 
+      - '8787:8787'
+    volumes:
+      - '.:/home/rstudio/easyalluvial'
+    command: /init
+    environment:
+      PASSWORD: '123'
+      USER: 'rstudio'
+
+  rstudio_devel:
+    image: 'easyalluvial_devel'
+    ports: 
+      - '8888:8787'
+    volumes:
+      - '.:/home/rstudio/easyalluvial'
+    command: /init
+    environment:
+      PASSWORD: '123'
+      USER: 'rstudio'
+    
+  check_devel:
+    image: 'easyalluvial_devel'
+    volumes:
+      - '.:/home/rstudio/easyalluvial'
+
+  check_latest:
+    image: 'easyalluvial_latest'
+    volumes:
+      - '.:/home/rstudio/easyalluvial'
+    

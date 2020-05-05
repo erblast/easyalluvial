@@ -18,8 +18,8 @@ sum of red green and blue values
 \examples{
 \dontrun{
 if(interactive()){
-palette_qualitative() %>%
-  palette_filter( thresh = 25) %>%
+palette_qualitative() \%>\%
+  palette_filter( thresh = 25) \%>\%
   palette_plot_intensity()
  }
 }

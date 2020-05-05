@@ -246,7 +246,6 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
   }
   
   if( ! is_num & is_pred){
-    
     var_str = ori_name
     
     df_input = data_input %>%
@@ -259,13 +258,19 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
       select( x, value ) %>%
       rename( variable = x) %>%
       mutate( variable = as.character(variable)
-              , value = fct_drop(value) )
+              , value = fct_drop(value)
+              # p$data does not preserve factor order
+              , value = fct_relevel(value, levels(df_input$value) ) )
+    
+    stopifnot(all(levels(df_input$value) == levels(df_resp$value)))
 
+    if(is.ordered(df_input$value)){
+      df_resp$value = as.ordered(df_resp$value)
+    }
+    
     df_plot = df_input %>%
       bind_rows(df_resp)
-    
-    # df_plot = df_input
-    
+
     if( ! is_null(pred_train) ){
       df_plot = df_plot %>%
         bind_rows( tibble(variable = 'pred_train'
