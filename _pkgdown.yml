@@ -1,0 +1,55 @@
+navbar:
+  structure:
+    left:
+    - home
+    - reference
+    - articles
+    - news
+    right: github
+  components:
+    home:
+      icon: fas fa-home fa-lg
+      href: index.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    news:
+      text: Changelog
+      href: news/index.html
+template:
+  params:
+    ganalytics: UA-123997499-2
+url: https://erblast.github.io/easyalluvial/
+reference:
+- title: Main Plot Functions
+  desc: ~
+  contents:
+  - starts_with("alluvial")
+- title: Add Plot Elements
+  desc: ~
+  contents:
+  - starts_with("add_")
+- title: Generate Data for Model Response and Partial Dependence Plots
+  desc: ~
+  contents:
+  - starts_with("get_")
+- title: Helper Functions - Data Manipulation
+  desc: ~
+  contents:
+  - starts_with("manip_")
+  - tidy_imp
+- title: Helper Functions - Plotting
+  desc: ~
+  contents:
+  - starts_with("plot_")
+- title: Helper Functions - Color Palette
+  desc: ~
+  contents:
+  - starts_with("palette_")
+- title: Data Sets
+  desc: ~
+  contents:
+  - mtcars2
+  - titanic
+  - quarterly_flights
+  - quarterly_sunspots

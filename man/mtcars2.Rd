@@ -5,7 +5,8 @@
 \alias{mtcars2}
 \title{mtcars dataset with cyl, vs, am ,gear, carb as factor variables and car model
 names as id}
-\format{A data frame with 32 rows and 12 variables
+\format{
+A data frame with 32 rows and 12 variables
 \describe{
 
 \item{mpg}{Miles/(US) gallon}
@@ -20,7 +21,8 @@ names as id}
 \item{gear}{Number of forward gears}
 \item{carb}{Number of carburetors}
 \item{ids}{car model name}
-}}
+}
+}
 \source{
 datasets
 }

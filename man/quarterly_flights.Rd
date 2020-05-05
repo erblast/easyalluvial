@@ -4,7 +4,8 @@
 \name{quarterly_flights}
 \alias{quarterly_flights}
 \title{Quarterly mean arrival delay times for a set of 402 flights}
-\format{A data frame with 1608 rows and 6 variables
+\format{
+A data frame with 1608 rows and 6 variables
 \describe{
  \item{tailnum}{
  a unique identifier created from tailnum, origin, destination and carrier}
@@ -12,7 +13,8 @@
  \item{dest}{destination code} \item{qu}{quarter}
  \item{mean_arr_delay}{average delay on arrival as either on_time or late}
 
- }}
+ }
+}
 \source{
 nycflights13::flights
 }

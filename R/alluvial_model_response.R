@@ -772,6 +772,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 #' @return OUTPUT_DESCRIPTION
 #' @seealso \code{\link[e1071]{skewness}}
 #' @rdname use_e1071
+#' @noRd
 #' @importFrom e1071 skewness
 use_e1071 = function(x){
   e1071::skewness(x)

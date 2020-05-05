@@ -2,7 +2,7 @@
 
 language: R
 R:
-  - 3.5.3
+  - 3.6.3
 sudo: false
 cache: packages
 
@@ -30,7 +30,7 @@ matrix:
     before_script: Rscript -e "remotes::install_github('tidyverse/dplyr')"
     after_success:
     - export PKGDOWN=no
-    
+
 deploy:
   provider: pages
   skip_cleanup: true

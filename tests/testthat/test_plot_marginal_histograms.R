@@ -117,7 +117,6 @@ test_that('plot_hist_as_margins',{
   # vdiffr::expect_doppelganger('marg_hist_mod_num_pred_train', p_grid)
 
   # model response categoric --------------------------------
-  
   set.seed(1)
   df = select(mtcars2, -ids)
   train = caret::train( cyl ~ .

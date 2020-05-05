@@ -4,7 +4,8 @@
 \name{titanic}
 \alias{titanic}
 \title{titanic data set'}
-\format{A data frame with 891 rows and 10 variables
+\format{
+A data frame with 891 rows and 10 variables
 \describe{
 
 \item{Survived}{Survived}
@@ -17,7 +18,8 @@
 \item{Cabin}{Cabin}
 \item{Embarked}{Embarked}
 \item{title}{title}
-}}
+}
+}
 \source{
 datasets
 }

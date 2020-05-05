@@ -10,6 +10,7 @@ Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?
 
 [![Coverage Status](https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg)](https://codecov.io/github/erblast/easyalluvial?branch=master)
 [![CRAN last release](https://www.r-pkg.org/badges/last-release/easyalluvial)](https://CRAN.R-project.org/package=easyalluvial)
+[![CRAN monthly downloads](https://cranlogs.r-pkg.org/badges/easyalluvial)](https://cran.r-project.org/package=easyalluvial)
 [![CRAN total downloads](https://cranlogs.r-pkg.org/badges/grand-total/easyalluvial)](https://CRAN.R-project.org/package=easyalluvial)
 
 
