@@ -15,10 +15,15 @@ matrix:
     after_success:
     - export PKGDOWN=no
   - r: release
-    before_script: Rscript -e 'install.packages(c("earth", "tidyverse", "mlbench", "pkgdown"))'
+    before_script: 
+      - Rscript -e 'install.packages(c("earth", "tidyverse", "mlbench", "pkgdown"))'
+      - Rscript -e "devtools::install_deps('.', dependencies = 'suggests')"
+    script:
+      - Rscript -e "devtools::check('.', error_on = 'note')"
+      - Rscript -e 'pkgdown::build_site(run_dont_run = TRUE)'
     after_success:
-    - Rscript -e 'covr::codecov()'
-    - Rscript -e 'pkgdown::build_site(run_dont_run = TRUE)' && export PKGDOWN=yes
+      - Rscript -e 'covr::codecov()'
+      - export PKGDOWN=yes
   - r: release
     name: tidyr-devel
     before_script: Rscript -e "remotes::install_github('tidyverse/tidyr')"
@@ -31,15 +36,13 @@ matrix:
     - export PKGDOWN=no
   - r: release
     name: parcats-devel
-    before_script:
-      - git clone https://github.com/erblast/parcats.git
-      - Rscript -e "remotes::install_github('erblast/parcats')"
     script:
-      - Rscript -e "devtools::install_deps('.')"
-      - Rscript -e "devtools::install_deps('parcats/')"
+      - git clone https://github.com/erblast/parcats.git
+      - Rscript -e "devtools::install_deps('.', dependencies = 'suggests')"
+      - Rscript -e "devtools::install_deps('parcats/', dependencies = 'suggests')"
       - Rscript -e "devtools::install('.')"
-      - Rscript -e "devtools::check('.')"
-      - Rscript -e "devtools::check('parcats/')"
+      - Rscript -e "devtools::check('.', error_on = 'note')"
+      - Rscript -e "devtools::check('parcats/', error_on = 'note')"
     after_success:
     - export PKGDOWN=no
     
