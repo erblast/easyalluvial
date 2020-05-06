@@ -38,10 +38,12 @@ matrix:
     name: parcats-devel
     script:
       - git clone https://github.com/erblast/parcats.git
-      - Rscript -e "devtools::install_deps('.', dependencies = 'suggests')"
+      - git clone https://github.com/erblast/easyalluvial.git
+      - Rscript -e "install.packages('spelling')"
+      - Rscript -e "devtools::install_deps('easyalluvial/', dependencies = 'suggests')"
       - Rscript -e "devtools::install_deps('parcats/', dependencies = 'suggests')"
-      - Rscript -e "devtools::install('.')"
-      - Rscript -e "devtools::check('.', error_on = 'note')"
+      - Rscript -e "devtools::install('easyalluvial/')"
+      - Rscript -e "devtools::check('easyalluvial/', error_on = 'note')"
       - Rscript -e "devtools::check('parcats/', error_on = 'note')"
     after_success:
     - export PKGDOWN=no
