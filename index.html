@@ -396,7 +396,7 @@
 <span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="reference/alluvial_wide.html">alluvial_wide</a></span>(<span class="no">mtcars2</span>, <span class="kw">max_variables</span> <span class="kw">=</span> <span class="fl">5</span>)
 
 <span class="fu"><a href="https://erblast.github.io/parcats//reference/parcats.html">parcats</a></span>(<span class="no">p</span>, <span class="kw">marginal_histograms</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">data_input</span> <span class="kw">=</span> <span class="no">mtcars2</span>)</pre></div>
-<p><img src="https://erblast.github.io/parcats/demo1.gif" alt="demo"></p>
+<p><img src="https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo1.gif" alt="demo"></p>
 <ul>
 <li><strong><a href="https://erblast.github.io/parcats/articles/parcats.html">Live Widget</a></strong></li>
 </ul>
@@ -431,9 +431,9 @@
   <span class="fu"><a href="reference/add_imp_plot.html">add_imp_plot</a></span>(<span class="no">p</span>, <span class="no">df</span>)</pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-5-1.png"><!-- --></p>
 </div>
-<div id="interactive-partial-dependene-plot" class="section level3">
+<div id="interactive-partial-dependence-plot" class="section level3">
 <h3 class="hasAnchor">
-<a href="#interactive-partial-dependene-plot" class="anchor"></a>Interactive Partial Dependene Plot</h3>
+<a href="#interactive-partial-dependence-plot" class="anchor"></a>Interactive Partial Dependence Plot</h3>
 <div class="sourceCode" id="cb11"><pre class="r"><span class="no">df</span> <span class="kw">=</span> <span class="fu">select</span>(<span class="no">mtcars2</span>, -<span class="no">ids</span> )
 <span class="no">m</span> <span class="kw">=</span> <span class="kw pkg">randomForest</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/randomForest/man/randomForest.html">randomForest</a></span>( <span class="no">disp</span> ~ <span class="no">.</span>, <span class="no">df</span>)
 <span class="no">imp</span> <span class="kw">=</span> <span class="no">m</span>$<span class="no">importance</span>
@@ -442,8 +442,10 @@
 <span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="reference/alluvial_model_response.html">alluvial_model_response</a></span>(<span class="no">pred</span>, <span class="no">dspace</span>, <span class="no">imp</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">3</span>)
 
 <span class="fu"><a href="https://erblast.github.io/parcats//reference/parcats.html">parcats</a></span>(<span class="no">p</span>, <span class="kw">marginal_histograms</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">imp</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">data_input</span> <span class="kw">=</span> <span class="no">df</span>)</pre></div>
-<p><img src="https://erblast.github.io/parcats/demo2.gif" alt="demo"><br>
-- <strong><a href="https://erblast.github.io/parcats/articles/parcats.html">Live Widget</a></strong></p>
+<p><img src="https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo2.gif" alt="demo"></p>
+<ul>
+<li><strong><a href="https://erblast.github.io/parcats/articles/parcats.html">Live Widget</a></strong></li>
+</ul>
 </div>
 </div>
 </div>
