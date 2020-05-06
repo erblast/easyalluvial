@@ -2,7 +2,7 @@
 % Please edit documentation in R/alluvial_model_response.R
 \name{get_pdp_predictions}
 \alias{get_pdp_predictions}
-\title{get predictions compatibel with the partial dependence plotting method}
+\title{get predictions compatible with the partial dependence plotting method}
 \usage{
 get_pdp_predictions(df, imp, m, degree = 4, bins = 5, .f_predict = predict)
 }

@@ -174,7 +174,7 @@ p = alluvial_wide(mtcars2, max_variables = 5)
 parcats(p, marginal_histograms = TRUE, data_input = mtcars2)
 ```
 
-![demo](https://erblast.github.io/parcats/demo1.gif)
+![demo](https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo1.gif)
 
   - **[Live
     Widget](https://erblast.github.io/parcats/articles/parcats.html)**
@@ -228,7 +228,7 @@ p_grid = add_marginal_histograms(p, df, plot = F) %>%
 
 ![](man/figures/README-unnamed-chunk-5-1.png)<!-- -->
 
-### Interactive Partial Dependene Plot
+### Interactive Partial Dependence Plot
 
 ``` r
 df = select(mtcars2, -ids )
@@ -241,6 +241,6 @@ p = alluvial_model_response(pred, dspace, imp, degree = 3)
 parcats(p, marginal_histograms = TRUE, imp = TRUE, data_input = df)
 ```
 
-![demo](https://erblast.github.io/parcats/demo2.gif)  
-\- **[Live
+![demo](https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo2.gif)
+- **[Live
 Widget](https://erblast.github.io/parcats/articles/parcats.html)**

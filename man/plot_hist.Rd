@@ -11,7 +11,7 @@ plot_hist(var, p, data_input, ...)
 
 \item{p}{alluvial plot}
 
-\item{data_input}{datafram used to create alluvial plot}
+\item{data_input}{dataframe used to create alluvial plot}
 
 \item{...}{additional arguments for specific alluvial plot types: pred_train
 can be used to pass training predictions for model response alluvials}

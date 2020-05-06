@@ -23,7 +23,7 @@ manip_bin_numerics(
 
 \item{bin_labels}{labels for the bins from low to high, Default: c("LL",
 "ML", "M", "MH", "HH"). Can also be one of c('mean', 'median', 'min_max',
-'cuts'), the corresppnding summary function will supply the labels.}
+'cuts'), the corresponding summary function will supply the labels.}
 
 \item{center}{logical, Default: T}
 
