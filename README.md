@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# easyalluvial <img src="https://www.datisticsblog.com/easyalluvial_logo_square.png" alt="logo" width="180" height="180" align = "right"/>
+# easyalluvial <a href='https://erblast.github.io/easyalluvial'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 [![Travis CI Build
 Status](https://travis-ci.org/erblast/easyalluvial.svg?branch=master)](https://travis-ci.org/erblast/easyalluvial)

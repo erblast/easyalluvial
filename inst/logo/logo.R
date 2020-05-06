@@ -48,7 +48,7 @@ sticker(p, package="easyalluvial", p_size=12, s_x=1, s_y=.9,
         , s_height = 1.3
         , h_fill = 'ivory'
         , h_color = '#666633'
-        , filename = './inst/logo/logo_easyalluvial.png'
+        , filename = './inst/logo/logo.png'
         )
 
 
