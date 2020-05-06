@@ -119,8 +119,8 @@
 <div id="taking-a-peek" class="section level2">
 <h2 class="hasAnchor">
 <a href="#taking-a-peek" class="anchor"></a>Taking a peek</h2>
-<p>When building machine learning models we are usually faced with a trade-off between accurracy and interpretability. However even if we tend to lean towards accuracy and pick a modelling method that results in nearly uninterpretable models we can still make use of model agnostic interporetation techniques that have been summarized in this excellent ebook <a href="https://christophm.github.io/interpretable-ml-book/">Interpretable Machine Learning by Christoph Molnar</a>.</p>
-<p>Whithout getting to theoretical I personally always feel the urge to simply take a peek simulate some data and see how the model reacts a method described in <a href="http://vita.had.co.nz/papers/model-vis.pdf">here</a>. In order to simulate data we can generate a a vector with a sequence of values over the entire range of a predictor variable of interest while setting all the others to their median or mode and use this artificial data space to obtain model predictions which we can plot against our variable of interest. An R package that will do this for you is (<code>plotmo</code>)[<a href="https://cran.r-project.org/web/packages/plotmo/index.html" class="uri">https://cran.r-project.org/web/packages/plotmo/index.html</a>]. Instead of ranging over 1 predictor variable we can create a data grid using 2 predictor variables and plot the response as a third dimension. However this is as far as you can go in a conventional plot. Alluvial plots can line up much more than 3 dimensions on a plane next to each other only limited by the number of flows as it will get too cluttered when there are too many of them.</p>
+<p>When building machine learning models we are usually faced with a trade-off between accuracy and interpretability. However even if we tend to lean towards accuracy and pick a modelling method that results in nearly uninterpretable models we can still make use of model agnostic interpretation techniques that have been summarized in this excellent ebook <a href="https://christophm.github.io/interpretable-ml-book/">Interpretable Machine Learning by Christoph Molnar</a>.</p>
+<p>Without getting to theoretical I personally always feel the urge to simply take a peek simulate some data and see how the model reacts a method described in <a href="http://vita.had.co.nz/papers/model-vis.pdf">here</a>. In order to simulate data we can generate a a vector with a sequence of values over the entire range of a predictor variable of interest while setting all the others to their median or mode and use this artificial data space to obtain model predictions which we can plot against our variable of interest. An R package that will do this for you is (<code>plotmo</code>)[<a href="https://cran.r-project.org/web/packages/plotmo/index.html" class="uri">https://cran.r-project.org/web/packages/plotmo/index.html</a>]. Instead of ranging over 1 predictor variable we can create a data grid using 2 predictor variables and plot the response as a third dimension. However this is as far as you can go in a conventional plot. Alluvial plots can line up much more than 3 dimensions on a plane next to each other only limited by the number of flows as it will get too cluttered when there are too many of them.</p>
 </div>
 <div id="which-variables-to-plot" class="section level2">
 <h2 class="hasAnchor">
@@ -153,55 +153,55 @@
 <tbody>
 <tr class="odd">
 <td align="left">medv</td>
-<td align="right">8337.1351</td>
+<td align="right">8370.2674</td>
 </tr>
 <tr class="even">
 <td align="left">rm</td>
-<td align="right">3447.5620</td>
+<td align="right">3538.7813</td>
 </tr>
 <tr class="odd">
 <td align="left">age</td>
-<td align="right">2781.7223</td>
+<td align="right">2586.3196</td>
 </tr>
 <tr class="even">
 <td align="left">indus</td>
-<td align="right">2485.6310</td>
+<td align="right">2373.2609</td>
 </tr>
 <tr class="odd">
 <td align="left">crim</td>
-<td align="right">2229.1320</td>
+<td align="right">2113.0458</td>
 </tr>
 <tr class="even">
 <td align="left">dis</td>
-<td align="right">1876.6443</td>
+<td align="right">1899.1493</td>
 </tr>
 <tr class="odd">
 <td align="left">nox</td>
-<td align="right">1695.2149</td>
+<td align="right">1713.7502</td>
 </tr>
 <tr class="even">
 <td align="left">tax</td>
-<td align="right">734.4441</td>
+<td align="right">881.2399</td>
 </tr>
 <tr class="odd">
 <td align="left">b</td>
-<td align="right">698.4017</td>
+<td align="right">711.4703</td>
 </tr>
 <tr class="even">
 <td align="left">ptratio</td>
-<td align="right">392.2202</td>
+<td align="right">373.5765</td>
 </tr>
 <tr class="odd">
 <td align="left">rad</td>
-<td align="right">185.8557</td>
+<td align="right">224.5073</td>
 </tr>
 <tr class="even">
-<td align="left">chas</td>
-<td align="right">127.6023</td>
+<td align="left">zn</td>
+<td align="right">136.9589</td>
 </tr>
 <tr class="odd">
-<td align="left">zn</td>
-<td align="right">119.7376</td>
+<td align="left">chas</td>
+<td align="right">130.2785</td>
 </tr>
 </tbody>
 </table>
@@ -225,8 +225,8 @@
 <th align="right">b</th>
 <th align="right">ptratio</th>
 <th align="right">rad</th>
-<th align="left">chas</th>
 <th align="right">zn</th>
+<th align="left">chas</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -241,8 +241,8 @@
 <td align="right">391.44</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
@@ -256,8 +256,8 @@
 <td align="right">391.44</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
@@ -271,8 +271,8 @@
 <td align="right">391.44</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
@@ -286,8 +286,8 @@
 <td align="right">391.44</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
@@ -301,8 +301,8 @@
 <td align="right">391.44</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
@@ -316,8 +316,8 @@
 <td align="right">391.44</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
@@ -331,8 +331,8 @@
 <td align="right">391.44</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
@@ -346,8 +346,8 @@
 <td align="right">391.44</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
@@ -361,8 +361,8 @@
 <td align="right">391.44</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
@@ -376,8 +376,8 @@
 <td align="right">391.44</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 </tbody>
 </table>
@@ -398,8 +398,8 @@
 <th align="right">b</th>
 <th align="right">ptratio</th>
 <th align="right">rad</th>
-<th align="right">chas</th>
 <th align="right">zn</th>
+<th align="right">chas</th>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="right">5</td>
@@ -451,7 +451,7 @@
           , <span class="kw">pred_train</span> <span class="kw">=</span> <span class="no">pred_train</span> <span class="co"># pred_train can also be passed to add_marginal_histograms()</span>
           , <span class="kw">scale</span> <span class="kw">=</span> <span class="fl">50</span>)</pre></body></html></div>
 <p><img src="model_response_files/figure-html/unnamed-chunk-8-1.png" width="288" style="display: block; margin: auto;"></p>
-<p>We see that the training prediction also do not completely cover all of the <code>lstat</code> range but more of it than the predictions from the aritficial data space.</p>
+<p>We see that the training prediction also do not completely cover all of the <code>lstat</code> range but more of it than the predictions from the artificial data space.</p>
 <p>If we wanted to emphasize this we can bin the data space predictions on the basis of the training predictions. In this case it makes sense to increase the number of bins for the predictions in order not to loose resolution on the plot.</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span>(<span class="no">pred</span>, <span class="no">dspace</span>, <span class="no">imp</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">7</span>
                             , <span class="kw">bin_labels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"LLL"</span>,<span class="st">"LL"</span>, <span class="st">"ML"</span>, <span class="st">"M"</span>, <span class="st">"MH"</span>, <span class="st">"HH"</span>, <span class="st">"HHH"</span>)
@@ -487,7 +487,7 @@
 
 <span class="no">p_grid</span> <span class="kw">=</span> <span class="fu"><a href="../reference/add_marginal_histograms.html">add_marginal_histograms</a></span>(<span class="no">p</span>, <span class="no">df_inv</span>)</pre></body></html></div>
 <p><img src="model_response_files/figure-html/unnamed-chunk-10-1.png" width="1152"></p>
-<p>We can see that for the upper ranges of <code>lstat</code> a pretty specific combination values is required from 8 feature variables from <code>medv</code> until <code>tax</code> only then begin the flows to scatter over the eintire range of the following variables. The lower range values of <code>lstat</code> start to scatter at <code>crim</code> or <code>dis</code>. Interestingly there seems to be a set of houses that branches off from the other houses in the lower range of <code>lstat</code> predictions already at the third feature, <code>age</code>. We could potentially explore this further, as a reminder you can get the binned input data for each alluvial plot by calling <code>p$data_key</code> and trace the variables of interest.</p>
+<p>We can see that for the upper ranges of <code>lstat</code> a pretty specific combination values is required from 8 feature variables from <code>medv</code> until <code>tax</code> only then begin the flows to scatter over the entire range of the following variables. The lower range values of <code>lstat</code> start to scatter at <code>crim</code> or <code>dis</code>. Interestingly there seems to be a set of houses that branches off from the other houses in the lower range of <code>lstat</code> predictions already at the third feature, <code>age</code>. We could potentially explore this further, as a reminder you can get the binned input data for each alluvial plot by calling <code>p$data_key</code> and trace the variables of interest.</p>
 </div>
 <div id="caret-wrapper" class="section level1">
 <h1 class="hasAnchor">
@@ -511,7 +511,7 @@
 <div id="partial-dependence-plotting-method" class="section level1">
 <h1 class="hasAnchor">
 <a href="#partial-dependence-plotting-method" class="anchor"></a>Partial Dependence Plotting Method</h1>
-<p>When simulating artificial data space we need to be aware that we will create data space that is outside the feature distribution space of our original training data. In this example we could be creating houses that cannot exist as such maybe a 5 square meter appartment with 10 bedrooms. We have to keep this in mind when interpretating the plot. Moreover by setting all the none-plotted values to median/mode we might also be creating observations outside the possible feature distribution space but this will be hidden and not foreseable even by somebody who has some subject matter expertise. Simply imagine how likely it would be if I meassurre a hundred different feautures of the inhabitants of a certain country how likely will it be that I find one person that is exactly the average for all of those measurements? So to alleviate this we can use the partial dependency plotting method:</p>
+<p>When simulating artificial data space we need to be aware that we will create data space that is outside the feature distribution space of our original training data. In this example we could be creating houses that cannot exist as such maybe a 5 square meter appartment with 10 bedrooms. We have to keep this in mind when interpretating the plot. Moreover by setting all the none-plotted values to median/mode we might also be creating observations outside the possible feature distribution space but this will be hidden and not foreseeable even by somebody who has some subject matter expertise. Simply imagine how likely it would be if I measure a hundred different features of the inhabitants of a certain country how likely will it be that I find one person that is exactly the average for all of those measurements? So to alleviate this we can use the partial dependency plotting method:</p>
 <ol style="list-style-type: decimal">
 <li><p>construct the data space as described above, but instead of setting all none-plotted variables to median/mode we set them to the values found in the first row of the training data.</p></li>
 <li><p>Repeat 1. for each row</p></li>
@@ -526,7 +526,7 @@
                         , <span class="kw">method</span> <span class="kw">=</span> <span class="st">'pdp'</span> <span class="co"># changes title and caption</span>
                         , <span class="kw">stratum_label_size</span> <span class="kw">=</span> <span class="fl">2.8</span> )</pre></body></html></div>
 <p><img src="model_response_files/figure-html/pdp-1.png" width="960"></p>
-<p>thanks to the uniformous modelling interface of <code>caret</code> <code><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret()</a></code> can call <code><a href="../reference/get_pdp_predictions.html">get_pdp_predictions()</a></code> directly.</p>
+<p>thanks to the uniform modelling interface of <code>caret</code> <code><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret()</a></code> can call <code><a href="../reference/get_pdp_predictions.html">get_pdp_predictions()</a></code> directly.</p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret</a></span>(<span class="no">train</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">5</span>
                               , <span class="kw">method</span> <span class="kw">=</span> <span class="st">'pdp'</span>
                               , <span class="kw">stratum_label_size</span> <span class="kw">=</span> <span class="fl">2.8</span> )</pre></body></html></div>
@@ -534,7 +534,7 @@
 <div id="a-note-on-feature-importance" class="section level2">
 <h2 class="hasAnchor">
 <a href="#a-note-on-feature-importance" class="anchor"></a>A note on feature importance</h2>
-<p>Calculating feature importance in a dataset with strongly correlating variables will lead to inacurrate results. It usually means that two strongly correlating variables share the importance that would be accredited to them if only one of them was present in the data set. Further some feature importance calculation methods require the model to be trained with scaled, centered and potentially normalized (transformed to be more normally distributed) numerical variables in order to deliver meaningful results. We can use the <code>recipes</code> package to perform these tasks. Using the below described workflow we can create the artifical dataspace with untransformed numerical values which will give us more meaningful output.</p>
+<p>Calculating feature importance in a dataset with strongly correlating variables will lead to inaccurate results. It usually means that two strongly correlating variables share the importance that would be accredited to them if only one of them was present in the data set. Further some feature importance calculation methods require the model to be trained with scaled, centered and potentially normalized (transformed to be more normally distributed) numerical variables in order to deliver meaningful results. We can use the <code>recipes</code> package to perform these tasks. Using the below described workflow we can create the artificial dataspace with untransformed numerical values which will give us more meaningful output.</p>
 <div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="co"># filter correlating variables recipe- ------------------------------</span>
 <span class="co"># caret tends to complain if recipe filters any variables, therefore</span>
 <span class="co"># we use two recipes</span>
