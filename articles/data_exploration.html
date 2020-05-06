@@ -313,8 +313,10 @@
   <span class="fu">summarise</span>( <span class="kw">mean_arr_delay</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">arr_delay</span>) ) <span class="kw">%&gt;%</span>
   <span class="fu">ungroup</span>() <span class="kw">%&gt;%</span>
   <span class="fu">mutate</span>( <span class="kw">mean_arr_delay</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>( <span class="no">mean_arr_delay</span> <span class="kw">&lt;</span> <span class="fl">10</span>, <span class="st">'on_time'</span>, <span class="st">'late'</span> ) )</pre></body></html></div>
+<pre><code>## `summarise()` regrouping by 'month', 'tailnum', 'origin', 'dest' (override with `.groups` argument)</code></pre>
 <pre><code>## Joining, by = c("tailnum", "origin", "dest", "carrier")</code></pre>
-<div class="sourceCode" id="cb12"><html><body><pre class="r">  <span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(<span class="no">monthly_flights</span>$<span class="no">qu</span>) <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Q1'</span>, <span class="st">'Q2'</span>, <span class="st">'Q3'</span>, <span class="st">'Q4'</span>)
+<pre><code>## `summarise()` regrouping by 'flight_id', 'carrier', 'origin', 'dest' (override with `.groups` argument)</code></pre>
+<div class="sourceCode" id="cb14"><html><body><pre class="r">  <span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(<span class="no">monthly_flights</span>$<span class="no">qu</span>) <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Q1'</span>, <span class="st">'Q2'</span>, <span class="st">'Q3'</span>, <span class="st">'Q4'</span>)
 
   <span class="no">data_long</span> <span class="kw">=</span> <span class="no">monthly_flights</span>
 
@@ -385,7 +387,7 @@
 <h2 class="hasAnchor">
 <a href="#alluvial_long" class="anchor"></a>alluvial_long()</h2>
 <p>In long format we only need the column that contains the keys (timepoints, Q1, Q2, Q3, Q4) and the values (late, ontime), but we also need a column for the ID (flight_id) because in long format data for one flight is spread over 4 rows and the function needs to know which IDs to group to put into a flow. If ther is implicitly missing data so one flight_id has less than in this case four rows of data (one for each timepoint) it will be made explicit and labelled <code>'NA'</code>.</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">col_vector</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'tomato'</span>, <span class="st">'green3'</span>)
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">col_vector</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'tomato'</span>, <span class="st">'green3'</span>)
 
 <span class="fu"><a href="../reference/alluvial_long.html">alluvial_long</a></span>(<span class="no">data_long</span>
               , <span class="kw">key</span> <span class="kw">=</span> <span class="no">qu</span>
@@ -397,7 +399,7 @@
               )</pre></body></html></div>
 <p><img src="data_exploration_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p>We might be more interested which airline carrier had the most late flights, we can add it as an additional variable to the plot and use it for coloring. We can place this variable either on the left or on the right.</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">p_right</span> <span class="kw">=</span> <span class="fu"><a href="../reference/alluvial_long.html">alluvial_long</a></span>(<span class="no">data_long</span>
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">p_right</span> <span class="kw">=</span> <span class="fu"><a href="../reference/alluvial_long.html">alluvial_long</a></span>(<span class="no">data_long</span>
               , <span class="kw">key</span> <span class="kw">=</span> <span class="no">qu</span>
               , <span class="kw">value</span> <span class="kw">=</span> <span class="no">mean_arr_delay</span>
               , <span class="kw">id</span> <span class="kw">=</span> <span class="no">flight_id</span>
@@ -426,7 +428,7 @@
 <h3 class="hasAnchor">
 <a href="#order-levels" class="anchor"></a>Order Levels</h3>
 <p><code><a href="../reference/alluvial_long.html">alluvial_long()</a></code> takes three different <code>order_levels_*</code> arguments, one for the keys (x-axis) one for the values (y-axis) and one for the fill variable. Here we want to demonstrate how to order the <code>carrier</code> variable by number of flights.</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">carriers_ordered_by_count</span> <span class="kw">=</span> <span class="no">data_long</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">carriers_ordered_by_count</span> <span class="kw">=</span> <span class="no">data_long</span> <span class="kw">%&gt;%</span>
   <span class="fu">group_by</span>(<span class="no">carrier</span>) <span class="kw">%&gt;%</span>
   <span class="fu">count</span>() <span class="kw">%&gt;%</span>
   <span class="fu">arrange</span>( <span class="no">n</span> ) <span class="kw">%&gt;%</span>
@@ -453,7 +455,7 @@
 <h2 class="hasAnchor">
 <a href="#missing-data" class="anchor"></a>Missing Data</h2>
 <p>Explicitly and implicitly missing data will automaticall be labeled as <code>'NA'</code> and added as a level. The order of that level can be changed like any other. We will automatically generate implicitly missing data if we sample only a fraction of our long format dataframe, because then not every flight_id will have a value (late, on_time) assigned for each time point (Q1, Q2, Q3, Q4). We can replace <code>'NA'</code> with any other string.</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">col_vector</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'tomato'</span>, <span class="st">'grey'</span>, <span class="st">'green3'</span>)
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">col_vector</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'tomato'</span>, <span class="st">'grey'</span>, <span class="st">'green3'</span>)
 
 <span class="no">data_na</span> <span class="kw">=</span> <span class="no">data_long</span> <span class="kw">%&gt;%</span>
   <span class="fu">select</span>(<span class="no">flight_id</span>, <span class="no">qu</span>, <span class="no">mean_arr_delay</span>) <span class="kw">%&gt;%</span>
@@ -475,7 +477,7 @@
 <h2 class="hasAnchor">
 <a href="#colors" class="anchor"></a>Colors</h2>
 <p><code><a href="../reference/alluvial_wide.html">alluvial_wide()</a></code> and <code>alluvial_long</code> take any sequence of either HEX code or string color values. <code>easyalluvial</code> offers some convenience functions around constructing qualitative color pallettes for distinct values.</p>
-<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu"><a href="../reference/palette_qualitative.html">palette_qualitative</a></span>() <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="fu"><a href="../reference/palette_qualitative.html">palette_qualitative</a></span>() <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/palette_filter.html">palette_filter</a></span>(<span class="kw">greys</span> <span class="kw">=</span> <span class="no">F</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/palette_plot_rgp.html">palette_plot_rgp</a></span>()</pre></body></html></div>
 <p><img src="data_exploration_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
@@ -484,7 +486,7 @@
 <h2 class="hasAnchor">
 <a href="#connect-flows-to-observations-in-original-data" class="anchor"></a>Connect Flows to observations in original data</h2>
 <p>We might recognise interesting patterns in the alluvial plot that we want to follow up upon. For example which cars With medium-low <code>mpg</code> and 8 <code>cyl</code> and 0 <code>vs</code> has an <code>am</code> value of 1. Note that we are passing the <code>car_id</code> variable.</p>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="../reference/alluvial_wide.html">alluvial_wide</a></span>( <span class="fu">select</span>(<span class="no">data_wide</span>, <span class="no">mpg</span>, <span class="no">cyl</span>, <span class="no">vs</span>, <span class="no">am</span>, <span class="no">car_id</span>)
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="../reference/alluvial_wide.html">alluvial_wide</a></span>( <span class="fu">select</span>(<span class="no">data_wide</span>, <span class="no">mpg</span>, <span class="no">cyl</span>, <span class="no">vs</span>, <span class="no">am</span>, <span class="no">car_id</span>)
                    , <span class="kw">id</span> <span class="kw">=</span> <span class="no">car_id</span>
                    , <span class="kw">fill_by</span> <span class="kw">=</span> <span class="st">'first_variable'</span>
                    , <span class="kw">order_levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'8'</span>,<span class="st">'6'</span>,<span class="st">'4'</span>) )
@@ -492,7 +494,7 @@
 <span class="no">p</span></pre></body></html></div>
 <p><img src="data_exploration_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
 <p>The plot objects returned by both functions have an attribute called <code>data_key</code> which is an x-y table arranged like the alluvial plot one column containing the original ID. We can use the <code>car_id</code> variable to rejoin the original dataframe.</p>
-<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">p</span>$<span class="no">data_key</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">p</span>$<span class="no">data_key</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>( <span class="no">mpg</span> <span class="kw">==</span> <span class="st">'ML'</span>
           , <span class="no">cyl</span> <span class="kw">==</span> <span class="fl">8</span>
           , <span class="no">vs</span> <span class="kw">==</span> <span class="fl">0</span>
@@ -573,7 +575,7 @@
 <h2 class="hasAnchor">
 <a href="#ggplot2-manipulations" class="anchor"></a>ggplot2 manipulations</h2>
 <p>thanks to <code>ggalluvial</code> the alluvial plots that <code>easyalluvial</code> returns can be manipulated using <code>ggplot2</code> synthax</p>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">p</span> +
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">p</span> +
   <span class="fu">coord_flip</span>() +
   <span class="fu">theme_minimal</span>() +
   <span class="fu">ggtitle</span>(<span class="st">'look at my minimal flip'</span>)</pre></body></html></div>
