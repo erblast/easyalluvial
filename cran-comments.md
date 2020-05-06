@@ -30,4 +30,7 @@ ERROR: Package suggested but not available: ‘vdiffr’ on Rhub Fedora Linux
 
 This package has one reverse dependency 'parcats'
 - which is also maintained by me
-- all checks are passing
+- travis CI installs dev versions of both packages and checks each of them
+- all check are passing
+- https://travis-ci.org/github/erblast/parcats/jobs/684018260
+- https://travis-ci.org/github/erblast/easyalluvial/jobs/684015855

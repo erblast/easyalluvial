@@ -182,7 +182,7 @@ p_grid = add_marginal_histograms(p, df, plot = F) %>%
 
 ```
 
-### Interactive Partial Dependene Plot
+### Interactive Partial Dependence Plot
 
 ```{r eval = F}
 df = select(mtcars2, -ids )

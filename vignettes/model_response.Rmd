@@ -15,9 +15,9 @@ In this tutorial I want to show how you can use alluvial plots to visualise mode
 
 ## Taking a peek
 
-When building machine learning models we are usually faced with a trade-off between accurracy and interpretability. However even if we tend to lean towards accuracy and pick a modelling method that results in nearly uninterpretable models we can still make use of model agnostic interporetation techniques that have been summarized in this excellent ebook [Interpretable Machine Learning by Christoph Molnar](https://christophm.github.io/interpretable-ml-book/).
+When building machine learning models we are usually faced with a trade-off between accuracy and interpretability. However even if we tend to lean towards accuracy and pick a modelling method that results in nearly uninterpretable models we can still make use of model agnostic interpretation techniques that have been summarized in this excellent ebook [Interpretable Machine Learning by Christoph Molnar](https://christophm.github.io/interpretable-ml-book/).
 
-Whithout getting to theoretical I personally always feel the urge to simply take a peek simulate some data and see how the model reacts a method described in [here](http://vita.had.co.nz/papers/model-vis.pdf). In order to simulate data we can generate a a vector with a sequence of values over the entire range of a predictor variable of interest while setting all the others to their median or mode and use this artificial data space to obtain model predictions which we can plot against our variable of interest. An R package that will do this for you is (`plotmo`)[https://cran.r-project.org/web/packages/plotmo/index.html]. Instead of ranging over 1 predictor variable we can create a data grid using 2 predictor variables and plot the response as a third dimension. However this is as far as you can go in a conventional plot. Alluvial plots can line up much more than 3 dimensions on a plane next to each other only limited by the number of flows as it will get too cluttered when there are too many of them.
+Without getting to theoretical I personally always feel the urge to simply take a peek simulate some data and see how the model reacts a method described in [here](http://vita.had.co.nz/papers/model-vis.pdf). In order to simulate data we can generate a a vector with a sequence of values over the entire range of a predictor variable of interest while setting all the others to their median or mode and use this artificial data space to obtain model predictions which we can plot against our variable of interest. An R package that will do this for you is (`plotmo`)[https://cran.r-project.org/web/packages/plotmo/index.html]. Instead of ranging over 1 predictor variable we can create a data grid using 2 predictor variables and plot the response as a third dimension. However this is as far as you can go in a conventional plot. Alluvial plots can line up much more than 3 dimensions on a plane next to each other only limited by the number of flows as it will get too cluttered when there are too many of them.
 
 ## Which variables to plot
 When using conventional model response plotting beeing limited two 2 variables we can simply resolve this by generating many plots and look at them one by one. Alluvial plots require a bit more attention and cannot easily be screened and compared since visually there is so much going on. Therefore I do not recommend to brute force it by simply creating a lot of random combinations of predictor variables and multiple alluvial plots but instead to focus on those that have the highest calculated feature importance. Feature importance values are natively provided by most modelling packages. So the question is how many can we plot and it turns out 4 features will usually result in well-interpretable plot.
@@ -110,7 +110,7 @@ plot_hist('pred', p, df
           , scale = 50)
 ```
 
-We see that the training prediction also do not completely cover all of the `lstat` range but more of it than the predictions from the aritficial data space.
+We see that the training prediction also do not completely cover all of the `lstat` range but more of it than the predictions from the artificial data space.
 
 If we wanted to emphasize this we can bin the data space predictions on the basis of the training predictions. In this case it makes sense to increase the number of bins for the predictions in order not to loose resolution on the plot.
 
@@ -155,7 +155,7 @@ p_grid = add_marginal_histograms(p, df_inv)
 
 ```
 
-We can see that for the upper ranges of `lstat` a pretty specific combination values is required from 8 feature variables from `medv` until `tax` only then begin the flows to scatter over the eintire range of the following variables. The lower range values of `lstat` start to scatter at `crim` or `dis`. Interestingly there seems to be a set of houses that branches off from the other houses in the lower range of `lstat` predictions already at the third feature, `age`. We could potentially explore this further, as a reminder you can get the binned input data for each alluvial plot by calling `p$data_key` and trace the variables of interest.
+We can see that for the upper ranges of `lstat` a pretty specific combination values is required from 8 feature variables from `medv` until `tax` only then begin the flows to scatter over the entire range of the following variables. The lower range values of `lstat` start to scatter at `crim` or `dis`. Interestingly there seems to be a set of houses that branches off from the other houses in the lower range of `lstat` predictions already at the third feature, `age`. We could potentially explore this further, as a reminder you can get the binned input data for each alluvial plot by calling `p$data_key` and trace the variables of interest.
 
 
 # `caret` wrapper
@@ -183,7 +183,8 @@ Model response alluvial plots can help us to get an immediate intuitive understa
 
 # Partial Dependence Plotting Method
 
-When simulating artificial data space we need to be aware that we will create data space that is outside the feature distribution space of our original training data. In this example we could be creating houses that cannot exist as such maybe a 5 square meter appartment with 10 bedrooms. We have to keep this in mind when interpretating the plot. Moreover by setting all the none-plotted values to median/mode we might also be creating observations outside the possible feature distribution space but this will be hidden and not foreseable even by somebody who has some subject matter expertise. Simply imagine how likely it would be if I meassurre a hundred different feautures of the inhabitants of a certain country how likely will it be that I find one person that is exactly the average for all of those measurements? So to alleviate this we can use the partial dependency plotting method:
+When simulating artificial data space we need to be aware that we will create data space that is outside the feature distribution space of our original training data. In this example we could be creating houses that cannot exist as such maybe a 5 square meter appartment with 10 bedrooms. We have to keep this in mind when interpretating the plot. Moreover by setting all the none-plotted values to median/mode we might also be creating observations outside the possible feature distribution space but this will be hidden and not foreseeable even by somebody who has some subject matter expertise. Simply imagine how likely it would be if I measure a hundred different features of the inhabitants of a certain country how likely will it be that I find one person that is exactly the average for all of those measurements? So to alleviate this we can use the partial dependency plotting method:
+
 
 1. construct the data space as described above, but instead of setting all none-plotted variables to median/mode we set them to the values found in the first row of the training data.
 
@@ -207,7 +208,7 @@ alluvial_model_response(pred, dspace, imp, degree = 4
 
 ```
 
-thanks to the uniformous modelling interface of `caret` `alluvial_model_response_caret()` can call `get_pdp_predictions()` directly.
+thanks to the uniform modelling interface of `caret` `alluvial_model_response_caret()` can call `get_pdp_predictions()` directly.
 
 ```{r pdp_caret, fig.height = 8, fig.width=10, cache = T}
 alluvial_model_response_caret(train, degree = 4, bins = 5
@@ -217,7 +218,7 @@ alluvial_model_response_caret(train, degree = 4, bins = 5
 
 ## A note on feature importance
 
-Calculating feature importance in a dataset with strongly correlating variables will lead to inacurrate results. It usually means that two strongly correlating variables share the importance that would be accredited to them if only one of them was present in the data set. Further some feature importance calculation methods require the model to be trained with scaled, centered and potentially normalized (transformed to be more normally distributed) numerical variables in order to deliver meaningful results. We can use the `recipes` package to perform these tasks. Using the below described workflow we can create the artifical dataspace with untransformed numerical values which will give us more meaningful output.
+Calculating feature importance in a dataset with strongly correlating variables will lead to inaccurate results. It usually means that two strongly correlating variables share the importance that would be accredited to them if only one of them was present in the data set. Further some feature importance calculation methods require the model to be trained with scaled, centered and potentially normalized (transformed to be more normally distributed) numerical variables in order to deliver meaningful results. We can use the `recipes` package to perform these tasks. Using the below described workflow we can create the artificial dataspace with untransformed numerical values which will give us more meaningful output.
 
 ```{r warning = F, message = F, fig.width=12, fig.height=9, cache = T}
 

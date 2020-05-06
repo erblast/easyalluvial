@@ -17,7 +17,7 @@ apply_cuts = function(x, cuts){
 #' @description helper function used by add_marginal_histograms
 #' @param var character vector, variable name
 #' @param p alluvial plot
-#' @param data_input datafram used to create alluvial plot
+#' @param data_input dataframe used to create alluvial plot
 #' @param ... additional arguments for specific alluvial plot types: pred_train
 #'   can be used to pass training predictions for model response alluvials
 #' @return ggplot object

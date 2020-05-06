@@ -258,7 +258,7 @@ get_data_space = function(df, imp, degree = 4, bins = 5, max_levels = 10){
   return(dspace)
 }
 
-#'@title get predictions compatibel with the partial dependence plotting method
+#'@title get predictions compatible with the partial dependence plotting method
 #'@description Alluvial plots are capable of displaying higher dimensional data
 #'  on a plane, thus lend themselves to plot the response of a statistical model
 #'  to changes in the input data across multiple dimensions. The practical limit

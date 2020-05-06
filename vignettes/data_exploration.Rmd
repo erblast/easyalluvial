@@ -16,7 +16,7 @@ knitr::opts_chunk$set(warning = F)
 
 # Introduction
 
-Alluvial plots are a form of [sankey diagrams](https://en.wikipedia.org/wiki/Sankey_diagram) that are a great tool for exploring categorical data. They group categorical data into flows that can easily be traced in the diagram. Other than sankey diagrams they are constrained to x-y dimensions, however their graphical grammar is a bit mor complex then that of a regular x-y plot. The [`ggalluvial`](http://corybrunson.github.io/ggalluvial/) package made a great job of translating that grammar into ggplot2 synthax and gives you many option to tweak the appearance of a plot, nevertheless there still remains a multilayered complexity that makes it difficult to use `ggalluvial` for explorative data analysis. `easyalluvial` provides a simple interface to this package that allows you to put out a decent alluvial from any dataframe where data is stored in either long or wide format while automatically binning continuous data. It is meant to allow a quick visualisation of entire dataframes similar to the visualisations created by the [`tabplot`](https://github.com/mtennekes/tabplot) package providing different colouring options which give it the flexibility needed for data exploration.
+Alluvial plots are a form of [sankey diagrams](https://en.wikipedia.org/wiki/Sankey_diagram) that are a great tool for exploring categorical data. They group categorical data into flows that can easily be traced in the diagram. Other than sankey diagrams they are constrained to x-y dimensions, however their graphical grammar is a bit more complex then that of a regular x-y plot. The [`ggalluvial`](http://corybrunson.github.io/ggalluvial/) package made a great job of translating that grammar into ggplot2 syntax and gives you many option to tweak the appearance of a plot, nevertheless there still remains a multilayered complexity that makes it difficult to use `ggalluvial` for explorative data analysis. `easyalluvial` provides a simple interface to this package that allows you to put out a decent alluvial from any dataframe where data is stored in either long or wide format while automatically binning continuous data. It is meant to allow a quick visualisation of entire dataframes similar to the visualisations created by the [`tabplot`](https://github.com/mtennekes/tabplot) package providing different colouring options which give it the flexibility needed for data exploration.
 
 # Wide Format
 
@@ -46,7 +46,7 @@ knitr::kable( head(data_wide) )
 
 ### Binning of Numerical Variables
 
-This function produces a simple alluvial plot of the given dataframe. Numerical variables are centered, scaled and yeo johnson transformed (transformed to resemble more of a normal distribution) by `easyalluvial::manip_bin_numerics()`. Outliers as defined by the boxplot criteria ( see documentation for `grDevices::boxplot.stats()`) are stunted to to the min and max values that are defined by the whiskers of the box plot. The so transformed numeric variables are then cut into 5 (default) equally ranged bins which are lebeled 'LL' (low-low), 'ML' (medium-low), 'M' (medium), 'MH' (medium-high), HH (high-high) by default.
+This function produces a simple alluvial plot of the given dataframe. Numerical variables are centered, scaled and yeo johnson transformed (transformed to resemble more of a normal distribution) by `easyalluvial::manip_bin_numerics()`. Outliers as defined by the boxplot criteria ( see documentation for `grDevices::boxplot.stats()`) are stunted to to the min and max values that are defined by the whiskers of the box plot. The so transformed numeric variables are then cut into 5 (default) equally ranged bins which are labeled 'LL' (low-low), 'ML' (medium-low), 'M' (medium), 'MH' (medium-high), HH (high-high) by default.
 
 ```{r}
 alluvial_wide(data_wide
@@ -65,12 +65,12 @@ We see that each flow has more or less the same thickness and the statistical in
 
 ### Reduce the Number of Variables
 
-In order to reduce the compexity we can use a helper function `plot_condensation()` to get an idea which variables we want to include in our alluvial plot. Lets say we are especially interested in the `mpg` (miles per gallon) variable and how it relates to the other variables. `plot_condensation` will look for other variables it can combine `mpg` with while trying to condense the data frame to a minimum.
+In order to reduce the complexity we can use a helper function `plot_condensation()` to get an idea which variables we want to include in our alluvial plot. Lets say we are especially interested in the `mpg` (miles per gallon) variable and how it relates to the other variables. `plot_condensation` will look for other variables it can combine `mpg` with while trying to condense the data frame to a minimum.
 ```{r}
 plot_condensation(data_wide, first = mpg)
 ```
 
-In general we want to condense the dataframe to 50% or less we might get a meaningfull alluvial when looking at `mpg, cyl, vs, am` in that order.
+In general we want to condense the dataframe to 50% or less we might get a meaningful alluvial when looking at `mpg, cyl, vs, am` in that order.
 
 ```{r}
 alluvial_wide( select(data_wide, mpg, cyl, vs, am), fill_by = 'first_variable' )
@@ -147,7 +147,7 @@ knitr::kable( head( data_long) )
 
 ## alluvial_long()
 
-In long format we only need the column that contains the keys (timepoints, Q1, Q2, Q3, Q4) and the values (late, ontime), but we also need a column for the ID (flight_id) because in long format data for one flight is spread over 4 rows and the function needs to know which IDs to group to put into a flow. If ther is implicitly missing data so one flight_id has less than in this case four rows of data (one for each timepoint) it will be made explicit and labelled `'NA'`.
+In long format we only need the column that contains the keys (timepoints, Q1, Q2, Q3, Q4) and the values (late, ontime), but we also need a column for the ID (flight_id) because in long format data for one flight is spread over 4 rows and the function needs to know which IDs to group to put into a flow. If there is implicitly missing data so one flight_id has less than in this case four rows of data (one for each timepoint) it will be made explicit and labeled `'NA'`.
 
 ```{r}
 
@@ -227,7 +227,7 @@ alluvial_long(data_long
 
 ## Missing Data
 
-Explicitly and implicitly missing data will automaticall be labeled as `'NA'` and added as a level. The order of that level can be changed like any other. We will automatically generate implicitly missing data if we sample only a fraction of our long format dataframe, because then not every flight_id will have a value (late, on_time) assigned for each time point (Q1, Q2, Q3, Q4). We can replace `'NA'` with any other string.
+Explicitly and implicitly missing data will automatically be labeled as `'NA'` and added as a level. The order of that level can be changed like any other. We will automatically generate implicitly missing data if we sample only a fraction of our long format dataframe, because then not every flight_id will have a value (late, on_time) assigned for each time point (Q1, Q2, Q3, Q4). We can replace `'NA'` with any other string.
 
 ```{r}
 
@@ -256,7 +256,7 @@ alluvial_long(data_na
 
 ## Colors
 
-`alluvial_wide()` and `alluvial_long` take any sequence of either HEX code or string color values. `easyalluvial` offers some convenience functions around constructing qualitative color pallettes for distinct values.
+`alluvial_wide()` and `alluvial_long` take any sequence of either HEX code or string color values. `easyalluvial` offers some convenience functions around constructing qualitative color palettes for distinct values.
 
 ```{r}
 
