@@ -2,7 +2,7 @@
 
 language: R
 R:
-  - 4.0.0
+  - release
 sudo: false
 cache: packages
 
