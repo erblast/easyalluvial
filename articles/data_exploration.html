@@ -320,9 +320,9 @@
   <span class="fu">summarise</span>( <span class="kw">mean_arr_delay</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">arr_delay</span>) ) <span class="kw">%&gt;%</span>
   <span class="fu">ungroup</span>() <span class="kw">%&gt;%</span>
   <span class="fu">mutate</span>( <span class="kw">mean_arr_delay</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>( <span class="no">mean_arr_delay</span> <span class="kw">&lt;</span> <span class="fl">10</span>, <span class="st">'on_time'</span>, <span class="st">'late'</span> ) )</pre></body></html></div>
-<pre><code>## `summarise()` regrouping by 'month', 'tailnum', 'origin', 'dest' (override with `.groups` argument)</code></pre>
+<pre><code>## `summarise()` regrouping output by 'month', 'tailnum', 'origin', 'dest' (override with `.groups` argument)</code></pre>
 <pre><code>## Joining, by = c("tailnum", "origin", "dest", "carrier")</code></pre>
-<pre><code>## `summarise()` regrouping by 'flight_id', 'carrier', 'origin', 'dest' (override with `.groups` argument)</code></pre>
+<pre><code>## `summarise()` regrouping output by 'flight_id', 'carrier', 'origin', 'dest' (override with `.groups` argument)</code></pre>
 <div class="sourceCode" id="cb14"><html><body><pre class="r">  <span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(<span class="no">monthly_flights</span>$<span class="no">qu</span>) <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Q1'</span>, <span class="st">'Q2'</span>, <span class="st">'Q3'</span>, <span class="st">'Q4'</span>)
 
   <span class="no">data_long</span> <span class="kw">=</span> <span class="no">monthly_flights</span>
