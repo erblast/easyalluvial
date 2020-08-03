@@ -197,3 +197,15 @@ parcats(p, marginal_histograms = TRUE, imp = TRUE, data_input = df)
 
 ![demo](https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo2.gif)
 - **[Live Widget](https://erblast.github.io/parcats/articles/parcats.html)**  
+
+
+# ClinicoPath {jamovi} Module
+
+[ClinicoPath jamovi Module](https://github.com/sbalci/ClinicoPathJamoviModule) (thanks to Serdar Balci) adds `easyalluvial` plots to `jamovi`a spreadsheet interface for doing statistics with `R`.
+
+
+# Similar Packages
+
+- [`ggalluvial`](https://github.com/corybrunson/ggalluvial/)
+- [`alluvial`](https://github.com/mbojan/alluvial)
+- [`networkD3`](https://github.com/christophergandrud/networkD3)
