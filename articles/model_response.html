@@ -130,18 +130,20 @@
 <div id="generating-the-data-space" class="section level2">
 <h2 class="hasAnchor">
 <a href="#generating-the-data-space" class="anchor"></a>Generating the data space</h2>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">tidyverse</span>) )
-<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">easyalluvial</span>) )
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">tidyverse</span>) )</pre></body></html></div>
+<pre><code>## Warning: replacing previous import 'vctrs::data_frame' by 'tibble::data_frame'
+## when loading 'dplyr'</code></pre>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">easyalluvial</span>) )
 <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">mlbench</span>) )
 <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">randomForest</span>) )
 <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">recipes</span>) )
 <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">earth</span>) )</pre></body></html></div>
 <p>We start by creating a model</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">'BostonHousing'</span>)
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">'BostonHousing'</span>)
 <span class="no">df</span> <span class="kw">=</span> <span class="fu">as_tibble</span>( <span class="no">BostonHousing</span> )
 <span class="no">m</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/randomForest/man/randomForest.html">randomForest</a></span>( <span class="no">lstat</span> ~ <span class="no">.</span>, <span class="no">df</span> )</pre></body></html></div>
 <p>and looking at the importance features</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">imp</span> <span class="kw">=</span> <span class="no">m</span>$<span class="no">importance</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">imp</span> <span class="kw">=</span> <span class="no">m</span>$<span class="no">importance</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/tidy_imp.html">tidy_imp</a></span>(<span class="no">df</span>) <span class="co"># </span>
 
 <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="no">imp</span>)</pre></body></html></div>
@@ -153,60 +155,60 @@
 <tbody>
 <tr class="odd">
 <td align="left">medv</td>
-<td align="right">8497.5533</td>
+<td align="right">8495.3840</td>
 </tr>
 <tr class="even">
 <td align="left">rm</td>
-<td align="right">3404.8055</td>
+<td align="right">3573.8298</td>
 </tr>
 <tr class="odd">
 <td align="left">age</td>
-<td align="right">2620.7293</td>
+<td align="right">2619.3458</td>
 </tr>
 <tr class="even">
 <td align="left">indus</td>
-<td align="right">2450.2694</td>
+<td align="right">2556.8092</td>
+</tr>
+<tr class="odd">
+<td align="left">crim</td>
+<td align="right">2158.6058</td>
+</tr>
+<tr class="even">
+<td align="left">nox</td>
+<td align="right">1889.0725</td>
 </tr>
 <tr class="odd">
 <td align="left">dis</td>
-<td align="right">2104.3825</td>
-</tr>
-<tr class="even">
-<td align="left">crim</td>
-<td align="right">2069.3317</td>
-</tr>
-<tr class="odd">
-<td align="left">nox</td>
-<td align="right">1815.1732</td>
+<td align="right">1722.4315</td>
 </tr>
 <tr class="even">
 <td align="left">b</td>
-<td align="right">718.7619</td>
+<td align="right">726.0632</td>
 </tr>
 <tr class="odd">
 <td align="left">tax</td>
-<td align="right">631.2058</td>
+<td align="right">615.0195</td>
 </tr>
 <tr class="even">
 <td align="left">ptratio</td>
-<td align="right">416.9460</td>
+<td align="right">377.7742</td>
 </tr>
 <tr class="odd">
 <td align="left">rad</td>
-<td align="right">181.9994</td>
+<td align="right">193.5758</td>
 </tr>
 <tr class="even">
-<td align="left">chas</td>
-<td align="right">163.6963</td>
+<td align="left">zn</td>
+<td align="right">120.3678</td>
 </tr>
 <tr class="odd">
-<td align="left">zn</td>
-<td align="right">124.8680</td>
+<td align="left">chas</td>
+<td align="right">114.7111</td>
 </tr>
 </tbody>
 </table>
 <p>When generating the data space we cannot screen an infinite amount of values per variable but will have to limit ourselves to a fixed number. Then we want to create all possible combinations between these values which determines the number of flows. The visual limit for flows on an alluvial plot is somewhere around 1000 flows. Thus I recommend to go with 5 values which will result in 5 x 5 X 5 X 5 –&gt; 625 combinations and the same number of flows. That also leaves some wiggeling room if one of the top 4 variables is a factor with more than 5 levels. <code><a href="../reference/get_data_space.html">get_data_space()</a></code> will split the range of a variable into 3 and pick the median of each split and add the variable minimum and the maximum to the set.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">dspace</span> <span class="kw">=</span> <span class="fu"><a href="../reference/get_data_space.html">get_data_space</a></span>(<span class="no">df</span>, <span class="no">imp</span>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">dspace</span> <span class="kw">=</span> <span class="fu"><a href="../reference/get_data_space.html">get_data_space</a></span>(<span class="no">df</span>, <span class="no">imp</span>
                         , <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span> <span class="co"># specifies the number of variables</span>
                         , <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">5</span> <span class="co"># the number of values per variable</span>
                         )
@@ -218,15 +220,15 @@
 <th align="right">rm</th>
 <th align="right">age</th>
 <th align="right">indus</th>
-<th align="right">dis</th>
 <th align="right">crim</th>
 <th align="right">nox</th>
+<th align="right">dis</th>
 <th align="right">b</th>
 <th align="right">tax</th>
 <th align="right">ptratio</th>
 <th align="right">rad</th>
-<th align="left">chas</th>
 <th align="right">zn</th>
+<th align="left">chas</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -234,155 +236,155 @@
 <td align="right">3.561</td>
 <td align="right">2.9</td>
 <td align="right">0.46</td>
-<td align="right">3.20745</td>
 <td align="right">0.25651</td>
 <td align="right">0.538</td>
+<td align="right">3.20745</td>
 <td align="right">391.44</td>
 <td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">2.9</td>
 <td align="right">4.27</td>
-<td align="right">3.20745</td>
 <td align="right">0.25651</td>
 <td align="right">0.538</td>
+<td align="right">3.20745</td>
 <td align="right">391.44</td>
 <td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">2.9</td>
 <td align="right">9.90</td>
-<td align="right">3.20745</td>
 <td align="right">0.25651</td>
 <td align="right">0.538</td>
+<td align="right">3.20745</td>
 <td align="right">391.44</td>
 <td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">2.9</td>
 <td align="right">18.10</td>
-<td align="right">3.20745</td>
 <td align="right">0.25651</td>
 <td align="right">0.538</td>
+<td align="right">3.20745</td>
 <td align="right">391.44</td>
 <td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">2.9</td>
 <td align="right">27.74</td>
-<td align="right">3.20745</td>
 <td align="right">0.25651</td>
 <td align="right">0.538</td>
+<td align="right">3.20745</td>
 <td align="right">391.44</td>
 <td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">32.2</td>
 <td align="right">0.46</td>
-<td align="right">3.20745</td>
 <td align="right">0.25651</td>
 <td align="right">0.538</td>
+<td align="right">3.20745</td>
 <td align="right">391.44</td>
 <td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">32.2</td>
 <td align="right">4.27</td>
-<td align="right">3.20745</td>
 <td align="right">0.25651</td>
 <td align="right">0.538</td>
+<td align="right">3.20745</td>
 <td align="right">391.44</td>
 <td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">32.2</td>
 <td align="right">9.90</td>
-<td align="right">3.20745</td>
 <td align="right">0.25651</td>
 <td align="right">0.538</td>
+<td align="right">3.20745</td>
 <td align="right">391.44</td>
 <td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">32.2</td>
 <td align="right">18.10</td>
-<td align="right">3.20745</td>
 <td align="right">0.25651</td>
 <td align="right">0.538</td>
+<td align="right">3.20745</td>
 <td align="right">391.44</td>
 <td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">32.2</td>
 <td align="right">27.74</td>
-<td align="right">3.20745</td>
 <td align="right">0.25651</td>
 <td align="right">0.538</td>
+<td align="right">3.20745</td>
 <td align="right">391.44</td>
 <td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 </tbody>
 </table>
 <p>Total rows in dspace: 625</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">dspace</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">dspace</span> <span class="kw">%&gt;%</span>
   <span class="fu">summarise_all</span>( ~ <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">.</span>) ) ) <span class="kw">%&gt;%</span>
   <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>()</pre></body></html></div>
 <table class="table">
@@ -391,15 +393,15 @@
 <th align="right">rm</th>
 <th align="right">age</th>
 <th align="right">indus</th>
-<th align="right">dis</th>
 <th align="right">crim</th>
 <th align="right">nox</th>
+<th align="right">dis</th>
 <th align="right">b</th>
 <th align="right">tax</th>
 <th align="right">ptratio</th>
 <th align="right">rad</th>
-<th align="right">chas</th>
 <th align="right">zn</th>
+<th align="right">chas</th>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="right">5</td>
@@ -421,13 +423,13 @@
 <div id="generating-model-response" class="section level2">
 <h2 class="hasAnchor">
 <a href="#generating-model-response" class="anchor"></a>Generating model response</h2>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">pred</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">m</span>, <span class="kw">newdata</span> <span class="kw">=</span> <span class="no">dspace</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">pred</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">m</span>, <span class="kw">newdata</span> <span class="kw">=</span> <span class="no">dspace</span>)</pre></body></html></div>
 </div>
 <div id="plotting" class="section level2">
 <h2 class="hasAnchor">
 <a href="#plotting" class="anchor"></a>Plotting</h2>
 <p>The predictions will be binned as well into 5 bins. Binning options can be passed as a list via the <code>params_bin_numeric_pred</code> parameter.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span>(<span class="no">pred</span>, <span class="no">dspace</span>, <span class="no">imp</span>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span>(<span class="no">pred</span>, <span class="no">dspace</span>, <span class="no">imp</span>
                             , <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">5</span>
                             , <span class="kw">stratum_label_size</span> <span class="kw">=</span> <span class="fl">2.8</span> )
 <span class="no">p</span></pre></body></html></div>
@@ -438,14 +440,14 @@
 <h2 class="hasAnchor">
 <a href="#marginal-histograms" class="anchor"></a>Marginal histograms</h2>
 <p>As well as for other <code>easyalluvial</code> plots we can add marginal histograms and as a bonus also the feature importance.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">p_grid</span> <span class="kw">=</span> <span class="fu"><a href="../reference/add_marginal_histograms.html">add_marginal_histograms</a></span>(<span class="no">p</span>, <span class="kw">data_input</span> <span class="kw">=</span> <span class="no">df</span>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">p_grid</span> <span class="kw">=</span> <span class="fu"><a href="../reference/add_marginal_histograms.html">add_marginal_histograms</a></span>(<span class="no">p</span>, <span class="kw">data_input</span> <span class="kw">=</span> <span class="no">df</span>
                                  , <span class="kw">plot</span> <span class="kw">=</span> <span class="no">F</span> <span class="co"># plot only after adding feature importance</span>
                                  , <span class="kw">scale</span> <span class="kw">=</span> <span class="fl">50</span> <span class="co"># to increase distance between ridge plots, Default: 400</span>
                                  ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/add_imp_plot.html">add_imp_plot</a></span>( <span class="kw">p</span> <span class="kw">=</span> <span class="no">p</span>, <span class="kw">data_input</span> <span class="kw">=</span> <span class="no">df</span>)</pre></body></html></div>
 <p><img src="model_response_files/figure-html/unnamed-chunk-7-1.png" width="1152"></p>
 <p>We can see the original distribution of the variables, the lines indicate the position of the values as picked by <code><a href="../reference/get_data_space.html">get_data_space()</a></code>. When comparing the distribution of the predictions against the original distribution of <code>lstat</code> we see that the range of the predictions in response to the artificial dataspace do not cover all of the range of <code>lstat</code>. Which most likely means that all possible combinations of the 4 plotted variables in combination with moderate values for all other predictors will not give any extreme values. Which we can further explore, first we will need to check whether the model is capable of making predictions in the lower and upper ranges of <code>lsat</code>. We can use <code><a href="../reference/plot_hist.html">plot_hist()</a></code> to only plot the distributions and add the prediction for the training data set using the <code>pred_train</code> parameter.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">pred_train</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">m</span>)
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">pred_train</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">m</span>)
 
 <span class="fu"><a href="../reference/plot_hist.html">plot_hist</a></span>(<span class="st">'pred'</span>, <span class="no">p</span>, <span class="no">df</span>
           , <span class="kw">pred_train</span> <span class="kw">=</span> <span class="no">pred_train</span> <span class="co"># pred_train can also be passed to add_marginal_histograms()</span>
@@ -453,14 +455,14 @@
 <p><img src="model_response_files/figure-html/unnamed-chunk-8-1.png" width="288" style="display: block; margin: auto;"></p>
 <p>We see that the training prediction also do not completely cover all of the <code>lstat</code> range but more of it than the predictions from the artificial data space.</p>
 <p>If we wanted to emphasize this we can bin the data space predictions on the basis of the training predictions. In this case it makes sense to increase the number of bins for the predictions in order not to loose resolution on the plot.</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span>(<span class="no">pred</span>, <span class="no">dspace</span>, <span class="no">imp</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">7</span>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span>(<span class="no">pred</span>, <span class="no">dspace</span>, <span class="no">imp</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">7</span>
                             , <span class="kw">bin_labels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"LLL"</span>,<span class="st">"LL"</span>, <span class="st">"ML"</span>, <span class="st">"M"</span>, <span class="st">"MH"</span>, <span class="st">"HH"</span>, <span class="st">"HHH"</span>)
                             , <span class="kw">pred_train</span> <span class="kw">=</span> <span class="no">pred_train</span>
                             , <span class="kw">stratum_label_size</span> <span class="kw">=</span> <span class="fl">2.8</span> )
 
 <span class="fu"><a href="../reference/plot_hist.html">plot_hist</a></span>(<span class="st">'pred'</span>, <span class="no">p</span>, <span class="no">df</span>, <span class="kw">scale</span> <span class="kw">=</span> <span class="fl">50</span>)</pre></body></html></div>
 <p><img src="model_response_files/figure-html/p_hist-1.png" width="288" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">p_grid</span> <span class="kw">=</span> <span class="fu"><a href="../reference/add_marginal_histograms.html">add_marginal_histograms</a></span>(<span class="no">p</span>, <span class="kw">data_input</span> <span class="kw">=</span> <span class="no">df</span>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">p_grid</span> <span class="kw">=</span> <span class="fu"><a href="../reference/add_marginal_histograms.html">add_marginal_histograms</a></span>(<span class="no">p</span>, <span class="kw">data_input</span> <span class="kw">=</span> <span class="no">df</span>
                                  , <span class="kw">plot</span> <span class="kw">=</span> <span class="no">F</span> <span class="co"># plot only after adding feature importance</span>
                                  , <span class="kw">scale</span> <span class="kw">=</span> <span class="fl">50</span> <span class="co"># to increase distance between ridge plots, Default: 400</span>
                                  ) <span class="kw">%&gt;%</span>
@@ -472,7 +474,7 @@
 <h1 class="hasAnchor">
 <a href="#what-feature-combinations-are-needed-to-obtain-predictions-in-the-lower-and-higher-ranges-of-lstat" class="anchor"></a>What feature combinations are needed to obtain predictions in the lower and higher ranges of <code>lstat</code>?</h1>
 <p>We can add the training predictions to the training data and assign the variables not covered by the model response plot to bins. We can then create an alluvial plot over the entire training dataframe in order to trace the <code>lstat</code> ranges not covered by the model response alluvial plot above. Since we are only interested in those observations we remove all other flows from the plot by setting their color to <code>NA</code>.</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span>(<span class="no">pred_train</span>) - <span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span>(<span class="no">pred</span>),<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">pred</span>),<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">pred_train</span>) + <span class="fl">1</span> )
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span>(<span class="no">pred_train</span>) - <span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span>(<span class="no">pred</span>),<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">pred</span>),<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">pred_train</span>) + <span class="fl">1</span> )
 
 <span class="no">df_inv</span> <span class="kw">=</span> <span class="no">df</span> <span class="kw">%&gt;%</span>
   <span class="fu">select</span>(-<span class="no">lstat</span>) <span class="kw">%&gt;%</span>
@@ -493,7 +495,7 @@
 <h1 class="hasAnchor">
 <a href="#caret-wrapper" class="anchor"></a><code>caret</code> wrapper</h1>
 <p><code>caret</code> provides a uniformous interface for training and calling a lot of machine learning models as well as for calculating feature importance. <code>easyalluvial</code> provides a function that wraps the above described workflow into one single call. Note that feature importance values are slightly different. <code>randomForest</code> returns a combined importance for all levels of a factor variable while <code>caret</code> splits them up. <code><a href="../reference/tidy_imp.html">tidy_imp()</a></code> aggregates them and uses the maximum value of all values. This behaviour can be adjusted by passing another aggregating function to the <code>.f</code> parameter.</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">train</span> <span class="kw">=</span> <span class="kw pkg">caret</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/train.html">train</a></span>( <span class="no">lstat</span> ~ <span class="no">.</span>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">train</span> <span class="kw">=</span> <span class="kw pkg">caret</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/train.html">train</a></span>( <span class="no">lstat</span> ~ <span class="no">.</span>
                      , <span class="no">df</span>
                      , <span class="kw">method</span> <span class="kw">=</span> <span class="st">'rf'</span>
                      , <span class="kw">trControl</span> <span class="kw">=</span> <span class="kw pkg">caret</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/trainControl.html">trainControl</a></span>( <span class="kw">method</span> <span class="kw">=</span> <span class="st">'none'</span> )
@@ -519,7 +521,7 @@
 <li><p>Average model predictions</p></li>
 </ol>
 <p>Using this method we reduce the risk of simulating data outside the feature distribution space concerning the variables that are not plotted.</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">pred</span> <span class="kw">=</span> <span class="fu"><a href="../reference/get_pdp_predictions.html">get_pdp_predictions</a></span>(<span class="no">df</span>, <span class="no">imp</span>, <span class="no">m</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">5</span>)
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">pred</span> <span class="kw">=</span> <span class="fu"><a href="../reference/get_pdp_predictions.html">get_pdp_predictions</a></span>(<span class="no">df</span>, <span class="no">imp</span>, <span class="no">m</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">5</span>)
 
 
 <span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span>(<span class="no">pred</span>, <span class="no">dspace</span>, <span class="no">imp</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>
@@ -527,7 +529,7 @@
                         , <span class="kw">stratum_label_size</span> <span class="kw">=</span> <span class="fl">2.8</span> )</pre></body></html></div>
 <p><img src="model_response_files/figure-html/pdp-1.png" width="960"></p>
 <p>thanks to the uniform modelling interface of <code>caret</code> <code><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret()</a></code> can call <code><a href="../reference/get_pdp_predictions.html">get_pdp_predictions()</a></code> directly.</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret</a></span>(<span class="no">train</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">5</span>
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu"><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret</a></span>(<span class="no">train</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">5</span>
                               , <span class="kw">method</span> <span class="kw">=</span> <span class="st">'pdp'</span>
                               , <span class="kw">stratum_label_size</span> <span class="kw">=</span> <span class="fl">2.8</span> )</pre></body></html></div>
 <p><img src="model_response_files/figure-html/pdp_caret-1.png" width="960"></p>
@@ -535,7 +537,7 @@
 <h2 class="hasAnchor">
 <a href="#a-note-on-feature-importance" class="anchor"></a>A note on feature importance</h2>
 <p>Calculating feature importance in a dataset with strongly correlating variables will lead to inaccurate results. It usually means that two strongly correlating variables share the importance that would be accredited to them if only one of them was present in the data set. Further some feature importance calculation methods require the model to be trained with scaled, centered and potentially normalized (transformed to be more normally distributed) numerical variables in order to deliver meaningful results. We can use the <code>recipes</code> package to perform these tasks. Using the below described workflow we can create the artificial dataspace with untransformed numerical values which will give us more meaningful output.</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="co"># filter correlating variables recipe- ------------------------------</span>
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="co"># filter correlating variables recipe- ------------------------------</span>
 <span class="co"># caret tends to complain if recipe filters any variables, therefore</span>
 <span class="co"># we use two recipes</span>
 
@@ -580,7 +582,7 @@
 <h2 class="hasAnchor">
 <a href="#none-regression-models" class="anchor"></a>None-regression models</h2>
 <p>Works the same way.</p>
-<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">df</span> <span class="kw">=</span> <span class="fu">select</span>(<span class="no">mtcars2</span>, -<span class="no">ids</span>)
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">df</span> <span class="kw">=</span> <span class="fu">select</span>(<span class="no">mtcars2</span>, -<span class="no">ids</span>)
 <span class="no">m</span> <span class="kw">=</span> <span class="kw pkg">randomForest</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/randomForest/man/randomForest.html">randomForest</a></span>( <span class="no">am</span> ~ <span class="no">.</span>, <span class="no">df</span>)
 <span class="no">imp</span> <span class="kw">=</span> <span class="no">m</span>$<span class="no">importance</span>
 <span class="no">dspace</span> <span class="kw">=</span> <span class="fu"><a href="../reference/get_data_space.html">get_data_space</a></span>(<span class="no">df</span>, <span class="no">imp</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">3</span>)
