@@ -16,6 +16,7 @@ matrix:
     - export PKGDOWN=no
   - r: release
     before_script: 
+      - libharfbuzz-dev libfribidi-dev
       - Rscript -e 'install.packages("tidyverse")'
       - Rscript -e "devtools::install_deps('.', dependencies = 'suggests')"
     script:
