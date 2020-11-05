@@ -16,10 +16,11 @@ matrix:
     - export PKGDOWN=no
   - r: release
     before_script: 
-      - Rscript -e 'install.packages(c("earth", "tidyverse", "mlbench", "pkgdown"))'
+      - Rscript -e 'install.packages("tidyverse")'
       - Rscript -e "devtools::install_deps('.', dependencies = 'suggests')"
     script:
       - Rscript -e "devtools::check('.', error_on = 'note')"
+      - Rscript -e "devtools::install('.')"
       - Rscript -e 'pkgdown::build_site(run_dont_run = TRUE)'
     after_success:
       - Rscript -e 'covr::codecov()'
