@@ -21,6 +21,7 @@ matrix:
     script:
       - Rscript -e "devtools::check('.', error_on = 'note')"
       - Rscript -e "devtools::install('.')"
+      - Rscript -e 'install.packages("earth")'
       - Rscript -e 'pkgdown::build_site(run_dont_run = TRUE)'
     after_success:
       - Rscript -e 'covr::codecov()'
