@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">easyalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3.900</span>
       </span>
     </div>
 
@@ -98,7 +98,8 @@
 
       
 
-      </header><div class="row">
+      </header><link href="model_response_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="model_response_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Visualising Model Response</h1>
@@ -130,21 +131,24 @@
 <div id="generating-the-data-space" class="section level2">
 <h2 class="hasAnchor">
 <a href="#generating-the-data-space" class="anchor"></a>Generating the data space</h2>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">tidyverse</span>) )
-<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">easyalluvial</span>) )
-<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">mlbench</span>) )
-<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">randomForest</span>) )
-<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">recipes</span>) )
-<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">earth</span>) )</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span> <span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/erblast/easyalluvial">easyalluvial</a></span><span class="op">)</span> <span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mlbench</span><span class="op">)</span> <span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.stat.berkeley.edu/~breiman/RandomForests/">randomForest</a></span><span class="op">)</span> <span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes">recipes</a></span><span class="op">)</span> <span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.milbo.users.sonic.net/earth/">earth</a></span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <p>We start by creating a model</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">'BostonHousing'</span>)
-<span class="no">df</span> <span class="kw">=</span> <span class="fu">as_tibble</span>( <span class="no">BostonHousing</span> )
-<span class="no">m</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/randomForest/man/randomForest.html">randomForest</a></span>( <span class="no">lstat</span> ~ <span class="no">.</span>, <span class="no">df</span> )</pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">'BostonHousing'</span><span class="op">)</span>
+<span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span> <span class="va">BostonHousing</span> <span class="op">)</span>
+<span class="va">m</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/randomForest/man/randomForest.html">randomForest</a></span><span class="op">(</span> <span class="va">lstat</span> <span class="op">~</span> <span class="va">.</span>, <span class="va">df</span> <span class="op">)</span></code></pre></div>
 <p>and looking at the importance features</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">imp</span> <span class="kw">=</span> <span class="no">m</span>$<span class="no">importance</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/tidy_imp.html">tidy_imp</a></span>(<span class="no">df</span>) <span class="co"># </span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">imp</span> <span class="op">=</span> <span class="va">m</span><span class="op">$</span><span class="va">importance</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/tidy_imp.html">tidy_imp</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="co"># </span>
 
-<span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="no">imp</span>)</pre></body></html></div>
+<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">imp</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">vars</th>
@@ -153,65 +157,66 @@
 <tbody>
 <tr class="odd">
 <td align="left">medv</td>
-<td align="right">8586.8354</td>
+<td align="right">8779.3724</td>
 </tr>
 <tr class="even">
 <td align="left">rm</td>
-<td align="right">3547.7524</td>
+<td align="right">3413.5624</td>
 </tr>
 <tr class="odd">
 <td align="left">age</td>
-<td align="right">2932.0796</td>
+<td align="right">2644.7755</td>
 </tr>
 <tr class="even">
 <td align="left">indus</td>
-<td align="right">2354.6273</td>
+<td align="right">2325.7429</td>
 </tr>
 <tr class="odd">
 <td align="left">crim</td>
-<td align="right">1982.4519</td>
+<td align="right">2296.0461</td>
 </tr>
 <tr class="even">
 <td align="left">dis</td>
-<td align="right">1790.8571</td>
+<td align="right">1890.9960</td>
 </tr>
 <tr class="odd">
 <td align="left">nox</td>
-<td align="right">1545.9612</td>
+<td align="right">1536.0021</td>
 </tr>
 <tr class="even">
 <td align="left">tax</td>
-<td align="right">860.2106</td>
+<td align="right">722.4426</td>
 </tr>
 <tr class="odd">
 <td align="left">b</td>
-<td align="right">725.4616</td>
+<td align="right">698.7011</td>
 </tr>
 <tr class="even">
 <td align="left">ptratio</td>
-<td align="right">307.1752</td>
+<td align="right">428.8317</td>
 </tr>
 <tr class="odd">
 <td align="left">rad</td>
-<td align="right">178.2566</td>
+<td align="right">183.4984</td>
 </tr>
 <tr class="even">
 <td align="left">zn</td>
-<td align="right">130.2155</td>
+<td align="right">131.6010</td>
 </tr>
 <tr class="odd">
 <td align="left">chas</td>
-<td align="right">121.9638</td>
+<td align="right">127.5242</td>
 </tr>
 </tbody>
 </table>
 <p>When generating the data space we cannot screen an infinite amount of values per variable but will have to limit ourselves to a fixed number. Then we want to create all possible combinations between these values which determines the number of flows. The visual limit for flows on an alluvial plot is somewhere around 1000 flows. Thus I recommend to go with 5 values which will result in 5 x 5 X 5 X 5 –&gt; 625 combinations and the same number of flows. That also leaves some wiggeling room if one of the top 4 variables is a factor with more than 5 levels. <code><a href="../reference/get_data_space.html">get_data_space()</a></code> will split the range of a variable into 3 and pick the median of each split and add the variable minimum and the maximum to the set.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">dspace</span> <span class="kw">=</span> <span class="fu"><a href="../reference/get_data_space.html">get_data_space</a></span>(<span class="no">df</span>, <span class="no">imp</span>
-                        , <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span> <span class="co"># specifies the number of variables</span>
-                        , <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">5</span> <span class="co"># the number of values per variable</span>
-                        )
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dspace</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_data_space.html">get_data_space</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">imp</span>
+                        , degree <span class="op">=</span> <span class="fl">4</span> <span class="co"># specifies the number of variables</span>
+                        , bins <span class="op">=</span> <span class="fl">5</span> <span class="co"># the number of values per variable</span>
+                        <span class="op">)</span>
 
-<span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>( <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">dspace</span>, <span class="fl">10</span>) )</pre></body></html></div>
+<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dspace</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">medv</th>
@@ -382,9 +387,10 @@
 </tbody>
 </table>
 <p>Total rows in dspace: 625</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">dspace</span> <span class="kw">%&gt;%</span>
-  <span class="fu">summarise_all</span>( ~ <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">.</span>) ) ) <span class="kw">%&gt;%</span>
-  <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>()</pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dspace</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise_all.html">summarise_all</a></span><span class="op">(</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span> <span class="op">)</span> <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">medv</th>
@@ -421,16 +427,18 @@
 <div id="generating-model-response" class="section level2">
 <h2 class="hasAnchor">
 <a href="#generating-model-response" class="anchor"></a>Generating model response</h2>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">pred</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">m</span>, <span class="kw">newdata</span> <span class="kw">=</span> <span class="no">dspace</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pred</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">m</span>, newdata <span class="op">=</span> <span class="va">dspace</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="plotting" class="section level2">
 <h2 class="hasAnchor">
 <a href="#plotting" class="anchor"></a>Plotting</h2>
 <p>The predictions will be binned as well into 5 bins. Binning options can be passed as a list via the <code>params_bin_numeric_pred</code> parameter.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span>(<span class="no">pred</span>, <span class="no">dspace</span>, <span class="no">imp</span>
-                            , <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">5</span>
-                            , <span class="kw">stratum_label_size</span> <span class="kw">=</span> <span class="fl">2.8</span> )
-<span class="no">p</span></pre></body></html></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">dspace</span>, <span class="va">imp</span>
+                            , degree <span class="op">=</span> <span class="fl">4</span>, bins <span class="op">=</span> <span class="fl">5</span>
+                            , stratum_label_size <span class="op">=</span> <span class="fl">2.8</span> <span class="op">)</span>
+<span class="va">p</span></code></pre></div>
 <p><img src="model_response_files/figure-html/alluv1-1.png" width="960"></p>
 <p>We can see the binned range of predictions and explore by which variable combination they have been created by tracing the coloured flows. The stratum labels of the prediction variables indicate the value of the variable and which fraction of the flows of that colour (prediction variable bin range) pass through that stratum.</p>
 </div>
@@ -438,33 +446,37 @@
 <h2 class="hasAnchor">
 <a href="#marginal-histograms" class="anchor"></a>Marginal histograms</h2>
 <p>As well as for other <code>easyalluvial</code> plots we can add marginal histograms and as a bonus also the feature importance.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">p_grid</span> <span class="kw">=</span> <span class="fu"><a href="../reference/add_marginal_histograms.html">add_marginal_histograms</a></span>(<span class="no">p</span>, <span class="kw">data_input</span> <span class="kw">=</span> <span class="no">df</span>
-                                 , <span class="kw">plot</span> <span class="kw">=</span> <span class="no">F</span> <span class="co"># plot only after adding feature importance</span>
-                                 , <span class="kw">scale</span> <span class="kw">=</span> <span class="fl">50</span> <span class="co"># to increase distance between ridge plots, Default: 400</span>
-                                 ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_imp_plot.html">add_imp_plot</a></span>( <span class="kw">p</span> <span class="kw">=</span> <span class="no">p</span>, <span class="kw">data_input</span> <span class="kw">=</span> <span class="no">df</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p_grid</span> <span class="op">=</span> <span class="fu"><a href="../reference/add_marginal_histograms.html">add_marginal_histograms</a></span><span class="op">(</span><span class="va">p</span>, data_input <span class="op">=</span> <span class="va">df</span>
+                                 , plot <span class="op">=</span> <span class="cn">F</span> <span class="co"># plot only after adding feature importance</span>
+                                 , scale <span class="op">=</span> <span class="fl">50</span> <span class="co"># to increase distance between ridge plots, Default: 400</span>
+                                 <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_imp_plot.html">add_imp_plot</a></span><span class="op">(</span> p <span class="op">=</span> <span class="va">p</span>, data_input <span class="op">=</span> <span class="va">df</span><span class="op">)</span></code></pre></div>
 <p><img src="model_response_files/figure-html/unnamed-chunk-7-1.png" width="1152"></p>
 <p>We can see the original distribution of the variables, the lines indicate the position of the values as picked by <code><a href="../reference/get_data_space.html">get_data_space()</a></code>. When comparing the distribution of the predictions against the original distribution of <code>lstat</code> we see that the range of the predictions in response to the artificial dataspace do not cover all of the range of <code>lstat</code>. Which most likely means that all possible combinations of the 4 plotted variables in combination with moderate values for all other predictors will not give any extreme values. Which we can further explore, first we will need to check whether the model is capable of making predictions in the lower and upper ranges of <code>lsat</code>. We can use <code><a href="../reference/plot_hist.html">plot_hist()</a></code> to only plot the distributions and add the prediction for the training data set using the <code>pred_train</code> parameter.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">pred_train</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">m</span>)
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pred_train</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/plot_hist.html">plot_hist</a></span>(<span class="st">'pred'</span>, <span class="no">p</span>, <span class="no">df</span>
-          , <span class="kw">pred_train</span> <span class="kw">=</span> <span class="no">pred_train</span> <span class="co"># pred_train can also be passed to add_marginal_histograms()</span>
-          , <span class="kw">scale</span> <span class="kw">=</span> <span class="fl">50</span>)</pre></body></html></div>
+<span class="fu"><a href="../reference/plot_hist.html">plot_hist</a></span><span class="op">(</span><span class="st">'pred'</span>, <span class="va">p</span>, <span class="va">df</span>
+          , pred_train <span class="op">=</span> <span class="va">pred_train</span> <span class="co"># pred_train can also be passed to add_marginal_histograms()</span>
+          , scale <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></code></pre></div>
 <p><img src="model_response_files/figure-html/unnamed-chunk-8-1.png" width="288" style="display: block; margin: auto;"></p>
 <p>We see that the training prediction also do not completely cover all of the <code>lstat</code> range but more of it than the predictions from the artificial data space.</p>
 <p>If we wanted to emphasize this we can bin the data space predictions on the basis of the training predictions. In this case it makes sense to increase the number of bins for the predictions in order not to loose resolution on the plot.</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span>(<span class="no">pred</span>, <span class="no">dspace</span>, <span class="no">imp</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">7</span>
-                            , <span class="kw">bin_labels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"LLL"</span>,<span class="st">"LL"</span>, <span class="st">"ML"</span>, <span class="st">"M"</span>, <span class="st">"MH"</span>, <span class="st">"HH"</span>, <span class="st">"HHH"</span>)
-                            , <span class="kw">pred_train</span> <span class="kw">=</span> <span class="no">pred_train</span>
-                            , <span class="kw">stratum_label_size</span> <span class="kw">=</span> <span class="fl">2.8</span> )
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">dspace</span>, <span class="va">imp</span>, degree <span class="op">=</span> <span class="fl">4</span>, bins <span class="op">=</span> <span class="fl">7</span>
+                            , bin_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"LLL"</span>,<span class="st">"LL"</span>, <span class="st">"ML"</span>, <span class="st">"M"</span>, <span class="st">"MH"</span>, <span class="st">"HH"</span>, <span class="st">"HHH"</span><span class="op">)</span>
+                            , pred_train <span class="op">=</span> <span class="va">pred_train</span>
+                            , stratum_label_size <span class="op">=</span> <span class="fl">2.8</span> <span class="op">)</span>
 
-<span class="fu"><a href="../reference/plot_hist.html">plot_hist</a></span>(<span class="st">'pred'</span>, <span class="no">p</span>, <span class="no">df</span>, <span class="kw">scale</span> <span class="kw">=</span> <span class="fl">50</span>)</pre></body></html></div>
+<span class="fu"><a href="../reference/plot_hist.html">plot_hist</a></span><span class="op">(</span><span class="st">'pred'</span>, <span class="va">p</span>, <span class="va">df</span>, scale <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></code></pre></div>
 <p><img src="model_response_files/figure-html/p_hist-1.png" width="288" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">p_grid</span> <span class="kw">=</span> <span class="fu"><a href="../reference/add_marginal_histograms.html">add_marginal_histograms</a></span>(<span class="no">p</span>, <span class="kw">data_input</span> <span class="kw">=</span> <span class="no">df</span>
-                                 , <span class="kw">plot</span> <span class="kw">=</span> <span class="no">F</span> <span class="co"># plot only after adding feature importance</span>
-                                 , <span class="kw">scale</span> <span class="kw">=</span> <span class="fl">50</span> <span class="co"># to increase distance between ridge plots, Default: 400</span>
-                                 ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_imp_plot.html">add_imp_plot</a></span>( <span class="kw">p</span> <span class="kw">=</span> <span class="no">p</span>, <span class="kw">data_input</span> <span class="kw">=</span> <span class="no">df</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p_grid</span> <span class="op">=</span> <span class="fu"><a href="../reference/add_marginal_histograms.html">add_marginal_histograms</a></span><span class="op">(</span><span class="va">p</span>, data_input <span class="op">=</span> <span class="va">df</span>
+                                 , plot <span class="op">=</span> <span class="cn">F</span> <span class="co"># plot only after adding feature importance</span>
+                                 , scale <span class="op">=</span> <span class="fl">50</span> <span class="co"># to increase distance between ridge plots, Default: 400</span>
+                                 <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_imp_plot.html">add_imp_plot</a></span><span class="op">(</span> p <span class="op">=</span> <span class="va">p</span>, data_input <span class="op">=</span> <span class="va">df</span><span class="op">)</span></code></pre></div>
 <p><img src="model_response_files/figure-html/unnamed-chunk-9-1.png" width="1152"></p>
 </div>
 </div>
@@ -472,35 +484,37 @@
 <h1 class="hasAnchor">
 <a href="#what-feature-combinations-are-needed-to-obtain-predictions-in-the-lower-and-higher-ranges-of-lstat" class="anchor"></a>What feature combinations are needed to obtain predictions in the lower and higher ranges of <code>lstat</code>?</h1>
 <p>We can add the training predictions to the training data and assign the variables not covered by the model response plot to bins. We can then create an alluvial plot over the entire training dataframe in order to trace the <code>lstat</code> ranges not covered by the model response alluvial plot above. Since we are only interested in those observations we remove all other flows from the plot by setting their color to <code>NA</code>.</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span>(<span class="no">pred_train</span>) - <span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span>(<span class="no">pred</span>),<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">pred</span>),<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">pred_train</span>) + <span class="fl">1</span> )
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">breaks</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">pred_train</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">pred_train</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span> <span class="op">)</span>
 
-<span class="no">df_inv</span> <span class="kw">=</span> <span class="no">df</span> <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(-<span class="no">lstat</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">mutate</span>( <span class="kw">pred_train</span> <span class="kw">=</span> <span class="no">pred_train</span>
-          , <span class="kw">pred_train</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span>(<span class="no">pred_train</span>, <span class="no">breaks</span>) ) <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>( <span class="no">pred_train</span>, <span class="fu">one_of</span>(<span class="no">imp</span>$<span class="no">vars</span>) ) <span class="co"># order by feature importance</span>
+<span class="va">df_inv</span> <span class="op">=</span> <span class="va">df</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">lstat</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span> pred_train <span class="op">=</span> <span class="va">pred_train</span>
+          , pred_train <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span><span class="va">pred_train</span>, <span class="va">breaks</span><span class="op">)</span> <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span> <span class="va">pred_train</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/one_of.html">one_of</a></span><span class="op">(</span><span class="va">imp</span><span class="op">$</span><span class="va">vars</span><span class="op">)</span> <span class="op">)</span> <span class="co"># order by feature importance</span>
 
-<span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="../reference/alluvial_wide.html">alluvial_wide</a></span>(<span class="no">df_inv</span>, <span class="kw">bin_labels</span> <span class="kw">=</span> <span class="st">'min_max'</span>
-                  , <span class="kw">stratum_label_size</span> <span class="kw">=</span> <span class="fl">3</span>
-                  , <span class="kw">col_vector_flow</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'blue'</span>, <span class="fl">NA</span>, <span class="st">'orange'</span>)
-                  , <span class="kw">colorful_fill_variable_stratum</span> <span class="kw">=</span> <span class="no">F</span>)
+<span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="../reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span><span class="va">df_inv</span>, bin_labels <span class="op">=</span> <span class="st">'min_max'</span>
+                  , stratum_label_size <span class="op">=</span> <span class="fl">3</span>
+                  , col_vector_flow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'blue'</span>, <span class="cn">NA</span>, <span class="st">'orange'</span><span class="op">)</span>
+                  , colorful_fill_variable_stratum <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
 
-<span class="no">p_grid</span> <span class="kw">=</span> <span class="fu"><a href="../reference/add_marginal_histograms.html">add_marginal_histograms</a></span>(<span class="no">p</span>, <span class="no">df_inv</span>)</pre></body></html></div>
+<span class="va">p_grid</span> <span class="op">=</span> <span class="fu"><a href="../reference/add_marginal_histograms.html">add_marginal_histograms</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">df_inv</span><span class="op">)</span></code></pre></div>
 <p><img src="model_response_files/figure-html/unnamed-chunk-10-1.png" width="1152"></p>
 <p>We can see that for the upper ranges of <code>lstat</code> a pretty specific combination values is required from 8 feature variables from <code>medv</code> until <code>tax</code> only then begin the flows to scatter over the entire range of the following variables. The lower range values of <code>lstat</code> start to scatter at <code>crim</code> or <code>dis</code>. Interestingly there seems to be a set of houses that branches off from the other houses in the lower range of <code>lstat</code> predictions already at the third feature, <code>age</code>. We could potentially explore this further, as a reminder you can get the binned input data for each alluvial plot by calling <code>p$data_key</code> and trace the variables of interest.</p>
 </div>
 <div id="caret-wrapper" class="section level1">
 <h1 class="hasAnchor">
 <a href="#caret-wrapper" class="anchor"></a><code>caret</code> wrapper</h1>
-<p><code>caret</code> provides a uniformous interface for training and calling a lot of machine learning models as well as for calculating feature importance. <code>easyalluvial</code> provides a function that wraps the above described workflow into one single call. Note that feature importance values are slightly different. <code>randomForest</code> returns a combined importance for all levels of a factor variable while <code>caret</code> splits them up. <code><a href="../reference/tidy_imp.html">tidy_imp()</a></code> aggregates them and uses the maximum value of all values. This behaviour can be adjusted by passing another aggregating function to the <code>.f</code> parameter.</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">train</span> <span class="kw">=</span> <span class="kw pkg">caret</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/train.html">train</a></span>( <span class="no">lstat</span> ~ <span class="no">.</span>
-                     , <span class="no">df</span>
-                     , <span class="kw">method</span> <span class="kw">=</span> <span class="st">'rf'</span>
-                     , <span class="kw">trControl</span> <span class="kw">=</span> <span class="kw pkg">caret</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/trainControl.html">trainControl</a></span>( <span class="kw">method</span> <span class="kw">=</span> <span class="st">'none'</span> )
-                     , <span class="kw">importance</span> <span class="kw">=</span> <span class="fl">TRUE</span> )
+<p><code>caret</code> provides a uniformous interface for training and calling a lot of machine learning models as well as for calculating feature importance. <code>easyalluvial</code> provides a function that wraps the above described workflow into one single call. Note that feature importance values can be slightly different.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">train</span> <span class="op">=</span> <span class="fu">caret</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/train.html">train</a></span><span class="op">(</span> <span class="va">lstat</span> <span class="op">~</span> <span class="va">.</span>
+                     , <span class="va">df</span>
+                     , method <span class="op">=</span> <span class="st">'rf'</span>
+                     , trControl <span class="op">=</span> <span class="fu">caret</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/trainControl.html">trainControl</a></span><span class="op">(</span> method <span class="op">=</span> <span class="st">'none'</span> <span class="op">)</span>
+                     , importance <span class="op">=</span> <span class="cn">TRUE</span> <span class="op">)</span>
 
-<span class="fu"><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret</a></span>(<span class="no">train</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">5</span>
-                              , <span class="kw">stratum_label_size</span> <span class="kw">=</span> <span class="fl">2.8</span>)</pre></body></html></div>
+<span class="fu"><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret</a></span><span class="op">(</span><span class="va">train</span>, degree <span class="op">=</span> <span class="fl">4</span>, bins <span class="op">=</span> <span class="fl">5</span>
+                              , stratum_label_size <span class="op">=</span> <span class="fl">2.8</span><span class="op">)</span></code></pre></div>
 <p><img src="model_response_files/figure-html/unnamed-chunk-11-1.png" width="960"></p>
 </div>
 <div id="advantages" class="section level1">
@@ -513,81 +527,86 @@
 <a href="#partial-dependence-plotting-method" class="anchor"></a>Partial Dependence Plotting Method</h1>
 <p>When simulating artificial data space we need to be aware that we will create data space that is outside the feature distribution space of our original training data. In this example we could be creating houses that cannot exist as such maybe a 5 square meter appartment with 10 bedrooms. We have to keep this in mind when interpretating the plot. Moreover by setting all the none-plotted values to median/mode we might also be creating observations outside the possible feature distribution space but this will be hidden and not foreseeable even by somebody who has some subject matter expertise. Simply imagine how likely it would be if I measure a hundred different features of the inhabitants of a certain country how likely will it be that I find one person that is exactly the average for all of those measurements? So to alleviate this we can use the partial dependency plotting method:</p>
 <ol style="list-style-type: decimal">
-<li><p>construct the data space as described above, but instead of setting all none-plotted variables to median/mode we set them to the values found in the first row of the training data.</p></li>
+<li><p>Construct the data space as described above, but instead of setting all none-plotted variables to median/mode we set them to the values found in the first row of the training data.</p></li>
 <li><p>Repeat 1. for each row</p></li>
 <li><p>Use all data spaces to get model predictions</p></li>
 <li><p>Average model predictions</p></li>
 </ol>
 <p>Using this method we reduce the risk of simulating data outside the feature distribution space concerning the variables that are not plotted.</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">pred</span> <span class="kw">=</span> <span class="fu"><a href="../reference/get_pdp_predictions.html">get_pdp_predictions</a></span>(<span class="no">df</span>, <span class="no">imp</span>, <span class="no">m</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">5</span>)
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pred</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_pdp_predictions.html">get_pdp_predictions</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">imp</span>, <span class="va">m</span>, degree <span class="op">=</span> <span class="fl">4</span>, bins <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
 
 
-<span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span>(<span class="no">pred</span>, <span class="no">dspace</span>, <span class="no">imp</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>
-                        , <span class="kw">method</span> <span class="kw">=</span> <span class="st">'pdp'</span> <span class="co"># changes title and caption</span>
-                        , <span class="kw">stratum_label_size</span> <span class="kw">=</span> <span class="fl">2.8</span> )</pre></body></html></div>
+<span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">dspace</span>, <span class="va">imp</span>, degree <span class="op">=</span> <span class="fl">4</span>
+                        , method <span class="op">=</span> <span class="st">'pdp'</span> <span class="co"># changes title and caption</span>
+                        , stratum_label_size <span class="op">=</span> <span class="fl">2.8</span> <span class="op">)</span></code></pre></div>
 <p><img src="model_response_files/figure-html/pdp-1.png" width="960"></p>
 <p>thanks to the uniform modelling interface of <code>caret</code> <code><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret()</a></code> can call <code><a href="../reference/get_pdp_predictions.html">get_pdp_predictions()</a></code> directly.</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret</a></span>(<span class="no">train</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">5</span>
-                              , <span class="kw">method</span> <span class="kw">=</span> <span class="st">'pdp'</span>
-                              , <span class="kw">stratum_label_size</span> <span class="kw">=</span> <span class="fl">2.8</span> )</pre></body></html></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret</a></span><span class="op">(</span><span class="va">train</span>, degree <span class="op">=</span> <span class="fl">4</span>, bins <span class="op">=</span> <span class="fl">5</span>
+                              , method <span class="op">=</span> <span class="st">'pdp'</span>
+                              , stratum_label_size <span class="op">=</span> <span class="fl">2.8</span> <span class="op">)</span></code></pre></div>
 <p><img src="model_response_files/figure-html/pdp_caret-1.png" width="960"></p>
 <div id="a-note-on-feature-importance" class="section level2">
 <h2 class="hasAnchor">
 <a href="#a-note-on-feature-importance" class="anchor"></a>A note on feature importance</h2>
 <p>Calculating feature importance in a dataset with strongly correlating variables will lead to inaccurate results. It usually means that two strongly correlating variables share the importance that would be accredited to them if only one of them was present in the data set. Further some feature importance calculation methods require the model to be trained with scaled, centered and potentially normalized (transformed to be more normally distributed) numerical variables in order to deliver meaningful results. We can use the <code>recipes</code> package to perform these tasks. Using the below described workflow we can create the artificial dataspace with untransformed numerical values which will give us more meaningful output.</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="co"># filter correlating variables recipe- ------------------------------</span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># filter correlating variables recipe- ------------------------------</span>
 <span class="co"># caret tends to complain if recipe filters any variables, therefore</span>
 <span class="co"># we use two recipes</span>
 
-<span class="no">rec_filt_corrs</span> <span class="kw">=</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html">recipe</a></span>(<span class="no">df</span>, <span class="no">lstat</span> ~ <span class="no">.</span> ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_corr.html">step_corr</a></span>( <span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_numeric</a></span>()
-             , - <span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_outcomes</a></span>()
-             , <span class="kw">threshold</span> <span class="kw">=</span> <span class="fl">0.7</span> ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://recipes.tidymodels.org/reference/prep.html">prep</a></span>()
+<span class="va">rec_filt_corrs</span> <span class="op">=</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">lstat</span> <span class="op">~</span> <span class="va">.</span> <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_corr.html">step_corr</a></span><span class="op">(</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_numeric</a></span><span class="op">(</span><span class="op">)</span>
+             , <span class="op">-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_outcomes</a></span><span class="op">(</span><span class="op">)</span>
+             , threshold <span class="op">=</span> <span class="fl">0.7</span> <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://recipes.tidymodels.org/reference/prep.html">prep</a></span><span class="op">(</span><span class="op">)</span>
 
 
-<span class="no">df_filt_corrs</span> <span class="kw">=</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/bake.html">bake</a></span>(<span class="no">rec_filt_corrs</span>, <span class="no">df</span>)
+<span class="va">df_filt_corrs</span> <span class="op">=</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/bake.html">bake</a></span><span class="op">(</span><span class="va">rec_filt_corrs</span>, <span class="va">df</span><span class="op">)</span>
 
 <span class="co"># transformation recipe --------------------------------------------</span>
-<span class="no">rec_trans</span> <span class="kw">=</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html">recipe</a></span>( <span class="no">df_filt_corrs</span>, <span class="no">lstat</span> ~ <span class="no">.</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_center.html">step_center</a></span>( <span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_numeric</a></span>(), - <span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_outcomes</a></span>() ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_scale.html">step_scale</a></span>( <span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_numeric</a></span>(), - <span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_outcomes</a></span>() ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_YeoJohnson.html">step_YeoJohnson</a></span>( <span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_numeric</a></span>(), - <span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_outcomes</a></span>() ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://recipes.tidymodels.org/reference/prep.html">prep</a></span>()
+<span class="va">rec_trans</span> <span class="op">=</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html">recipe</a></span><span class="op">(</span> <span class="va">df_filt_corrs</span>, <span class="va">lstat</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_center.html">step_center</a></span><span class="op">(</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_numeric</a></span><span class="op">(</span><span class="op">)</span>, <span class="op">-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_outcomes</a></span><span class="op">(</span><span class="op">)</span> <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_scale.html">step_scale</a></span><span class="op">(</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_numeric</a></span><span class="op">(</span><span class="op">)</span>, <span class="op">-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_outcomes</a></span><span class="op">(</span><span class="op">)</span> <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_YeoJohnson.html">step_YeoJohnson</a></span><span class="op">(</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_numeric</a></span><span class="op">(</span><span class="op">)</span>, <span class="op">-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_outcomes</a></span><span class="op">(</span><span class="op">)</span> <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://recipes.tidymodels.org/reference/prep.html">prep</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co"># train and plot ---------------------------------------------------</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">1</span>)
-<span class="no">train</span> <span class="kw">=</span> <span class="kw pkg">caret</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/train.html">train</a></span>( <span class="no">rec_trans</span>
-                     , <span class="no">df_filt_corrs</span>
-                     , <span class="kw">method</span> <span class="kw">=</span> <span class="st">'earth'</span>
-                     , <span class="kw">trControl</span> <span class="kw">=</span> <span class="kw pkg">caret</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/trainControl.html">trainControl</a></span>( <span class="kw">method</span> <span class="kw">=</span> <span class="st">'cv'</span>
-                                                        , <span class="kw">search</span> <span class="kw">=</span> <span class="st">'random'</span>)
-                     , <span class="kw">tuneLength</span> <span class="kw">=</span> <span class="fl">100</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="va">train</span> <span class="op">=</span> <span class="fu">caret</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/train.html">train</a></span><span class="op">(</span> <span class="va">rec_trans</span>
+                     , <span class="va">df_filt_corrs</span>
+                     , method <span class="op">=</span> <span class="st">'earth'</span>
+                     , trControl <span class="op">=</span> <span class="fu">caret</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/trainControl.html">trainControl</a></span><span class="op">(</span> method <span class="op">=</span> <span class="st">'cv'</span>
+                                                        , search <span class="op">=</span> <span class="st">'random'</span><span class="op">)</span>
+                     , tuneLength <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
-<span class="no">pred_train</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">train</span>, <span class="no">df_filt_corrs</span>)
+<span class="va">pred_train</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">train</span>, <span class="va">df_filt_corrs</span><span class="op">)</span>
 
-<span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret</a></span>(<span class="no">train</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">5</span>
-                                  , <span class="kw">pred_train</span> <span class="kw">=</span> <span class="no">pred_train</span>
-                                  , <span class="kw">stratum_label_size</span> <span class="kw">=</span> <span class="fl">2.8</span> )
+<span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret</a></span><span class="op">(</span><span class="va">train</span>, degree <span class="op">=</span> <span class="fl">4</span>, bins <span class="op">=</span> <span class="fl">5</span>
+                                  , pred_train <span class="op">=</span> <span class="va">pred_train</span>
+                                  , stratum_label_size <span class="op">=</span> <span class="fl">2.8</span>
+                                  , pred_var <span class="op">=</span> <span class="st">'lstat'</span><span class="op">)</span>
 
-<span class="no">p_grid</span> <span class="kw">=</span> <span class="fu"><a href="../reference/add_marginal_histograms.html">add_marginal_histograms</a></span>(<span class="no">p</span>, <span class="no">df</span>, <span class="kw">plot</span> <span class="kw">=</span> <span class="no">F</span>
-                                 , <span class="kw">pred_var</span> <span class="kw">=</span> <span class="st">'lstat'</span>
-                                 , <span class="kw">scale</span> <span class="kw">=</span> <span class="fl">50</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_imp_plot.html">add_imp_plot</a></span>(<span class="no">p</span>, <span class="no">df</span>)</pre></body></html></div>
+<span class="va">p_grid</span> <span class="op">=</span> <span class="fu"><a href="../reference/add_marginal_histograms.html">add_marginal_histograms</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">df</span>, plot <span class="op">=</span> <span class="cn">F</span>
+                                 , pred_var <span class="op">=</span> <span class="st">'lstat'</span>
+                                 , scale <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_imp_plot.html">add_imp_plot</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">df</span><span class="op">)</span></code></pre></div>
 <p><img src="model_response_files/figure-html/unnamed-chunk-12-1.png" width="1152"></p>
 </div>
 <div id="none-regression-models" class="section level2">
 <h2 class="hasAnchor">
 <a href="#none-regression-models" class="anchor"></a>None-regression models</h2>
 <p>Works the same way.</p>
-<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">df</span> <span class="kw">=</span> <span class="fu">select</span>(<span class="no">mtcars2</span>, -<span class="no">ids</span>)
-<span class="no">m</span> <span class="kw">=</span> <span class="kw pkg">randomForest</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/randomForest/man/randomForest.html">randomForest</a></span>( <span class="no">am</span> ~ <span class="no">.</span>, <span class="no">df</span>)
-<span class="no">imp</span> <span class="kw">=</span> <span class="no">m</span>$<span class="no">importance</span>
-<span class="no">dspace</span> <span class="kw">=</span> <span class="fu"><a href="../reference/get_data_space.html">get_data_space</a></span>(<span class="no">df</span>, <span class="no">imp</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">3</span>)
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">mtcars2</span>, <span class="op">-</span><span class="va">ids</span><span class="op">)</span>
+<span class="va">m</span> <span class="op">=</span> <span class="fu">randomForest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randomForest/man/randomForest.html">randomForest</a></span><span class="op">(</span> <span class="va">am</span> <span class="op">~</span> <span class="va">.</span>, <span class="va">df</span><span class="op">)</span>
+<span class="va">imp</span> <span class="op">=</span> <span class="va">m</span><span class="op">$</span><span class="va">importance</span>
+<span class="va">dspace</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_data_space.html">get_data_space</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">imp</span>, degree <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 
-<span class="no">pred</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">m</span>, <span class="kw">newdata</span> <span class="kw">=</span> <span class="no">dspace</span>,<span class="kw">type</span> <span class="kw">=</span> <span class="st">'response'</span>)
-<span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span>(<span class="no">pred</span>, <span class="no">dspace</span>, <span class="no">imp</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">3</span>)
-<span class="no">p</span></pre></body></html></div>
+<span class="va">pred</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">m</span>, newdata <span class="op">=</span> <span class="va">dspace</span>,type <span class="op">=</span> <span class="st">'response'</span><span class="op">)</span>
+<span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">dspace</span>, <span class="va">imp</span>, degree <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
+<span class="va">p</span></code></pre></div>
 <p><img src="model_response_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 </div>
 <div id="limitations" class="section level2">
@@ -618,7 +637,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

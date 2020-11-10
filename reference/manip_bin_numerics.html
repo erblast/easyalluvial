@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">easyalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3.900</span>
       </span>
     </div>
 
@@ -160,17 +160,17 @@
   boxplot stats are capped (set to min or max of boxplot stats).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>manip_bin_numerics</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>bin_labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"LL"</span>, <span class='st'>"ML"</span>, <span class='st'>"M"</span>, <span class='st'>"MH"</span>, <span class='st'>"HH"</span>),
-  <span class='kw'>center</span> <span class='kw'>=</span> <span class='no'>T</span>,
-  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='no'>T</span>,
-  <span class='kw'>transform</span> <span class='kw'>=</span> <span class='no'>T</span>,
-  <span class='kw'>round_numeric</span> <span class='kw'>=</span> <span class='no'>T</span>,
-  <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>NA_label</span> <span class='kw'>=</span> <span class='st'>"NA"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>manip_bin_numerics</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  bins <span class='op'>=</span> <span class='fl'>5</span>,
+  bin_labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"LL"</span>, <span class='st'>"ML"</span>, <span class='st'>"M"</span>, <span class='st'>"MH"</span>, <span class='st'>"HH"</span><span class='op'>)</span>,
+  center <span class='op'>=</span> <span class='cn'>T</span>,
+  scale <span class='op'>=</span> <span class='cn'>T</span>,
+  transform <span class='op'>=</span> <span class='cn'>T</span>,
+  round_numeric <span class='op'>=</span> <span class='cn'>T</span>,
+  digits <span class='op'>=</span> <span class='fl'>2</span>,
+  NA_label <span class='op'>=</span> <span class='st'>"NA"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -221,7 +221,8 @@ supplied with a supported summary function name.</p></td>
     <p>dataframe</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>( <span class='no'>mtcars2</span> )</div><div class='output co'>#&gt;       mpg        cyl         disp             hp             drat      
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span> <span class='va'>mtcars2</span> <span class='op'>)</span>
+</div><div class='output co'>#&gt;       mpg        cyl         disp             hp             drat      
 #&gt;  Min.   :10.40   4:11   Min.   : 71.1   Min.   : 52.0   Min.   :2.760  
 #&gt;  1st Qu.:15.43   6: 7   1st Qu.:120.8   1st Qu.: 96.5   1st Qu.:3.080  
 #&gt;  Median :19.20   8:14   Median :196.3   Median :123.0   Median :3.695  
@@ -241,7 +242,8 @@ supplied with a supported summary function name.</p></td>
 #&gt;  Mode  :character  
 #&gt;                    
 #&gt;                    
-#&gt;                    </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>( <span class='fu'>manip_bin_numerics</span>(<span class='no'>mtcars2</span>) )</div><div class='output co'>#&gt;  mpg    cyl    disp     hp     drat     wt     qsec    vs             am    
+#&gt;                    </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span> <span class='fu'>manip_bin_numerics</span><span class='op'>(</span><span class='va'>mtcars2</span><span class='op'>)</span> <span class='op'>)</span>
+</div><div class='output co'>#&gt;  mpg    cyl    disp     hp     drat     wt     qsec    vs             am    
 #&gt;  LL:3   4:11   LL: 9   LL: 5   LL: 9   LL: 5   LL: 4   V:18   automatic:19  
 #&gt;  ML:8   6: 7   ML: 7   ML:10   ML: 4   ML: 6   ML: 2   S:14   manual   :13  
 #&gt;  M :9   8:14   M : 2   M : 4   M :12   M :13   M :10                        
@@ -254,7 +256,8 @@ supplied with a supported summary function name.</p></td>
 #&gt;  5: 5   3: 3   Mode  :character  
 #&gt;         4:10                     
 #&gt;         6: 1                     
-#&gt;         8: 1                     </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>( <span class='fu'>manip_bin_numerics</span>(<span class='no'>mtcars2</span>, <span class='kw'>bin_labels</span> <span class='kw'>=</span> <span class='st'>'mean'</span>))</div><div class='output co'>#&gt;     mpg    cyl        disp         hp       drat       wt        qsec    vs    
+#&gt;         8: 1                     </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span> <span class='fu'>manip_bin_numerics</span><span class='op'>(</span><span class='va'>mtcars2</span>, bin_labels <span class='op'>=</span> <span class='st'>'mean'</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     mpg    cyl        disp         hp       drat       wt        qsec    vs    
 #&gt;  11.37:3   4:11   96.56 : 9   62.2  : 5   2.98: 9   1.81: 5   15   : 4   V:18  
 #&gt;  15.26:8   6: 7   155.39: 7   103.3 :10   3.18: 4   2.53: 6   16.15: 2   S:14  
 #&gt;  19.11:9   8:14   241.5 : 2   136.5 : 4   3.79:12   3.34:13   17.13:10         
@@ -267,8 +270,9 @@ supplied with a supported summary function name.</p></td>
 #&gt;                 5: 5   3: 3   Mode  :character  
 #&gt;                        4:10                     
 #&gt;                        6: 1                     
-#&gt;                        8: 1                     </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>( <span class='fu'>manip_bin_numerics</span>(<span class='no'>mtcars2</span>, <span class='kw'>bin_labels</span> <span class='kw'>=</span> <span class='st'>'cuts'</span>
-  , <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>center</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><div class='output co'>#&gt;           mpg     cyl            disp              hp              drat   
+#&gt;                        8: 1                     </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span> <span class='fu'>manip_bin_numerics</span><span class='op'>(</span><span class='va'>mtcars2</span>, bin_labels <span class='op'>=</span> <span class='st'>'cuts'</span>
+  , scale <span class='op'>=</span> <span class='cn'>FALSE</span>, center <span class='op'>=</span> <span class='cn'>FALSE</span>, transform <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;           mpg     cyl            disp              hp              drat   
 #&gt;  (10.4,15.1]: 6   4:11   (70.7,151]:12   (51.8,94.4]: 7   (2.76,3.19]:11  
 #&gt;  (15.1,19.8]:12   6: 7   (151,231] : 5   (94.4,137] :10   (3.19,3.63]: 4  
 #&gt;  (19.8,24.5]: 8   8:14   (231,312] : 6   (137,179]  : 5   (3.63,4.06]:10  
@@ -304,7 +308,7 @@ supplied with a supported summary function name.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

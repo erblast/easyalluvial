@@ -91,7 +91,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">easyalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3.900</span>
       </span>
     </div>
 
@@ -158,14 +158,14 @@
  to alluvial plot</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_marginal_histograms</span>(
-  <span class='no'>p</span>,
-  <span class='no'>data_input</span>,
-  <span class='kw'>top</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>keep_labels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>add_marginal_histograms</span><span class='op'>(</span>
+  <span class='va'>p</span>,
+  <span class='va'>data_input</span>,
+  top <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  keep_labels <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  plot <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -194,7 +194,7 @@ Default: TRUE</p></td>
     <tr>
       <th>...</th>
       <td><p>additional arguments for model response alluvial plot concerning
-the response variable</p><dl'>
+the response variable</p><dl>
 <dt>pred_train</dt><dd><p>display training
 prediction, not necessary if pred_train has already been passed to
 alluvial_model_response()</p></dd> <dt>scale</dt><dd><p>int, y-axis distance between the
@@ -213,8 +213,9 @@ inferred, Default: NULL</p></dd>
     <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html'>arrangeGrob</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>p</span> <span class='kw'>=</span> <span class='fu'><a href='alluvial_wide.html'>alluvial_wide</a></span>(<span class='no'>mtcars2</span>, <span class='kw'>max_variables</span> <span class='kw'>=</span> <span class='fl'>4</span>)
-<span class='no'>p_grid</span> <span class='kw'>=</span> <span class='fu'>add_marginal_histograms</span>(<span class='no'>p</span>, <span class='no'>mtcars2</span>)</div><div class='img'><img src='add_marginal_histograms-1.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><div class='input'><span class='va'>p</span> <span class='op'>=</span> <span class='fu'><a href='alluvial_wide.html'>alluvial_wide</a></span><span class='op'>(</span><span class='va'>mtcars2</span>, max_variables <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+<span class='va'>p_grid</span> <span class='op'>=</span> <span class='fu'>add_marginal_histograms</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>mtcars2</span><span class='op'>)</span>
+</div><div class='img'><img src='add_marginal_histograms-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -230,7 +231,7 @@ inferred, Default: NULL</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

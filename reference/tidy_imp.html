@@ -93,7 +93,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">easyalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3.900</span>
       </span>
     </div>
 
@@ -162,7 +162,7 @@
   aggregating dummy encoded variables must be modified.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tidy_imp</span>(<span class='no'>imp</span>, <span class='no'>df</span>, <span class='kw'>.f</span> <span class='kw'>=</span> <span class='no'>max</span>)</pre>
+    <pre class="usage"><span class='fu'>tidy_imp</span><span class='op'>(</span><span class='va'>imp</span>, <span class='va'>df</span>, .f <span class='op'>=</span> <span class='va'>max</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -183,7 +183,7 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>dataframe</p><dl'>
+    <p>dataframe</p><dl>
 <dt>vars</dt><dd><p>character column with feature names</p></dd>
   <dt>imp</dt><dd><p>numerical column, importance values</p></dd> 
 </dl>
@@ -191,23 +191,24 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># randomforest</span>
-<span class='no'>df</span> <span class='kw'>=</span> <span class='no'>mtcars2</span>[, ! <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>mtcars2</span>) <span class='kw'>%in%</span> <span class='st'>'ids'</span> ]
-<span class='no'>m</span> <span class='kw'>=</span> <span class='kw pkg'>randomForest</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/randomForest/man/randomForest.html'>randomForest</a></span>( <span class='no'>disp</span> ~ <span class='no'>.</span>, <span class='no'>df</span>)
-<span class='no'>imp</span> <span class='kw'>=</span> <span class='no'>m</span>$<span class='no'>importance</span>
-<span class='fu'>tidy_imp</span>(<span class='no'>imp</span>, <span class='no'>mtcars2</span>)</div><div class='output co'>#&gt; # A tibble: 10 x 2
+<span class='va'>df</span> <span class='op'>=</span> <span class='va'>mtcars2</span><span class='op'>[</span>, <span class='op'>!</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>mtcars2</span><span class='op'>)</span> <span class='op'>%in%</span> <span class='st'>'ids'</span> <span class='op'>]</span>
+<span class='va'>m</span> <span class='op'>=</span> <span class='fu'>randomForest</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/randomForest/man/randomForest.html'>randomForest</a></span><span class='op'>(</span> <span class='va'>disp</span> <span class='op'>~</span> <span class='va'>.</span>, <span class='va'>df</span><span class='op'>)</span>
+<span class='va'>imp</span> <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>importance</span>
+<span class='fu'>tidy_imp</span><span class='op'>(</span><span class='va'>imp</span>, <span class='va'>mtcars2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 10 x 2</span><span>
 #&gt;    vars      imp
-#&gt;    &lt;chr&gt;   &lt;dbl&gt;
-#&gt;  1 cyl   104496.
-#&gt;  2 mpg    79654.
-#&gt;  3 hp     78618.
-#&gt;  4 wt     69626.
-#&gt;  5 drat   49637.
-#&gt;  6 gear   23535.
-#&gt;  7 qsec   20962.
-#&gt;  8 vs     14347.
-#&gt;  9 carb    8955.
-#&gt; 10 am      3045.</div><div class='input'>
-</div></pre>
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span> cyl   </span><span style='text-decoration: underline;'>104</span><span>496.
+#&gt; </span><span style='color: #555555;'> 2</span><span> mpg    </span><span style='text-decoration: underline;'>79</span><span>654.
+#&gt; </span><span style='color: #555555;'> 3</span><span> hp     </span><span style='text-decoration: underline;'>78</span><span>618.
+#&gt; </span><span style='color: #555555;'> 4</span><span> wt     </span><span style='text-decoration: underline;'>69</span><span>626.
+#&gt; </span><span style='color: #555555;'> 5</span><span> drat   </span><span style='text-decoration: underline;'>49</span><span>637.
+#&gt; </span><span style='color: #555555;'> 6</span><span> gear   </span><span style='text-decoration: underline;'>23</span><span>535.
+#&gt; </span><span style='color: #555555;'> 7</span><span> qsec   </span><span style='text-decoration: underline;'>20</span><span>962.
+#&gt; </span><span style='color: #555555;'> 8</span><span> vs     </span><span style='text-decoration: underline;'>14</span><span>347.
+#&gt; </span><span style='color: #555555;'> 9</span><span> carb    </span><span style='text-decoration: underline;'>8</span><span>955.
+#&gt; </span><span style='color: #555555;'>10</span><span> am      </span><span style='text-decoration: underline;'>3</span><span>045.</div><div class='input'>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -223,7 +224,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

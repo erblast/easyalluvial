@@ -56,7 +56,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">easyalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3.900</span>
       </span>
     </div>
 
@@ -141,14 +141,16 @@
 <div id="cran" class="section level3">
 <h3 class="hasAnchor">
 <a href="#cran" class="anchor"></a>CRAN</h3>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'easyalluvial'</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">'easyalluvial'</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="development-version" class="section level3">
 <h3 class="hasAnchor">
 <a href="#development-version" class="anchor"></a>Development Version</h3>
-<div class="sourceCode" id="cb2"><pre class="r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co"># install.packages("devtools")</span>
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"erblast/easyalluvial"</span>)</pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"erblast/easyalluvial"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 <div id="documentation" class="section level2">
@@ -168,16 +170,18 @@
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">tidyverse</span>) )
-<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">easyalluvial</span>) )</pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span> <span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/erblast/easyalluvial">easyalluvial</a></span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <div id="alluvial-from-data-in-wide-format" class="section level3">
 <h3 class="hasAnchor">
 <a href="#alluvial-from-data-in-wide-format" class="anchor"></a>Alluvial from data in wide format</h3>
 <div id="sample-data" class="section level4">
 <h4 class="hasAnchor">
 <a href="#sample-data" class="anchor"></a>Sample Data</h4>
-<div class="sourceCode" id="cb4"><pre class="r">
-<span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>( <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">mtcars2</span>) )</pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mtcars2</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">mpg</th>
@@ -292,10 +296,11 @@
 <li>Medium, Low (ML)</li>
 <li>Low, Low (LL)</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb5"><pre class="r">
-<span class="fu"><a href="reference/alluvial_wide.html">alluvial_wide</a></span>( <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars2</span>
-                , <span class="kw">max_variables</span> <span class="kw">=</span> <span class="fl">5</span>
-                , <span class="kw">fill_by</span> <span class="kw">=</span> <span class="st">'first_variable'</span> )</pre></div>
+<!-- end list --><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="fu"><a href="reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span> data <span class="op">=</span> <span class="va">mtcars2</span>
+                , max_variables <span class="op">=</span> <span class="fl">5</span>
+                , fill_by <span class="op">=</span> <span class="st">'first_variable'</span> <span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-wide_plot-1.png"><!-- --></p>
 </div>
 </div>
@@ -305,7 +310,8 @@
 <div id="sample-data-1" class="section level4">
 <h4 class="hasAnchor">
 <a href="#sample-data-1" class="anchor"></a>Sample Data</h4>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>( <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">quarterly_flights</span>) )</pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">quarterly_flights</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">tailnum</th>
@@ -370,33 +376,36 @@
 <div id="plot-1" class="section level4">
 <h4 class="hasAnchor">
 <a href="#plot-1" class="anchor"></a>Plot</h4>
-<div class="sourceCode" id="cb7"><pre class="r">
-<span class="fu"><a href="reference/alluvial_long.html">alluvial_long</a></span>( <span class="no">quarterly_flights</span>
-               , <span class="kw">key</span> <span class="kw">=</span> <span class="no">qu</span>
-               , <span class="kw">value</span> <span class="kw">=</span> <span class="no">mean_arr_delay</span>
-               , <span class="kw">id</span> <span class="kw">=</span> <span class="no">tailnum</span>
-               , <span class="kw">fill</span> <span class="kw">=</span> <span class="no">carrier</span> )</pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="fu"><a href="reference/alluvial_long.html">alluvial_long</a></span><span class="op">(</span> <span class="va">quarterly_flights</span>
+               , key <span class="op">=</span> <span class="va">qu</span>
+               , value <span class="op">=</span> <span class="va">mean_arr_delay</span>
+               , id <span class="op">=</span> <span class="va">tailnum</span>
+               , fill <span class="op">=</span> <span class="va">carrier</span> <span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-plot_long-1.png"><!-- --></p>
 </div>
 </div>
 <div id="marginal-histograms" class="section level3">
 <h3 class="hasAnchor">
 <a href="#marginal-histograms" class="anchor"></a>Marginal Histograms</h3>
-<div class="sourceCode" id="cb8"><pre class="r"><span class="fu"><a href="reference/alluvial_wide.html">alluvial_wide</a></span>( <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars2</span>
-                , <span class="kw">max_variables</span> <span class="kw">=</span> <span class="fl">5</span>
-                , <span class="kw">fill_by</span> <span class="kw">=</span> <span class="st">'first_variable'</span> ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="reference/add_marginal_histograms.html">add_marginal_histograms</a></span>(<span class="no">mtcars2</span>)</pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span> data <span class="op">=</span> <span class="va">mtcars2</span>
+                , max_variables <span class="op">=</span> <span class="fl">5</span>
+                , fill_by <span class="op">=</span> <span class="st">'first_variable'</span> <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="reference/add_marginal_histograms.html">add_marginal_histograms</a></span><span class="op">(</span><span class="va">mtcars2</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-3-1.png"><!-- --></p>
 </div>
 <div id="interactive-graphs" class="section level3">
 <h3 class="hasAnchor">
 <a href="#interactive-graphs" class="anchor"></a>Interactive Graphs</h3>
-<div class="sourceCode" id="cb9"><pre class="r">
-<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">parcats</span>) )
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="https://erblast.github.io/parcats/">parcats</a></span><span class="op">)</span> <span class="op">)</span>
 
-<span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="reference/alluvial_wide.html">alluvial_wide</a></span>(<span class="no">mtcars2</span>, <span class="kw">max_variables</span> <span class="kw">=</span> <span class="fl">5</span>)
+<span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span><span class="va">mtcars2</span>, max_variables <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
 
-<span class="fu"><a href="https://erblast.github.io/parcats//reference/parcats.html">parcats</a></span>(<span class="no">p</span>, <span class="kw">marginal_histograms</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">data_input</span> <span class="kw">=</span> <span class="no">mtcars2</span>)</pre></div>
+<span class="fu"><a href="https://erblast.github.io/parcats//reference/parcats.html">parcats</a></span><span class="op">(</span><span class="va">p</span>, marginal_histograms <span class="op">=</span> <span class="cn">TRUE</span>, data_input <span class="op">=</span> <span class="va">mtcars2</span><span class="op">)</span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo1.gif" alt="demo"></p>
 <ul>
 <li><strong><a href="https://erblast.github.io/parcats/articles/parcats.html">Live Widget</a></strong></li>
@@ -411,38 +420,40 @@
 <li><a href="https://christophm.github.io/interpretable-ml-book/">more on partial dependence plots (ebook)</a></li>
 <li><a href="https://www.datisticsblog.com/2019/04/visualising-model-response-with-easyalluvial/">Tutorial</a></li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb10"><pre class="r">
-<span class="no">df</span> <span class="kw">=</span> <span class="fu">select</span>(<span class="no">mtcars2</span>, -<span class="no">ids</span>)
-<span class="no">m</span> <span class="kw">=</span> <span class="kw pkg">randomForest</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/randomForest/man/randomForest.html">randomForest</a></span>( <span class="no">disp</span> ~ <span class="no">.</span>, <span class="no">df</span>)
-<span class="no">imp</span> <span class="kw">=</span> <span class="no">m</span>$<span class="no">importance</span>
+<!-- end list --><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="va">df</span> <span class="op">=</span> <span class="fu">select</span><span class="op">(</span><span class="va">mtcars2</span>, <span class="op">-</span><span class="va">ids</span><span class="op">)</span>
+<span class="va">m</span> <span class="op">=</span> <span class="fu">randomForest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randomForest/man/randomForest.html">randomForest</a></span><span class="op">(</span> <span class="va">disp</span> <span class="op">~</span> <span class="va">.</span>, <span class="va">df</span><span class="op">)</span>
+<span class="va">imp</span> <span class="op">=</span> <span class="va">m</span><span class="op">$</span><span class="va">importance</span>
 
-<span class="no">dspace</span> <span class="kw">=</span> <span class="fu"><a href="reference/get_data_space.html">get_data_space</a></span>(<span class="no">df</span>, <span class="no">imp</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>)
+<span class="va">dspace</span> <span class="op">=</span> <span class="fu"><a href="reference/get_data_space.html">get_data_space</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">imp</span>, degree <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 
-<span class="no">pred</span> <span class="kw">=</span> <span class="fu"><a href="reference/get_pdp_predictions.html">get_pdp_predictions</a></span>(<span class="no">df</span>, <span class="no">imp</span>
-                           , <span class="no">m</span>
-                           , <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>
-                           , <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">5</span>)
+<span class="va">pred</span> <span class="op">=</span> <span class="fu"><a href="reference/get_pdp_predictions.html">get_pdp_predictions</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">imp</span>
+                           , <span class="va">m</span>
+                           , degree <span class="op">=</span> <span class="fl">4</span>
+                           , bins <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
 
 
-<span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="reference/alluvial_model_response.html">alluvial_model_response</a></span>(<span class="no">pred</span>, <span class="no">dspace</span>, <span class="no">imp</span>
-                            , <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">method</span> <span class="kw">=</span> <span class="st">'pdp'</span>
-                            , <span class="kw">stratum_label_size</span> <span class="kw">=</span> <span class="fl">2.75</span>)
+<span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="reference/alluvial_model_response.html">alluvial_model_response</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">dspace</span>, <span class="va">imp</span>
+                            , degree <span class="op">=</span> <span class="fl">4</span>, method <span class="op">=</span> <span class="st">'pdp'</span>
+                            , stratum_label_size <span class="op">=</span> <span class="fl">2.75</span><span class="op">)</span>
 
-<span class="no">p_grid</span> <span class="kw">=</span> <span class="fu"><a href="reference/add_marginal_histograms.html">add_marginal_histograms</a></span>(<span class="no">p</span>, <span class="no">df</span>, <span class="kw">plot</span> <span class="kw">=</span> <span class="no">F</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="reference/add_imp_plot.html">add_imp_plot</a></span>(<span class="no">p</span>, <span class="no">df</span>)</pre></div>
+<span class="va">p_grid</span> <span class="op">=</span> <span class="fu"><a href="reference/add_marginal_histograms.html">add_marginal_histograms</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">df</span>, plot <span class="op">=</span> <span class="cn">F</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="reference/add_imp_plot.html">add_imp_plot</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">df</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-5-1.png"><!-- --></p>
 </div>
 <div id="interactive-partial-dependence-plot" class="section level3">
 <h3 class="hasAnchor">
 <a href="#interactive-partial-dependence-plot" class="anchor"></a>Interactive Partial Dependence Plot</h3>
-<div class="sourceCode" id="cb11"><pre class="r"><span class="no">df</span> <span class="kw">=</span> <span class="fu">select</span>(<span class="no">mtcars2</span>, -<span class="no">ids</span> )
-<span class="no">m</span> <span class="kw">=</span> <span class="kw pkg">randomForest</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/randomForest/man/randomForest.html">randomForest</a></span>( <span class="no">disp</span> ~ <span class="no">.</span>, <span class="no">df</span>)
-<span class="no">imp</span> <span class="kw">=</span> <span class="no">m</span>$<span class="no">importance</span>
-<span class="no">dspace</span> <span class="kw">=</span> <span class="fu"><a href="reference/get_data_space.html">get_data_space</a></span>(<span class="no">df</span>, <span class="no">imp</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">3</span>)
-<span class="no">pred</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">m</span>, <span class="kw">newdata</span> <span class="kw">=</span> <span class="no">dspace</span>)
-<span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="reference/alluvial_model_response.html">alluvial_model_response</a></span>(<span class="no">pred</span>, <span class="no">dspace</span>, <span class="no">imp</span>, <span class="kw">degree</span> <span class="kw">=</span> <span class="fl">3</span>)
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">df</span> <span class="op">=</span> <span class="fu">select</span><span class="op">(</span><span class="va">mtcars2</span>, <span class="op">-</span><span class="va">ids</span> <span class="op">)</span>
+<span class="va">m</span> <span class="op">=</span> <span class="fu">randomForest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randomForest/man/randomForest.html">randomForest</a></span><span class="op">(</span> <span class="va">disp</span> <span class="op">~</span> <span class="va">.</span>, <span class="va">df</span><span class="op">)</span>
+<span class="va">imp</span> <span class="op">=</span> <span class="va">m</span><span class="op">$</span><span class="va">importance</span>
+<span class="va">dspace</span> <span class="op">=</span> <span class="fu"><a href="reference/get_data_space.html">get_data_space</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">imp</span>, degree <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
+<span class="va">pred</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">m</span>, newdata <span class="op">=</span> <span class="va">dspace</span><span class="op">)</span>
+<span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="reference/alluvial_model_response.html">alluvial_model_response</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">dspace</span>, <span class="va">imp</span>, degree <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 
-<span class="fu"><a href="https://erblast.github.io/parcats//reference/parcats.html">parcats</a></span>(<span class="no">p</span>, <span class="kw">marginal_histograms</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">imp</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">data_input</span> <span class="kw">=</span> <span class="no">df</span>)</pre></div>
+<span class="fu"><a href="https://erblast.github.io/parcats//reference/parcats.html">parcats</a></span><span class="op">(</span><span class="va">p</span>, marginal_histograms <span class="op">=</span> <span class="cn">TRUE</span>, imp <span class="op">=</span> <span class="cn">TRUE</span>, data_input <span class="op">=</span> <span class="va">df</span><span class="op">)</span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo2.gif" alt="demo"></p>
 <ul>
 <li><strong><a href="https://erblast.github.io/parcats/articles/parcats.html">Live Widget</a></strong></li>
@@ -506,7 +517,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

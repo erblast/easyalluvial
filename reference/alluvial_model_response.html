@@ -96,7 +96,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">easyalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3.900</span>
       </span>
     </div>
 
@@ -168,22 +168,22 @@
  returned by the model in response to the data space.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>alluvial_model_response</span>(
-  <span class='no'>pred</span>,
-  <span class='no'>dspace</span>,
-  <span class='no'>imp</span>,
-  <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>4</span>,
-  <span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>bin_labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"LL"</span>, <span class='st'>"ML"</span>, <span class='st'>"M"</span>, <span class='st'>"MH"</span>, <span class='st'>"HH"</span>),
-  <span class='kw'>col_vector_flow</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"#FF0065"</span>, <span class='st'>"#009850"</span>, <span class='st'>"#A56F2B"</span>, <span class='st'>"#005EAA"</span>, <span class='st'>"#710500"</span>, <span class='st'>"#7B5380"</span>,
-    <span class='st'>"#9DD1D1"</span>),
-  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"median"</span>,
-  <span class='kw'>force</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>params_bin_numeric_pred</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>center</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='no'>T</span>),
-  <span class='kw'>pred_train</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>stratum_label_size</span> <span class='kw'>=</span> <span class='fl'>3.5</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>alluvial_model_response</span><span class='op'>(</span>
+  <span class='va'>pred</span>,
+  <span class='va'>dspace</span>,
+  <span class='va'>imp</span>,
+  degree <span class='op'>=</span> <span class='fl'>4</span>,
+  bins <span class='op'>=</span> <span class='fl'>5</span>,
+  bin_labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"LL"</span>, <span class='st'>"ML"</span>, <span class='st'>"M"</span>, <span class='st'>"MH"</span>, <span class='st'>"HH"</span><span class='op'>)</span>,
+  col_vector_flow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"#FF0065"</span>, <span class='st'>"#009850"</span>, <span class='st'>"#A56F2B"</span>, <span class='st'>"#005EAA"</span>, <span class='st'>"#710500"</span>, <span class='st'>"#7B5380"</span>,
+    <span class='st'>"#9DD1D1"</span><span class='op'>)</span>,
+  method <span class='op'>=</span> <span class='st'>"median"</span>,
+  force <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  params_bin_numeric_pred <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>center <span class='op'>=</span> <span class='cn'>T</span>, transform <span class='op'>=</span> <span class='cn'>T</span>, scale <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>,
+  pred_train <span class='op'>=</span> <span class='cn'>NULL</span>,
+  stratum_label_size <span class='op'>=</span> <span class='fl'>3.5</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -227,7 +227,7 @@ c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')</p></td>
     </tr>
     <tr>
       <th>method, </th>
-      <td><p>character vector, one of c('median', 'pdp')</p><dl'>
+      <td><p>character vector, one of c('median', 'pdp')</p><dl>
 <dt>median</dt><dd><p>sets variables that are not displayed to median mode, use with
 regular predictions</p></dd> <dt>pdp</dt><dd><p>partial dependency plot method, for each
 observation in the training data the displayed variableas are set to the
@@ -279,22 +279,24 @@ histograms are added to the plot later. Default = NULL</p></td>
  <code><a href='alluvial_model_response_caret.html'>alluvial_model_response_caret</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>df</span> <span class='kw'>=</span> <span class='no'>mtcars2</span>[, ! <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>mtcars2</span>) <span class='kw'>%in%</span> <span class='st'>'ids'</span> ]
-<span class='no'>m</span> <span class='kw'>=</span> <span class='kw pkg'>randomForest</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/randomForest/man/randomForest.html'>randomForest</a></span>( <span class='no'>disp</span> ~ <span class='no'>.</span>, <span class='no'>df</span>)
-<span class='no'>imp</span> <span class='kw'>=</span> <span class='no'>m</span>$<span class='no'>importance</span>
-<span class='no'>dspace</span> <span class='kw'>=</span> <span class='fu'><a href='get_data_space.html'>get_data_space</a></span>(<span class='no'>df</span>, <span class='no'>imp</span>, <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>3</span>)
-<span class='no'>pred</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>m</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>dspace</span>)
-<span class='fu'>alluvial_model_response</span>(<span class='no'>pred</span>, <span class='no'>dspace</span>, <span class='no'>imp</span>, <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='img'><img src='alluvial_model_response-1.png' alt='' width='700' height='433' /></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='va'>df</span> <span class='op'>=</span> <span class='va'>mtcars2</span><span class='op'>[</span>, <span class='op'>!</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>mtcars2</span><span class='op'>)</span> <span class='op'>%in%</span> <span class='st'>'ids'</span> <span class='op'>]</span>
+<span class='va'>m</span> <span class='op'>=</span> <span class='fu'>randomForest</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/randomForest/man/randomForest.html'>randomForest</a></span><span class='op'>(</span> <span class='va'>disp</span> <span class='op'>~</span> <span class='va'>.</span>, <span class='va'>df</span><span class='op'>)</span>
+<span class='va'>imp</span> <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>importance</span>
+<span class='va'>dspace</span> <span class='op'>=</span> <span class='fu'><a href='get_data_space.html'>get_data_space</a></span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>imp</span>, degree <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+<span class='va'>pred</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>m</span>, newdata <span class='op'>=</span> <span class='va'>dspace</span><span class='op'>)</span>
+<span class='fu'>alluvial_model_response</span><span class='op'>(</span><span class='va'>pred</span>, <span class='va'>dspace</span>, <span class='va'>imp</span>, degree <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+</div><div class='img'><img src='alluvial_model_response-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># partial dependency plotting method</span>
 <span class='co'># \dontrun{</span>
- <span class='no'>pred</span> <span class='kw'>=</span> <span class='fu'><a href='get_pdp_predictions.html'>get_pdp_predictions</a></span>(<span class='no'>df</span>, <span class='no'>imp</span>
-                            , <span class='kw'>.f_predict</span> <span class='kw'>=</span> <span class='kw pkg'>randomForest</span><span class='kw ns'>:::</span><span class='no'><a href='https://rdrr.io/pkg/randomForest/man/predict.randomForest.html'>predict.randomForest</a></span>
-                            , <span class='no'>m</span>
-                            , <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>3</span>
-                            , <span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>5</span>)
+ <span class='va'>pred</span> <span class='op'>=</span> <span class='fu'><a href='get_pdp_predictions.html'>get_pdp_predictions</a></span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>imp</span>
+                            , .f_predict <span class='op'>=</span> <span class='fu'>randomForest</span><span class='fu'>:::</span><span class='va'><a href='https://rdrr.io/pkg/randomForest/man/predict.randomForest.html'>predict.randomForest</a></span>
+                            , <span class='va'>m</span>
+                            , degree <span class='op'>=</span> <span class='fl'>3</span>
+                            , bins <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
 
 
- <span class='fu'>alluvial_model_response</span>(<span class='no'>pred</span>, <span class='no'>dspace</span>, <span class='no'>imp</span>, <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>'pdp'</span>)</div><div class='img'><img src='alluvial_model_response-2.png' alt='' width='700' height='433' /></div><div class='input'> # }
+ <span class='fu'>alluvial_model_response</span><span class='op'>(</span><span class='va'>pred</span>, <span class='va'>dspace</span>, <span class='va'>imp</span>, degree <span class='op'>=</span> <span class='fl'>3</span>, method <span class='op'>=</span> <span class='st'>'pdp'</span><span class='op'>)</span>
+</div><div class='img'><img src='alluvial_model_response-2.png' alt='' width='700' height='433' /></div><div class='input'> <span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -311,7 +313,7 @@ histograms are added to the plot later. Default = NULL</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
