@@ -28,7 +28,8 @@ Suggests:
     vdiffr (>= 0.3.1),
     parcats,
     pkgdown,
-    mlbench
+    mlbench,
+    earth
 RoxygenNote: 7.1.1
 Imports:
   purrr

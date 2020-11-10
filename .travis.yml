@@ -15,16 +15,17 @@ matrix:
     after_success:
     - export PKGDOWN=no
   - r: release
+    before_install:
+      - sudo apt-get update
+      - sudo apt-get -y install libharfbuzz-dev
+      - sudo apt-get -y install libfribidi-dev
     before_script: 
-      - apt-get update
-      - apt-get install libharfbuzz-dev -y
-      - apt-get install libfribidi-dev -y
+      - Rscript -e 'install.packages("textshaping")'
       - Rscript -e 'install.packages("tidyverse")'
       - Rscript -e "devtools::install_deps('.', dependencies = 'suggests')"
     script:
       - Rscript -e "devtools::check('.', error_on = 'note')"
       - Rscript -e "devtools::install('.')"
-      - Rscript -e 'install.packages("earth")'
       - Rscript -e 'pkgdown::build_site(run_dont_run = TRUE)'
     after_success:
       - Rscript -e 'covr::codecov()'
