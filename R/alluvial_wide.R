@@ -182,7 +182,16 @@ alluvial_wide = function( data
 
   data = data %>%
     manip_bin_numerics( bins, bin_labels, NA_label = NA_label, ... )
-
+  
+  # strings as factor
+  char_cols = names( select_if(data, is.character) )
+  char_cols = char_cols[ char_cols %in% variables]
+  
+  if(! is_empty(char_cols)){
+    data = data %>%
+      mutate_at( .vars = vars( one_of(char_cols) ), as.factor )
+  }
+    
   # to ensure dbplyr 0.8.0. compatibility we 
   # transform factors to character before grouping
   # and back after grouping
@@ -226,7 +235,7 @@ alluvial_wide = function( data
 
   # Prepare dataframe
 
-  # this code is a bit redundant but the different fill options require
+  # this code contains duplicated code sections but the different fill options require
   # different transformations. I have marked the sections where there are
   # differences with ## ***
 

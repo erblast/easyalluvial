@@ -12,30 +12,54 @@ r_packages:
 matrix:
   include:
   - r: devel
+    before_install:
+      - sudo apt-get update
+      - sudo apt-get -y install libharfbuzz-dev
+      - sudo apt-get -y install libfribidi-dev
     after_success:
     - export PKGDOWN=no
+    
   - r: release
+    before_install:
+      - sudo apt-get update
+      - sudo apt-get -y install libharfbuzz-dev
+      - sudo apt-get -y install libfribidi-dev
     before_script: 
-      - Rscript -e 'install.packages(c("earth", "tidyverse", "mlbench", "pkgdown"))'
+      - Rscript -e 'install.packages("tidyverse")'
       - Rscript -e "devtools::install_deps('.', dependencies = 'suggests')"
     script:
       - Rscript -e "devtools::check('.', error_on = 'note')"
+      - Rscript -e "devtools::install('.')"
       - Rscript -e 'pkgdown::build_site(run_dont_run = TRUE)'
     after_success:
       - Rscript -e 'covr::codecov()'
       - export PKGDOWN=yes
+      
   - r: release
     name: tidyr-devel
+    before_install:
+      - sudo apt-get update
+      - sudo apt-get -y install libharfbuzz-dev
+      - sudo apt-get -y install libfribidi-dev
     before_script: Rscript -e "remotes::install_github('tidyverse/tidyr')"
     after_success:
     - export PKGDOWN=no
   - r: release
     name: dplyr-devel
+    before_install:
+      - sudo apt-get update
+      - sudo apt-get -y install libharfbuzz-dev
+      - sudo apt-get -y install libfribidi-dev
     before_script: Rscript -e "remotes::install_github('tidyverse/dplyr')"
     after_success:
     - export PKGDOWN=no
+    
   - r: release
     name: parcats-devel
+    before_install:
+      - sudo apt-get update
+      - sudo apt-get -y install libharfbuzz-dev
+      - sudo apt-get -y install libfribidi-dev
     script:
       - git clone https://github.com/erblast/parcats.git
       - git clone https://github.com/erblast/easyalluvial.git

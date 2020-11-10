@@ -142,3 +142,11 @@ test_that('alluvial_wide'
   })
 
 
+test_that('alluvial_wide_all_char_cols',{
+  p = mtcars2 %>%
+    select_if(is.factor) %>%
+    mutate_all(as.character) %>%
+    alluvial_wide()  
+  
+  expect_true("ggplot" %in% class(p))
+})

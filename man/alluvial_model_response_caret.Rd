@@ -16,6 +16,7 @@ alluvial_model_response_caret(
   pred_train = NULL,
   stratum_label_size = 3.5,
   force = F,
+  pred_var = NULL,
   ...
 )
 }
@@ -53,6 +54,9 @@ histograms are added to the plot later. Default = NULL}
 \item{stratum_label_size}{numeric, Default: 3.5}
 
 \item{force}{logical, force plotting of over 1500 flows, Default: FALSE}
+
+\item{pred_var}{character, sometimes target variable cannot be inferred and
+needs to be passed. Default NULL}
 
 \item{...}{additional parameters passed to
 \code{\link[easyalluvial]{alluvial_wide}}}
