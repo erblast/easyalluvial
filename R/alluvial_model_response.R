@@ -339,6 +339,49 @@ get_pdp_predictions = function(df, imp, m, degree = 4, bins = 5, .f_predict = pr
   return(pred_results)
 }
 
+get_pdp_predictions_parallel = function(df, imp, m, degree = 4, bins = 5, .f_predict = predict){
+  
+  dspace = get_data_space(df, imp, degree, bins)
+  
+  if(degree == nrow(imp) ){
+    return( .f_predict(m, newdata = dspace) )
+  }
+  
+  df_trunc = select(df, one_of( names(dspace)[(degree + 1) : ncol(dspace)] ) )
+  
+  get_preds_per_row <- function(i){
+    
+    sub_dspace = df_trunc[i,] %>%
+      sample_n(nrow(dspace), replace = T )
+    
+    sub_dspace = dspace[,1:degree] %>%
+      bind_cols(sub_dspace)
+    
+    pred = .f_predict(m, newdata = sub_dspace)
+    p()
+    
+    return(pred)
+  }
+  
+  progressr::handlers("progress")
+  along <- seq(1, nrow(df))
+  
+  progressr::with_progress({
+    p <- progressr::progressor(along = along)
+    preds <- furrr::future_map(
+      along,
+      get_preds_per_row,
+      .options = furrr::furrr_options(seed = 1)
+      )
+  })
+  
+  mean_pred <- preds %>%
+    as.data.frame() %>%
+    rowMeans()
+  
+  return(mean_pred)
+  
+}
 
 get_cuts = function( from, target, ... ){
 

@@ -33,15 +33,23 @@ test_that('pdp_methods'
     m = randomForest::randomForest( disp ~ ., df)
     imp = m$importance
     
-    pred = get_pdp_predictions(df, imp
+    pred_seq = get_pdp_predictions(df, imp
                                 #, .f_predict = predict
                                 , m
                                 , degree = 3
                                 , bins = 5)
     
+    pred_parallel =  get_pdp_predictions_parallel(df, imp
+                                         , .f_predict = randomForest:::predict.randomForest
+                                         , m
+                                         , degree = 3
+                                         , bins = 5)
+    
+    expect_true(all(near(pred_seq, pred_parallel)))
+    
     dspace = get_data_space(df, imp, degree = 3)
     
-    p = alluvial_model_response(pred, dspace, imp, degree = 3, method = 'pdp')
+    p = alluvial_model_response(pred_seq, dspace, imp, degree = 3, method = 'pdp')
     
     vdiffr::expect_doppelganger('model_response_pdb', p)
     
