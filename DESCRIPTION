@@ -29,7 +29,8 @@ Suggests:
     parcats,
     pkgdown,
     mlbench,
-    earth
+    earth,
+    workflows
 RoxygenNote: 7.1.1
 Imports:
   purrr
@@ -50,4 +51,6 @@ Imports:
   , gridExtra
   , randomForest
   , e1071
+  , parsnip
+  , vip
 Language: en-US

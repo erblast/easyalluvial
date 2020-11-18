@@ -782,6 +782,152 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
   return(p)
 }
 
+#'@title create model response plot for parsnip models
+#'@description Wraps \code{\link[easyalluvial]{alluvial_model_response}} and
+#'  \code{\link[easyalluvial]{get_data_space}} into one call for parsnip models.
+#'@param m parsnip model
+#'@param data_input dataframe, input data
+#'@param degree integer,  number of top important variables to select. For
+#'  plotting more than 4 will result in two many flows and the alluvial plot
+#'  will not be very readable, Default: 4
+#'@param bins integer, number of bins for numeric variables, increasing this
+#'  number might result in too many flows, Default: 5
+#'@param bin_labels labels for the bins from low to high, Default: c("LL", "ML",
+#'  "M", "MH", "HH")
+#'@param col_vector_flow, character vector, defines flow colours, Default:
+#'  c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')
+#'@param method, character vector, one of c('median', 'pdp') \describe{
+#'  \item{median}{sets variables that are not displayed to median mode, use with
+#'  regular predictions} \item{pdp}{partial dependency plot method, for each
+#'  observation in the training data the displayed variableas are set to the
+#'  indicated values. The predict function is called for each modified
+#'  observation and the result is averaged} }. Default: 'median'
+#'@param params_bin_numeric_pred list, additional parameters passed to
+#'  \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
+#'  parameter. Default: list( bins = 5, center = T, transform = T, scale = T)
+#'@param force logical, force plotting of over 1500 flows, Default: FALSE
+#'@param pred_train numeric vector, base the automated binning of the pred vector on
+#'  the distribution of the training predictions. This is useful if marginal
+#'  histograms are added to the plot later. Default = NULL
+#'@param stratum_label_size numeric, Default: 3.5
+#'@param pred_var character, sometimes target variable cannot be inferred and
+#'needs to be passed. Default NULL
+#'@param .f_imp vip function that gets importance, Default: vip::vi_model
+#'@param ... additional parameters passed to
+#'  \code{\link[easyalluvial]{alluvial_wide}}
+#'@return ggplot2 object
+#'@details this model visualisation approach follows the "visualising the model
+#'  in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
+#'  (2015) Visualizing statistical models: Removing the blindfold. Statistical
+#'  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
+#' @examples
+#' df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
+#'
+#' m = parsnip::rand_forest(mode = "regression") %>%
+#'    parsnip::set_engine("randomForest") %>%
+#'    parsnip::fit(disp ~ ., data = df)
+#'
+#' alluvial_model_response_parsnip(m, df, degree = 3)
+#'
+#' # partial dependency plotting method
+#' \dontrun{
+#' alluvial_model_response_parsnip(m, df, degree = 3, method = 'pdp')
+#'  }
+#'@seealso \code{\link[easyalluvial]{alluvial_wide}},
+#'  \code{\link[easyalluvial]{get_data_space}}, \code{\link[caret]{varImp}},
+#'  \code{\link[caret]{extractPrediction}},
+#'  \code{\link[easyalluvial]{get_data_space}},
+#'  \code{\link[easyalluvial]{get_pdp_predictions}}
+#'@rdname alluvial_model_response_parsnip
+#'@importFrom vip vi_model
+#'@importFrom parsnip predict.model_fit
+#'@export
+alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
+                                         , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
+                                         , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#9DD1D1')
+                                         , method = 'median'
+                                         , params_bin_numeric_pred = list( center = T, transform = T, scale = T)
+                                         , pred_train = NULL
+                                         , stratum_label_size = 3.5
+                                         , force = F
+                                         , pred_var = NULL
+                                         , .f_imp = vip::vi_model
+                                         , ...){
+  
+  
+  if( ! 'model_fit' %in% class(m) ){
+    stop( paste( 'm needs to be of class "model_fit" instead got object of class'
+                 , paste( class(m), collapse = ', ' ) ) )
+  }
+  
+  if( ! method %in% c('median', 'pdp') ){
+    stop( paste('parameter method needs to be one of c("median","pdp") instead got:', method) )
+  }
+  
+  imp = .f_imp(m) %>%
+    select(Variable, Importance)
+  
+  pred_vars = colnames(attr(m$preproc$terms, "factors"))
+  resp_var = m$preproc$y_var
+  
+
+  # For some models features with zero imp do not occur in imp table, they need to be re-added
+  if(! all(pred_vars %in% imp$Variable)){
+
+    vars_zero = pred_vars[! pred_vars %in% imp$Variable]
+    
+    imp_df_zero = tibble(Variable = vars_zero, Importance = 0)
+    
+    imp = bind_rows(imp, imp_df_zero)
+    
+  }
+  
+  dspace = get_data_space(data_input, imp, degree = degree, bins = bins)
+
+  if( method == 'median'){
+    pred = predict(m, new_data = dspace)
+  }
+  
+  if( method == 'pdp'){
+    
+    # parsnip predict function uses new_data instead of newdata
+    wr_predict <- function(..., newdata){
+      predict(..., new_data = newdata)
+    }
+    
+    pred = get_pdp_predictions(data_input, imp
+                               , .f_predict = wr_predict
+                               , m = m
+                               , degree = degree
+                               , bins = bins)
+    
+  }
+  
+  if(m$spec$mode == "classification") {
+    pred = pred$.pred_class
+  } else{
+    pred = pred$.pred
+  }
+
+  p = alluvial_model_response(pred = pred
+                              , dspace = dspace
+                              , imp = imp
+                              , degree = degree
+                              , bins = bins
+                              , bin_labels = bin_labels
+                              , col_vector_flow = col_vector_flow
+                              , method = method
+                              , params_bin_numeric_pred = params_bin_numeric_pred
+                              , force = force
+                              , pred_train = pred_train
+                              , stratum_label_size = stratum_label_size
+                              , ... )
+  
+  
+  return(p)
+}
+
+
 #' @title calls e1071::skewness
 #' @description if e1071 is not listed a a dependency I get an error. I assume
 #'   caret uses it to calculate feature importance. However, e1071 is not listed

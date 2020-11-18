@@ -157,10 +157,25 @@ p_grid = add_marginal_histograms(p, df_inv)
 
 We can see that for the upper ranges of `lstat` a pretty specific combination values is required from 8 feature variables from `medv` until `tax` only then begin the flows to scatter over the entire range of the following variables. The lower range values of `lstat` start to scatter at `crim` or `dis`. Interestingly there seems to be a set of houses that branches off from the other houses in the lower range of `lstat` predictions already at the third feature, `age`. We could potentially explore this further, as a reminder you can get the binned input data for each alluvial plot by calling `p$data_key` and trace the variables of interest.
 
+# `parsnip` wrapper
+
+`parsnip` provides a tidyverse style uniform interface for training and calling a lot of machine learning models. `easyalluvial` provides a function that wraps the above described workflow into one single call using the `vip` package to get the feature importance. 
+
+```{r fig.height = 8, fig.width=10, cache = T}
+
+m = parsnip::rand_forest(mode = "regression") %>%
+  parsnip::set_engine("randomForest") %>%
+  parsnip::fit(lstat ~., df) 
+
+alluvial_model_response_parsnip(m, df, degree = 4, bins = 5
+                              , stratum_label_size = 2.8)
+
+```
+
 
 # `caret` wrapper
 
-`caret` provides a uniformous interface for training and calling a lot of machine learning models as well as for calculating feature importance. `easyalluvial` provides a function that wraps the above described workflow into one single call. Note that feature importance values can be slightly different. 
+`caret` similar to `parsnip` provides a uniform modeling syntax and also returns feature importance.
 
 ```{r fig.height = 8, fig.width=10, cache = T}
 
@@ -207,12 +222,17 @@ alluvial_model_response(pred, dspace, imp, degree = 4
 
 ```
 
-thanks to the uniform modelling interface of `caret` `alluvial_model_response_caret()` can call `get_pdp_predictions()` directly.
+thanks to the uniform modeling interface of `caret` and `parsnip` `alluvial_model_response_caret()`  and `alluvial_model_response_parsnip()` can call `get_pdp_predictions()` directly.
 
-```{r pdp_caret, fig.height = 8, fig.width=10, cache = T}
+```{r pdp_caret, fig.height = 8, fig.width=10, cache = T, eval = FALSE}
+
 alluvial_model_response_caret(train, degree = 4, bins = 5
                               , method = 'pdp'
                               , stratum_label_size = 2.8 )
+
+alluvial_model_response_parsnip(m, df, degree = 4, bins = 5
+                                , method = 'pdp'
+                                , stratum_label_size = 2.8)
 ```
 
 ## A note on feature importance

@@ -292,6 +292,92 @@ test_that('alluvial_model_response_caret'
 
   })
 
+test_that('alluvial_model_response_parsnip'
+          , {
+            
+  df = select(mtcars2, -ids)
+  
+  set.seed(1)
+  
+  m = parsnip::linear_reg(mode = "regression") %>%
+    parsnip::set_engine("lm")
+  
+  rec_prep = recipes::recipe(disp ~ ., df) %>%
+    recipes::prep()
+  
+  m_form = parsnip::fit(m, disp ~ ., df)
+  
+  wf <- workflows::workflow() %>%
+    workflows::add_model(m) %>%
+    workflows::add_recipe(rec_prep) %>%
+    parsnip::fit(df)
+  
+  m_wf <- workflows::pull_workflow_fit(wf)
+  
+  p = alluvial_model_response_parsnip(m_form, df, degree = 3)
+  p = alluvial_model_response_parsnip(m_wf, df, degree = 3)
+  
+  p = alluvial_model_response_parsnip(m_form, df, degree = 3, method = 'pdp')
+
+  set.seed(0)
+  
+  m_rf = parsnip::rand_forest(mode = "regression") %>%
+    parsnip::set_engine("randomForest") %>%
+    parsnip::fit(disp ~ ., df)
+  
+  p = alluvial_model_response_parsnip(m_rf, df, degree = 3)
+  
+  # change bin labels
+  p = alluvial_model_response_parsnip(m_rf, df, degree = 3, bin_labels =  c('A','B','C','D','E') )
+  
+  # categorical bivariate response 
+  set.seed(1)
+  
+  m_rf = parsnip::rand_forest(mode = "classification") %>%
+    parsnip::set_engine("randomForest") %>%
+    parsnip::fit(am ~ ., df)
+  
+  p = alluvial_model_response_parsnip(m_rf, df, degree = 3)
+  
+  # categorical multivariate response
+  set.seed(1)
+  
+  m_rf = parsnip::rand_forest(mode = "classification") %>%
+    parsnip::set_engine("randomForest") %>%
+    parsnip::fit(cyl ~ ., df)
+  
+  p = alluvial_model_response_parsnip(m_rf, df, degree = 3)
+  
+  # all facs
+  set.seed(1)
+  
+  df = titanic %>%
+    select_if( is.factor )
+  
+  m_rf = parsnip::rand_forest(mode = "classification") %>%
+    parsnip::set_engine("randomForest") %>%
+    parsnip::fit(Survived ~ ., df)
+  
+  p = alluvial_model_response_parsnip(m_rf, df, degree = 3)
+
+  # all nums
+  set.seed(1)
+  
+  df = select(mtcars2, -ids) %>%
+    select_if( is.numeric )
+  
+  m_rf = parsnip::rand_forest(mode = "regression") %>%
+    parsnip::set_engine("randomForest") %>%
+    parsnip::fit(disp ~ ., df)
+  
+  p = alluvial_model_response_parsnip(m_rf, df, degree = 3)
+
+  p_grid = add_marginal_histograms(p, data_input = df, plot = F) %>%
+    add_imp_plot(p, df, plot = FALSE)
+  
+})
+
+
 test_that('params_bin_numeric_pred',{
   
   # alluvial_model_response_caret
