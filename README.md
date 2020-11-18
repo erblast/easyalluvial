@@ -213,7 +213,7 @@ m = parsnip::rand_forest(mode = "regression") %>%
   parsnip::set_engine("randomForest") %>%
   parsnip::fit(disp ~ ., df)
 
-p = alluvial_model_response_parsnip(m, df, degree = 4)
+p = alluvial_model_response_parsnip(m, df, degree = 4, method = "pdp")
 
 p_grid = add_marginal_histograms(p, df, plot = F) %>%
   add_imp_plot(p, df)

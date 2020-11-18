@@ -7,7 +7,7 @@ output:
 editor_options: 
   chunk_output_type: console
 ---
-In this tutorial I want to show how you can use alluvial plots to visualise model response in up to 4 dimensions. `easyalluvial` generates an artificial data space using fixed values for unplotted variables or uses the partial dependence plotting method. It is model agnostic but offers some convenient wrappers for `caret` models.
+In this tutorial I want to show how you can use alluvial plots to visualise model response in up to 4 dimensions. `easyalluvial` generates an artificial data space using fixed values for unplotted variables or uses the partial dependence plotting method. It is model agnostic but offers some convenient wrappers for `parsnip` and `caret` models.
 <!--more-->
 
 
