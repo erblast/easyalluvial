@@ -15,7 +15,7 @@ test_that('plot_imp'
   
   p_imp = plot_imp(p, mtcars2)
   
-  vdiffr::expect_doppelganger('plot_imp', p_imp)
+  expect_doppelganger('plot_imp', p_imp)
   
 })
 
