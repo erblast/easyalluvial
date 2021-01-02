@@ -7,7 +7,8 @@
 Status](https://travis-ci.org/erblast/easyalluvial.svg?branch=master)](https://travis-ci.org/erblast/easyalluvial)
 [![AppVeyor Build
 Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&svg=true)](https://ci.appveyor.com/project/erblast/easyalluvial)
-
+[![R build
+status](https://github.com/erblast/easyalluvial/workflows/R-CMD-check/badge.svg)](https://github.com/erblast/easyalluvial/actions)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg)](https://codecov.io/github/erblast/easyalluvial?branch=master)
 [![CRAN last
@@ -208,6 +209,19 @@ Custom Wrappers for other models can easily be created.
 ``` r
 
 df = select(mtcars2, -ids)
+<<<<<<< HEAD
+=======
+m = randomForest::randomForest( disp ~ ., df)
+imp = m$importance
+
+dspace = get_data_space(df, imp, degree = 4)
+
+pred = get_pdp_predictions(df, imp
+                           , m
+                           , degree = 4
+                           , bins = 5)
+#> Getting partial dependence plot preditions. This can take a while. See easyalluvial::get_pdp_predictions() `Details` on how to use multiprocessing
+>>>>>>> master
 
 m = parsnip::rand_forest(mode = "regression") %>%
   parsnip::set_engine("randomForest") %>%
