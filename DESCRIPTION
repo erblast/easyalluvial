@@ -2,7 +2,7 @@ Package: easyalluvial
 Title: Generate Alluvial Plots with a Single Line of Code
 Version: 0.2.3.900
 Authors@R: person( "Bjoern", "Koneswarakantha", role = c("aut","cre"), email = "datistics@gmail.com", comment = c(ORCID = "0000-0003-4585-7799") )
-URL: https://github.com/erblast/easyalluvial
+URL: https://github.com/erblast/easyalluvial/
 Description: Alluvial plots are similar to sankey diagrams and visualise categorical data 
     over multiple dimensions as flows. (Rosvall M, Bergstrom CT (2010) Mapping Change in 
     Large Networks. PLoS ONE 5(1): e8694. <doi:10.1371/journal.pone.0008694> 

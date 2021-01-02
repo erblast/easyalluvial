@@ -24,7 +24,8 @@ jobs:
         run: |
           install.packages(c("remotes", "rcmdcheck"))
           remotes::install_deps(dependencies = TRUE)
+          Sys.setenv('_R_CHECK_SYSTEM_CLOCK_' = 0)
         shell: Rscript {0}
       - name: Check
-        run: rcmdcheck::rcmdcheck(args = "--as-cran", error_on = "note")
+        run: rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-manual"), error_on = "note")
         shell: Rscript {0}
