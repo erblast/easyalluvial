@@ -19,7 +19,7 @@ Description: Alluvial plots are similar to sankey diagrams and visualise categor
 License: CC0
 Encoding: UTF-8
 LazyData: true
-Depends: R(>= 2.10)
+Depends: R(>= 3.5)
 Suggests: 
     testthat,
     covr,
@@ -29,7 +29,14 @@ Suggests:
     parcats,
     pkgdown,
     mlbench,
-    earth
+    earth,
+    workflows,
+    future,
+    furrr,
+    e1071,
+    caret,
+    parsnip,
+    vip
 RoxygenNote: 7.1.1
 Imports:
   purrr
@@ -45,9 +52,8 @@ Imports:
   , stringr
   , magrittr
   , tibble
-  , caret
-  , progress
   , gridExtra
   , randomForest
-  , e1071
+  , progressr
+  , progress
 Language: en-US

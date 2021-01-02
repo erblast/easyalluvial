@@ -10,13 +10,13 @@ test_that('alluvial_long'
 
   # flow coloring variants
   p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill = carrier )
-  vdiffr::expect_doppelganger('long_fill_carrier', p)
+  expect_doppelganger('long_fill_carrier', p)
   p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'last_variable' )
-  vdiffr::expect_doppelganger('long_fill_last', p)
+  expect_doppelganger('long_fill_last', p)
   p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'first_variable' )
-  vdiffr::expect_doppelganger('long_fill_first', p)
+  expect_doppelganger('long_fill_first', p)
   p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'all_flows' )
-  vdiffr::expect_doppelganger('long_fill_value', p)
+  expect_doppelganger('long_fill_value', p)
   p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'value' )
 
   # strings instead of unquoted expressions
@@ -28,23 +28,23 @@ test_that('alluvial_long'
                        , col_vector_flow = palette_qualitative() %>% palette_filter(greys = F, bright = F)
                        , col_vector_value = palette_qualitative() %>% palette_filter(greys = F, bright = F) )
 
-  vdiffr::expect_doppelganger('long_sprecify_color', p)
+  expect_doppelganger('long_sprecify_color', p)
   
   # move fill variable to the left
   p = alluvial_long( data, qu, mean_arr_delay, tailnum, carrier ,fill_right = F )
   
-  vdiffr::expect_doppelganger('long_fill_to_right', p)
+  expect_doppelganger('long_fill_to_right', p)
   
   # reorder levels
   p = alluvial_long( data, qu, mean_arr_delay, tailnum, fill_by = 'first_variable'
                        , order_levels_value = c('on_time', 'late') )
   
-  vdiffr::expect_doppelganger('long_reorder_y_levels', p)
+  expect_doppelganger('long_reorder_y_levels', p)
   
   p = alluvial_long( data, qu, mean_arr_delay, tailnum, fill_by = 'first_variable'
                        , order_levels_key = c('Q4', 'Q3', 'Q2', 'Q1') )
   
-  vdiffr::expect_doppelganger('long_reorder_x_levels', p)
+  expect_doppelganger('long_reorder_x_levels', p)
   
   order_by_carrier_size = data %>%
     group_by(carrier) %>%
@@ -55,7 +55,7 @@ test_that('alluvial_long'
   p = alluvial_long( data, qu, mean_arr_delay, tailnum, carrier
                        , order_levels_fill = order_by_carrier_size )
 
-  vdiffr::expect_doppelganger('long_reorder_carrier_by_size', p)
+  expect_doppelganger('long_reorder_carrier_by_size', p)
   
   #check integritiy of returned dataframe
   expect_equivalent( unique(data$tailnum), levels( p$data_key$tailnum ) )
@@ -71,7 +71,7 @@ test_that('alluvial_long'
                      , order_levels_value = 'none')
   
   # comes up as false positive try again with next vdiffr version
-  #vdiffr::expect_doppelganger('long_none_label', p)
+  #expect_doppelganger('long_none_label', p)
   
 
   # check stratum options
@@ -80,7 +80,7 @@ test_that('alluvial_long'
                      , stratum_labels = FALSE, stratum_width = 1/20)
   
   # comes up as false positive try again with next vdiffr version
-  #vdiffr::expect_doppelganger('long_strat_width', p)
+  #expect_doppelganger('long_strat_width', p)
   
   # switch off automatic  label angling
 
@@ -111,10 +111,10 @@ test_that('alluvial_long'
   # numeric sample data
   
   p = alluvial_long(quarterly_sunspots, key = qu, value = spots, id = year)
-  vdiffr::expect_doppelganger('long_all_nums', p)
+  expect_doppelganger('long_all_nums', p)
   
   p = alluvial_long(quarterly_sunspots, key = qu, value = spots, id = year, fill = mean_spots_per_year)
-  vdiffr::expect_doppelganger('long_all_nums_plus_fill', p)
+  expect_doppelganger('long_all_nums_plus_fill', p)
   
 
 })

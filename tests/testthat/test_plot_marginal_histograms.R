@@ -13,17 +13,17 @@ test_that('plot_hist_as_margins',{
   
   set.seed(1)
   p = plot_hist('cyl', p_wide, mtcars2)
-  vdiffr::expect_doppelganger('plot_hist_wide_cat', p)
+  expect_doppelganger('plot_hist_wide_cat', p)
 
   set.seed(1)
   p = plot_hist('disp',p_wide, mtcars2)
-  vdiffr::expect_doppelganger('plot_hist_wide_num', p)
+  expect_doppelganger('plot_hist_wide_num', p)
   
   set.seed(1)
   p = add_marginal_histograms(p_wide, mtcars2, plot = F)
   
   # gtables not yet supported by vdiffr
-  # vdiffr::expect_doppelganger('marg_hist_wide', p)
+  # expect_doppelganger('marg_hist_wide', p)
   
   
   # long numeric---------------------------------------
@@ -33,29 +33,29 @@ test_that('plot_hist_as_margins',{
   
   set.seed(1)
   p = plot_hist('Q1',p_long, quarterly_sunspots)
-  vdiffr::expect_doppelganger('plot_hist_long_num', p)
+  expect_doppelganger('plot_hist_long_num', p)
   
   set.seed(1)
   p = add_marginal_histograms(p_long, quarterly_sunspots, plot = F)
   
   # gtables not yet supported by vdiffr
-  # vdiffr::expect_doppelganger('marg_hist_long', p)
+  # expect_doppelganger('marg_hist_long', p)
   
   p_long = alluvial_long(quarterly_sunspots, key = qu, value = spots
                      , id = year, fill = mean_spots_per_year)
   set.seed(1)
   p = plot_hist('Q1',p_long, quarterly_sunspots)
-  vdiffr::expect_doppelganger('plot_hist_long_num_has_fill', p)
+  expect_doppelganger('plot_hist_long_num_has_fill', p)
   
   set.seed(1)
   p = plot_hist('mean_spots_per_year',p_long, quarterly_sunspots)
-  vdiffr::expect_doppelganger('plot_hist_long_num_is_fill', p)
+  expect_doppelganger('plot_hist_long_num_is_fill', p)
   
   set.seed(1)
   p = add_marginal_histograms(p_long, quarterly_sunspots, plot = F)
   
   # gtables not yet supported by vdiffr
-  # vdiffr::expect_doppelganger('marg_hist_long_num_fill', p)
+  # expect_doppelganger('marg_hist_long_num_fill', p)
   
   
   # long categoric --------------------------------------
@@ -65,17 +65,17 @@ test_that('plot_hist_as_margins',{
   
   set.seed(1)
   p = plot_hist('Q1', p_long, quarterly_flights)
-  vdiffr::expect_doppelganger('plot_hist_long_cat', p)
+  expect_doppelganger('plot_hist_long_cat', p)
   
   set.seed(1)
   p = plot_hist('carrier', p_long, quarterly_flights)
-  vdiffr::expect_doppelganger('plot_hist_long_cat_fill', p)
+  expect_doppelganger('plot_hist_long_cat_fill', p)
   
   set.seed(1)
   p = add_marginal_histograms(p_long, quarterly_flights, plot = F)
   
   # gtables not yet supported by vdiffr
-  # vdiffr::expect_doppelganger('marg_hist_long_cat-fill', p)
+  # expect_doppelganger('marg_hist_long_cat-fill', p)
   
   # model response numeric ----------------------------------
   set.seed(1)
@@ -87,34 +87,34 @@ test_that('plot_hist_as_margins',{
   p_mod_num = alluvial_model_response_caret(train, degree = 3)
   
   p = plot_hist('pred', p_mod_num, df)
-  vdiffr::expect_doppelganger('mod_num_pred', p)
+  expect_doppelganger('mod_num_pred', p)
   
   p = plot_hist('carb', p_mod_num, df)
-  vdiffr::expect_doppelganger('mod_num_cat', p)
+  expect_doppelganger('mod_num_cat', p)
 
   p = plot_hist('wt', p_mod_num, df)
-  vdiffr::expect_doppelganger('mod_num_num', p)
+  expect_doppelganger('mod_num_num', p)
   
   p_grid = add_marginal_histograms(p_mod_num, df, plot = F)
   
   # gtables not yet supported by vdiffr
-  # vdiffr::expect_doppelganger('marg_hist_mod_num', p_grid)
+  # expect_doppelganger('marg_hist_mod_num', p_grid)
   
   p_grid = add_marginal_histograms(p_mod_num, df, keep_labels = T, plot = F)
   
   # gtables not yet supported by vdiffr
-  # vdiffr::expect_doppelganger('marg_hist_mod_num_labels', p_grid)
+  # expect_doppelganger('marg_hist_mod_num_labels', p_grid)
   
   p_mod_num = alluvial_model_response_caret(train, degree = 3
                                     , pred_train = predict(train, mtcars2))
   
   p = plot_hist('pred', p_mod_num, df)
-  vdiffr::expect_doppelganger('mod_num_pred_train', p)
+  expect_doppelganger('mod_num_pred_train', p)
   
   p_grid = add_marginal_histograms(p_mod_num, df, keep_labels = T, plot = F)
   
   # gtables not yet supported by vdiffr
-  # vdiffr::expect_doppelganger('marg_hist_mod_num_pred_train', p_grid)
+  # expect_doppelganger('marg_hist_mod_num_pred_train', p_grid)
 
   # model response categoric --------------------------------
   set.seed(1)
@@ -127,15 +127,15 @@ test_that('plot_hist_as_margins',{
   p_mod_cat = alluvial_model_response_caret(train, degree = 3)
   
   p = plot_hist('pred', p_mod_cat, df, pred_train = predict(train, mtcars2))
-  vdiffr::expect_doppelganger('mod_cat_pred_train', p)
+  expect_doppelganger('mod_cat_pred_train', p)
   
   p = plot_hist('pred', p_mod_cat, df )
-  vdiffr::expect_doppelganger('mod_cat_pred', p)
+  expect_doppelganger('mod_cat_pred', p)
   
   p_grid = add_marginal_histograms(p_mod_cat, df, keep_labels = T, pred_train = predict(train, mtcars2), plot = F )
 
   # gtables not yet supported by vdiffr
-  # vdiffr::expect_doppelganger('marg_hist_mod_cat_pred_train', p_grid)
+  # expect_doppelganger('marg_hist_mod_cat_pred_train', p_grid)
   
 })
 
