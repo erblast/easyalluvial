@@ -18,3 +18,5 @@
 ^vignettes$
 ^tests/figs$
 ^\.github$
+^README.md$
+^NEWS.md$
