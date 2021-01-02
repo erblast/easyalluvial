@@ -7,7 +7,8 @@
 Status](https://travis-ci.org/erblast/easyalluvial.svg?branch=master)](https://travis-ci.org/erblast/easyalluvial)
 [![AppVeyor Build
 Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&svg=true)](https://ci.appveyor.com/project/erblast/easyalluvial)
-
+[![R build
+status](https://github.com/erblast/easyalluvial/workflows/R-CMD-check/badge.svg)](https://github.com/erblast/easyalluvial/actions)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg)](https://codecov.io/github/erblast/easyalluvial?branch=master)
 [![CRAN last
@@ -216,6 +217,7 @@ pred = get_pdp_predictions(df, imp
                            , m
                            , degree = 4
                            , bins = 5)
+#> Getting partial dependence plot preditions. This can take a while. See easyalluvial::get_pdp_predictions() `Details` on how to use multiprocessing
 
 
 p = alluvial_model_response(pred, dspace, imp
@@ -257,3 +259,4 @@ interface for doing statistics with `R`.
   - [`ggalluvial`](https://github.com/corybrunson/ggalluvial/)
   - [`alluvial`](https://github.com/mbojan/alluvial)
   - [`networkD3`](https://github.com/christophergandrud/networkD3)
+  - [`ggbump`](https://github.com/davidsjoberg/ggbump)
