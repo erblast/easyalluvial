@@ -23,14 +23,10 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@master
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", "rcmdcheck", "devtools", "tidyverse", "pkgdown"))
-          devtools::install()
-          devtools::install_deps(dependencies = 'suggests')
+          install.packages(c("remotes", "rcmdcheck", "tidyverse", "pkgdown"))
+          remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       - name: Check
         run: |
           pkgdown::build_articles()
-          system("git clone https://github.com/erblast/parcats.git")
-          devtools::install_deps('parcats/', dependencies = 'suggests')
-          devtools::check('parcats/', error_on = 'note')
         shell: Rscript {0}

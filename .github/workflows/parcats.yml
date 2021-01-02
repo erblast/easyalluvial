@@ -24,10 +24,10 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "devtools"))
+          remotes::install_deps(dependencies = TRUE)
           devtools::install()
-          devtools::install_deps(dependencies = 'suggests')
           system("git clone https://github.com/erblast/parcats.git")
-          devtools::install_deps('parcats/', dependencies = 'suggests')
+          remotes::install_deps("parcats/", dependencies = TRUE)
         shell: Rscript {0}
       - name: Check
         run: |
