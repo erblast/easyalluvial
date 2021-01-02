@@ -27,5 +27,10 @@ jobs:
           Sys.setenv('_R_CHECK_SYSTEM_CLOCK_' = 0)
         shell: Rscript {0}
       - name: Check
-        run: rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-manual"), error_on = "note")
+        run: |
+          rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-manual"), error_on = "note")
+          pkgdown::build_articles()
+          system("git clone https://github.com/erblast/parcats.git")
+          devtools::install_deps('parcats/', dependencies = 'suggests')
+          devtools::check('parcats/', error_on = 'note')
         shell: Rscript {0}
