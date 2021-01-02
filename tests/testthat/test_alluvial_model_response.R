@@ -25,6 +25,31 @@ test_that('get_data_space'
 })
 
 
+test_that('pdp_parallel',{
+  
+  skip_if_not_installed("furrr")
+  
+  set.seed(0)
+  
+  df = select(mtcars2, -ids)
+  m = randomForest::randomForest( disp ~ ., df)
+  imp = m$importance
+  
+  pred_seq_old = get_pdp_predictions_seq(df, imp
+                                         , m
+                                         , degree = 3
+                                         , bins = 5)
+  
+  
+
+  pred_parallel =  pdp_predictions(df, imp
+                                   , m
+                                   , degree = 3
+                                   , bins = 5
+                                   , parallel = TRUE)
+  
+  expect_true(all(near(pred_seq_old, pred_parallel)))
+})
 
 test_that('pdp_methods'
   ,{
@@ -47,15 +72,9 @@ test_that('pdp_methods'
                                , bins = 5
                                , parallel = FALSE)
     
-    pred_parallel =  pdp_predictions(df, imp
-                                     , m
-                                     , degree = 3
-                                     , bins = 5
-                                     , parallel = TRUE)
-    
+
     expect_true(all(near(pred_seq, pred_seq_old)))
-    expect_true(all(near(pred_seq, pred_parallel)))
-    
+
     dspace = get_data_space(df, imp, degree = 3)
     
     p = alluvial_model_response(pred_seq, dspace, imp, degree = 3, method = 'pdp')
@@ -79,12 +98,7 @@ test_that('pdp_methods_classification_non_binary'
                                , bins = 5
                                , parallel = FALSE)
     
-    pred_parallel =  pdp_predictions(df, imp
-                                      , m
-                                      , degree = 3
-                                      , bins = 5
-                                      , parallel = TRUE)
-    
+
     dspace = get_data_space(df, imp, degree = 3)
     
     p = alluvial_model_response(pred_seq, dspace, imp, degree = 3, method = 'pdp')
@@ -266,6 +280,8 @@ test_that('alluvial_model_response'
 
 test_that('alluvial_model_response_caret'
           , {
+  
+  skip_if_not_installed("caret")
             
   df = select(mtcars2, -ids)
   
@@ -341,7 +357,9 @@ test_that('alluvial_model_response_caret'
 
 test_that('alluvial_model_response_parsnip'
           , {
-            
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("vip")
+  
   df = select(mtcars2, -ids)
   
   set.seed(1)

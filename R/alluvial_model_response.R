@@ -9,6 +9,21 @@ check_degree = function(degree, imp, df){
   return(degree)
 }
 
+check_pkg_installed = function(pkg){
+  
+  is_installed <- try({
+    suppressPackageStartupMessages(requireNamespace(pkg, quietly = TRUE))
+  })
+  
+  msg <- paste("Please install package `", pkg, "`")
+  
+  if(! is_installed){
+    stop(msg)
+  }
+  
+  return(TRUE)
+}
+
 #' @title tidy up dataframe containing model feature importance
 #' @description returns dataframe with exactly two columns, vars and imp and
 #'   aggregates dummy encoded variables. Helper function called by all functions
@@ -336,17 +351,11 @@ get_pdp_predictions = function(df, imp, m, degree = 4, bins = 5,
       )
     
   }else{
-    
-    furrr_installed <- try({
-      suppressPackageStartupMessages(requireNamespace("furrr", quietly = TRUE))
-    })
-    
-    stopifnot( "Please install package `furrr`" = furrr_installed)
-    
+    check_pkg_installed("furrr")
   }
   
   pred_results = pdp_predictions(df = df, imp = imp, m = m, degree = degree
-                                 , bins = bins, .f_predict = .f_predict, parallel = TRUE)
+                                 , bins = bins, .f_predict = .f_predict, parallel = parallel)
   
   return(pred_results)
   
@@ -833,7 +842,6 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'  \code{\link[easyalluvial]{get_pdp_predictions}}
 #'@rdname alluvial_model_response_caret
 #'@export
-#'@importFrom caret varImp predict.train
 alluvial_model_response_caret = function(train, degree = 4, bins = 5
                                          , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
                                          , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#9DD1D1')
@@ -856,7 +864,8 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
     stop( paste('parameter method needs to be one of c("median","pdp") instead got:', method) )
   }
 
-
+  check_pkg_installed("caret")
+  
   imp = caret::varImp( train )
   imp = imp$importance
   
@@ -978,8 +987,6 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 #'  \code{\link[easyalluvial]{get_data_space}},
 #'  \code{\link[easyalluvial]{get_pdp_predictions}}
 #'@rdname alluvial_model_response_parsnip
-#'@importFrom vip vi_model
-#'@importFrom parsnip predict.model_fit
 #'@export
 alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
                                          , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
@@ -1003,6 +1010,9 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
   if( ! method %in% c('median', 'pdp') ){
     stop( paste('parameter method needs to be one of c("median","pdp") instead got:', method) )
   }
+  
+  check_pkg_installed("parsnip")
+  check_pkg_installed("vip")
   
   imp = .f_imp(m) %>%
     select(Variable, Importance)
@@ -1075,20 +1085,5 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
   return(p)
 }
 
-
-#' @title calls e1071::skewness
-#' @description if e1071 is not listed a a dependency I get an error. I assume
-#'   caret uses it to calculate feature importance. However, e1071 is not listed
-#'   as a caret dependency. I have to add a function that directly calls it, so
-#'   I do not get a NOTE from RMD Check on Linux.
-#' @param x PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @seealso \code{\link[e1071]{skewness}}
-#' @rdname use_e1071
-#' @noRd
-#' @importFrom e1071 skewness
-use_e1071 = function(x){
-  e1071::skewness(x)
-}
 
 
