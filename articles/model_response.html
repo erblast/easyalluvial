@@ -112,7 +112,7 @@
 
     
     
-<p>In this tutorial I want to show how you can use alluvial plots to visualise model response in up to 4 dimensions. <code>easyalluvial</code> generates an artificial data space using fixed values for unplotted variables or uses the partial dependence plotting method. It is model agnostic but offers some convenient wrappers for <code>caret</code> models. <!--more--></p>
+<p>In this tutorial I want to show how you can use alluvial plots to visualise model response in up to 4 dimensions. <code>easyalluvial</code> generates an artificial data space using fixed values for unplotted variables or uses the partial dependence plotting method. It is model agnostic but offers some convenient wrappers for <code>parsnip</code> and <code>caret</code> models. <!--more--></p>
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
@@ -156,55 +156,55 @@
 <tbody>
 <tr class="odd">
 <td align="left">medv</td>
-<td align="right">8445.3148</td>
+<td align="right">8010.1107</td>
 </tr>
 <tr class="even">
 <td align="left">rm</td>
-<td align="right">3500.5971</td>
+<td align="right">3444.7931</td>
 </tr>
 <tr class="odd">
 <td align="left">age</td>
-<td align="right">2815.5785</td>
+<td align="right">2904.6964</td>
 </tr>
 <tr class="even">
-<td align="left">crim</td>
-<td align="right">2170.6899</td>
+<td align="left">indus</td>
+<td align="right">2432.7104</td>
 </tr>
 <tr class="odd">
-<td align="left">indus</td>
-<td align="right">2157.8868</td>
+<td align="left">crim</td>
+<td align="right">2358.1212</td>
 </tr>
 <tr class="even">
 <td align="left">nox</td>
-<td align="right">2008.8394</td>
+<td align="right">1921.6817</td>
 </tr>
 <tr class="odd">
 <td align="left">dis</td>
-<td align="right">1717.9988</td>
+<td align="right">1860.4539</td>
 </tr>
 <tr class="even">
-<td align="left">tax</td>
-<td align="right">700.4756</td>
+<td align="left">b</td>
+<td align="right">727.5954</td>
 </tr>
 <tr class="odd">
-<td align="left">b</td>
-<td align="right">675.0368</td>
+<td align="left">tax</td>
+<td align="right">643.9702</td>
 </tr>
 <tr class="even">
 <td align="left">ptratio</td>
-<td align="right">403.8507</td>
+<td align="right">384.5696</td>
 </tr>
 <tr class="odd">
 <td align="left">rad</td>
-<td align="right">227.3464</td>
+<td align="right">184.9706</td>
 </tr>
 <tr class="even">
-<td align="left">zn</td>
-<td align="right">136.1796</td>
+<td align="left">chas</td>
+<td align="right">130.0738</td>
 </tr>
 <tr class="odd">
-<td align="left">chas</td>
-<td align="right">107.1972</td>
+<td align="left">zn</td>
+<td align="right">128.8358</td>
 </tr>
 </tbody>
 </table>
@@ -221,167 +221,167 @@
 <th align="right">medv</th>
 <th align="right">rm</th>
 <th align="right">age</th>
-<th align="right">crim</th>
 <th align="right">indus</th>
+<th align="right">crim</th>
 <th align="right">nox</th>
 <th align="right">dis</th>
-<th align="right">tax</th>
 <th align="right">b</th>
+<th align="right">tax</th>
 <th align="right">ptratio</th>
 <th align="right">rad</th>
-<th align="right">zn</th>
 <th align="left">chas</th>
+<th align="right">zn</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">2.9</td>
-<td align="right">0.00632</td>
-<td align="right">9.69</td>
+<td align="right">0.46</td>
+<td align="right">0.25651</td>
 <td align="right">0.538</td>
 <td align="right">3.20745</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="right">0</td>
 <td align="left">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">2.9</td>
-<td align="right">0.12000</td>
-<td align="right">9.69</td>
+<td align="right">4.27</td>
+<td align="right">0.25651</td>
 <td align="right">0.538</td>
 <td align="right">3.20745</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="right">0</td>
 <td align="left">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">2.9</td>
-<td align="right">2.38000</td>
-<td align="right">9.69</td>
+<td align="right">9.90</td>
+<td align="right">0.25651</td>
 <td align="right">0.538</td>
 <td align="right">3.20745</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="right">0</td>
 <td align="left">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">2.9</td>
-<td align="right">9.51000</td>
-<td align="right">9.69</td>
+<td align="right">18.10</td>
+<td align="right">0.25651</td>
 <td align="right">0.538</td>
 <td align="right">3.20745</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="right">0</td>
 <td align="left">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">2.9</td>
-<td align="right">88.97620</td>
-<td align="right">9.69</td>
+<td align="right">27.74</td>
+<td align="right">0.25651</td>
 <td align="right">0.538</td>
 <td align="right">3.20745</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="right">0</td>
 <td align="left">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">32.2</td>
-<td align="right">0.00632</td>
-<td align="right">9.69</td>
+<td align="right">0.46</td>
+<td align="right">0.25651</td>
 <td align="right">0.538</td>
 <td align="right">3.20745</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="right">0</td>
 <td align="left">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">32.2</td>
-<td align="right">0.12000</td>
-<td align="right">9.69</td>
+<td align="right">4.27</td>
+<td align="right">0.25651</td>
 <td align="right">0.538</td>
 <td align="right">3.20745</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="right">0</td>
 <td align="left">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">32.2</td>
-<td align="right">2.38000</td>
-<td align="right">9.69</td>
+<td align="right">9.90</td>
+<td align="right">0.25651</td>
 <td align="right">0.538</td>
 <td align="right">3.20745</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="right">0</td>
 <td align="left">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">32.2</td>
-<td align="right">9.51000</td>
-<td align="right">9.69</td>
+<td align="right">18.10</td>
+<td align="right">0.25651</td>
 <td align="right">0.538</td>
 <td align="right">3.20745</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="right">0</td>
 <td align="left">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
 <td align="right">3.561</td>
 <td align="right">32.2</td>
-<td align="right">88.97620</td>
-<td align="right">9.69</td>
+<td align="right">27.74</td>
+<td align="right">0.25651</td>
 <td align="right">0.538</td>
 <td align="right">3.20745</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="right">0</td>
 <td align="left">0</td>
+<td align="right">0</td>
 </tr>
 </tbody>
 </table>
@@ -395,16 +395,16 @@
 <th align="right">medv</th>
 <th align="right">rm</th>
 <th align="right">age</th>
-<th align="right">crim</th>
 <th align="right">indus</th>
+<th align="right">crim</th>
 <th align="right">nox</th>
 <th align="right">dis</th>
-<th align="right">tax</th>
 <th align="right">b</th>
+<th align="right">tax</th>
 <th align="right">ptratio</th>
 <th align="right">rad</th>
-<th align="right">zn</th>
 <th align="right">chas</th>
+<th align="right">zn</th>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="right">5</td>
@@ -501,11 +501,24 @@
 <p><img src="model_response_files/figure-html/unnamed-chunk-10-1.png" width="1152"></p>
 <p>We can see that for the upper ranges of <code>lstat</code> a pretty specific combination values is required from 8 feature variables from <code>medv</code> until <code>tax</code> only then begin the flows to scatter over the entire range of the following variables. The lower range values of <code>lstat</code> start to scatter at <code>crim</code> or <code>dis</code>. Interestingly there seems to be a set of houses that branches off from the other houses in the lower range of <code>lstat</code> predictions already at the third feature, <code>age</code>. We could potentially explore this further, as a reminder you can get the binned input data for each alluvial plot by calling <code>p$data_key</code> and trace the variables of interest.</p>
 </div>
+<div id="parsnip-wrapper" class="section level1">
+<h1 class="hasAnchor">
+<a href="#parsnip-wrapper" class="anchor"></a><code>parsnip</code> wrapper</h1>
+<p><code>parsnip</code> provides a tidyverse style uniform interface for training and calling a lot of machine learning models. <code>easyalluvial</code> provides a function that wraps the above described workflow into one single call using the <code>vip</code> package to get the feature importance.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">m_parsnip</span> <span class="op">=</span> <span class="fu">parsnip</span><span class="fu">::</span><span class="fu"><a href="https://parsnip.tidymodels.org/reference/rand_forest.html">rand_forest</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">parsnip</span><span class="fu">::</span><span class="fu"><a href="https://parsnip.tidymodels.org/reference/set_engine.html">set_engine</a></span><span class="op">(</span><span class="st">"randomForest"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">parsnip</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span><span class="va">lstat</span> <span class="op">~</span><span class="va">.</span>, <span class="va">df</span><span class="op">)</span> 
+
+<span class="fu"><a href="../reference/alluvial_model_response_parsnip.html">alluvial_model_response_parsnip</a></span><span class="op">(</span><span class="va">m_parsnip</span>, <span class="va">df</span>, degree <span class="op">=</span> <span class="fl">4</span>, bins <span class="op">=</span> <span class="fl">5</span>
+                              , stratum_label_size <span class="op">=</span> <span class="fl">2.8</span><span class="op">)</span></code></pre></div>
+<p><img src="model_response_files/figure-html/unnamed-chunk-11-1.png" width="960"></p>
+</div>
 <div id="caret-wrapper" class="section level1">
 <h1 class="hasAnchor">
 <a href="#caret-wrapper" class="anchor"></a><code>caret</code> wrapper</h1>
-<p><code>caret</code> provides a uniformous interface for training and calling a lot of machine learning models as well as for calculating feature importance. <code>easyalluvial</code> provides a function that wraps the above described workflow into one single call. Note that feature importance values can be slightly different.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<p><code>caret</code> similar to <code>parsnip</code> provides a uniform modeling syntax and also returns feature importance.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">train</span> <span class="op">=</span> <span class="fu">caret</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/train.html">train</a></span><span class="op">(</span> <span class="va">lstat</span> <span class="op">~</span> <span class="va">.</span>
                      , <span class="va">df</span>
                      , method <span class="op">=</span> <span class="st">'rf'</span>
@@ -514,7 +527,7 @@
 
 <span class="fu"><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret</a></span><span class="op">(</span><span class="va">train</span>, degree <span class="op">=</span> <span class="fl">4</span>, bins <span class="op">=</span> <span class="fl">5</span>
                               , stratum_label_size <span class="op">=</span> <span class="fl">2.8</span><span class="op">)</span></code></pre></div>
-<p><img src="model_response_files/figure-html/unnamed-chunk-11-1.png" width="960"></p>
+<p><img src="model_response_files/figure-html/unnamed-chunk-12-1.png" width="960"></p>
 </div>
 <div id="advantages" class="section level1">
 <h1 class="hasAnchor">
@@ -532,25 +545,28 @@
 <li><p>Average model predictions</p></li>
 </ol>
 <p>Using this method we reduce the risk of simulating data outside the feature distribution space concerning the variables that are not plotted.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pred</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_pdp_predictions.html">get_pdp_predictions</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">imp</span>, <span class="va">m</span>, degree <span class="op">=</span> <span class="fl">4</span>, bins <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
-
-
-<span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">dspace</span>, <span class="va">imp</span>, degree <span class="op">=</span> <span class="fl">4</span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pred</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_pdp_predictions.html">get_pdp_predictions</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">imp</span>, <span class="va">m</span>, degree <span class="op">=</span> <span class="fl">4</span>, bins <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<pre><code>## Getting partial dependence plot preditions. This can take a while. See easyalluvial::get_pdp_predictions() `Details` on how to use multiprocessing</code></pre>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">dspace</span>, <span class="va">imp</span>, degree <span class="op">=</span> <span class="fl">4</span>
                         , method <span class="op">=</span> <span class="st">'pdp'</span> <span class="co"># changes title and caption</span>
                         , stratum_label_size <span class="op">=</span> <span class="fl">2.8</span> <span class="op">)</span></code></pre></div>
 <p><img src="model_response_files/figure-html/pdp-1.png" width="960"></p>
-<p>thanks to the uniform modelling interface of <code>caret</code> <code><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret()</a></code> can call <code><a href="../reference/get_pdp_predictions.html">get_pdp_predictions()</a></code> directly.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<p>thanks to the uniform modeling interface of <code>caret</code> and <code>parsnip</code> <code><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret()</a></code> and <code><a href="../reference/alluvial_model_response_parsnip.html">alluvial_model_response_parsnip()</a></code> can call <code><a href="../reference/get_pdp_predictions.html">get_pdp_predictions()</a></code> directly.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret</a></span><span class="op">(</span><span class="va">train</span>, degree <span class="op">=</span> <span class="fl">4</span>, bins <span class="op">=</span> <span class="fl">5</span>
                               , method <span class="op">=</span> <span class="st">'pdp'</span>
-                              , stratum_label_size <span class="op">=</span> <span class="fl">2.8</span> <span class="op">)</span></code></pre></div>
-<p><img src="model_response_files/figure-html/pdp_caret-1.png" width="960"></p>
+                              , stratum_label_size <span class="op">=</span> <span class="fl">2.8</span> <span class="op">)</span>
+
+<span class="fu"><a href="../reference/alluvial_model_response_parsnip.html">alluvial_model_response_parsnip</a></span><span class="op">(</span><span class="va">m_parsnip</span>, <span class="va">df</span>, degree <span class="op">=</span> <span class="fl">4</span>, bins <span class="op">=</span> <span class="fl">5</span>
+                                , method <span class="op">=</span> <span class="st">'pdp'</span>
+                                , stratum_label_size <span class="op">=</span> <span class="fl">2.8</span><span class="op">)</span></code></pre></div>
 <div id="a-note-on-feature-importance" class="section level2">
 <h2 class="hasAnchor">
 <a href="#a-note-on-feature-importance" class="anchor"></a>A note on feature importance</h2>
 <p>Calculating feature importance in a dataset with strongly correlating variables will lead to inaccurate results. It usually means that two strongly correlating variables share the importance that would be accredited to them if only one of them was present in the data set. Further some feature importance calculation methods require the model to be trained with scaled, centered and potentially normalized (transformed to be more normally distributed) numerical variables in order to deliver meaningful results. We can use the <code>recipes</code> package to perform these tasks. Using the below described workflow we can create the artificial dataspace with untransformed numerical values which will give us more meaningful output.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># filter correlating variables recipe- ------------------------------</span>
 <span class="co"># caret tends to complain if recipe filters any variables, therefore</span>
 <span class="co"># we use two recipes</span>
@@ -591,13 +607,13 @@
                                  , pred_var <span class="op">=</span> <span class="st">'lstat'</span>
                                  , scale <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/add_imp_plot.html">add_imp_plot</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">df</span><span class="op">)</span></code></pre></div>
-<p><img src="model_response_files/figure-html/unnamed-chunk-12-1.png" width="1152"></p>
+<p><img src="model_response_files/figure-html/unnamed-chunk-13-1.png" width="1152"></p>
 </div>
 <div id="none-regression-models" class="section level2">
 <h2 class="hasAnchor">
 <a href="#none-regression-models" class="anchor"></a>None-regression models</h2>
 <p>Works the same way.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">mtcars2</span>, <span class="op">-</span><span class="va">ids</span><span class="op">)</span>
 <span class="va">m</span> <span class="op">=</span> <span class="fu">randomForest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randomForest/man/randomForest.html">randomForest</a></span><span class="op">(</span> <span class="va">am</span> <span class="op">~</span> <span class="va">.</span>, <span class="va">df</span><span class="op">)</span>
 <span class="va">imp</span> <span class="op">=</span> <span class="va">m</span><span class="op">$</span><span class="va">importance</span>
@@ -606,7 +622,7 @@
 <span class="va">pred</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">m</span>, newdata <span class="op">=</span> <span class="va">dspace</span>,type <span class="op">=</span> <span class="st">'response'</span><span class="op">)</span>
 <span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">dspace</span>, <span class="va">imp</span>, degree <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 <span class="va">p</span></code></pre></div>
-<p><img src="model_response_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
+<p><img src="model_response_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 </div>
 <div id="limitations" class="section level2">
 <h2 class="hasAnchor">

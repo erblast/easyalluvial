@@ -166,6 +166,7 @@
   col_vector_flow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"#FF0065"</span>, <span class='st'>"#009850"</span>, <span class='st'>"#A56F2B"</span>, <span class='st'>"#005EAA"</span>, <span class='st'>"#710500"</span>, <span class='st'>"#7B5380"</span>,
     <span class='st'>"#9DD1D1"</span><span class='op'>)</span>,
   method <span class='op'>=</span> <span class='st'>"median"</span>,
+  parallel <span class='op'>=</span> <span class='cn'>FALSE</span>,
   params_bin_numeric_pred <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>center <span class='op'>=</span> <span class='cn'>T</span>, transform <span class='op'>=</span> <span class='cn'>T</span>, scale <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>,
   pred_train <span class='op'>=</span> <span class='cn'>NULL</span>,
   stratum_label_size <span class='op'>=</span> <span class='fl'>3.5</span>,
@@ -207,10 +208,14 @@ c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')</p></td>
       <td><p>character vector, one of c('median', 'pdp')</p><dl>
 <dt>median</dt><dd><p>sets variables that are not displayed to median mode, use with
 regular predictions</p></dd> <dt>pdp</dt><dd><p>partial dependency plot method, for each
-observation in the training data the displayed variableas are set to the
+observation in the training data the displayed variables are set to the
 indicated values. The predict function is called for each modified
 observation and the result is averaged</p></dd> 
 </dl><p>. Default: 'median'</p></td>
+    </tr>
+    <tr>
+      <th>parallel</th>
+      <td><p>logical, turn on parallel processing for pdp method. Default: FALSE</p></td>
     </tr>
     <tr>
       <th>params_bin_numeric_pred</th>
@@ -253,6 +258,13 @@ needs to be passed. Default NULL</p></td>
  in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
  (2015) Visualizing statistical models: Removing the blindfold. Statistical
  Analysis and Data Mining 8(4) &lt;doi:10.1002/sam.11271&gt;</p>
+    <h2 class="hasAnchor" id="parallel-processing"><a class="anchor" href="#parallel-processing"></a>Parallel Processing</h2>
+
+    
+ 
+<p>We are using `furrr` and the `future` package to parallelize some of the
+ computational steps for calculating the predictions. It is up to the user
+ to register a compatible backend (see <a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a>).</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='alluvial_wide.html'>alluvial_wide</a></code>,
@@ -274,7 +286,8 @@ needs to be passed. Default NULL</p></td>
 </div><div class='img'><img src='alluvial_model_response_caret-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># partial dependency plotting method</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>alluvial_model_response_caret</span><span class='op'>(</span><span class='va'>train</span>, degree <span class='op'>=</span> <span class='fl'>3</span>, method <span class='op'>=</span> <span class='st'>'pdp'</span><span class='op'>)</span>
+<span class='fu'>future</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span><span class='op'>(</span><span class='st'>"multisession"</span><span class='op'>)</span>
+<span class='fu'>alluvial_model_response_caret</span><span class='op'>(</span><span class='va'>train</span>, degree <span class='op'>=</span> <span class='fl'>3</span>, method <span class='op'>=</span> <span class='st'>'pdp'</span>, parallel <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
  <span class='op'>}</span>
 </div></pre>
   </div>

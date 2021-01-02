@@ -19,6 +19,9 @@
     <loc>https://erblast.github.io/easyalluvial//reference/alluvial_model_response_caret.html</loc>
   </url>
   <url>
+    <loc>https://erblast.github.io/easyalluvial//reference/alluvial_model_response_parsnip.html</loc>
+  </url>
+  <url>
     <loc>https://erblast.github.io/easyalluvial//reference/alluvial_wide.html</loc>
   </url>
   <url>
@@ -26,6 +29,9 @@
   </url>
   <url>
     <loc>https://erblast.github.io/easyalluvial//reference/get_pdp_predictions.html</loc>
+  </url>
+  <url>
+    <loc>https://erblast.github.io/easyalluvial//reference/get_pdp_predictions_seq.html</loc>
   </url>
   <url>
     <loc>https://erblast.github.io/easyalluvial//reference/manip_bin_numerics.html</loc>
@@ -50,6 +56,12 @@
   </url>
   <url>
     <loc>https://erblast.github.io/easyalluvial//reference/palette_qualitative.html</loc>
+  </url>
+  <url>
+    <loc>https://erblast.github.io/easyalluvial//reference/pdp_predictions.html</loc>
+  </url>
+  <url>
+    <loc>https://erblast.github.io/easyalluvial//reference/pipe.html</loc>
   </url>
   <url>
     <loc>https://erblast.github.io/easyalluvial//reference/plot_all_hists.html</loc>

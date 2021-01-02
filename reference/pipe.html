@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>tidy up dataframe containing model feature importance — tidy_imp • easyalluvial</title>
+<title>Pipe operator — %&gt;% • easyalluvial</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,11 +46,8 @@
 
 
 
-<meta property="og:title" content="tidy up dataframe containing model feature importance — tidy_imp" />
-<meta property="og:description" content="returns dataframe with exactly two columns, vars and imp and
-  aggregates dummy encoded variables. Helper function called by all functions
-  that take an imp parameter. Can be called manually if formula for
-  aggregating dummy encoded variables must be modified." />
+<meta property="og:title" content="Pipe operator — %&gt;%" />
+<meta property="og:description" content="See magrittr::%&amp;gt;% for details." />
 <meta property="og:image" content="https://erblast.github.io/easyalluvial/logo.png" />
 
 
@@ -150,65 +147,19 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>tidy up dataframe containing model feature importance</h1>
-    <small class="dont-index">Source: <a href='https://github.com/erblast/easyalluvial/blob/master/R/alluvial_model_response.R'><code>R/alluvial_model_response.R</code></a></small>
-    <div class="hidden name"><code>tidy_imp.Rd</code></div>
+    <h1>Pipe operator</h1>
+    <small class="dont-index">Source: <a href='https://github.com/erblast/easyalluvial/blob/master/R/utils-pipe.R'><code>R/utils-pipe.R</code></a></small>
+    <div class="hidden name"><code>pipe.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>returns dataframe with exactly two columns, vars and imp and
-  aggregates dummy encoded variables. Helper function called by all functions
-  that take an imp parameter. Can be called manually if formula for
-  aggregating dummy encoded variables must be modified.</p>
+    <p>See <code>magrittr::%&gt;%</code> for details.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tidy_imp</span><span class='op'>(</span><span class='va'>imp</span>, <span class='va'>df</span>, .f <span class='op'>=</span> <span class='va'>max</span><span class='op'>)</span></pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>imp</th>
-      <td><p>dataframe or matrix with feature importance information</p></td>
-    </tr>
-    <tr>
-      <th>df</th>
-      <td><p>dataframe, modelling training data</p></td>
-    </tr>
-    <tr>
-      <th>.f</th>
-      <td><p>window function, Default: max</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>dataframe</p><dl>
-<dt>vars</dt><dd><p>character column with feature names</p></dd>
-  <dt>imp</dt><dd><p>numerical column, importance values</p></dd> 
-</dl>
+    <pre class="usage"><span class='va'>lhs</span> <span class='op'>%&gt;%</span> <span class='va'>rhs</span></pre>
 
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># randomforest</span>
-<span class='va'>df</span> <span class='op'>=</span> <span class='va'>mtcars2</span><span class='op'>[</span>, <span class='op'>!</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>mtcars2</span><span class='op'>)</span> <span class='op'>%in%</span> <span class='st'>'ids'</span> <span class='op'>]</span>
-<span class='va'>m</span> <span class='op'>=</span> <span class='fu'>randomForest</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/randomForest/man/randomForest.html'>randomForest</a></span><span class='op'>(</span> <span class='va'>disp</span> <span class='op'>~</span> <span class='va'>.</span>, <span class='va'>df</span><span class='op'>)</span>
-<span class='va'>imp</span> <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>importance</span>
-<span class='fu'>tidy_imp</span><span class='op'>(</span><span class='va'>imp</span>, <span class='va'>mtcars2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 10 x 2</span><span>
-#&gt;    vars      imp
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span> cyl   </span><span style='text-decoration: underline;'>119</span><span>500.
-#&gt; </span><span style='color: #555555;'> 2</span><span> mpg    </span><span style='text-decoration: underline;'>81</span><span>591.
-#&gt; </span><span style='color: #555555;'> 3</span><span> wt     </span><span style='text-decoration: underline;'>68</span><span>770.
-#&gt; </span><span style='color: #555555;'> 4</span><span> hp     </span><span style='text-decoration: underline;'>66</span><span>306.
-#&gt; </span><span style='color: #555555;'> 5</span><span> drat   </span><span style='text-decoration: underline;'>46</span><span>632.
-#&gt; </span><span style='color: #555555;'> 6</span><span> qsec   </span><span style='text-decoration: underline;'>23</span><span>123.
-#&gt; </span><span style='color: #555555;'> 7</span><span> gear   </span><span style='text-decoration: underline;'>21</span><span>275.
-#&gt; </span><span style='color: #555555;'> 8</span><span> vs     </span><span style='text-decoration: underline;'>14</span><span>345.
-#&gt; </span><span style='color: #555555;'> 9</span><span> carb    </span><span style='text-decoration: underline;'>6</span><span>626.
-#&gt; </span><span style='color: #555555;'>10</span><span> am      </span><span style='text-decoration: underline;'>3</span><span>087.</div><div class='input'>
-</div></span></pre>
+
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
