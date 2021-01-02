@@ -30,6 +30,7 @@ jobs:
       - name: Check
         run: |
           rcmdcheck::rcmdcheck(args = c("--as-cran", "--no-manual"), error_on = "note")
+          install.packages("tidyverse")
           pkgdown::build_articles()
           system("git clone https://github.com/erblast/parcats.git")
           devtools::install_deps('parcats/', dependencies = 'suggests')
