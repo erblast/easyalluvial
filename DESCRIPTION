@@ -32,8 +32,7 @@ Suggests:
     earth,
     workflows,
     future,
-    furrr,
-    progressr
+    furrr
 RoxygenNote: 7.1.1
 Imports:
   purrr
@@ -55,4 +54,5 @@ Imports:
   , e1071
   , parsnip
   , vip
+  , progressr
 Language: en-US

@@ -339,10 +339,9 @@ get_pdp_predictions = function(df, imp, m, degree = 4, bins = 5,
     
     furrr_installed <- try({
       suppressPackageStartupMessages(requireNamespace("furrr", quietly = TRUE))
-      suppressPackageStartupMessages(requireNamespace("progressr", quietly = TRUE))
     })
     
-    stopifnot( "Please install packages `furrr` and `progressr`" = furrr_installed)
+    stopifnot( "Please install package `furrr`" = furrr_installed)
     
   }
   
@@ -394,6 +393,7 @@ get_pdp_predictions_seq = function(df, imp, m, degree = 4, bins = 5, .f_predict 
 #'@title get predictions compatible with the partial dependence plotting method,
 #'parallel variant is called by get_pdp_predictions()
 #'@inheritParams get_pdp_predictions
+#'@importFrom progressr handlers progressor with_progress
 #'@param parallel logical, Default: TRUE
 #'@rdname pdp_predictions
 #'@seealso \code{\link[easyalluvial]{get_pdp_predictions}}
