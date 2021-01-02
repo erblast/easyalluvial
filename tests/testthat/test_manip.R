@@ -155,3 +155,11 @@ test_that('manip_bin_numerics_NA',{
   expect_true( all( as.matrix( df[1,] ) ) )
   
 })
+
+test_that("most_frequent_lvl", {
+  
+  lvls <- as.factor(LETTERS[c(7, 7, 7, 1, 4, 8, 9, 14, 20)])
+  lvl <- get_most_frequent_lvl(lvls)
+  expect_true(lvl == "G")
+  
+})

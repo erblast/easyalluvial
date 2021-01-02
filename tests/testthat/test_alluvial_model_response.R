@@ -24,6 +24,8 @@ test_that('get_data_space'
 
 })
 
+
+
 test_that('pdp_methods'
   ,{
     
@@ -33,27 +35,64 @@ test_that('pdp_methods'
     m = randomForest::randomForest( disp ~ ., df)
     imp = m$importance
     
-    pred_seq = get_pdp_predictions(df, imp
-                                #, .f_predict = predict
-                                , m
-                                , degree = 3
-                                , bins = 5)
+    pred_seq_old = get_pdp_predictions_seq(df, imp
+                                       , m
+                                       , degree = 3
+                                       , bins = 5)
     
-    pred_parallel =  get_pdp_predictions_parallel(df, imp
-                                         , .f_predict = randomForest:::predict.randomForest
-                                         , m
-                                         , degree = 3
-                                         , bins = 5)
     
+    pred_seq = pdp_predictions(df, imp
+                               , m
+                               , degree = 3
+                               , bins = 5
+                               , parallel = FALSE)
+    
+    pred_parallel =  pdp_predictions(df, imp
+                                     , m
+                                     , degree = 3
+                                     , bins = 5
+                                     , parallel = TRUE)
+    
+    expect_true(all(near(pred_seq, pred_seq_old)))
     expect_true(all(near(pred_seq, pred_parallel)))
     
     dspace = get_data_space(df, imp, degree = 3)
     
     p = alluvial_model_response(pred_seq, dspace, imp, degree = 3, method = 'pdp')
     
-    vdiffr::expect_doppelganger('model_response_pdb', p)
+    expect_doppelganger('model_response_pdb', p)
     
 })
+
+test_that('pdp_methods_classification_non_binary'
+          ,{
+            
+    set.seed(0)
+    
+    df = select(mtcars2, -ids)
+    m = randomForest::randomForest(cyl ~ ., df)
+    imp = m$importance
+    
+    pred_seq = pdp_predictions(df, imp
+                               , m
+                               , degree = 3
+                               , bins = 5
+                               , parallel = FALSE)
+    
+    pred_parallel =  pdp_predictions(df, imp
+                                      , m
+                                      , degree = 3
+                                      , bins = 5
+                                      , parallel = TRUE)
+    
+    dspace = get_data_space(df, imp, degree = 3)
+    
+    p = alluvial_model_response(pred_seq, dspace, imp, degree = 3, method = 'pdp')
+    
+    expect_doppelganger('model_response_pdb_non_binary', p)
+    
+})
+
 
 test_that('alluvial_model_response'
           ,{
@@ -72,7 +111,7 @@ test_that('alluvial_model_response'
     
     p = alluvial_model_response(pred, dspace, imp, degree = 3)
     
-    vdiffr::expect_doppelganger('model_response', p)
+    expect_doppelganger('model_response', p)
     
     expect_equal( length( levels(p$data$x) ) - 1, 3 )
     
@@ -123,7 +162,7 @@ test_that('alluvial_model_response'
     
     p = alluvial_model_response(pred, dspace, imp, bin_labels = c('A','B','C','D','E'), degree = 3 )
     
-    vdiffr::expect_doppelganger('model_response_new_labs', p)
+    expect_doppelganger('model_response_new_labs', p)
     
     # change bin_numerics parameter for pred and bins
     
@@ -135,7 +174,7 @@ test_that('alluvial_model_response'
 
     expect_true( p$alluvial_params$bins == 3 )
     
-    vdiffr::expect_doppelganger('model_response_new_change_bins_3', p)
+    expect_doppelganger('model_response_new_change_bins_3', p)
     
     dspace = get_data_space(df, imp, degree = 4)
     pred = predict(m, newdata = dspace)
@@ -148,7 +187,7 @@ test_that('alluvial_model_response'
                             , bin_labels = c('LLL','LL', 'ML', 'M', 'MH', 'HH', 'HHH')
                             , pred_train = pred_train )
     
-    vdiffr::expect_doppelganger('model_response_new_change_bins_7', p)
+    expect_doppelganger('model_response_new_change_bins_7', p)
     
     # bivariate categorical response
     
@@ -161,7 +200,7 @@ test_that('alluvial_model_response'
     pred = predict(m, newdata = dspace,type = 'response')
     p = alluvial_model_response(pred, dspace, imp, degree = 3)
     
-    vdiffr::expect_doppelganger('model_response_cat_bi', p)
+    expect_doppelganger('model_response_cat_bi', p)
     
     # multivariate categorical response
     
@@ -174,7 +213,7 @@ test_that('alluvial_model_response'
     pred = predict(m, newdata = dspace,type = 'response')
     p = alluvial_model_response(pred, dspace, imp, degree = 3)
     
-    vdiffr::expect_doppelganger('model_response_cat_multi', p)
+    expect_doppelganger('model_response_cat_multi', p)
     
     # all factors -----------------------------------------------
     
@@ -193,7 +232,7 @@ test_that('alluvial_model_response'
     
     pred = predict(m, newdata = dspace,type = 'response')
     p = alluvial_model_response(pred, dspace, imp, degree = 3)
-    vdiffr::expect_doppelganger('model_response_all_facs', p)
+    expect_doppelganger('model_response_all_facs', p)
     
     # factors as character ---------------------------------------
     
@@ -222,7 +261,7 @@ test_that('alluvial_model_response'
     pred = predict(m, newdata = dspace)
     
     p = alluvial_model_response(pred, dspace, imp, degree = 3)
-    vdiffr::expect_doppelganger('model_response_all_nums', p)
+    expect_doppelganger('model_response_all_nums', p)
           })
 
 test_that('alluvial_model_response_caret'
@@ -234,35 +273,35 @@ test_that('alluvial_model_response_caret'
   train = caret::train( disp ~ ., df, method = 'lm',trControl = caret::trainControl(method = 'none') )
   p = alluvial_model_response_caret(train, degree = 3)
   
-  # vdiffr::expect_doppelganger('model_response_caret_lm', p)
+  # expect_doppelganger('model_response_caret_lm', p)
   
   p = alluvial_model_response_caret(train, degree = 3, method = 'pdp')
-  # vdiffr::expect_doppelganger('model_response_caret_lm_pdp', p)
+  # expect_doppelganger('model_response_caret_lm_pdp', p)
   
   
   set.seed(0)
   train = caret::train( disp ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
   p = alluvial_model_response_caret(train, degree = 3)
   
-  # vdiffr::expect_doppelganger('model_response_caret_rf', p)
+  # expect_doppelganger('model_response_caret_rf', p)
   
   # change bin labels
   p = alluvial_model_response_caret(train, degree = 3, bin_labels =  c('A','B','C','D','E') )
   
-  # vdiffr::expect_doppelganger('model_response_caret_new_labs', p)
+  # expect_doppelganger('model_response_caret_new_labs', p)
   
   # categorical bivariate response 
   set.seed(1)
   train = caret::train( am ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
   p = alluvial_model_response_caret(train, degree = 3)
-  # vdiffr::expect_doppelganger('model_response_caret_cat_bi', p)
+  # expect_doppelganger('model_response_caret_cat_bi', p)
   
   
   # categorical multivariate response
   set.seed(1)
   train = caret::train( cyl ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
   p = alluvial_model_response_caret(train, degree = 3)
-  # vdiffr::expect_doppelganger('model_response_caret_cat_multi', p)
+  # expect_doppelganger('model_response_caret_cat_multi', p)
   
   # all facs
   set.seed(1)
@@ -272,7 +311,7 @@ test_that('alluvial_model_response_caret'
   
   train = caret::train( Survived ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
   p = alluvial_model_response_caret(train, degree = 3)
-  # vdiffr::expect_doppelganger('all_facs_caret', p)
+  # expect_doppelganger('all_facs_caret', p)
   
   # all nums
   set.seed(1)
@@ -282,7 +321,7 @@ test_that('alluvial_model_response_caret'
   
   train = caret::train( disp ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
   p = alluvial_model_response_caret(train, degree = 3)
-  # vdiffr::expect_doppelganger('all_nums_caret', p)
+  # expect_doppelganger('all_nums_caret', p)
   
   # titanic example, + mix of factor and character features
   # regular random Forest will not allow this caret works around it
@@ -346,6 +385,7 @@ test_that('alluvial_model_response_parsnip'
     parsnip::fit(am ~ ., df)
   
   p = alluvial_model_response_parsnip(m_rf, df, degree = 3)
+  p = alluvial_model_response_parsnip(m_rf, df, degree = 3, method = "pdp")
   
   # categorical multivariate response
   set.seed(1)
@@ -355,6 +395,7 @@ test_that('alluvial_model_response_parsnip'
     parsnip::fit(cyl ~ ., df)
   
   p = alluvial_model_response_parsnip(m_rf, df, degree = 3)
+  p = alluvial_model_response_parsnip(m_rf, df, degree = 3, method = "pdp")
   
   # all facs
   set.seed(1)
@@ -367,7 +408,8 @@ test_that('alluvial_model_response_parsnip'
     parsnip::fit(Survived ~ ., df)
   
   p = alluvial_model_response_parsnip(m_rf, df, degree = 3)
-
+  p = alluvial_model_response_parsnip(m_rf, df, degree = 3, method = "pdp")
+  
   # all nums
   set.seed(1)
   
@@ -379,7 +421,8 @@ test_that('alluvial_model_response_parsnip'
     parsnip::fit(disp ~ ., df)
   
   p = alluvial_model_response_parsnip(m_rf, df, degree = 3)
-
+  p = alluvial_model_response_parsnip(m_rf, df, degree = 3, method = "pdp")
+  
   p_grid = add_marginal_histograms(p, data_input = df, plot = F) %>%
     add_imp_plot(p, df, plot = FALSE)
   
@@ -431,13 +474,11 @@ test_that('n_feats == degree',{
   
   pred = predict(m, newdata = dspace)
   
-  expect_silent( pred <- get_pdp_predictions(df, imp, .f_predict = randomForest:::predict.randomForest
+  expect_message( pred <- get_pdp_predictions(df, imp, .f_predict = randomForest:::predict.randomForest
                                              , m = m, degree = 3) )
   
   p = alluvial_model_response(pred, dspace, imp, degree = 3)
   
   p_imp = plot_imp(p, df)
   
-  # vdiffr::expect_doppelganger('p_imp_nfeats_equal_degree', p_imp)
-
 })

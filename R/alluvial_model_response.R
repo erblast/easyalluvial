@@ -289,8 +289,15 @@ get_data_space = function(df, imp, degree = 4, bins = 5, max_levels = 10){
 #'  as the first parameter and use the `newdata` parameter. Supply a wrapper for
 #'  predict functions with x-y synthax.
 #'@param m model object
+#'@param parallel logical, turn on parallel processing. Default: FALSE
 #'@return vector, predictions
-#'@details see https://christophm.github.io/interpretable-ml-book/pdp.html
+#'@details For more on partial dependency plots see
+#'  [https://christophm.github.io/interpretable-ml-book/pdp.html]. 
+#' 
+#'@section Parallel Processing: 
+#'  We are using `furrr` and the `future` package to parallelize some of the
+#'  computational steps for calculating the predictions. It is up to the user
+#'  to register a compatible backend (see \link[future]{plan}).
 #' @examples
 #'  df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
 #'  m = randomForest::randomForest( disp ~ ., df)
@@ -301,13 +308,59 @@ get_data_space = function(df, imp, degree = 4, bins = 5, max_levels = 10){
 #'                             , degree = 3
 #'                             , bins = 5)
 #'
-#'@seealso \code{\link[progress]{progress_bar}}
+#'# parallel processing --------------------------
+#'\dontrun{
+#'  future::plan("multisession")
+#'  pred = get_pdp_predictions(df, imp
+#'                             , m
+#'                             , degree = 3
+#'                             , bins = 5,
+#'                             , parallel = TRUE)
+#'}
 #'@rdname get_pdp_predictions
 #'@export
-#'@importFrom progress progress_bar
-get_pdp_predictions = function(df, imp, m, degree = 4, bins = 5, .f_predict = predict){
+get_pdp_predictions = function(df, imp, m, degree = 4, bins = 5,
+                               .f_predict = predict, 
+                               parallel = FALSE
+){
   
-  pb = progress::progress_bar$new(total = nrow(df))
+  if(parallel == FALSE){
+    
+    message(
+      paste(
+        "Getting partial dependence plot preditions.", 
+        "This can take a while.",
+        "See easyalluvial::get_pdp_predictions()", 
+        "`Details` on how to use multiprocessing"
+        )
+      )
+    
+  }else{
+    
+    furrr_installed <- try({
+      suppressPackageStartupMessages(requireNamespace("furrr", quietly = TRUE))
+      suppressPackageStartupMessages(requireNamespace("progressr", quietly = TRUE))
+    })
+    
+    stopifnot( "Please install packages `furrr` and `progressr`" = furrr_installed)
+    
+  }
+  
+  pred_results = pdp_predictions(df = df, imp = imp, m = m, degree = degree
+                                 , bins = bins, .f_predict = .f_predict, parallel = TRUE)
+  
+  return(pred_results)
+  
+}
+
+#'@title get predictions compatible with the partial dependence plotting method,
+#'sequential variant that only works for numeric predictions.
+#'@description has been replaced by pdp_predictions which can be parallelized
+#'and also handles factor predictions. It is still used to test results.
+#'@inheritParams get_pdp_predictions
+#'@rdname get_pdp_predictions_seq
+#'@seealso \code{\link[easyalluvial]{get_pdp_predictions}}
+get_pdp_predictions_seq = function(df, imp, m, degree = 4, bins = 5, .f_predict = predict){
   
   dspace = get_data_space(df, imp, degree, bins)
   
@@ -333,15 +386,21 @@ get_pdp_predictions = function(df, imp, m, degree = 4, bins = 5, .f_predict = pr
     
     pred_results = pred_results + pred
     
-    pb$tick()
   }
   
   return(pred_results)
 }
 
-get_pdp_predictions_parallel = function(df, imp, m, degree = 4, bins = 5, .f_predict = predict){
+#'@title get predictions compatible with the partial dependence plotting method,
+#'parallel variant is called by get_pdp_predictions()
+#'@inheritParams get_pdp_predictions
+#'@param parallel logical, Default: TRUE
+#'@rdname pdp_predictions
+#'@seealso \code{\link[easyalluvial]{get_pdp_predictions}}
+pdp_predictions = function(df, imp, m, degree = 4, bins = 5, .f_predict = predict,
+                           parallel = FALSE){
   
-  dspace = get_data_space(df, imp, degree, bins)
+  dspace <- get_data_space(df, imp, degree, bins)
   
   if(degree == nrow(imp) ){
     return( .f_predict(m, newdata = dspace) )
@@ -365,19 +424,48 @@ get_pdp_predictions_parallel = function(df, imp, m, degree = 4, bins = 5, .f_pre
   
   progressr::handlers("progress")
   along <- seq(1, nrow(df))
-  
-  progressr::with_progress({
-    p <- progressr::progressor(along = along)
-    preds <- furrr::future_map(
-      along,
-      get_preds_per_row,
-      .options = furrr::furrr_options(seed = 1)
-      )
+
+  # progressr sometimes produces a weird error
+  # Warning in sink(type = "output", split = FALSE) : no sink to remove 
+  suppressWarnings({
+    progressr::with_progress({
+      p <- progressr::progressor(along = along)
+      
+      if(parallel) {
+        preds <- furrr::future_map(
+          along,
+          get_preds_per_row,
+          .options = furrr::furrr_options(seed = 1)
+          )
+      } else {
+        preds <- purrr::map(
+          along,
+          get_preds_per_row
+        )
+      }
+    })
   })
+
+  # parsnip predictions can come as tibbles
+  if(any(unlist(map(preds, is_tibble)))) {
+    preds <- map(preds, ~ .[[1]]) 
+  }
   
-  mean_pred <- preds %>%
-    as.data.frame() %>%
-    rowMeans()
+  if(any(unlist(map(preds, is.factor)))) {
+    mean_pred <- preds %>%
+      as.data.frame() %>%
+      t() %>%
+      as.data.frame() %>%
+      summarise_all(~ get_most_frequent_lvl(as.factor(.))) %>%
+      as.list() %>%
+      unlist() %>% 
+      unname()
+    
+  } else {
+    mean_pred <- preds %>%
+      as.data.frame() %>%
+      rowMeans()
+  }
   
   return(mean_pred)
   
@@ -700,9 +788,10 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'@param method, character vector, one of c('median', 'pdp') \describe{
 #'  \item{median}{sets variables that are not displayed to median mode, use with
 #'  regular predictions} \item{pdp}{partial dependency plot method, for each
-#'  observation in the training data the displayed variableas are set to the
+#'  observation in the training data the displayed variables are set to the
 #'  indicated values. The predict function is called for each modified
 #'  observation and the result is averaged} }. Default: 'median'
+#'@param parallel logical, turn on parallel processing for pdp method. Default: FALSE
 #'@param params_bin_numeric_pred list, additional parameters passed to
 #'  \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
 #'  parameter. Default: list( bins = 5, center = T, transform = T, scale = T)
@@ -715,6 +804,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'needs to be passed. Default NULL
 #'@param ... additional parameters passed to
 #'  \code{\link[easyalluvial]{alluvial_wide}}
+#'@inheritSection get_pdp_predictions Parallel Processing
 #'@return ggplot2 object
 #'@details this model visualisation approach follows the "visualising the model
 #'  in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
@@ -733,7 +823,8 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'
 #' # partial dependency plotting method
 #' \dontrun{
-#' alluvial_model_response_caret(train, degree = 3, method = 'pdp')
+#' future::plan("multisession")
+#' alluvial_model_response_caret(train, degree = 3, method = 'pdp', parallel = TRUE)
 #'  }
 #'@seealso \code{\link[easyalluvial]{alluvial_wide}},
 #'  \code{\link[easyalluvial]{get_data_space}}, \code{\link[caret]{varImp}},
@@ -747,6 +838,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
                                          , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
                                          , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#9DD1D1')
                                          , method = 'median'
+                                         , parallel = FALSE
                                          , params_bin_numeric_pred = list( center = T, transform = T, scale = T)
                                          , pred_train = NULL
                                          , stratum_label_size = 3.5
@@ -803,7 +895,8 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
                                , .f_predict = predict
                                , m = train
                                , degree = degree
-                               , bins = bins)
+                               , bins = bins
+                               , parallel = parallel)
 
   }
 
@@ -842,9 +935,10 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 #'@param method, character vector, one of c('median', 'pdp') \describe{
 #'  \item{median}{sets variables that are not displayed to median mode, use with
 #'  regular predictions} \item{pdp}{partial dependency plot method, for each
-#'  observation in the training data the displayed variableas are set to the
+#'  observation in the training data the displayed variables are set to the
 #'  indicated values. The predict function is called for each modified
 #'  observation and the result is averaged} }. Default: 'median'
+#'@param parallel logical, turn on parallel processing for pdp methof. Default: FALSE
 #'@param params_bin_numeric_pred list, additional parameters passed to
 #'  \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
 #'  parameter. Default: list( bins = 5, center = T, transform = T, scale = T)
@@ -863,6 +957,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 #'  in the dataspace" principle as described in Wickham H, Cook D, Hofmann H
 #'  (2015) Visualizing statistical models: Removing the blindfold. Statistical
 #'  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
+#'@inheritSection get_pdp_predictions Parallel Processing
 #' @examples
 #' df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
 #'
@@ -874,7 +969,8 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 #'
 #' # partial dependency plotting method
 #' \dontrun{
-#' alluvial_model_response_parsnip(m, df, degree = 3, method = 'pdp')
+#' future::plan("multisession")
+#' alluvial_model_response_parsnip(m, df, degree = 3, method = 'pdp', parallel = TRUE)
 #'  }
 #'@seealso \code{\link[easyalluvial]{alluvial_wide}},
 #'  \code{\link[easyalluvial]{get_data_space}}, \code{\link[caret]{varImp}},
@@ -889,6 +985,7 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
                                          , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
                                          , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#9DD1D1')
                                          , method = 'median'
+                                         , parallel = FALSE
                                          , params_bin_numeric_pred = list( center = T, transform = T, scale = T)
                                          , pred_train = NULL
                                          , stratum_label_size = 3.5
@@ -942,14 +1039,22 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
                                , .f_predict = wr_predict
                                , m = m
                                , degree = degree
-                               , bins = bins)
+                               , bins = bins
+                               , parallel = parallel)
     
   }
   
   if(m$spec$mode == "classification") {
-    pred = pred$.pred_class
-  } else{
+    if(is_tibble(pred)) {
+      pred = pred$.pred_class
+    } else {
+      # pdp will not return tibble
+      pred = pred
+    }
+  } else if(is_tibble(pred)){
     pred = pred$.pred
+  } else{
+    pred = pred
   }
 
   p = alluvial_model_response(pred = pred

@@ -12,6 +12,7 @@ alluvial_model_response_caret(
   col_vector_flow = c("#FF0065", "#009850", "#A56F2B", "#005EAA", "#710500", "#7B5380",
     "#9DD1D1"),
   method = "median",
+  parallel = FALSE,
   params_bin_numeric_pred = list(center = T, transform = T, scale = T),
   pred_train = NULL,
   stratum_label_size = 3.5,
@@ -39,9 +40,11 @@ c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')}
 \item{method, }{character vector, one of c('median', 'pdp') \describe{
 \item{median}{sets variables that are not displayed to median mode, use with
 regular predictions} \item{pdp}{partial dependency plot method, for each
-observation in the training data the displayed variableas are set to the
+observation in the training data the displayed variables are set to the
 indicated values. The predict function is called for each modified
 observation and the result is averaged} }. Default: 'median'}
+
+\item{parallel}{logical, turn on parallel processing for pdp method. Default: FALSE}
 
 \item{params_bin_numeric_pred}{list, additional parameters passed to
 \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
@@ -74,6 +77,13 @@ this model visualisation approach follows the "visualising the model
  (2015) Visualizing statistical models: Removing the blindfold. Statistical
  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 }
+\section{Parallel Processing}{
+ 
+ We are using `furrr` and the `future` package to parallelize some of the
+ computational steps for calculating the predictions. It is up to the user
+ to register a compatible backend (see \link[future]{plan}).
+}
+
 \examples{
 df = mtcars2[, ! names(mtcars2) \%in\% 'ids' ]
 
@@ -87,7 +97,8 @@ alluvial_model_response_caret(train, degree = 3)
 
 # partial dependency plotting method
 \dontrun{
-alluvial_model_response_caret(train, degree = 3, method = 'pdp')
+future::plan("multisession")
+alluvial_model_response_caret(train, degree = 3, method = 'pdp', parallel = TRUE)
  }
 }
 \seealso{

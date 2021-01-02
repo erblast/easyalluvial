@@ -244,7 +244,26 @@ manip_bin_numerics = function(x
 
 }
 
-
-
+#' @title get most frequent level of factor
+#' @param x factor
+#' @return factor
+#' @examples 
+#' x <- LETTERS[c(7,6,7,7,3,4,20)]
+#' x <- as.factor(x)
+#' get_most_frequent_lvl(x)
+#' @rdname get_most_frequent_lvl
+#' @noRd
+get_most_frequent_lvl <- function(x) {
+  stopifnot(is.factor(x))
+  
+  x <- unname(x)
+  
+  lvl <- table(x) %>%
+    sort(decreasing = TRUE) %>%
+    .[1] %>%
+    names()
+  
+  return(x[which(x == lvl)][1])
+}
 
 
