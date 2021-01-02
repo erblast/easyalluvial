@@ -101,7 +101,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -133,7 +133,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/erblast/easyalluvial/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -285,28 +285,28 @@ fill variable stratum, Default: TRUE</p></td>
     <pre class="examples"><div class='input'><span class='fu'>alluvial_wide</span><span class='op'>(</span> data <span class='op'>=</span> <span class='va'>mtcars2</span>, id <span class='op'>=</span> <span class='va'>ids</span>
                 , max_variables <span class='op'>=</span> <span class='fl'>5</span>
                 , fill_by <span class='op'>=</span> <span class='st'>'first_variable'</span> <span class='op'>)</span>
-</div><div class='img'><img src='alluvial_wide-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># \dontrun{</span>
+</div><div class='img'><img src='alluvial_wide-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 
 <span class='co'># more coloring variants----------------------</span>
 <span class='fu'>alluvial_wide</span><span class='op'>(</span> data <span class='op'>=</span> <span class='va'>mtcars2</span>, id <span class='op'>=</span> <span class='va'>ids</span>
                 , max_variables <span class='op'>=</span> <span class='fl'>5</span>
                 , fill_by <span class='op'>=</span> <span class='st'>'last_variable'</span> <span class='op'>)</span>
-</div><div class='img'><img src='alluvial_wide-2.png' alt='' width='700' height='433' /></div><div class='input'>
+
 <span class='fu'>alluvial_wide</span><span class='op'>(</span> data <span class='op'>=</span> <span class='va'>mtcars2</span>, id <span class='op'>=</span> <span class='va'>ids</span>
                 , max_variables <span class='op'>=</span> <span class='fl'>5</span>
                 , fill_by <span class='op'>=</span> <span class='st'>'all_flows'</span> <span class='op'>)</span>
-</div><div class='img'><img src='alluvial_wide-3.png' alt='' width='700' height='433' /></div><div class='input'>
+
 <span class='fu'>alluvial_wide</span><span class='op'>(</span> data <span class='op'>=</span> <span class='va'>mtcars2</span>, id <span class='op'>=</span> <span class='va'>ids</span>
                 , max_variables <span class='op'>=</span> <span class='fl'>5</span>
                 , fill_by <span class='op'>=</span> <span class='st'>'first_variable'</span> <span class='op'>)</span>
-</div><div class='img'><img src='alluvial_wide-4.png' alt='' width='700' height='433' /></div><div class='input'>
+
 <span class='co'># manually order variable values and colour by stratum value</span>
 
 <span class='fu'>alluvial_wide</span><span class='op'>(</span> data <span class='op'>=</span> <span class='va'>mtcars2</span>, id <span class='op'>=</span> <span class='va'>ids</span>
                  , max_variables <span class='op'>=</span> <span class='fl'>5</span>
                  , fill_by <span class='op'>=</span> <span class='st'>'values'</span>
                  , order_levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'4'</span>, <span class='st'>'8'</span>, <span class='st'>'6'</span><span class='op'>)</span> <span class='op'>)</span>
-</div><div class='img'><img src='alluvial_wide-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

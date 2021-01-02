@@ -104,7 +104,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -136,7 +136,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/erblast/easyalluvial/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -287,7 +287,7 @@ histograms are added to the plot later. Default = NULL</p></td>
 <span class='fu'>alluvial_model_response</span><span class='op'>(</span><span class='va'>pred</span>, <span class='va'>dspace</span>, <span class='va'>imp</span>, degree <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
 </div><div class='img'><img src='alluvial_model_response-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># partial dependency plotting method</span>
-<span class='co'># \dontrun{</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
  <span class='va'>pred</span> <span class='op'>=</span> <span class='fu'><a href='get_pdp_predictions.html'>get_pdp_predictions</a></span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>imp</span>
                             , .f_predict <span class='op'>=</span> <span class='fu'>randomForest</span><span class='fu'>:::</span><span class='va'><a href='https://rdrr.io/pkg/randomForest/man/predict.randomForest.html'>predict.randomForest</a></span>
                             , <span class='va'>m</span>
@@ -296,7 +296,7 @@ histograms are added to the plot later. Default = NULL</p></td>
 
 
  <span class='fu'>alluvial_model_response</span><span class='op'>(</span><span class='va'>pred</span>, <span class='va'>dspace</span>, <span class='va'>imp</span>, degree <span class='op'>=</span> <span class='fl'>3</span>, method <span class='op'>=</span> <span class='st'>'pdp'</span><span class='op'>)</span>
-</div><div class='img'><img src='alluvial_model_response-2.png' alt='' width='700' height='433' /></div><div class='input'> <span class='co'># }</span>
+ <span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
