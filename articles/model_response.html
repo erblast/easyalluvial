@@ -132,7 +132,7 @@
 <a href="#generating-the-data-space" class="anchor"></a>Generating the data space</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span> <span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/erblast/easyalluvial">easyalluvial</a></span><span class="op">)</span> <span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/erblast/easyalluvial/">easyalluvial</a></span><span class="op">)</span> <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mlbench</span><span class="op">)</span> <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.stat.berkeley.edu/~breiman/RandomForests/">randomForest</a></span><span class="op">)</span> <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes">recipes</a></span><span class="op">)</span> <span class="op">)</span>
@@ -156,55 +156,55 @@
 <tbody>
 <tr class="odd">
 <td align="left">medv</td>
-<td align="right">8696.0316</td>
+<td align="right">8246.4626</td>
 </tr>
 <tr class="even">
 <td align="left">rm</td>
-<td align="right">3645.4121</td>
+<td align="right">3567.1643</td>
 </tr>
 <tr class="odd">
 <td align="left">age</td>
-<td align="right">2609.0228</td>
+<td align="right">2961.4537</td>
 </tr>
 <tr class="even">
 <td align="left">indus</td>
-<td align="right">2297.2290</td>
+<td align="right">2252.2190</td>
 </tr>
 <tr class="odd">
 <td align="left">crim</td>
-<td align="right">2153.7873</td>
+<td align="right">2231.3382</td>
 </tr>
 <tr class="even">
 <td align="left">dis</td>
-<td align="right">1875.3921</td>
+<td align="right">1802.2238</td>
 </tr>
 <tr class="odd">
 <td align="left">nox</td>
-<td align="right">1532.8565</td>
+<td align="right">1648.1508</td>
 </tr>
 <tr class="even">
-<td align="left">tax</td>
-<td align="right">737.8594</td>
+<td align="left">b</td>
+<td align="right">703.9107</td>
 </tr>
 <tr class="odd">
-<td align="left">b</td>
-<td align="right">670.0916</td>
+<td align="left">tax</td>
+<td align="right">628.1203</td>
 </tr>
 <tr class="even">
 <td align="left">ptratio</td>
-<td align="right">366.5342</td>
+<td align="right">446.1274</td>
 </tr>
 <tr class="odd">
 <td align="left">rad</td>
-<td align="right">243.0698</td>
+<td align="right">201.8832</td>
 </tr>
 <tr class="even">
-<td align="left">chas</td>
-<td align="right">125.5655</td>
+<td align="left">zn</td>
+<td align="right">117.3911</td>
 </tr>
 <tr class="odd">
-<td align="left">zn</td>
-<td align="right">123.5614</td>
+<td align="left">chas</td>
+<td align="right">111.0059</td>
 </tr>
 </tbody>
 </table>
@@ -225,12 +225,12 @@
 <th align="right">crim</th>
 <th align="right">dis</th>
 <th align="right">nox</th>
-<th align="right">tax</th>
 <th align="right">b</th>
+<th align="right">tax</th>
 <th align="right">ptratio</th>
 <th align="right">rad</th>
-<th align="left">chas</th>
 <th align="right">zn</th>
+<th align="left">chas</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -241,12 +241,12 @@
 <td align="right">0.25651</td>
 <td align="right">3.20745</td>
 <td align="right">0.538</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
@@ -256,12 +256,12 @@
 <td align="right">0.25651</td>
 <td align="right">3.20745</td>
 <td align="right">0.538</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
@@ -271,12 +271,12 @@
 <td align="right">0.25651</td>
 <td align="right">3.20745</td>
 <td align="right">0.538</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
@@ -286,12 +286,12 @@
 <td align="right">0.25651</td>
 <td align="right">3.20745</td>
 <td align="right">0.538</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
@@ -301,12 +301,12 @@
 <td align="right">0.25651</td>
 <td align="right">3.20745</td>
 <td align="right">0.538</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
@@ -316,12 +316,12 @@
 <td align="right">0.25651</td>
 <td align="right">3.20745</td>
 <td align="right">0.538</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
@@ -331,12 +331,12 @@
 <td align="right">0.25651</td>
 <td align="right">3.20745</td>
 <td align="right">0.538</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
@@ -346,12 +346,12 @@
 <td align="right">0.25651</td>
 <td align="right">3.20745</td>
 <td align="right">0.538</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
@@ -361,12 +361,12 @@
 <td align="right">0.25651</td>
 <td align="right">3.20745</td>
 <td align="right">0.538</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
 <td align="right">5</td>
@@ -376,12 +376,12 @@
 <td align="right">0.25651</td>
 <td align="right">3.20745</td>
 <td align="right">0.538</td>
-<td align="right">330</td>
 <td align="right">391.44</td>
+<td align="right">330</td>
 <td align="right">19.05</td>
 <td align="right">5</td>
-<td align="left">0</td>
 <td align="right">0</td>
+<td align="left">0</td>
 </tr>
 </tbody>
 </table>
@@ -399,12 +399,12 @@
 <th align="right">crim</th>
 <th align="right">dis</th>
 <th align="right">nox</th>
-<th align="right">tax</th>
 <th align="right">b</th>
+<th align="right">tax</th>
 <th align="right">ptratio</th>
 <th align="right">rad</th>
-<th align="right">chas</th>
 <th align="right">zn</th>
+<th align="right">chas</th>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="right">5</td>
