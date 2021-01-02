@@ -668,6 +668,8 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'  the distribution of the training predictions. This is useful if marginal
 #'  histograms are added to the plot later. Default = NULL
 #'@param stratum_label_size numeric, Default: 3.5
+#'@param pred_var character, sometimes target variable cannot be inferred and
+#'needs to be passed. Default NULL
 #'@param ... additional parameters passed to
 #'  \code{\link[easyalluvial]{alluvial_wide}}
 #'@return ggplot2 object
@@ -705,7 +707,9 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
                                          , params_bin_numeric_pred = list( center = T, transform = T, scale = T)
                                          , pred_train = NULL
                                          , stratum_label_size = 3.5
-                                         , force = F, ...){
+                                         , force = F
+                                         , pred_var = NULL
+                                         , ...){
 
 
   if( ! 'train' %in% class(train) ){
@@ -720,6 +724,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 
   imp = caret::varImp( train )
   imp = imp$importance
+  
 
   # for categorical response imp is calculated for each value
   # and has is own column in imp. In this case we average them
@@ -727,11 +732,25 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
   imp_df = tibble( var = row.names(imp)
                    , imp = apply(imp, 1, sum) / ncol(imp) )
 
-
+  # For some models features with zero imp do not occur in imp table, they need to be re-added
+  if(nrow(imp) < ncol(train$trainingData) - 1){
+    if(purrr::is_null(pred_var)){
+      stop("predicted variable cannot be determined, please supply via 'pred_var' parameter")
+    }
+    
+    vars_zero = train$trainingData %>%
+      select(- one_of(c(row.names(imp), pred_var))) %>%
+      colnames()
+    
+    imp_df_zero = tibble(var = vars_zero, imp = 0)
+    
+    imp_df = bind_rows(imp_df, imp_df_zero)
+    
+  }
+  
   dspace = get_data_space(train$trainingData, imp_df, degree = degree, bins = bins)
 
   if( method == 'median'){
-
     pred = predict(train, newdata = dspace)
   }
 
@@ -777,3 +796,5 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 use_e1071 = function(x){
   e1071::skewness(x)
 }
+
+
