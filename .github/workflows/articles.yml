@@ -23,8 +23,9 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@master
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", "rcmdcheck", "tidyverse", "pkgdown"))
+          install.packages(c("remotes", "devtools", "tidyverse", "pkgdown"))
           remotes::install_deps(dependencies = TRUE)
+          devtools::install()
         shell: Rscript {0}
       - name: Check
         run: |
