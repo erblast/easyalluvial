@@ -182,7 +182,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>m</th>
-      <td><p>parsnip model</p></td>
+      <td><p>parsnip model or trained workflow</p></td>
     </tr>
     <tr>
       <th>data_input</th>
@@ -292,11 +292,19 @@ needs to be passed. Default NULL</p></td>
 
 <span class='fu'>alluvial_model_response_parsnip</span><span class='op'>(</span><span class='va'>m</span>, <span class='va'>df</span>, degree <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
 </div><div class='img'><img src='alluvial_model_response_parsnip-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># partial dependency plotting method</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># workflow --------------------------------- </span>
+<span class='va'>wf</span> <span class='op'>&lt;-</span> <span class='fu'>workflows</span><span class='fu'>::</span><span class='fu'><a href='https://workflows.tidymodels.org//reference/workflow.html'>workflow</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+ <span class='fu'>workflows</span><span class='fu'>::</span><span class='fu'><a href='https://workflows.tidymodels.org//reference/add_model.html'>add_model</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+ <span class='fu'>workflows</span><span class='fu'>::</span><span class='fu'><a href='https://workflows.tidymodels.org//reference/add_recipe.html'>add_recipe</a></span><span class='op'>(</span><span class='va'>rec_prep</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+ <span class='fu'>parsnip</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/fit.html'>fit</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
+
+<span class='fu'>alluvial_model_response_parsnip</span><span class='op'>(</span><span class='va'>m</span>, <span class='va'>df</span>, degree <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+
+<span class='co'># partial dependence plotting method -----</span>
 <span class='fu'>future</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span><span class='op'>(</span><span class='st'>"multisession"</span><span class='op'>)</span>
 <span class='fu'>alluvial_model_response_parsnip</span><span class='op'>(</span><span class='va'>m</span>, <span class='va'>df</span>, degree <span class='op'>=</span> <span class='fl'>3</span>, method <span class='op'>=</span> <span class='st'>'pdp'</span>, parallel <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
- <span class='op'>}</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
