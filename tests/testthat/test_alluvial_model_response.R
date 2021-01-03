@@ -359,6 +359,7 @@ test_that('alluvial_model_response_parsnip'
           , {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("vip")
+  skip_if_not_installed("workflows")
   
   df = select(mtcars2, -ids)
   
@@ -381,6 +382,7 @@ test_that('alluvial_model_response_parsnip'
   
   p = alluvial_model_response_parsnip(m_form, df, degree = 3)
   p = alluvial_model_response_parsnip(m_wf, df, degree = 3)
+  p = alluvial_model_response_parsnip(wf, df, degree = 3)
   
   p = alluvial_model_response_parsnip(m_form, df, degree = 3, method = 'pdp')
 

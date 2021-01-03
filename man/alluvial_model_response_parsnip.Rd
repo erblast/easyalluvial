@@ -24,7 +24,7 @@ alluvial_model_response_parsnip(
 )
 }
 \arguments{
-\item{m}{parsnip model}
+\item{m}{parsnip model or trained workflow}
 
 \item{data_input}{dataframe, input data}
 
@@ -99,11 +99,19 @@ m = parsnip::rand_forest(mode = "regression") \%>\%
 
 alluvial_model_response_parsnip(m, df, degree = 3)
 
-# partial dependency plotting method
 \dontrun{
+# workflow --------------------------------- 
+wf <- workflows::workflow() \%>\%
+ workflows::add_model(m) \%>\%
+ workflows::add_recipe(rec_prep) \%>\%
+ parsnip::fit(df)
+
+alluvial_model_response_parsnip(m, df, degree = 3)
+
+# partial dependence plotting method -----
 future::plan("multisession")
 alluvial_model_response_parsnip(m, df, degree = 3, method = 'pdp', parallel = TRUE)
- }
+}
 }
 \seealso{
 \code{\link[easyalluvial]{alluvial_wide}},

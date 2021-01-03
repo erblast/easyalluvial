@@ -25,6 +25,9 @@ fac_chr_ordered = factor( c('a','b','c'), ordered = TRUE )
 manip_factor_2_numeric( fac_num )
 manip_factor_2_numeric( fac_chr )
 manip_factor_2_numeric( fac_chr_ordered )
+# does not work for decimal numbers
+manip_factor_2_numeric(factor(c("A12", "B55", "10e4")))
+manip_factor_2_numeric(factor(c("1.56", "4.56", "8.4")))
 }
 \seealso{
 \code{\link[stringr]{str_detect}}
