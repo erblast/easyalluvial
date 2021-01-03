@@ -13,7 +13,7 @@ on:
 name: parcats
 
 jobs:
-  R-CMD-check:
+  parcats:
     runs-on: macOS-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
