@@ -24,6 +24,72 @@ check_pkg_installed = function(pkg){
   return(TRUE)
 }
 
+#' @title pretty numbers
+#' @description converts numeric into pretty character
+#' @param x numeric vector
+#' @param digits_lower lower limit for scientific annotation
+#' @param digits_upper upper limit for scientific annotation
+#' @return character
+#' @examples 
+#' pretty_num(0.00009)
+#' pretty_num(0.0009)
+#' pretty_num(0.009)
+#' pretty_num(0.09)
+#' pretty_num(0.9)
+#' pretty_num(5.42)
+#' pretty_num(1.411234657)
+#' pretty_num(15.411234657)
+#' pretty_num(1677.411234657)
+#' pretty_num(1677.411234657)
+#' pretty_num(16779.411234657)
+#' pretty_num(167746.411234657)
+#' pretty_num(1677468.411234657)
+#' pretty_num(1123123532465.23453246)
+#' pretty_num("ABC")
+#' pretty_num("1123123532465.23453246")
+#' pretty_num("1e5")
+#' pretty_num(21321546787)
+#' @noRd
+pretty_num = function(x, digits_lower = -3, digits_upper = 6){
+  
+  stopifnot(length(x) == 1)
+  
+  suppressWarnings({
+    if(is.na(as.numeric(x))){
+      return(x)
+    }
+  })
+  
+  x <- as.numeric(x)
+  
+  n_int_digits <- function(x) {
+    result = floor(log10(abs(x)))
+    result[!is.finite(result)] = 0
+    result
+  }
+  
+  n <- n_int_digits(x)
+  
+  if(n == 0){
+    as.character(round(x, 2))
+  } else if(between(n, 0, digits_upper - 1)){
+    as.character(round(x, 1))
+  } else if(between(n, digits_lower, 0)){
+    as.character(round(x, abs(digits_lower)))
+  } else {
+    formatC(x, 2, format = "e")
+  }
+}
+
+#' @title vectorised version of pretty_num
+#' @inheritParams 
+#' @seealso pretty_num
+#' @noRd
+pretty_num_vec <- function(x){
+  sapply(x, pretty_num, USE.NAMES = FALSE)
+}
+
+
 #' @title tidy up dataframe containing model feature importance
 #' @description returns dataframe with exactly two columns, vars and imp and
 #'   aggregates dummy encoded variables. Helper function called by all functions
@@ -674,6 +740,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
   df = dspace %>%
     mutate_if( is.factor, fct_drop ) %>%
     mutate_all( as.factor ) %>%
+    mutate_all(fct_relabel, pretty_num_vec) %>%
     mutate( pred = pred )
 
   # prepare bins for numerical pred ----------------------------
@@ -763,9 +830,8 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 
   } else{
 
-    title = 'Mean Model Response Plot'
-    caption = 'the indicated variables have been set to the indicated values for each
-    observation in the data set and model response has been averaged' %>%
+    title = 'Partial Dependence Alluvial Plot'
+    caption = 'Indicated values replace corresponding values in training data set. For each unique combination predictions from entire training data set were averaged.' %>%
       str_wrap( width = 180 )
 
   }
@@ -930,7 +996,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 #'@title create model response plot for parsnip models
 #'@description Wraps \code{\link[easyalluvial]{alluvial_model_response}} and
 #'  \code{\link[easyalluvial]{get_data_space}} into one call for parsnip models.
-#'@param m parsnip model
+#'@param m parsnip model or trained workflow
 #'@param data_input dataframe, input data
 #'@param degree integer,  number of top important variables to select. For
 #'  plotting more than 4 will result in two many flows and the alluvial plot
@@ -975,12 +1041,20 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 #'    parsnip::fit(disp ~ ., data = df)
 #'
 #' alluvial_model_response_parsnip(m, df, degree = 3)
-#'
-#' # partial dependency plotting method
+#' 
 #' \dontrun{
+#'# workflow --------------------------------- 
+#'wf <- workflows::workflow() %>%
+#'  workflows::add_model(m) %>%
+#'  workflows::add_recipe(rec_prep) %>%
+#'  parsnip::fit(df)
+#'
+#' alluvial_model_response_parsnip(m, df, degree = 3)
+#'
+#' # partial dependence plotting method -----
 #' future::plan("multisession")
 #' alluvial_model_response_parsnip(m, df, degree = 3, method = 'pdp', parallel = TRUE)
-#'  }
+#'}
 #'@seealso \code{\link[easyalluvial]{alluvial_wide}},
 #'  \code{\link[easyalluvial]{get_data_space}}, \code{\link[caret]{varImp}},
 #'  \code{\link[caret]{extractPrediction}},
@@ -1001,9 +1075,8 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
                                          , .f_imp = vip::vi_model
                                          , ...){
   
-  
-  if( ! 'model_fit' %in% class(m) ){
-    stop( paste( 'm needs to be of class "model_fit" instead got object of class'
+  if( ! any(c('model_fit', 'workflow') %in% class(m))){
+    stop( paste( 'm needs to be of class "model_fit" or "workflow" instead got object of class'
                  , paste( class(m), collapse = ', ' ) ) )
   }
   
@@ -1014,13 +1087,25 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
   check_pkg_installed("parsnip")
   check_pkg_installed("vip")
   
-  imp = .f_imp(m) %>%
-    select(Variable, Importance)
+  is_workflow_model <- ifelse("workflow" %in% class(m), TRUE, FALSE)
+  
+  if(is_workflow_model){
+    stopifnot(m$trained)
+  }
   
   pred_vars = colnames(attr(m$preproc$terms, "factors"))
   resp_var = m$preproc$y_var
   
-
+  # vip cannot calculate importance for workflows
+  if(! is_workflow_model){
+    imp = .f_imp(m) %>%
+      select(Variable, Importance)
+  } else {
+    imp = workflows::pull_workflow_fit(m) %>%
+      .f_imp() %>%
+      select(Variable, Importance)
+  }
+  
   # For some models features with zero imp do not occur in imp table, they need to be re-added
   if(! all(pred_vars %in% imp$Variable)){
 
@@ -1054,19 +1139,17 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
     
   }
   
-  if(m$spec$mode == "classification") {
-    if(is_tibble(pred)) {
-      pred = pred$.pred_class
-    } else {
-      # pdp will not return tibble
-      pred = pred
+  if(is_tibble(pred)){
+    if(".pred" %in% names(pred)){
+      pred = pred$.pred
     }
-  } else if(is_tibble(pred)){
-    pred = pred$.pred
-  } else{
-    pred = pred
+    if(".pred_class" %in% names(pred)){
+      pred = pred$.pred_class
+    }
   }
 
+  stopifnot(! is.list(pred))
+  
   p = alluvial_model_response(pred = pred
                               , dspace = dspace
                               , imp = imp
