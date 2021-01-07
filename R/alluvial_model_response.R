@@ -626,9 +626,7 @@ get_cuts = function( from, target, ... ){
 #'@param degree integer,  number of top important variables to select. For
 #'  plotting more than 4 will result in two many flows and the alluvial plot
 #'  will not be very readable, Default: 4
-#'@param bins integer, number of bins for numeric variables, increasing this
-#'  number might result in too many flows, Default: 5
-#'@param bin_labels labels for the bins from low to high, Default: c("LL", "ML",
+#'@param bin_labels labels for prediction bins from low to high, Default: c("LL", "ML",
 #'  "M", "MH", "HH")
 #'@param col_vector_flow, character vector, defines flow colours, Default:
 #'  c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')
@@ -679,12 +677,12 @@ get_cuts = function( from, target, ... ){
 #'@rdname alluvial_model_response
 #'@export
 #'@importFrom stringr str_wrap str_replace_all str_split
-alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
+alluvial_model_response = function(pred, dspace, imp, degree = 4
                                    , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
                                    , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#9DD1D1')
                                    , method = 'median'
                                    , force = FALSE
-                                   , params_bin_numeric_pred = list( center = T, transform = T, scale = T)
+                                   , params_bin_numeric_pred = list(bins = 5) 
                                    , pred_train = NULL
                                    , stratum_label_size = 3.5
                                    , ...){
@@ -694,7 +692,6 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
                 , dspace = dspace
                 , imp = imp
                 , degree = degree
-                , bins = bins
                 , bin_labels = bin_labels
                 , col_vector_flow = col_vector_flow
                 , method = method
@@ -702,7 +699,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
                 , force = force)
   # checks ----------------------------------------------------------------------------
 
-  if( length(bin_labels) != bins & ! bin_labels[1] %in% c('median', 'cuts', 'mean', 'min_max') ){
+  if( length(bin_labels) != params_bin_numeric_pred$bins & ! bin_labels[1] %in% c('median', 'cuts', 'mean', 'min_max') ){
     stop( "bin_labels length must be equal to bins or one of  c('median', 'cuts', 'mean', 'min_max')")
   }
 
@@ -733,7 +730,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
     stop( paste('parameter method needs to be one of c("median","pdp") instead got:', method) )
   }
 
-  if( bins > 7){
+  if( params_bin_numeric_pred$bins > 7){
     warning('if bins > 7 default colors will be repeated, adjust "col_vector_flow" parameter manually')
   }
 
@@ -788,11 +785,11 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
     }
 
     new_cuts = do.call( get_cuts, c(from = list(pred_train), target = list(pred)
-                                    , params_bin_numeric_pred, bins = bins) )
+                                    , params_bin_numeric_pred) )
 
     params$new_cuts = new_cuts
 
-    bin_labels_pred = ifelse(n_distinct(pred) <= bins, "median", "cuts")
+    bin_labels_pred = ifelse(n_distinct(pred) <= params_bin_numeric_pred$bins, "median", "cuts")
     
     df = df %>%
       manip_bin_numerics( bins = new_cuts, bin_labels = bin_labels_pred
@@ -907,7 +904,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'@param parallel logical, turn on parallel processing for pdp method. Default: FALSE
 #'@param params_bin_numeric_pred list, additional parameters passed to
 #'  \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
-#'  parameter. Default: list( bins = 5, center = T, transform = T, scale = T)
+#'  parameter. Default: list(bins = 5, center = T, transform = T, scale = T)
 #'@param force logical, force plotting of over 1500 flows, Default: FALSE
 #'@param pred_train numeric vector, base the automated binning of the pred vector on
 #'  the distribution of the training predictions. This is useful if marginal
@@ -951,7 +948,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
                                          , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#9DD1D1')
                                          , method = 'median'
                                          , parallel = FALSE
-                                         , params_bin_numeric_pred = list( center = T, transform = T, scale = T)
+                                         , params_bin_numeric_pred = list(bins=5)
                                          , pred_train = NULL
                                          , stratum_label_size = 3.5
                                          , force = F
@@ -996,7 +993,6 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
                               , dspace = dspace
                               , imp = imp
                               , degree = degree
-                              , bins = bins
                               , bin_labels = bin_labels
                               , col_vector_flow = col_vector_flow
                               , method = method
@@ -1033,7 +1029,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 #'@param parallel logical, turn on parallel processing for pdp methof. Default: FALSE
 #'@param params_bin_numeric_pred list, additional parameters passed to
 #'  \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
-#'  parameter. Default: list( bins = 5, center = T, transform = T, scale = T)
+#'  parameter. Default: list(bins = 5, center = T, transform = T, scale = T)
 #'@param force logical, force plotting of over 1500 flows, Default: FALSE
 #'@param pred_train numeric vector, base the automated binning of the pred vector on
 #'  the distribution of the training predictions. This is useful if marginal
@@ -1084,7 +1080,7 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
                                          , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#9DD1D1')
                                          , method = 'median'
                                          , parallel = FALSE
-                                         , params_bin_numeric_pred = list( center = T, transform = T, scale = T)
+                                         , params_bin_numeric_pred = list(bins=5)
                                          , pred_train = NULL
                                          , stratum_label_size = 3.5
                                          , force = F
@@ -1162,7 +1158,6 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
                               , dspace = dspace
                               , imp = imp
                               , degree = degree
-                              , bins = bins
                               , bin_labels = bin_labels
                               , col_vector_flow = col_vector_flow
                               , method = method

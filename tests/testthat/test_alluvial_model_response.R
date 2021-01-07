@@ -142,10 +142,6 @@ test_that('alluvial_model_response'
     expect_error( get_data_space(df, imp_no_match) )
     expect_error( alluvial_model_response( pred, dspace, imp_no_match) )
   
-    # importance as less variables then degrees
-    expect_warning( get_data_space(df, imp_conv[0:2,], degree = 3) )
-    expect_warning( alluvial_model_response(pred, dspace, imp_conv[0:2,], degree = 3) )
-    
     # number of flows to high
     dspace = get_data_space(df, imp, degree = 6)
     pred = predict(m, newdata = dspace)
@@ -181,25 +177,26 @@ test_that('alluvial_model_response'
     # change bin_numerics parameter for pred and bins
     
     p = alluvial_model_response(pred, dspace, imp, degree = 3
-                                , bins = 3
                                 , bin_labels = c('L','M', 'H')
-                                , params_bin_numeric_pred = list(center = F, scale = F, transform = F) )
+                                , params_bin_numeric_pred = list(bins = 3, center = F, scale = F, transform = F) )
     
 
-    expect_true( p$alluvial_params$bins == 3 )
+    expect_true( p$alluvial_params$params_bin_numeric_pred$bins == 3 )
     
     expect_doppelganger('model_response_new_change_bins_3', p)
     
     dspace = get_data_space(df, imp, degree = 4)
     pred = predict(m, newdata = dspace)
     p = alluvial_model_response(pred, dspace, imp, degree = 4
-                                , bins = 7, c('LLL','LL', 'ML', 'M', 'MH', 'HH', 'HHH') )
+                                , params_bin_numeric_pred = list(bins=7)
+                                , c('LLL','LL', 'ML', 'M', 'MH', 'HH', 'HHH') )
     
     pred_train = predict(m)
     
-    p = alluvial_model_response(pred, dspace, imp, degree = 4, bins = 7
-                            , bin_labels = c('LLL','LL', 'ML', 'M', 'MH', 'HH', 'HHH')
-                            , pred_train = pred_train )
+    p = alluvial_model_response(pred, dspace, imp, degree = 4
+                                , params_bin_numeric_pred = list(bins=7)
+                                , bin_labels = c('LLL','LL', 'ML', 'M', 'MH', 'HH', 'HHH')
+                                , pred_train = pred_train )
     
     expect_doppelganger('model_response_new_change_bins_7', p)
     
@@ -308,7 +305,7 @@ test_that('alluvial_model_response_caret'
   
   # categorical bivariate response 
   set.seed(1)
-  train = caret::train( am ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
+  train = caret::train(am ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
   p = alluvial_model_response_caret(train, degree = 3)
   # expect_doppelganger('model_response_caret_cat_bi', p)
   
@@ -456,7 +453,7 @@ test_that("rpart", {
   skip_if_not_installed("caret")
   skip_if_not_installed("parsnip")
   
-  test_rpart <- function(form, mode, resp_var){
+  test_rpart <- function(form, mode, resp_var, type = "vector"){
   
     df = select(mtcars2, -ids)
     
@@ -491,28 +488,43 @@ test_that("rpart", {
     
     # plots --------------------------------------------------
     dspace <- get_data_space(df, imp, degree = 3, bins = 5)
-    pred <- predict(m, newdata = dspace)
+    pred <- predict(m, newdata = dspace, type = type)
     pred_pdp <- get_pdp_predictions(df, imp, m, degree = 3, bins = 5)
     
-    expect_warning(p <- alluvial_model_response(pred, dspace, imp, degree = 3))
-    p <- alluvial_model_response(pred, dspace, imp, degree = 3, bins = 2,
-                                 bin_labels = c("H", "L"))
-    
-    p <- alluvial_model_response(pred_pdp, dspace, imp, degree = 3,
-                                 method = "pdp", bins = 2,
-                                 bin_labels = c("H", "L"))
-    
-    p <- alluvial_model_response_caret(train, degree = 3, bins = 2, bin_labels = c("H", "L"))
-    p <- alluvial_model_response_caret(train, degree = 3, method = "pdp")
-    
-    p <- alluvial_model_response_parsnip(m_parsnip, df, degree = 3, bins = 2, bin_labels = c("H", "L"))
-    p <- alluvial_model_response_parsnip(m_parsnip, df, degree = 3, method = "pdp")
+    if(mode == "regression") {
+      expect_warning(p <- alluvial_model_response(pred, dspace, imp, degree = 3))
+      
+      p <- alluvial_model_response(pred, dspace, imp, degree = 3,
+                                   params_bin_numeric_pred = list(bins =2),
+                                   bin_labels = c("H", "L"))
+      
+      p <- alluvial_model_response(pred_pdp, dspace, imp, degree = 3,
+                                   method = "pdp",
+                                   params_bin_numeric_pred = list(bins =2),
+                                   bin_labels = c("H", "L"))
+      
+      p <- alluvial_model_response_caret(train, degree = 3,
+                                         params_bin_numeric_pred = list(bins =2),
+                                         bin_labels = c("H", "L"))
+      
+      p <- alluvial_model_response_caret(train, degree = 3, method = "pdp",
+                                         params_bin_numeric_pred = list(bins =2),
+                                         bin_labels = c("H", "L"))
+      
+      p <- alluvial_model_response_parsnip(m_parsnip, df, degree = 3,
+                                           params_bin_numeric_pred = list(bins =2),
+                                           bin_labels = c("H", "L"))
+      
+      p <- alluvial_model_response_parsnip(m_parsnip, df, degree = 3, method = "pdp",
+                                           params_bin_numeric_pred = list(bins =2),
+                                           bin_labels = c("H", "L"))
+    }
     
   }
   
-  test_rpart(disp ~ ., "regression", "disp")
-  test_rpart(cyl ~ ., "classification", "cyl")
-  test_rpart(am ~ ., "classification", "am")
+  test_rpart(disp ~ ., "regression", "disp", type = "vector")
+  # test_rpart(cyl ~ ., "classification", "cyl", type = "class")
+  # test_rpart(am ~ ., "classification", "am")
   
 })
 
