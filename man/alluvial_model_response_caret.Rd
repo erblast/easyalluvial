@@ -6,6 +6,7 @@
 \usage{
 alluvial_model_response_caret(
   train,
+  data_input,
   degree = 4,
   bins = 5,
   bin_labels = c("LL", "ML", "M", "MH", "HH"),
@@ -13,16 +14,18 @@ alluvial_model_response_caret(
     "#9DD1D1"),
   method = "median",
   parallel = FALSE,
-  params_bin_numeric_pred = list(center = T, transform = T, scale = T),
+  params_bin_numeric_pred = list(bins = 5),
   pred_train = NULL,
   stratum_label_size = 3.5,
   force = F,
-  pred_var = NULL,
+  resp_var = NULL,
   ...
 )
 }
 \arguments{
 \item{train}{caret train object}
+
+\item{data_input}{dataframe, input data}
 
 \item{degree}{integer,  number of top important variables to select. For
 plotting more than 4 will result in two many flows and the alluvial plot
@@ -48,7 +51,7 @@ observation and the result is averaged} }. Default: 'median'}
 
 \item{params_bin_numeric_pred}{list, additional parameters passed to
 \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
-parameter. Default: list( bins = 5, center = T, transform = T, scale = T)}
+parameter. Default: list(bins = 5, center = T, transform = T, scale = T)}
 
 \item{pred_train}{numeric vector, base the automated binning of the pred vector on
 the distribution of the training predictions. This is useful if marginal
@@ -58,7 +61,7 @@ histograms are added to the plot later. Default = NULL}
 
 \item{force}{logical, force plotting of over 1500 flows, Default: FALSE}
 
-\item{pred_var}{character, sometimes target variable cannot be inferred and
+\item{resp_var}{character, sometimes target variable cannot be inferred and
 needs to be passed. Default NULL}
 
 \item{...}{additional parameters passed to
@@ -93,12 +96,12 @@ train = caret::train( disp ~ .
                      , trControl = caret::trainControl( method = 'none' )
                      , importance = TRUE )
 
-alluvial_model_response_caret(train, degree = 3)
+alluvial_model_response_caret(train, df, degree = 3)
 
 # partial dependency plotting method
 \dontrun{
 future::plan("multisession")
-alluvial_model_response_caret(train, degree = 3, method = 'pdp', parallel = TRUE)
+alluvial_model_response_caret(train, df, degree = 3, method = 'pdp', parallel = TRUE)
  }
 }
 \seealso{

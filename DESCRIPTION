@@ -36,7 +36,8 @@ Suggests:
     e1071,
     caret,
     parsnip,
-    vip
+    vip,
+    rpart
 RoxygenNote: 7.1.1
 Imports:
   purrr

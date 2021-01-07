@@ -84,7 +84,7 @@ test_that('plot_hist_as_margins',{
                         , df, method = 'lm'
                         ,trControl = caret::trainControl(method = 'none') )
   
-  p_mod_num = alluvial_model_response_caret(train, degree = 3)
+  p_mod_num = alluvial_model_response_caret(train, df, degree = 3)
   
   p = plot_hist('pred', p_mod_num, df)
   expect_doppelganger('mod_num_pred', p)
@@ -105,7 +105,7 @@ test_that('plot_hist_as_margins',{
   # gtables not yet supported by vdiffr
   # expect_doppelganger('marg_hist_mod_num_labels', p_grid)
   
-  p_mod_num = alluvial_model_response_caret(train, degree = 3
+  p_mod_num = alluvial_model_response_caret(train, df, degree = 3
                                     , pred_train = predict(train, mtcars2))
   
   p = plot_hist('pred', p_mod_num, df)
@@ -124,7 +124,7 @@ test_that('plot_hist_as_margins',{
                         , trControl = caret::trainControl(method = 'none')
                         , importance = T)
   
-  p_mod_cat = alluvial_model_response_caret(train, degree = 3)
+  p_mod_cat = alluvial_model_response_caret(train, df, degree = 3)
   
   p = plot_hist('pred', p_mod_cat, df, pred_train = predict(train, mtcars2))
   expect_doppelganger('mod_cat_pred_train', p)
@@ -147,11 +147,11 @@ test_that('model response marginal hists, extra columns in df',{
                         , df, method = 'lm'
                         ,trControl = caret::trainControl(method = 'none') )
   
-  p_mod_num = alluvial_model_response_caret(train, degree = 3)
+  expect_error(alluvial_model_response_caret(train, df, degree = 3))
   
-  expect_error( p = plot_hist('pred', p_mod_num, df) )
+  p_mod_num = alluvial_model_response_caret(train, df, degree = 3, resp_var = "disp")
   
-  p = plot_hist('pred', p_mod_num, df, pred_var = 'disp')
+  p = plot_hist('pred', p_mod_num, df)
   
 
 })

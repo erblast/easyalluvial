@@ -29,7 +29,7 @@ Default: TRUE}
 the response variable \describe{ \item{pred_train}{display training
 prediction, not necessary if pred_train has already been passed to
 alluvial_model_response()} \item{scale}{int, y-axis distance between the
-ridge plots, Default: 400 } \item{pred_var}{character vector, specify
+ridge plots, Default: 400 } \item{resp_var}{character vector, specify
 response variable in data_input, if not set response variable will try to be
 inferred, Default: NULL } }}
 }

@@ -108,11 +108,20 @@ pretty_num_vec <- function(x){
 #' df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
 #' m = randomForest::randomForest( disp ~ ., df)
 #' imp = m$importance
-#' tidy_imp(imp, mtcars2)
+#' tidy_imp(imp, df)
 #' 
 #' @rdname tidy_imp
 #' @export
 tidy_imp = function(imp, df, .f = max, resp_var = NULL){
+  
+  if("varImp.train" %in% class(imp)){
+    imp = imp$importance
+    # for categorical response imp is calculated for each value
+    # and has is own column in imp. In this case we average them
+    imp = tibble( var = row.names(imp)
+                     , imp = apply(imp, 1, sum) / ncol(imp) )
+    
+  }
 
   if( ! "data.frame" %in% class(imp) & ! 'matrix' %in% class(imp) ){
     stop( paste('imp needs to be of class "data.frame" instead passed object of class'
@@ -886,6 +895,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4
 #'@description Wraps \code{\link[easyalluvial]{alluvial_model_response}} and
 #'  \code{\link[easyalluvial]{get_data_space}} into one call for caret models.
 #'@param train caret train object
+#'@param data_input dataframe, input data
 #'@param degree integer,  number of top important variables to select. For
 #'  plotting more than 4 will result in two many flows and the alluvial plot
 #'  will not be very readable, Default: 4
@@ -929,12 +939,12 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4
 #'                      , trControl = caret::trainControl( method = 'none' )
 #'                      , importance = TRUE )
 #'
-#' alluvial_model_response_caret(train, degree = 3)
+#' alluvial_model_response_caret(train, df, degree = 3)
 #'
 #' # partial dependency plotting method
 #' \dontrun{
 #' future::plan("multisession")
-#' alluvial_model_response_caret(train, degree = 3, method = 'pdp', parallel = TRUE)
+#' alluvial_model_response_caret(train, df, degree = 3, method = 'pdp', parallel = TRUE)
 #'  }
 #'@seealso \code{\link[easyalluvial]{alluvial_wide}},
 #'  \code{\link[easyalluvial]{get_data_space}}, \code{\link[caret]{varImp}},
@@ -943,7 +953,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4
 #'  \code{\link[easyalluvial]{get_pdp_predictions}}
 #'@rdname alluvial_model_response_caret
 #'@export
-alluvial_model_response_caret = function(train, degree = 4, bins = 5
+alluvial_model_response_caret = function(train, data_input, degree = 4, bins = 5
                                          , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
                                          , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#9DD1D1')
                                          , method = 'median'
@@ -968,11 +978,10 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
   check_pkg_installed("caret")
   
   imp = caret::varImp( train )
-  imp = imp$importance
+
+  imp = tidy_imp(imp, data_input, resp_var = resp_var)
   
-  imp = tidy_imp(imp, df, resp_var = resp_var)
-  
-  dspace = get_data_space(train$trainingData, imp, degree = degree, bins = bins)
+  dspace = get_data_space(data_input, imp, degree = degree, bins = bins)
 
   if( method == 'median'){
     pred = predict(train, newdata = dspace)
@@ -980,7 +989,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 
   if( method == 'pdp'){
 
-    pred = get_pdp_predictions(train$trainingData, imp
+    pred = get_pdp_predictions(data_input, imp
                                , .f_predict = predict
                                , m = train
                                , degree = degree
@@ -1107,7 +1116,10 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
   }
   
   pred_vars = colnames(attr(m$preproc$terms, "factors"))
-  resp_var = m$preproc$y_var
+  
+  if(is.null(resp_var)){
+    resp_var = m$preproc$y_var
+  }
   
   # vip cannot calculate importance for workflows
   if(! is_workflow_model){
@@ -1119,7 +1131,7 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
       select(Variable, Importance)
   }
   
-  imp = tidy_imp(imp, df, resp_var = resp_var)
+  imp = tidy_imp(imp, data_input, resp_var = resp_var)
   
   dspace = get_data_space(data_input, imp, degree = degree, bins = bins)
   

@@ -170,7 +170,7 @@ plot_hist_long = function(var, p, data_input){
   
 }
 
-plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale = 400, pred_var = NULL){
+plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale = 400, resp_var = NULL){
 
   var_str = var
   var_quo = as.name(var_str)
@@ -181,9 +181,9 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
     
     # set ori_name -----------------------------------------------
     ori_name = NULL
-    if( ! is_null(pred_var) ){
-      if( pred_var %in% names(data_input) ){
-        ori_name = pred_var
+    if( ! is_null(resp_var) ){
+      if( resp_var %in% names(data_input) ){
+        ori_name = resp_var
       }
     }
     
@@ -195,7 +195,7 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
     if( length(ori_name) > 1){
       stop( paste('\n"data_input" should only contain explanatory and response variables, so response variable can be inferred.
                   \nPotential response variables:', paste( ori_name, collapse = ', ')
-                  , '\nPlease pass correct response variable as string using the "pred_var" parameter.' ) )
+                  , '\nPlease pass correct response variable as string using the "resp_var" parameter.' ) )
     }
     
     is_num = is.numeric( data_input[[ori_name]] )
@@ -506,7 +506,7 @@ plot_hist_wide = function( var, p, data_input){
 #'  the response variable \describe{ \item{pred_train}{display training
 #'  prediction, not necessary if pred_train has already been passed to
 #'  alluvial_model_response()} \item{scale}{int, y-axis distance between the
-#'  ridge plots, Default: 400 } \item{pred_var}{character vector, specify
+#'  ridge plots, Default: 400 } \item{resp_var}{character vector, specify
 #'  response variable in data_input, if not set response variable will try to be
 #'  inferred, Default: NULL } }
 #'@return gtable
