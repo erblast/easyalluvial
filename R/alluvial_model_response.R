@@ -713,7 +713,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4
   }
 
   if( is.factor(pred) ){
-    bin_labels = abbreviate( levels(pred), minlength = 1 )
+    bin_labels = abbreviate( unique(pred), minlength = 1 )
   }
 
   if( ! is.numeric(pred) & ! is.factor(pred) ){
@@ -752,7 +752,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4
   # will be applied to each column in df creates a suitable label
 
   make_level_labels = function(col, df, bin_labels){
-
+    df$pred <- fct_drop(df$pred)
     levels( df$pred ) <- paste0( bin_labels, ':')
 
     labels = df %>%

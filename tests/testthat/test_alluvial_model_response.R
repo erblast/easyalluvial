@@ -488,7 +488,17 @@ test_that("rpart", {
     # plots --------------------------------------------------
     dspace <- get_data_space(df, imp, degree = 3, bins = 5)
     pred <- predict(m, newdata = dspace, type = type)
-    pred_pdp <- get_pdp_predictions(df, imp, m, degree = 3, bins = 5)
+    pred_pdp <- get_pdp_predictions(df, imp, m, degree = 3, bins = 5,
+                                    .f_predict = function(...) predict(..., type = type))
+    
+    if(mode == "classification"){
+      p <- alluvial_model_response(pred, dspace, imp, degree = 3)
+      p <- alluvial_model_response(pred, dspace, imp, degree = 3, method = "pdp")
+      p <- alluvial_model_response_caret(train, df, degree = 3)
+      p <- alluvial_model_response_caret(train, df, degree = 3, method = "pdp")
+      p <- alluvial_model_response_parsnip(m_parsnip, df, degree = 3)
+      p <- alluvial_model_response_parsnip(m_parsnip, df, degree = 3, method = "pdp")
+    }
     
     if(mode == "regression") {
       expect_warning(p <- alluvial_model_response(pred, dspace, imp, degree = 3))
@@ -522,11 +532,65 @@ test_that("rpart", {
   }
   
   test_rpart(form = disp ~ ., mode = "regression", resp_var = "disp", type = "vector")
-  test_rpart(cyl ~ ., "classification", "cyl", type = "class")
-  test_rpart(am ~ ., "classification", "am")
+  test_rpart(form = cyl ~ ., mode = "classification", resp_var = "cyl", type = "class")
+  test_rpart(form = am ~ ., mode ="classification", resp_var = "am", type = "class")
   
 })
 
+test_that("earth", {
+  
+  skip_if_not_installed("earth")
+  skip_if_not_installed("vip")
+  skip_if_not_installed("caret")
+  skip_if_not_installed("parsnip")
+  
+  test_earth <- function(form, mode, resp_var, type = "vector"){
+    
+    df = select(mtcars2, -ids)
+    
+    set.seed(1)
+    # train models --------------------------------------------
+    set.seed(1)
+    m <- earth::earth(form, df)
+    
+    set.seed(1)
+    m_parsnip <- parsnip::mars(mode = mode) %>%
+      parsnip::set_engine("earth") %>%
+      parsnip::fit(form, df)
+    
+    set.seed(1)
+    suppressWarnings({
+      train <- caret::train(form, df, method = 'earth')
+    })
+    # imp -----------------------------------------------------
+    imp <- vip::vi_model(m)
+    imp_parsnip <- vip::vi_model(m_parsnip)
+    imp_caret <- caret::varImp(train)
+    
+    imp <- tidy_imp(imp, df)
+    imp_parsnip <- tidy_imp(imp_parsnip, df)
+    imp_caret <- tidy_imp(imp_caret, df, resp_var = resp_var)
+    
+    expect_true(all(nrow(c(imp, imp_parsnip, imp_caret)) == nrow(df) - 1))
+    
+    # plots --------------------------------------------------
+    dspace <- get_data_space(df, imp, degree = 3, bins = 5)
+    pred <- predict(m, newdata = dspace, type = type)
+    pred_pdp <- get_pdp_predictions(df, imp, m, degree = 3, bins = 5)
+    
+    p <- alluvial_model_response(pred, dspace, imp, degree = 3)
+    p <- alluvial_model_response(pred, dspace, imp, degree = 3, method = "pdp")
+    p <- alluvial_model_response_caret(train, df, degree = 3, resp_var = resp_var)
+    p <- alluvial_model_response_caret(train, df, degree = 3, method = "pdp", resp_var = resp_var)
+    p <- alluvial_model_response_parsnip(m_parsnip, df, degree = 3)
+    p <- alluvial_model_response_parsnip(m_parsnip, df, degree = 3, method = "pdp")
+    
+
+  }
+  
+  test_earth(form = disp ~ ., mode = "regression", resp_var = "disp", type = "link")
+
+})
 
 
 test_that('n_feats == degree',{
