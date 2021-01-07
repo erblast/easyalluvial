@@ -449,6 +449,74 @@ test_that('alluvial_model_response_parsnip'
 })
 
 
+test_that("rpart", {
+  
+  skip_if_not_installed("rpart")
+  skip_if_not_installed("vip")
+  skip_if_not_installed("caret")
+  skip_if_not_installed("parsnip")
+  
+  test_rpart <- function(form, mode, resp_var){
+  
+    df = select(mtcars2, -ids)
+    
+    set.seed(1)
+    # train models --------------------------------------------
+    set.seed(1)
+    m <- rpart::rpart(form, df)
+  
+    set.seed(1)
+    m_parsnip <- parsnip::decision_tree(mode = mode) %>%
+      parsnip::set_engine("rpart") %>%
+      parsnip::fit(form, df)
+    
+    set.seed(1)
+    suppressWarnings({
+      train <- caret::train(form, df, method = 'rpart')
+    })
+    # imp -----------------------------------------------------
+    imp <- vip::vi_model(m)
+    imp_parsnip <- vip::vi_model(m_parsnip)
+    imp_caret <- caret::varImp(train)
+    imp_caret <- imp_caret$importance
+    
+    expect_error(tidy_imp(imp, df, resp_var = NULL))
+    expect_error(tidy_imp(imp_parsnip, df, resp_var = NULL))
+    
+    imp <- tidy_imp(imp, df, resp_var = resp_var)
+    imp_parsnip <- tidy_imp(imp_parsnip, df, resp_var = resp_var)
+    imp_caret <- tidy_imp(imp_caret, df)
+    
+    expect_true(all(nrow(c(imp, imp_parsnip, imp_caret)) == nrow(df) - 1))
+    
+    # plots --------------------------------------------------
+    dspace <- get_data_space(df, imp, degree = 3, bins = 5)
+    pred <- predict(m, newdata = dspace)
+    pred_pdp <- get_pdp_predictions(df, imp, m, degree = 3, bins = 5)
+    
+    expect_warning(p <- alluvial_model_response(pred, dspace, imp, degree = 3))
+    p <- alluvial_model_response(pred, dspace, imp, degree = 3, bins = 2,
+                                 bin_labels = c("H", "L"))
+    
+    p <- alluvial_model_response(pred_pdp, dspace, imp, degree = 3,
+                                 method = "pdp", bins = 2,
+                                 bin_labels = c("H", "L"))
+    
+    p <- alluvial_model_response_caret(train, degree = 3, bins = 2, bin_labels = c("H", "L"))
+    p <- alluvial_model_response_caret(train, degree = 3, method = "pdp")
+    
+    p <- alluvial_model_response_parsnip(m_parsnip, df, degree = 3, bins = 2, bin_labels = c("H", "L"))
+    p <- alluvial_model_response_parsnip(m_parsnip, df, degree = 3, method = "pdp")
+    
+  }
+  
+  test_rpart(disp ~ ., "regression", "disp")
+  test_rpart(cyl ~ ., "classification", "cyl")
+  test_rpart(am ~ ., "classification", "am")
+  
+})
+
+
 test_that('params_bin_numeric_pred',{
   
   # alluvial_model_response_caret

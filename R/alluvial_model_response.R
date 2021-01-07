@@ -98,6 +98,9 @@ pretty_num_vec <- function(x){
 #' @param imp dataframe or matrix with feature importance information
 #' @param df dataframe, modelling training data
 #' @param .f window function, Default: max
+#' @param resp_var character, prediction variable, can usually be inferred from 
+#' imp and df. It does not work for all models and needs to be specified in those 
+#' cases.
 #' @return dataframe \describe{ \item{vars}{character column with feature names}
 #'   \item{imp}{numerical column, importance values} }
 #' @examples
@@ -109,7 +112,7 @@ pretty_num_vec <- function(x){
 #' 
 #' @rdname tidy_imp
 #' @export
-tidy_imp = function(imp, df, .f = max){
+tidy_imp = function(imp, df, .f = max, resp_var = NULL){
 
   if( ! "data.frame" %in% class(imp) & ! 'matrix' %in% class(imp) ){
     stop( paste('imp needs to be of class "data.frame" instead passed object of class'
@@ -137,6 +140,10 @@ tidy_imp = function(imp, df, .f = max){
   if( ncol(imp) == 1 ){
     imp = tibble( vars = row.names( imp ), imp = imp[,1] )
   }
+  
+  if(! is.null(resp_var)){
+    stopifnot(resp_var %in% names(df))
+  }
 
   # correct dummyvariable names back to original name
 
@@ -147,7 +154,7 @@ tidy_imp = function(imp, df, .f = max){
   imp = imp %>%
     mutate( ori = vars )
 
-  # go from shortest variabe name to longest, matches with longer variable
+  # go from shortest variable name to longest, matches with longer variable
   # names will overwrite matches from shorter variable names
 
   for( ori_var in df_ori_var$ori_var ){
@@ -163,8 +170,22 @@ tidy_imp = function(imp, df, .f = max){
     summarise( imp = .f(imp) ) %>%
     arrange( desc(imp) )
 
-
-
+  # For some models features with zero imp do not occur in imp table, they need to be re-added
+  if(nrow(imp) < ncol(df) - 1){
+    if(purrr::is_null(resp_var)){
+      stop("predicted variable cannot be determined, please supply via 'resp_var' parameter")
+    }
+    
+    vars_zero = df %>%
+      select(- one_of(c(imp[[1]], resp_var))) %>%
+      colnames()
+    
+    imp_zero = tibble(vars = vars_zero, imp = 0)
+    
+    imp = bind_rows(imp, imp_zero)
+    
+  }
+  
   # final checks
 
   if( ncol(imp) != 2 | ! all( c('vars', 'imp') %in% names(imp) ) ){
@@ -177,6 +198,7 @@ tidy_imp = function(imp, df, .f = max){
 
   return(imp)
 }
+
 
 #'@title calculate data space
 #'@description calculates a dataspace based on the modelling dataframe and the
@@ -546,6 +568,17 @@ pdp_predictions = function(df, imp, m, degree = 4, bins = 5, .f_predict = predic
   
 }
 
+#' @title get uniform cuts for model predictions
+#' @description internal function used by alluvial_model_response() result 
+#' is a breaks vector that can be passed to manip_bin_numerics(). Training
+#' predictions cover a wider range than predictions for artificial data space.
+#' Therefore breaks are optimised for training predictions that can then be imposed
+#' on data space predictions.
+#' @param from pred_train, vector with training prediction
+#' @param target pred, vector with data space predictions
+#' @param ... additional parameters passed to manip_bin_numerics()
+#' @return vector with breaks
+#' @noRd
 get_cuts = function( from, target, ... ){
 
   cuts = levels( manip_bin_numerics(from, bin_labels = 'min_max', ... ) )%>%
@@ -704,8 +737,11 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
     warning('if bins > 7 default colors will be repeated, adjust "col_vector_flow" parameter manually')
   }
 
-
-
+  if(n_distinct(pred) < n_distinct(bin_labels)){
+    warning("predictions contain less unique values than 'bin_labels'")
+    bin_labels = bin_labels[1:n_distinct(pred)]
+  }
+  
   # internal function -------------------------------------------------------------------
   # will be applied to each column in df creates a suitable label
 
@@ -756,14 +792,16 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 
     params$new_cuts = new_cuts
 
+    bin_labels_pred = ifelse(n_distinct(pred) <= bins, "median", "cuts")
+    
     df = df %>%
-      manip_bin_numerics( bins = new_cuts, bin_labels = 'cuts'
+      manip_bin_numerics( bins = new_cuts, bin_labels = bin_labels_pred
                           , scale = F, center = F, transform = F)
 
     # create new label for response variable -----------------------------
 
     new_levels =  tibble( lvl = levels(df$pred)
-                          , prefix = bin_labels ) %>%
+                          , prefix = bin_labels) %>%
       mutate( new = map2_chr( prefix, lvl, function(x,y) paste0(x,'\n',y) ) ) %>%
       .$new
 
@@ -875,7 +913,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'  the distribution of the training predictions. This is useful if marginal
 #'  histograms are added to the plot later. Default = NULL
 #'@param stratum_label_size numeric, Default: 3.5
-#'@param pred_var character, sometimes target variable cannot be inferred and
+#'@param resp_var character, sometimes target variable cannot be inferred and
 #'needs to be passed. Default NULL
 #'@param ... additional parameters passed to
 #'  \code{\link[easyalluvial]{alluvial_wide}}
@@ -917,7 +955,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
                                          , pred_train = NULL
                                          , stratum_label_size = 3.5
                                          , force = F
-                                         , pred_var = NULL
+                                         , resp_var = NULL
                                          , ...){
 
 
@@ -935,30 +973,9 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
   imp = caret::varImp( train )
   imp = imp$importance
   
-
-  # for categorical response imp is calculated for each value
-  # and has is own column in imp. In this case we average them
-
-  imp_df = tibble( var = row.names(imp)
-                   , imp = apply(imp, 1, sum) / ncol(imp) )
-
-  # For some models features with zero imp do not occur in imp table, they need to be re-added
-  if(nrow(imp) < ncol(train$trainingData) - 1){
-    if(purrr::is_null(pred_var)){
-      stop("predicted variable cannot be determined, please supply via 'pred_var' parameter")
-    }
-    
-    vars_zero = train$trainingData %>%
-      select(- one_of(c(row.names(imp), pred_var))) %>%
-      colnames()
-    
-    imp_df_zero = tibble(var = vars_zero, imp = 0)
-    
-    imp_df = bind_rows(imp_df, imp_df_zero)
-    
-  }
+  imp = tidy_imp(imp, df, resp_var = resp_var)
   
-  dspace = get_data_space(train$trainingData, imp_df, degree = degree, bins = bins)
+  dspace = get_data_space(train$trainingData, imp, degree = degree, bins = bins)
 
   if( method == 'median'){
     pred = predict(train, newdata = dspace)
@@ -966,7 +983,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 
   if( method == 'pdp'){
 
-    pred = get_pdp_predictions(train$trainingData, imp_df
+    pred = get_pdp_predictions(train$trainingData, imp
                                , .f_predict = predict
                                , m = train
                                , degree = degree
@@ -977,7 +994,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 
   p = alluvial_model_response(pred = pred
                               , dspace = dspace
-                              , imp = imp_df
+                              , imp = imp
                               , degree = degree
                               , bins = bins
                               , bin_labels = bin_labels
@@ -1022,7 +1039,7 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 #'  the distribution of the training predictions. This is useful if marginal
 #'  histograms are added to the plot later. Default = NULL
 #'@param stratum_label_size numeric, Default: 3.5
-#'@param pred_var character, sometimes target variable cannot be inferred and
+#'@param resp_var character, sometimes target variable cannot be inferred and
 #'needs to be passed. Default NULL
 #'@param .f_imp vip function that gets importance, Default: vip::vi_model
 #'@param ... additional parameters passed to
@@ -1071,7 +1088,7 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
                                          , pred_train = NULL
                                          , stratum_label_size = 3.5
                                          , force = F
-                                         , pred_var = NULL
+                                         , resp_var = NULL
                                          , .f_imp = vip::vi_model
                                          , ...){
   
@@ -1106,19 +1123,10 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
       select(Variable, Importance)
   }
   
-  # For some models features with zero imp do not occur in imp table, they need to be re-added
-  if(! all(pred_vars %in% imp$Variable)){
-
-    vars_zero = pred_vars[! pred_vars %in% imp$Variable]
-    
-    imp_df_zero = tibble(Variable = vars_zero, Importance = 0)
-    
-    imp = bind_rows(imp, imp_df_zero)
-    
-  }
+  imp = tidy_imp(imp, df, resp_var = resp_var)
   
   dspace = get_data_space(data_input, imp, degree = degree, bins = bins)
-
+  
   if( method == 'median'){
     pred = predict(m, new_data = dspace)
   }

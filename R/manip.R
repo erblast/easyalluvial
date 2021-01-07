@@ -49,7 +49,8 @@ manip_factor_2_numeric = function(vec){
 #'   a dataframe before binning into n bins of equal range. Outliers based on
 #'   boxplot stats are capped (set to min or max of boxplot stats).
 #' @param x dataframe with numeric variables, or numeric vector
-#' @param bins number of bins for numerical variables, Default: 5
+#' @param bins number of bins for numerical variables, passed to cut as breaks
+#'   parameter, Default: 5
 #' @param bin_labels labels for the bins from low to high, Default: c("LL",
 #'   "ML", "M", "MH", "HH"). Can also be one of c('mean', 'median', 'min_max',
 #'   'cuts'), the corresponding summary function will supply the labels.
@@ -57,9 +58,10 @@ manip_factor_2_numeric = function(vec){
 #' @param center logical, Default: T
 #' @param transform logical, apply Yeo Johnson Transformation, Default: T
 #' @param round_numeric, logical, rounds numeric results if bin_labels is
-#' supplied with a supported summary function name.
+#'   supplied with a supported summary function name.
 #' @param digits, integer, number of digits to round to
-#' @param NA_label character vector, define label for missing data, Default: 'NA'
+#' @param NA_label character vector, define label for missing data, Default:
+#'   'NA'
 #' @examples
 #' summary( mtcars2 )
 #' summary( manip_bin_numerics(mtcars2) )
