@@ -135,6 +135,10 @@ tidy_imp = function(imp, df, .f = max, resp_var = NULL){
                 , 'Number numeric columns:', ncol( select_if(imp, is.numeric)) ) )
   }
 
+  if("Sign" %in% colnames(imp)){
+    imp <- select(imp, - Sign)
+  }
+  
   if( ncol( select_if(imp, is.character) ) > 1 ){
     stop('"imp" must not have more than one character column')
   }
@@ -804,6 +808,12 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4
       manip_bin_numerics( bins = new_cuts, bin_labels = bin_labels_pred
                           , scale = F, center = F, transform = F)
 
+    if(n_distinct(df$pred) < n_distinct(bin_labels)){
+      warning(paste("binned predictions have only", n_distinct(df$pred),
+                    ", which is  less bins than 'bin_labels'"))
+      bin_labels = bin_labels[1:n_distinct(df$pred)]
+    }
+    
     # create new label for response variable -----------------------------
 
     new_levels =  tibble( lvl = levels(df$pred)
