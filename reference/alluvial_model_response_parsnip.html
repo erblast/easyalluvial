@@ -117,7 +117,7 @@
       <a href="../articles/data_exploration.html">Data Exploration with Alluvial Plots</a>
     </li>
     <li>
-      <a href="../articles/model_response.html">Visualising Model Response</a>
+      <a href="../articles/model_response.html">Partial Dependence Alluvial Plots - Visualising Model Response</a>
     </li>
     <li>
       <a href="../articles/parcats.html">Interactive Plots with parcats</a>
@@ -168,11 +168,11 @@
     <span class='st'>"#9DD1D1"</span><span class='op'>)</span>,
   method <span class='op'>=</span> <span class='st'>"median"</span>,
   parallel <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  params_bin_numeric_pred <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>center <span class='op'>=</span> <span class='cn'>T</span>, transform <span class='op'>=</span> <span class='cn'>T</span>, scale <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>,
+  params_bin_numeric_pred <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>bins <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>,
   pred_train <span class='op'>=</span> <span class='cn'>NULL</span>,
   stratum_label_size <span class='op'>=</span> <span class='fl'>3.5</span>,
   force <span class='op'>=</span> <span class='cn'>F</span>,
-  pred_var <span class='op'>=</span> <span class='cn'>NULL</span>,
+  resp_var <span class='op'>=</span> <span class='cn'>NULL</span>,
   .f_imp <span class='op'>=</span> <span class='fu'>vip</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/vip/man/vi_model.html'>vi_model</a></span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
@@ -227,7 +227,7 @@ observation and the result is averaged</p></dd>
       <th>params_bin_numeric_pred</th>
       <td><p>list, additional parameters passed to
 <code><a href='manip_bin_numerics.html'>manip_bin_numerics</a></code> which is applied to the pred
-parameter. Default: list( bins = 5, center = T, transform = T, scale = T)</p></td>
+parameter. Default: list(bins = 5, center = T, transform = T, scale = T)</p></td>
     </tr>
     <tr>
       <th>pred_train</th>
@@ -244,13 +244,13 @@ histograms are added to the plot later. Default = NULL</p></td>
       <td><p>logical, force plotting of over 1500 flows, Default: FALSE</p></td>
     </tr>
     <tr>
-      <th>pred_var</th>
+      <th>resp_var</th>
       <td><p>character, sometimes target variable cannot be inferred and
 needs to be passed. Default NULL</p></td>
     </tr>
     <tr>
       <th>.f_imp</th>
-      <td><p>vip function that gets importance, Default: vip::vi_model</p></td>
+      <td><p>vip function that calculates feature importance, Default: vip::vi_model</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -294,12 +294,18 @@ needs to be passed. Default NULL</p></td>
 </div><div class='img'><img src='alluvial_model_response_parsnip-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># workflow --------------------------------- </span>
-<span class='va'>wf</span> <span class='op'>&lt;-</span> <span class='fu'>workflows</span><span class='fu'>::</span><span class='fu'><a href='https://workflows.tidymodels.org//reference/workflow.html'>workflow</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
- <span class='fu'>workflows</span><span class='fu'>::</span><span class='fu'><a href='https://workflows.tidymodels.org//reference/add_model.html'>add_model</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
- <span class='fu'>workflows</span><span class='fu'>::</span><span class='fu'><a href='https://workflows.tidymodels.org//reference/add_recipe.html'>add_recipe</a></span><span class='op'>(</span><span class='va'>rec_prep</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
- <span class='fu'>parsnip</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/fit.html'>fit</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>parsnip</span><span class='fu'>::</span><span class='fu'><a href='https://parsnip.tidymodels.org/reference/rand_forest.html'>rand_forest</a></span><span class='op'>(</span>mode <span class='op'>=</span> <span class='st'>"regression"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>parsnip</span><span class='fu'>::</span><span class='fu'><a href='https://parsnip.tidymodels.org/reference/set_engine.html'>set_engine</a></span><span class='op'>(</span><span class='st'>"randomForest"</span><span class='op'>)</span>
 
-<span class='fu'>alluvial_model_response_parsnip</span><span class='op'>(</span><span class='va'>m</span>, <span class='va'>df</span>, degree <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+<span class='va'>rec_prep</span> <span class='op'>=</span> <span class='fu'>recipes</span><span class='fu'>::</span><span class='fu'><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipe</a></span><span class='op'>(</span><span class='va'>disp</span> <span class='op'>~</span> <span class='va'>.</span>, <span class='va'>df</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>recipes</span><span class='fu'>::</span><span class='fu'><a href='https://recipes.tidymodels.org/reference/prep.html'>prep</a></span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>wf</span> <span class='op'>&lt;-</span> <span class='fu'>workflows</span><span class='fu'>::</span><span class='fu'><a href='https://workflows.tidymodels.org//reference/workflow.html'>workflow</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>workflows</span><span class='fu'>::</span><span class='fu'><a href='https://workflows.tidymodels.org//reference/add_model.html'>add_model</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>workflows</span><span class='fu'>::</span><span class='fu'><a href='https://workflows.tidymodels.org//reference/add_recipe.html'>add_recipe</a></span><span class='op'>(</span><span class='va'>rec_prep</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>parsnip</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/fit.html'>fit</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
+
+<span class='fu'>alluvial_model_response_parsnip</span><span class='op'>(</span><span class='va'>wf</span>, <span class='va'>df</span>, degree <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
 
 <span class='co'># partial dependence plotting method -----</span>
 <span class='fu'>future</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span><span class='op'>(</span><span class='st'>"multisession"</span><span class='op'>)</span>

@@ -119,7 +119,7 @@
       <a href="../articles/data_exploration.html">Data Exploration with Alluvial Plots</a>
     </li>
     <li>
-      <a href="../articles/model_response.html">Visualising Model Response</a>
+      <a href="../articles/model_response.html">Partial Dependence Alluvial Plots - Visualising Model Response</a>
     </li>
     <li>
       <a href="../articles/parcats.html">Interactive Plots with parcats</a>
@@ -162,7 +162,7 @@
   aggregating dummy encoded variables must be modified.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tidy_imp</span><span class='op'>(</span><span class='va'>imp</span>, <span class='va'>df</span>, .f <span class='op'>=</span> <span class='va'>max</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>tidy_imp</span><span class='op'>(</span><span class='va'>imp</span>, <span class='va'>df</span>, .f <span class='op'>=</span> <span class='va'>max</span>, resp_var <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -179,6 +179,12 @@
       <th>.f</th>
       <td><p>window function, Default: max</p></td>
     </tr>
+    <tr>
+      <th>resp_var</th>
+      <td><p>character, prediction variable, can usually be inferred from 
+imp and df. It does not work for all models and needs to be specified in those 
+cases.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -194,7 +200,7 @@
 <span class='va'>df</span> <span class='op'>=</span> <span class='va'>mtcars2</span><span class='op'>[</span>, <span class='op'>!</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>mtcars2</span><span class='op'>)</span> <span class='op'>%in%</span> <span class='st'>'ids'</span> <span class='op'>]</span>
 <span class='va'>m</span> <span class='op'>=</span> <span class='fu'>randomForest</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/randomForest/man/randomForest.html'>randomForest</a></span><span class='op'>(</span> <span class='va'>disp</span> <span class='op'>~</span> <span class='va'>.</span>, <span class='va'>df</span><span class='op'>)</span>
 <span class='va'>imp</span> <span class='op'>=</span> <span class='va'>m</span><span class='op'>$</span><span class='va'>importance</span>
-<span class='fu'>tidy_imp</span><span class='op'>(</span><span class='va'>imp</span>, <span class='va'>mtcars2</span><span class='op'>)</span>
+<span class='fu'>tidy_imp</span><span class='op'>(</span><span class='va'>imp</span>, <span class='va'>df</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 10 x 2</span><span>
 #&gt;    vars      imp
 #&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>

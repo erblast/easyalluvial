@@ -117,7 +117,7 @@
       <a href="../articles/data_exploration.html">Data Exploration with Alluvial Plots</a>
     </li>
     <li>
-      <a href="../articles/model_response.html">Visualising Model Response</a>
+      <a href="../articles/model_response.html">Partial Dependence Alluvial Plots - Visualising Model Response</a>
     </li>
     <li>
       <a href="../articles/parcats.html">Interactive Plots with parcats</a>
@@ -160,6 +160,7 @@
 
     <pre class="usage"><span class='fu'>alluvial_model_response_caret</span><span class='op'>(</span>
   <span class='va'>train</span>,
+  <span class='va'>data_input</span>,
   degree <span class='op'>=</span> <span class='fl'>4</span>,
   bins <span class='op'>=</span> <span class='fl'>5</span>,
   bin_labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"LL"</span>, <span class='st'>"ML"</span>, <span class='st'>"M"</span>, <span class='st'>"MH"</span>, <span class='st'>"HH"</span><span class='op'>)</span>,
@@ -167,11 +168,11 @@
     <span class='st'>"#9DD1D1"</span><span class='op'>)</span>,
   method <span class='op'>=</span> <span class='st'>"median"</span>,
   parallel <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  params_bin_numeric_pred <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>center <span class='op'>=</span> <span class='cn'>T</span>, transform <span class='op'>=</span> <span class='cn'>T</span>, scale <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>,
+  params_bin_numeric_pred <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>bins <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>,
   pred_train <span class='op'>=</span> <span class='cn'>NULL</span>,
   stratum_label_size <span class='op'>=</span> <span class='fl'>3.5</span>,
   force <span class='op'>=</span> <span class='cn'>F</span>,
-  pred_var <span class='op'>=</span> <span class='cn'>NULL</span>,
+  resp_var <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -181,6 +182,10 @@
     <tr>
       <th>train</th>
       <td><p>caret train object</p></td>
+    </tr>
+    <tr>
+      <th>data_input</th>
+      <td><p>dataframe, input data</p></td>
     </tr>
     <tr>
       <th>degree</th>
@@ -221,7 +226,7 @@ observation and the result is averaged</p></dd>
       <th>params_bin_numeric_pred</th>
       <td><p>list, additional parameters passed to
 <code><a href='manip_bin_numerics.html'>manip_bin_numerics</a></code> which is applied to the pred
-parameter. Default: list( bins = 5, center = T, transform = T, scale = T)</p></td>
+parameter. Default: list(bins = 5, center = T, transform = T, scale = T)</p></td>
     </tr>
     <tr>
       <th>pred_train</th>
@@ -238,7 +243,7 @@ histograms are added to the plot later. Default = NULL</p></td>
       <td><p>logical, force plotting of over 1500 flows, Default: FALSE</p></td>
     </tr>
     <tr>
-      <th>pred_var</th>
+      <th>resp_var</th>
       <td><p>character, sometimes target variable cannot be inferred and
 needs to be passed. Default NULL</p></td>
     </tr>
@@ -282,12 +287,12 @@ needs to be passed. Default NULL</p></td>
                      , trControl <span class='op'>=</span> <span class='fu'>caret</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/caret/man/trainControl.html'>trainControl</a></span><span class='op'>(</span> method <span class='op'>=</span> <span class='st'>'none'</span> <span class='op'>)</span>
                      , importance <span class='op'>=</span> <span class='cn'>TRUE</span> <span class='op'>)</span>
 
-<span class='fu'>alluvial_model_response_caret</span><span class='op'>(</span><span class='va'>train</span>, degree <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+<span class='fu'>alluvial_model_response_caret</span><span class='op'>(</span><span class='va'>train</span>, <span class='va'>df</span>, degree <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
 </div><div class='img'><img src='alluvial_model_response_caret-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># partial dependency plotting method</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='fu'>future</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span><span class='op'>(</span><span class='st'>"multisession"</span><span class='op'>)</span>
-<span class='fu'>alluvial_model_response_caret</span><span class='op'>(</span><span class='va'>train</span>, degree <span class='op'>=</span> <span class='fl'>3</span>, method <span class='op'>=</span> <span class='st'>'pdp'</span>, parallel <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'>alluvial_model_response_caret</span><span class='op'>(</span><span class='va'>train</span>, <span class='va'>df</span>, degree <span class='op'>=</span> <span class='fl'>3</span>, method <span class='op'>=</span> <span class='st'>'pdp'</span>, parallel <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
  <span class='op'>}</span>
 </div></pre>
   </div>

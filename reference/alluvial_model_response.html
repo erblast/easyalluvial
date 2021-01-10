@@ -122,7 +122,7 @@
       <a href="../articles/data_exploration.html">Data Exploration with Alluvial Plots</a>
     </li>
     <li>
-      <a href="../articles/model_response.html">Visualising Model Response</a>
+      <a href="../articles/model_response.html">Partial Dependence Alluvial Plots - Visualising Model Response</a>
     </li>
     <li>
       <a href="../articles/parcats.html">Interactive Plots with parcats</a>
@@ -173,13 +173,12 @@
   <span class='va'>dspace</span>,
   <span class='va'>imp</span>,
   degree <span class='op'>=</span> <span class='fl'>4</span>,
-  bins <span class='op'>=</span> <span class='fl'>5</span>,
   bin_labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"LL"</span>, <span class='st'>"ML"</span>, <span class='st'>"M"</span>, <span class='st'>"MH"</span>, <span class='st'>"HH"</span><span class='op'>)</span>,
   col_vector_flow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"#FF0065"</span>, <span class='st'>"#009850"</span>, <span class='st'>"#A56F2B"</span>, <span class='st'>"#005EAA"</span>, <span class='st'>"#710500"</span>, <span class='st'>"#7B5380"</span>,
     <span class='st'>"#9DD1D1"</span><span class='op'>)</span>,
   method <span class='op'>=</span> <span class='st'>"median"</span>,
   force <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  params_bin_numeric_pred <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>center <span class='op'>=</span> <span class='cn'>T</span>, transform <span class='op'>=</span> <span class='cn'>T</span>, scale <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>,
+  params_bin_numeric_pred <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>bins <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>,
   pred_train <span class='op'>=</span> <span class='cn'>NULL</span>,
   stratum_label_size <span class='op'>=</span> <span class='fl'>3.5</span>,
   <span class='va'>...</span>
@@ -211,13 +210,8 @@ plotting more than 4 will result in two many flows and the alluvial plot
 will not be very readable, Default: 4</p></td>
     </tr>
     <tr>
-      <th>bins</th>
-      <td><p>integer, number of bins for numeric variables, increasing this
-number might result in too many flows, Default: 5</p></td>
-    </tr>
-    <tr>
       <th>bin_labels</th>
-      <td><p>labels for the bins from low to high, Default: c("LL", "ML",
+      <td><p>labels for prediction bins from low to high, Default: c("LL", "ML",
 "M", "MH", "HH")</p></td>
     </tr>
     <tr>

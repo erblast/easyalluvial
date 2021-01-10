@@ -130,7 +130,7 @@ Briefly the 4 variables with the highest feature importance for a given
       <a href="../articles/data_exploration.html">Data Exploration with Alluvial Plots</a>
     </li>
     <li>
-      <a href="../articles/model_response.html">Visualising Model Response</a>
+      <a href="../articles/model_response.html">Partial Dependence Alluvial Plots - Visualising Model Response</a>
     </li>
     <li>
       <a href="../articles/parcats.html">Interactive Plots with parcats</a>
@@ -226,7 +226,12 @@ number might result in too many flows, Default: 5</p></td>
       <th>.f_predict</th>
       <td><p>corresponding model predict() function. Needs to accept `m`
 as the first parameter and use the `newdata` parameter. Supply a wrapper for
-predict functions with x-y synthax.</p></td>
+predict functions with x-y syntax. For parallel processing the predict
+method of object classes will not always get imported correctly to the worker
+environment. We can pass the correct predict method via this parameter for 
+example randomForest:::predict.randomForest. Note that a lot of modeling
+packages do not export the predict method explicitly and it can only be found
+using :::.</p></td>
     </tr>
     <tr>
       <th>parallel</th>
@@ -262,11 +267,16 @@ predict functions with x-y synthax.</p></td>
 <span class='co'># parallel processing --------------------------</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
  <span class='fu'>future</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span><span class='op'>(</span><span class='st'>"multisession"</span><span class='op'>)</span>
+ 
+ <span class='co'># note that we have to pass the predict method via .f_predict otherwise</span>
+ <span class='co'># it will not be available in the worker's environment.</span>
+ 
  <span class='va'>pred</span> <span class='op'>=</span> <span class='fu'>get_pdp_predictions</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>imp</span>
                             , <span class='va'>m</span>
                             , degree <span class='op'>=</span> <span class='fl'>3</span>
                             , bins <span class='op'>=</span> <span class='fl'>5</span>,
-                            , parallel <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+                            , parallel <span class='op'>=</span> <span class='cn'>TRUE</span>
+                            , .f_predict <span class='op'>=</span> <span class='fu'>randomForest</span><span class='fu'>:::</span><span class='va'><a href='https://rdrr.io/pkg/randomForest/man/predict.randomForest.html'>predict.randomForest</a></span><span class='op'>)</span>
 <span class='op'>}</span>
 </div></pre>
   </div>

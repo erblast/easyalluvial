@@ -119,7 +119,7 @@ parallel variant is called by get_pdp_predictions()" />
       <a href="../articles/data_exploration.html">Data Exploration with Alluvial Plots</a>
     </li>
     <li>
-      <a href="../articles/model_response.html">Visualising Model Response</a>
+      <a href="../articles/model_response.html">Partial Dependence Alluvial Plots - Visualising Model Response</a>
     </li>
     <li>
       <a href="../articles/parcats.html">Interactive Plots with parcats</a>
@@ -203,7 +203,12 @@ number might result in too many flows, Default: 5</p></td>
       <th>.f_predict</th>
       <td><p>corresponding model predict() function. Needs to accept `m`
 as the first parameter and use the `newdata` parameter. Supply a wrapper for
-predict functions with x-y synthax.</p></td>
+predict functions with x-y syntax. For parallel processing the predict
+method of object classes will not always get imported correctly to the worker
+environment. We can pass the correct predict method via this parameter for 
+example randomForest:::predict.randomForest. Note that a lot of modeling
+packages do not export the predict method explicitly and it can only be found
+using :::.</p></td>
     </tr>
     <tr>
       <th>parallel</th>
