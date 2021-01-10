@@ -95,10 +95,6 @@ manip_bin_numerics = function(x
     return(x)
   }
 
-  if( length(bin_labels) != bins[1] & ! bin_labels[1] %in% c('median', 'cuts', 'mean', 'min_max') ){
-    stop( "bin_labels length must be equal to bins or one of  c('median', 'cuts', 'mean', 'min_max')")
-  }
-
   numerics = df %>%
     select_if( is.numeric ) %>%
     select_if( function(x) var(x, na.rm = T) > 0 ) %>%  ##boxplotstats produces NA if var == 0
@@ -113,7 +109,11 @@ manip_bin_numerics = function(x
   if( is_empty(numerics) ){
     return( df )
   }
-
+  
+  if( length(bin_labels) != bins[1] & ! bin_labels[1] %in% c('median', 'cuts', 'mean', 'min_max') ){
+    stop( "bin_labels length must be equal to bins or one of  c('median', 'cuts', 'mean', 'min_max')")
+  }
+  
   # we need to assign an ID to restore the correct order at the end
   df = mutate(df, easyalluvialid = row_number() ) 
   

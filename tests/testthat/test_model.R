@@ -25,6 +25,18 @@ test_that("rpart", {
     suppressWarnings({
       train <- caret::train(form, df, method = 'rpart')
     })
+    
+    m_wf <- parsnip::decision_tree(mode = mode) %>%
+      parsnip::set_engine("rpart")
+    
+    rec_prep = recipes::recipe(form, df) %>%
+      recipes::prep()
+    
+    wf <- workflows::workflow() %>%
+      workflows::add_model(m_wf) %>%
+      workflows::add_recipe(rec_prep) %>%
+      parsnip::fit(df)
+    
     # imp -----------------------------------------------------
     imp <- vip::vi_model(m)
     imp_parsnip <- vip::vi_model(m_parsnip)
@@ -81,6 +93,15 @@ test_that("rpart", {
       p <- alluvial_model_response_parsnip(m_parsnip, df, degree = 3, method = "pdp",
                                            params_bin_numeric_pred = list(bins =2),
                                            bin_labels = c("H", "L"))
+      
+      # TODO there seems to be a weird thing when using rpart with workflows
+      # p <- alluvial_model_response_parsnip(wf, df, degree = 3,
+      #                                      params_bin_numeric_pred = list(bins =2),
+      #                                      bin_labels = c("H", "L"), resp_var = resp_var)
+      # 
+      # p <- alluvial_model_response_parsnip(wf, df, degree = 3, method = "pdp",
+      #                                      params_bin_numeric_pred = list(bins =2),
+      #                                      bin_labels = c("H", "L"), resp_var = resp_var)
     }
     
   }

@@ -403,7 +403,12 @@ get_data_space = function(df, imp, degree = 4, bins = 5, max_levels = 10){
 #'  number might result in too many flows, Default: 5
 #'@param .f_predict corresponding model predict() function. Needs to accept `m`
 #'  as the first parameter and use the `newdata` parameter. Supply a wrapper for
-#'  predict functions with x-y synthax.
+#'  predict functions with x-y syntax. For parallel processing the predict
+#'  method of object classes will not always get imported correctly to the worker
+#'  environment. We can pass the correct predict method via this parameter for 
+#'  example randomForest:::predict.randomForest. Note that a lot of modeling
+#'  packages do not export the predict method explicitly and it can only be found
+#'  using :::.
 #'@param m model object
 #'@param parallel logical, turn on parallel processing. Default: FALSE
 #'@return vector, predictions
@@ -427,11 +432,16 @@ get_data_space = function(df, imp, degree = 4, bins = 5, max_levels = 10){
 #'# parallel processing --------------------------
 #'\dontrun{
 #'  future::plan("multisession")
+#'  
+#'  # note that we have to pass the predict method via .f_predict otherwise
+#'  # it will not be available in the worker's environment.
+#'  
 #'  pred = get_pdp_predictions(df, imp
 #'                             , m
 #'                             , degree = 3
 #'                             , bins = 5,
-#'                             , parallel = TRUE)
+#'                             , parallel = TRUE
+#'                             , .f_predict = randomForest:::predict.randomForest)
 #'}
 #'@rdname get_pdp_predictions
 #'@export
@@ -1002,11 +1012,11 @@ alluvial_model_response_caret = function(train, data_input, degree = 4, bins = 5
   if( method == 'pdp'){
 
     pred = get_pdp_predictions(data_input, imp
-                               , .f_predict = predict
                                , m = train
                                , degree = degree
                                , bins = bins
-                               , parallel = parallel)
+                               , parallel = parallel
+                               , .f_predict = caret::predict.train)
 
   }
 
@@ -1058,7 +1068,7 @@ alluvial_model_response_caret = function(train, data_input, degree = 4, bins = 5
 #'@param stratum_label_size numeric, Default: 3.5
 #'@param resp_var character, sometimes target variable cannot be inferred and
 #'needs to be passed. Default NULL
-#'@param .f_imp vip function that gets importance, Default: vip::vi_model
+#'@param .f_imp vip function that calculates feature importance, Default: vip::vi_model
 #'@param ... additional parameters passed to
 #'  \code{\link[easyalluvial]{alluvial_wide}}
 #'@return ggplot2 object
@@ -1078,12 +1088,18 @@ alluvial_model_response_caret = function(train, data_input, degree = 4, bins = 5
 #' 
 #' \dontrun{
 #'# workflow --------------------------------- 
-#'wf <- workflows::workflow() %>%
-#'  workflows::add_model(m) %>%
-#'  workflows::add_recipe(rec_prep) %>%
-#'  parsnip::fit(df)
-#'
-#' alluvial_model_response_parsnip(m, df, degree = 3)
+#' m <- parsnip::rand_forest(mode = "regression") %>%
+#'   parsnip::set_engine("randomForest")
+#' 
+#' rec_prep = recipes::recipe(disp ~ ., df) %>%
+#'   recipes::prep()
+#' 
+#' wf <- workflows::workflow() %>%
+#'   workflows::add_model(m) %>%
+#'   workflows::add_recipe(rec_prep) %>%
+#'   parsnip::fit(df)
+#' 
+#' alluvial_model_response_parsnip(wf, df, degree = 3)
 #'
 #' # partial dependence plotting method -----
 #' future::plan("multisession")
@@ -1146,7 +1162,7 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
   imp = tidy_imp(imp, data_input, resp_var = resp_var)
   
   dspace = get_data_space(data_input, imp, degree = degree, bins = bins)
-  
+
   if( method == 'median'){
     pred = predict(m, new_data = dspace)
   }
@@ -1155,7 +1171,7 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
     
     # parsnip predict function uses new_data instead of newdata
     wr_predict <- function(..., newdata){
-      predict(..., new_data = newdata)
+      parsnip::predict.model_fit(..., new_data = newdata)
     }
     
     pred = get_pdp_predictions(data_input, imp

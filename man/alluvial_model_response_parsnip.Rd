@@ -65,7 +65,7 @@ histograms are added to the plot later. Default = NULL}
 \item{resp_var}{character, sometimes target variable cannot be inferred and
 needs to be passed. Default NULL}
 
-\item{.f_imp}{vip function that gets importance, Default: vip::vi_model}
+\item{.f_imp}{vip function that calculates feature importance, Default: vip::vi_model}
 
 \item{...}{additional parameters passed to
 \code{\link[easyalluvial]{alluvial_wide}}}
@@ -101,12 +101,18 @@ alluvial_model_response_parsnip(m, df, degree = 3)
 
 \dontrun{
 # workflow --------------------------------- 
-wf <- workflows::workflow() \%>\%
- workflows::add_model(m) \%>\%
- workflows::add_recipe(rec_prep) \%>\%
- parsnip::fit(df)
+m <- parsnip::rand_forest(mode = "regression") \%>\%
+  parsnip::set_engine("randomForest")
 
-alluvial_model_response_parsnip(m, df, degree = 3)
+rec_prep = recipes::recipe(disp ~ ., df) \%>\%
+  recipes::prep()
+
+wf <- workflows::workflow() \%>\%
+  workflows::add_model(m) \%>\%
+  workflows::add_recipe(rec_prep) \%>\%
+  parsnip::fit(df)
+
+alluvial_model_response_parsnip(wf, df, degree = 3)
 
 # partial dependence plotting method -----
 future::plan("multisession")

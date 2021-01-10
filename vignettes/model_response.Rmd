@@ -1,5 +1,5 @@
 ---
-title: Visualising Model Response
+title: Partial Dependence Alluvial Plots - Visualising Model Response
 author: Bjönr Koneswarakantha
 output: 
     html_document:
@@ -7,22 +7,6 @@ output:
 editor_options: 
   chunk_output_type: console
 ---
-In this tutorial I want to show how you can use alluvial plots to visualise model response in up to 4 dimensions. `easyalluvial` generates an artificial data space using fixed values for unplotted variables or uses the partial dependence plotting method. It is model agnostic but offers some convenient wrappers for `parsnip` and `caret` models.
-<!--more-->
-
-
-# Introduction
-
-## Taking a peek
-
-When building machine learning models we are usually faced with a trade-off between accuracy and interpretability. However even if we tend to lean towards accuracy and pick a modelling method that results in nearly uninterpretable models we can still make use of model agnostic interpretation techniques that have been summarized in this excellent ebook [Interpretable Machine Learning by Christoph Molnar](https://christophm.github.io/interpretable-ml-book/).
-
-Without getting to theoretical I personally always feel the urge to simply take a peek simulate some data and see how the model reacts a method described in [here](http://vita.had.co.nz/papers/model-vis.pdf). In order to simulate data we can generate a a vector with a sequence of values over the entire range of a predictor variable of interest while setting all the others to their median or mode and use this artificial data space to obtain model predictions which we can plot against our variable of interest. An R package that will do this for you is (`plotmo`)[https://cran.r-project.org/web/packages/plotmo/index.html]. Instead of ranging over 1 predictor variable we can create a data grid using 2 predictor variables and plot the response as a third dimension. However this is as far as you can go in a conventional plot. Alluvial plots can line up much more than 3 dimensions on a plane next to each other only limited by the number of flows as it will get too cluttered when there are too many of them.
-
-## Which variables to plot
-When using conventional model response plotting beeing limited two 2 variables we can simply resolve this by generating many plots and look at them one by one. Alluvial plots require a bit more attention and cannot easily be screened and compared since visually there is so much going on. Therefore I do not recommend to brute force it by simply creating a lot of random combinations of predictor variables and multiple alluvial plots but instead to focus on those that have the highest calculated feature importance. Feature importance values are natively provided by most modelling packages. So the question is how many can we plot and it turns out 4 features will usually result in well-interpretable plot.
-
-## Generating the data space
 
 ```{r}
 suppressPackageStartupMessages( library(tidyverse) )
@@ -32,6 +16,69 @@ suppressPackageStartupMessages( library(randomForest) )
 suppressPackageStartupMessages( library(recipes) )
 suppressPackageStartupMessages( library(earth) )
 ```
+
+
+In this tutorial I want to show how you can use alluvial plots to visualise model response in up to 4 dimensions. `easyalluvial` generates an artificial data space using fixed values for unplotted variables or uses the partial dependence plotting method. It is model agnostic but offers some convenient wrappers for `parsnip` and `caret` models.
+<!--more-->
+
+
+# Introduction
+
+## Taking a peek
+
+When building machine learning models we are usually faced with a trade-off between performance and interpretability. However there are a lot of  model agnostic interpretation techniques that can be applied even to black box models. A good overview can be found here [Interpretable Machine Learning by Christoph Molnar](https://christophm.github.io/interpretable-ml-book/).
+
+The most intuitive interpretation techniques visualize the model predictions in response to different data input. They try to visualise how the model behaves in the possible data space, which is discussed in-depth in this [paper](http://vita.had.co.nz/papers/model-vis.pdf).
+
+The simplest data space only changes one input dimension, meaning that we sequence through the range of variable while keeping all others at a constant value. We can then plot the model predictions against the values of the variable we have stepped through. Similarly we can create a two dimensional data space in which we ste through the range of 2 variables. We then have to add a third dimension two the resulting plot.
+
+
+## Partial Dependence Plots
+
+Partial Dependence Plots are a little bit more sophisticated. Instead of setting
+unaffected predictor variables to a constant it uses the values from the training data set and
+returns the averaged predictions from all rows in the training data set.
+
+Packages for creating partial dependence plots are:
+- [`plotmo`](https://cran.r-project.org/web/packages/plotmo/index.html)
+- [`pdp`](https://bgreenwell.github.io/pdp/index.html)
+
+## Partial Dependence Alluvial Plots
+
+Alluvial Plots can plot more than three dimensions side by side. In practice we can plot partial dependence plots with 4 dimension. The limitation being that we have to limit the number of flows on the plot so we can only use 5 steps to range through the predictor variables we want to add to the plot.
+
+```{r fig.width=12, fig.height=9}
+
+data('BostonHousing')
+df <- as_tibble( BostonHousing )
+
+library(future)
+future::plan("multisession")
+
+m <- parsnip::rand_forest(mode = "regression") %>%
+  parsnip::set_engine("randomForest") %>%
+  parsnip::fit(lstat ~., df) 
+
+p <- alluvial_model_response_parsnip(m, df, degree = 4, bins = 5,
+                                    stratum_label_size = 2.8,
+                                    method = "pdp", parallel = TRUE)
+p_grid <- p %>%
+  add_marginal_histograms(data_input = df, plot = FALSE) %>%
+  add_imp_plot(p = p, data_input = df)
+
+
+```
+
+
+## Interactive Partial Dependence Plot with {parcats}
+
+```{r fig.width=12, fig.height=9}
+parcats::parcats(p, data_input = df)
+```
+
+
+
+## Step By Step
 
 We start by creating a model
 
@@ -117,6 +164,7 @@ If we wanted to emphasize this we can bin the data space predictions on the basi
 ```{r p_hist, fig.width=3, fig.height=3, fig.align='center'}
 p = alluvial_model_response(pred, dspace, imp, degree = 4, bins = 7
                             , bin_labels = c("LLL","LL", "ML", "M", "MH", "HH", "HHH")
+                            , params_bin_numeric_pred = list(bins = 7)
                             , pred_train = pred_train
                             , stratum_label_size = 2.8 )
 
@@ -157,39 +205,6 @@ p_grid = add_marginal_histograms(p, df_inv)
 
 We can see that for the upper ranges of `lstat` a pretty specific combination values is required from 8 feature variables from `medv` until `tax` only then begin the flows to scatter over the entire range of the following variables. The lower range values of `lstat` start to scatter at `crim` or `dis`. Interestingly there seems to be a set of houses that branches off from the other houses in the lower range of `lstat` predictions already at the third feature, `age`. We could potentially explore this further, as a reminder you can get the binned input data for each alluvial plot by calling `p$data_key` and trace the variables of interest.
 
-# `parsnip` wrapper
-
-`parsnip` provides a tidyverse style uniform interface for training and calling a lot of machine learning models. `easyalluvial` provides a function that wraps the above described workflow into one single call using the `vip` package to get the feature importance. 
-
-```{r fig.height = 8, fig.width=10, cache = T}
-
-m_parsnip = parsnip::rand_forest(mode = "regression") %>%
-  parsnip::set_engine("randomForest") %>%
-  parsnip::fit(lstat ~., df) 
-
-alluvial_model_response_parsnip(m_parsnip, df, degree = 4, bins = 5
-                              , stratum_label_size = 2.8)
-
-```
-
-
-# `caret` wrapper
-
-`caret` similar to `parsnip` provides a uniform modeling syntax and also returns feature importance.
-
-```{r fig.height = 8, fig.width=10, cache = T}
-
-train = caret::train( lstat ~ .
-                     , df
-                     , method = 'rf'
-                     , trControl = caret::trainControl( method = 'none' )
-                     , importance = TRUE )
-
-alluvial_model_response_caret(train, degree = 4, bins = 5
-                              , stratum_label_size = 2.8)
-
-```
-
 # Advantages
 
 Model response alluvial plots can help us to get an immediate intuitive understanding how predictions of a certain range can be generated by the model. They can be understood by none-statistical stakeholders and invite the viewer to start exploring and question the decision making process of the model while also conveying an appreciation for the model complexity as flows branch out to the variables of lower feature importance.
@@ -222,67 +237,6 @@ alluvial_model_response(pred, dspace, imp, degree = 4
 
 ```
 
-thanks to the uniform modeling interface of `caret` and `parsnip` `alluvial_model_response_caret()`  and `alluvial_model_response_parsnip()` can call `get_pdp_predictions()` directly.
-
-```{r pdp_caret, fig.height = 8, fig.width=10, cache = T, eval = FALSE}
-
-alluvial_model_response_caret(train, degree = 4, bins = 5
-                              , method = 'pdp'
-                              , stratum_label_size = 2.8 )
-
-alluvial_model_response_parsnip(m_parsnip, df, degree = 4, bins = 5
-                                , method = 'pdp'
-                                , stratum_label_size = 2.8)
-```
-
-## A note on feature importance
-
-Calculating feature importance in a dataset with strongly correlating variables will lead to inaccurate results. It usually means that two strongly correlating variables share the importance that would be accredited to them if only one of them was present in the data set. Further some feature importance calculation methods require the model to be trained with scaled, centered and potentially normalized (transformed to be more normally distributed) numerical variables in order to deliver meaningful results. We can use the `recipes` package to perform these tasks. Using the below described workflow we can create the artificial dataspace with untransformed numerical values which will give us more meaningful output.
-
-```{r warning = F, message = F, fig.width=12, fig.height=9, cache = T}
-
-# filter correlating variables recipe- ------------------------------
-# caret tends to complain if recipe filters any variables, therefore
-# we use two recipes
-
-rec_filt_corrs = recipe(df, lstat ~ . ) %>%
-  step_corr( all_numeric()
-             , - all_outcomes()
-             , threshold = 0.7 ) %>%
-  prep()
-
-
-df_filt_corrs = bake(rec_filt_corrs, df)
-
-# transformation recipe --------------------------------------------
-rec_trans = recipe( df_filt_corrs, lstat ~ .) %>%
-  step_center( all_numeric(), - all_outcomes() ) %>%
-  step_scale( all_numeric(), - all_outcomes() ) %>%
-  step_YeoJohnson( all_numeric(), - all_outcomes() ) %>%
-  prep()
-
-# train and plot ---------------------------------------------------
-set.seed(1)
-train = caret::train( rec_trans
-                     , df_filt_corrs
-                     , method = 'earth'
-                     , trControl = caret::trainControl( method = 'cv'
-                                                        , search = 'random')
-                     , tuneLength = 100)
-
-pred_train = predict(train, df_filt_corrs)
-
-p = alluvial_model_response_caret(train, degree = 4, bins = 5
-                                  , pred_train = pred_train
-                                  , stratum_label_size = 2.8
-                                  , pred_var = 'lstat')
-
-p_grid = add_marginal_histograms(p, df, plot = F
-                                 , pred_var = 'lstat'
-                                 , scale = 50) %>%
-  add_imp_plot(p, df)
-
-```
 
 ## None-regression models
 

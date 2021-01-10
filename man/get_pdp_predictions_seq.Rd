@@ -25,7 +25,12 @@ number might result in too many flows, Default: 5}
 
 \item{.f_predict}{corresponding model predict() function. Needs to accept `m`
 as the first parameter and use the `newdata` parameter. Supply a wrapper for
-predict functions with x-y synthax.}
+predict functions with x-y syntax. For parallel processing the predict
+method of object classes will not always get imported correctly to the worker
+environment. We can pass the correct predict method via this parameter for 
+example randomForest:::predict.randomForest. Note that a lot of modeling
+packages do not export the predict method explicitly and it can only be found
+using :::.}
 }
 \description{
 has been replaced by pdp_predictions which can be parallelized
