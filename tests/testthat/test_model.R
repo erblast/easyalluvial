@@ -92,7 +92,7 @@ test_that("rpart", {
 })
 
 test_that("earth", {
-  
+  skip_on_cran()
   skip_if_not_installed("earth")
   skip_if_not_installed("vip")
   skip_if_not_installed("caret")
@@ -133,7 +133,7 @@ test_that("earth", {
     pred_pdp <- get_pdp_predictions(df, imp, m, degree = 3, bins = 5)
     
     p <- alluvial_model_response(pred, dspace, imp, degree = 3)
-    p <- alluvial_model_response(pred, dspace, imp, degree = 3, method = "pdp")
+    p <- alluvial_model_response(pred_pdp, dspace, imp, degree = 3, method = "pdp")
     p <- alluvial_model_response_caret(train, df, degree = 3, resp_var = resp_var)
     p <- alluvial_model_response_caret(train, df, degree = 3, method = "pdp", resp_var = resp_var)
     p <- alluvial_model_response_parsnip(m_parsnip, df, degree = 3)
@@ -188,7 +188,7 @@ test_that("rf", {
                                     .f_predict = function(...) predict(..., type = type))
     
     p <- alluvial_model_response(pred, dspace, imp, degree = 3)
-    p <- alluvial_model_response(pred, dspace, imp, degree = 3, method = "pdp")
+    p <- alluvial_model_response(pred_pdp, dspace, imp, degree = 3, method = "pdp")
     p <- alluvial_model_response_caret(train, df, degree = 3)
     p <- alluvial_model_response_caret(train, df, degree = 3, method = "pdp")
     p <- alluvial_model_response_parsnip(m_parsnip, df, degree = 3)
@@ -262,7 +262,7 @@ test_that("glm", {
                                    params_bin_numeric_pred = list(bins=3)                                  )
     }else{
       p <- alluvial_model_response(pred, dspace, imp, degree = 3)
-      p <- alluvial_model_response(pred, dspace, imp, degree = 3, method = "pdp")
+      p <- alluvial_model_response(pred_pdp, dspace, imp, degree = 3, method = "pdp")
     }
     p <- alluvial_model_response_caret(train, df, degree = 3)
     p <- alluvial_model_response_caret(train, df, degree = 3, method = "pdp")
@@ -276,6 +276,8 @@ test_that("glm", {
 })
 
 test_that("xgboost", {
+  skip("xgboost test skipped for performance")
+  skip_on_cran()
   
   skip_if_not_installed("xgboost")
   skip_if_not_installed("vip")
@@ -327,7 +329,7 @@ test_that("xgboost", {
                                     .f_predict = .f_predict)
     
     p <- alluvial_model_response(pred, dspace, imp, degree = 3)
-    p <- alluvial_model_response(pred, dspace, imp, degree = 3, method = "pdp")
+    p <- alluvial_model_response(pred_pdp, dspace, imp, degree = 3, method = "pdp")
     p <- alluvial_model_response_caret(train, df, degree = 3, resp_var = resp_var)
     p <- alluvial_model_response_caret(train, df, degree = 3, method = "pdp", resp_var = resp_var)
     p <- alluvial_model_response_parsnip(m_parsnip, df, degree = 3)
@@ -337,4 +339,91 @@ test_that("xgboost", {
   }
   test_xgb(form = disp ~ ., mode = "regression", resp_var = "disp",
            X = select(df, - disp), y = df$disp)
+})
+
+test_that("glmnet", {
+  
+  skip_on_cran()
+  skip_if_not_installed("glmnet")
+  skip_if_not_installed("vip")
+  skip_if_not_installed("caret")
+  skip_if_not_installed("parsnip")
+  
+  
+  test_glm <- function(form, mode, resp_var, X, y, type = type, family = family){
+    
+    set.seed(1)
+    # train models --------------------------------------------
+    set.seed(1)
+    X <- X %>%
+      as.matrix()
+    
+    m <- glmnet::cv.glmnet(X, y, family = family, nfolds = 3)
+    
+    if(mode == "regression"){
+      .f <- parsnip::linear_reg
+    } else {
+      .f <- parsnip::logistic_reg
+    }
+    
+    m_parsnip <- .f(penalty = 0.5) %>%
+      parsnip::set_engine("glmnet") %>%
+      parsnip::fit(form, df)
+    
+    set.seed(1)
+    suppressWarnings({
+      train <- caret::train(form, df, method = 'glmnet',
+                            trControl = caret::trainControl(method = 'none'))
+    })
+    # imp -----------------------------------------------------
+    imp <- vip::vi_model(m)
+    imp_parsnip <- vip::vi_model(m_parsnip)
+    imp_caret <- caret::varImp(train)
+    
+    imp <- tidy_imp(imp, df, resp_var = resp_var)
+    imp_parsnip <- tidy_imp(imp_parsnip, df, resp_var = resp_var)
+    imp_caret <- tidy_imp(imp_caret, df, resp_var = resp_var)
+    
+    expect_true(all(nrow(c(imp, imp_parsnip, imp_caret)) == nrow(df) - 1))
+    
+    # plots --------------------------------------------------
+    dspace <- get_data_space(df, imp, degree = 3, bins = 5)
+    pred <- predict(m, newx = as.matrix(dspace), type = type, s = "lambda.1se")
+    
+    .f_predict <- function(m, newdata){
+      predict(m, newx = as.matrix(newdata), type = type, s = "lambda.1se")
+    }
+    pred_pdp <- get_pdp_predictions(df, imp, m, degree = 3, bins = 5,
+                                    .f_predict = .f_predict)
+    
+    expect_warning(alluvial_model_response(pred, dspace, imp, degree = 3))
+    
+    p <- alluvial_model_response(pred, dspace, imp, degree = 3,
+                                 params_bin_numeric_pred = list(bins=3),
+                                 bin_labels = c("H", "M", "L"))
+    
+    p <- alluvial_model_response(pred_pdp, dspace, imp, degree = 3,
+                                 params_bin_numeric_pred = list(bins=3),
+                                 bin_labels = c("H", "M", "L"), method = "pdp")
+    
+    p <- alluvial_model_response_caret(train, df, degree = 3)
+    p <- alluvial_model_response_caret(train, df, degree = 3, method = "pdp")
+    
+    p <- alluvial_model_response_parsnip(m_parsnip, df, degree = 3,
+                                         params_bin_numeric_pred = list(bins=3),
+                                         bin_labels = c("H", "M", "L"))
+    
+    p <- alluvial_model_response_parsnip(m_parsnip, df, degree = 3,
+                                         params_bin_numeric_pred = list(bins=3),
+                                         bin_labels = c("H", "M", "L"), method = "pdp")
+    
+    
+  }
+  
+  df = select(mtcars2, -ids) %>%
+    mutate_if(is.factor, manip_factor_2_numeric)
+  
+  test_glm(form = disp ~ ., mode = "regression", resp_var = "disp",
+           X = select(df, - disp), y = df$disp, family = "gaussian", type = "link")
+  
 })

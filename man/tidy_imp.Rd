@@ -32,6 +32,6 @@ returns dataframe with exactly two columns, vars and imp and
 df = mtcars2[, ! names(mtcars2) \%in\% 'ids' ]
 m = randomForest::randomForest( disp ~ ., df)
 imp = m$importance
-tidy_imp(imp, mtcars2)
+tidy_imp(imp, df)
 
 }

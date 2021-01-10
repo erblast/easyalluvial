@@ -8,7 +8,7 @@ if(getRversion() >= "2.15.1"){
                             , 'fill', 'easyalluvialid', 'total', 'perc', 'label', 'prefix', 'lvl'
                             , 'cum_imp', 'variable', 'label', 'len', 'ori', 'bin'
                             , 'colors', 'rwn', 'value_col', 'var_num', 'y', 'predict', 'plotted'
-                            , 'const_values', 'Importance', 'Variable') )
+                            , 'const_values', 'Importance', 'Variable', 'Sign') )
 }
 
 

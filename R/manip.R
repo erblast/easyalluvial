@@ -71,7 +71,7 @@ manip_factor_2_numeric = function(vec){
 #' @return dataframe
 #' @rdname manip_bin_numerics
 #' @import recipes
-#' @importFrom purrr is_bare_numeric
+#' @importFrom purrr is_bare_numeric walk
 #' @importFrom tibble is_tibble
 #' @export
 manip_bin_numerics = function(x
@@ -153,9 +153,10 @@ manip_bin_numerics = function(x
                  ) %>%
       mutate_at( vars(numerics), function(x) cut(x, breaks = bins) ) %>%
       #bake() is converting character variables to factor which we need to revert
-      mutate_at( vars(characters), as.character ) 
-  
+      mutate_at( vars(characters), as.character )
   })
+  
+  purrr::walk(numerics, check_empty_lvl, data_new)
   
   summary_as_label = function(df, df_old, fun){
     # joins df with original dataframe. Groups by segments and calculates
@@ -271,4 +272,22 @@ get_most_frequent_lvl <- function(x) {
   return(x[which(x == lvl)][1])
 }
 
+#' @title check for empty lvl
+#' @param col character, column name
+#' @return df dataframe
+#' @examples 
+#' df <- data.frame(x = cut(c(1,1,2,2,9,9,10), 5))
+#' check_empty_lvl("x", df)
+#' @rdname check_empty_lvl
+#' @noRd
+check_empty_lvl <- function(col, df){
+  df_check <- df %>%
+    group_by(!! as.name(col), .drop = FALSE) %>%
+    count() %>%
+    filter(n == 0)
+  
+  if(nrow(df_check) > 0){
+    warning(paste("bins ", paste(unique(df_check[[col]]), collapse = ","), "of", col, "are empty" ))
+  }
+}
 

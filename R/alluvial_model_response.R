@@ -717,7 +717,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4
   }
 
   if( is.factor(pred) ){
-    bin_labels = abbreviate( unique(pred), minlength = 1 )
+    bin_labels = abbreviate(levels(fct_drop(pred)), minlength = 1 )
   }
 
   if( ! is.numeric(pred) & ! is.factor(pred) ){
@@ -810,9 +810,11 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4
 
     if(n_distinct(df$pred) < n_distinct(bin_labels)){
       warning(paste("binned predictions have only", n_distinct(df$pred),
-                    ", which is  less bins than 'bin_labels'"))
+                    "bins, which is  less bins than 'bin_labels'"))
       bin_labels = bin_labels[1:n_distinct(df$pred)]
     }
+    
+    df$pred <- fct_drop(df$pred)
     
     # create new label for response variable -----------------------------
 

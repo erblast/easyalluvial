@@ -37,7 +37,9 @@ Suggests:
     caret,
     parsnip,
     vip,
-    rpart
+    rpart,
+    glmnet,
+    xgboost
 RoxygenNote: 7.1.1
 Imports:
   purrr
