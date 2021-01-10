@@ -9,13 +9,12 @@ alluvial_model_response(
   dspace,
   imp,
   degree = 4,
-  bins = 5,
   bin_labels = c("LL", "ML", "M", "MH", "HH"),
   col_vector_flow = c("#FF0065", "#009850", "#A56F2B", "#005EAA", "#710500", "#7B5380",
     "#9DD1D1"),
   method = "median",
   force = FALSE,
-  params_bin_numeric_pred = list(center = T, transform = T, scale = T),
+  params_bin_numeric_pred = list(bins = 5),
   pred_train = NULL,
   stratum_label_size = 3.5,
   ...
@@ -36,10 +35,7 @@ corresponding variable names as found in training data.}
 plotting more than 4 will result in two many flows and the alluvial plot
 will not be very readable, Default: 4}
 
-\item{bins}{integer, number of bins for numeric variables, increasing this
-number might result in too many flows, Default: 5}
-
-\item{bin_labels}{labels for the bins from low to high, Default: c("LL", "ML",
+\item{bin_labels}{labels for prediction bins from low to high, Default: c("LL", "ML",
 "M", "MH", "HH")}
 
 \item{col_vector_flow, }{character vector, defines flow colours, Default:

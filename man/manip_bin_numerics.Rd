@@ -19,7 +19,8 @@ manip_bin_numerics(
 \arguments{
 \item{x}{dataframe with numeric variables, or numeric vector}
 
-\item{bins}{number of bins for numerical variables, Default: 5}
+\item{bins}{number of bins for numerical variables, passed to cut as breaks
+parameter, Default: 5}
 
 \item{bin_labels}{labels for the bins from low to high, Default: c("LL",
 "ML", "M", "MH", "HH"). Can also be one of c('mean', 'median', 'min_max',
@@ -36,7 +37,8 @@ supplied with a supported summary function name.}
 
 \item{digits, }{integer, number of digits to round to}
 
-\item{NA_label}{character vector, define label for missing data, Default: 'NA'}
+\item{NA_label}{character vector, define label for missing data, Default:
+'NA'}
 }
 \value{
 dataframe

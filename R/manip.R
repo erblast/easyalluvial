@@ -49,7 +49,8 @@ manip_factor_2_numeric = function(vec){
 #'   a dataframe before binning into n bins of equal range. Outliers based on
 #'   boxplot stats are capped (set to min or max of boxplot stats).
 #' @param x dataframe with numeric variables, or numeric vector
-#' @param bins number of bins for numerical variables, Default: 5
+#' @param bins number of bins for numerical variables, passed to cut as breaks
+#'   parameter, Default: 5
 #' @param bin_labels labels for the bins from low to high, Default: c("LL",
 #'   "ML", "M", "MH", "HH"). Can also be one of c('mean', 'median', 'min_max',
 #'   'cuts'), the corresponding summary function will supply the labels.
@@ -57,9 +58,10 @@ manip_factor_2_numeric = function(vec){
 #' @param center logical, Default: T
 #' @param transform logical, apply Yeo Johnson Transformation, Default: T
 #' @param round_numeric, logical, rounds numeric results if bin_labels is
-#' supplied with a supported summary function name.
+#'   supplied with a supported summary function name.
 #' @param digits, integer, number of digits to round to
-#' @param NA_label character vector, define label for missing data, Default: 'NA'
+#' @param NA_label character vector, define label for missing data, Default:
+#'   'NA'
 #' @examples
 #' summary( mtcars2 )
 #' summary( manip_bin_numerics(mtcars2) )
@@ -69,7 +71,7 @@ manip_factor_2_numeric = function(vec){
 #' @return dataframe
 #' @rdname manip_bin_numerics
 #' @import recipes
-#' @importFrom purrr is_bare_numeric
+#' @importFrom purrr is_bare_numeric walk
 #' @importFrom tibble is_tibble
 #' @export
 manip_bin_numerics = function(x
@@ -93,10 +95,6 @@ manip_bin_numerics = function(x
     return(x)
   }
 
-  if( length(bin_labels) != bins[1] & ! bin_labels[1] %in% c('median', 'cuts', 'mean', 'min_max') ){
-    stop( "bin_labels length must be equal to bins or one of  c('median', 'cuts', 'mean', 'min_max')")
-  }
-
   numerics = df %>%
     select_if( is.numeric ) %>%
     select_if( function(x) var(x, na.rm = T) > 0 ) %>%  ##boxplotstats produces NA if var == 0
@@ -111,7 +109,11 @@ manip_bin_numerics = function(x
   if( is_empty(numerics) ){
     return( df )
   }
-
+  
+  if( length(bin_labels) != bins[1] & ! bin_labels[1] %in% c('median', 'cuts', 'mean', 'min_max') ){
+    stop( "bin_labels length must be equal to bins or one of  c('median', 'cuts', 'mean', 'min_max')")
+  }
+  
   # we need to assign an ID to restore the correct order at the end
   df = mutate(df, easyalluvialid = row_number() ) 
   
@@ -151,9 +153,10 @@ manip_bin_numerics = function(x
                  ) %>%
       mutate_at( vars(numerics), function(x) cut(x, breaks = bins) ) %>%
       #bake() is converting character variables to factor which we need to revert
-      mutate_at( vars(characters), as.character ) 
-  
+      mutate_at( vars(characters), as.character )
   })
+  
+  purrr::walk(numerics, check_empty_lvl, data_new)
   
   summary_as_label = function(df, df_old, fun){
     # joins df with original dataframe. Groups by segments and calculates
@@ -269,4 +272,22 @@ get_most_frequent_lvl <- function(x) {
   return(x[which(x == lvl)][1])
 }
 
+#' @title check for empty lvl
+#' @param col character, column name
+#' @return df dataframe
+#' @examples 
+#' df <- data.frame(x = cut(c(1,1,2,2,9,9,10), 5))
+#' check_empty_lvl("x", df)
+#' @rdname check_empty_lvl
+#' @noRd
+check_empty_lvl <- function(col, df){
+  df_check <- df %>%
+    group_by(!! as.name(col), .drop = FALSE) %>%
+    count() %>%
+    filter(n == 0)
+  
+  if(nrow(df_check) > 0){
+    warning(paste("bins ", paste(unique(df_check[[col]]), collapse = ","), "of", col, "are empty" ))
+  }
+}
 

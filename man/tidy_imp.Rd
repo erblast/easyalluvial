@@ -4,7 +4,7 @@
 \alias{tidy_imp}
 \title{tidy up dataframe containing model feature importance}
 \usage{
-tidy_imp(imp, df, .f = max)
+tidy_imp(imp, df, .f = max, resp_var = NULL)
 }
 \arguments{
 \item{imp}{dataframe or matrix with feature importance information}
@@ -12,6 +12,10 @@ tidy_imp(imp, df, .f = max)
 \item{df}{dataframe, modelling training data}
 
 \item{.f}{window function, Default: max}
+
+\item{resp_var}{character, prediction variable, can usually be inferred from 
+imp and df. It does not work for all models and needs to be specified in those 
+cases.}
 }
 \value{
 dataframe \describe{ \item{vars}{character column with feature names}
@@ -28,6 +32,6 @@ returns dataframe with exactly two columns, vars and imp and
 df = mtcars2[, ! names(mtcars2) \%in\% 'ids' ]
 m = randomForest::randomForest( disp ~ ., df)
 imp = m$importance
-tidy_imp(imp, mtcars2)
+tidy_imp(imp, df)
 
 }

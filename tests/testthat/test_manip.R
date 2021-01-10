@@ -74,7 +74,7 @@ test_that('manip_bin_numerics zero variance columns'
             , zero = 0
             , near_zero_var = c( rep(1,nrow(.)-1), 0.9 ) )
 
-  data_new = manip_bin_numerics(data)
+  expect_warning(data_new <- manip_bin_numerics(data))
 
   expect_identical( select(data, zero_var, zero)
                     , select(data_new, zero_var, zero) )
@@ -162,4 +162,10 @@ test_that("most_frequent_lvl", {
   lvl <- get_most_frequent_lvl(lvls)
   expect_true(lvl == "G")
   
+})
+
+test_that("manip_bin_numerics_warning",{
+  df <- data.frame(x = c(1,1,2,2,9,9,10),
+                   y = c(1,2,3,4,5,6,7))
+  expect_warning(manip_bin_numerics(df))
 })

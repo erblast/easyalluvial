@@ -98,6 +98,9 @@ pretty_num_vec <- function(x){
 #' @param imp dataframe or matrix with feature importance information
 #' @param df dataframe, modelling training data
 #' @param .f window function, Default: max
+#' @param resp_var character, prediction variable, can usually be inferred from 
+#' imp and df. It does not work for all models and needs to be specified in those 
+#' cases.
 #' @return dataframe \describe{ \item{vars}{character column with feature names}
 #'   \item{imp}{numerical column, importance values} }
 #' @examples
@@ -105,11 +108,20 @@ pretty_num_vec <- function(x){
 #' df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
 #' m = randomForest::randomForest( disp ~ ., df)
 #' imp = m$importance
-#' tidy_imp(imp, mtcars2)
+#' tidy_imp(imp, df)
 #' 
 #' @rdname tidy_imp
 #' @export
-tidy_imp = function(imp, df, .f = max){
+tidy_imp = function(imp, df, .f = max, resp_var = NULL){
+  
+  if("varImp.train" %in% class(imp)){
+    imp = imp$importance
+    # for categorical response imp is calculated for each value
+    # and has is own column in imp. In this case we average them
+    imp = tibble( var = row.names(imp)
+                     , imp = apply(imp, 1, sum) / ncol(imp) )
+    
+  }
 
   if( ! "data.frame" %in% class(imp) & ! 'matrix' %in% class(imp) ){
     stop( paste('imp needs to be of class "data.frame" instead passed object of class'
@@ -123,6 +135,10 @@ tidy_imp = function(imp, df, .f = max){
                 , 'Number numeric columns:', ncol( select_if(imp, is.numeric)) ) )
   }
 
+  if("Sign" %in% colnames(imp)){
+    imp <- select(imp, - Sign)
+  }
+  
   if( ncol( select_if(imp, is.character) ) > 1 ){
     stop('"imp" must not have more than one character column')
   }
@@ -137,6 +153,10 @@ tidy_imp = function(imp, df, .f = max){
   if( ncol(imp) == 1 ){
     imp = tibble( vars = row.names( imp ), imp = imp[,1] )
   }
+  
+  if(! is.null(resp_var)){
+    stopifnot(resp_var %in% names(df))
+  }
 
   # correct dummyvariable names back to original name
 
@@ -147,7 +167,7 @@ tidy_imp = function(imp, df, .f = max){
   imp = imp %>%
     mutate( ori = vars )
 
-  # go from shortest variabe name to longest, matches with longer variable
+  # go from shortest variable name to longest, matches with longer variable
   # names will overwrite matches from shorter variable names
 
   for( ori_var in df_ori_var$ori_var ){
@@ -163,8 +183,22 @@ tidy_imp = function(imp, df, .f = max){
     summarise( imp = .f(imp) ) %>%
     arrange( desc(imp) )
 
-
-
+  # For some models features with zero imp do not occur in imp table, they need to be re-added
+  if(nrow(imp) < ncol(df) - 1){
+    if(purrr::is_null(resp_var)){
+      stop("predicted variable cannot be determined, please supply via 'resp_var' parameter")
+    }
+    
+    vars_zero = df %>%
+      select(- one_of(c(imp[[1]], resp_var))) %>%
+      colnames()
+    
+    imp_zero = tibble(vars = vars_zero, imp = 0)
+    
+    imp = bind_rows(imp, imp_zero)
+    
+  }
+  
   # final checks
 
   if( ncol(imp) != 2 | ! all( c('vars', 'imp') %in% names(imp) ) ){
@@ -177,6 +211,7 @@ tidy_imp = function(imp, df, .f = max){
 
   return(imp)
 }
+
 
 #'@title calculate data space
 #'@description calculates a dataspace based on the modelling dataframe and the
@@ -368,7 +403,12 @@ get_data_space = function(df, imp, degree = 4, bins = 5, max_levels = 10){
 #'  number might result in too many flows, Default: 5
 #'@param .f_predict corresponding model predict() function. Needs to accept `m`
 #'  as the first parameter and use the `newdata` parameter. Supply a wrapper for
-#'  predict functions with x-y synthax.
+#'  predict functions with x-y syntax. For parallel processing the predict
+#'  method of object classes will not always get imported correctly to the worker
+#'  environment. We can pass the correct predict method via this parameter for 
+#'  example randomForest:::predict.randomForest. Note that a lot of modeling
+#'  packages do not export the predict method explicitly and it can only be found
+#'  using :::.
 #'@param m model object
 #'@param parallel logical, turn on parallel processing. Default: FALSE
 #'@return vector, predictions
@@ -392,11 +432,16 @@ get_data_space = function(df, imp, degree = 4, bins = 5, max_levels = 10){
 #'# parallel processing --------------------------
 #'\dontrun{
 #'  future::plan("multisession")
+#'  
+#'  # note that we have to pass the predict method via .f_predict otherwise
+#'  # it will not be available in the worker's environment.
+#'  
 #'  pred = get_pdp_predictions(df, imp
 #'                             , m
 #'                             , degree = 3
 #'                             , bins = 5,
-#'                             , parallel = TRUE)
+#'                             , parallel = TRUE
+#'                             , .f_predict = randomForest:::predict.randomForest)
 #'}
 #'@rdname get_pdp_predictions
 #'@export
@@ -546,6 +591,17 @@ pdp_predictions = function(df, imp, m, degree = 4, bins = 5, .f_predict = predic
   
 }
 
+#' @title get uniform cuts for model predictions
+#' @description internal function used by alluvial_model_response() result 
+#' is a breaks vector that can be passed to manip_bin_numerics(). Training
+#' predictions cover a wider range than predictions for artificial data space.
+#' Therefore breaks are optimised for training predictions that can then be imposed
+#' on data space predictions.
+#' @param from pred_train, vector with training prediction
+#' @param target pred, vector with data space predictions
+#' @param ... additional parameters passed to manip_bin_numerics()
+#' @return vector with breaks
+#' @noRd
 get_cuts = function( from, target, ... ){
 
   cuts = levels( manip_bin_numerics(from, bin_labels = 'min_max', ... ) )%>%
@@ -593,9 +649,7 @@ get_cuts = function( from, target, ... ){
 #'@param degree integer,  number of top important variables to select. For
 #'  plotting more than 4 will result in two many flows and the alluvial plot
 #'  will not be very readable, Default: 4
-#'@param bins integer, number of bins for numeric variables, increasing this
-#'  number might result in too many flows, Default: 5
-#'@param bin_labels labels for the bins from low to high, Default: c("LL", "ML",
+#'@param bin_labels labels for prediction bins from low to high, Default: c("LL", "ML",
 #'  "M", "MH", "HH")
 #'@param col_vector_flow, character vector, defines flow colours, Default:
 #'  c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')
@@ -646,12 +700,12 @@ get_cuts = function( from, target, ... ){
 #'@rdname alluvial_model_response
 #'@export
 #'@importFrom stringr str_wrap str_replace_all str_split
-alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
+alluvial_model_response = function(pred, dspace, imp, degree = 4
                                    , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
                                    , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#9DD1D1')
                                    , method = 'median'
                                    , force = FALSE
-                                   , params_bin_numeric_pred = list( center = T, transform = T, scale = T)
+                                   , params_bin_numeric_pred = list(bins = 5) 
                                    , pred_train = NULL
                                    , stratum_label_size = 3.5
                                    , ...){
@@ -661,7 +715,6 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
                 , dspace = dspace
                 , imp = imp
                 , degree = degree
-                , bins = bins
                 , bin_labels = bin_labels
                 , col_vector_flow = col_vector_flow
                 , method = method
@@ -669,12 +722,12 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
                 , force = force)
   # checks ----------------------------------------------------------------------------
 
-  if( length(bin_labels) != bins & ! bin_labels[1] %in% c('median', 'cuts', 'mean', 'min_max') ){
+  if( length(bin_labels) != params_bin_numeric_pred$bins & ! bin_labels[1] %in% c('median', 'cuts', 'mean', 'min_max') ){
     stop( "bin_labels length must be equal to bins or one of  c('median', 'cuts', 'mean', 'min_max')")
   }
 
   if( is.factor(pred) ){
-    bin_labels = abbreviate( levels(pred), minlength = 1 )
+    bin_labels = abbreviate(levels(fct_drop(pred)), minlength = 1 )
   }
 
   if( ! is.numeric(pred) & ! is.factor(pred) ){
@@ -700,17 +753,20 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
     stop( paste('parameter method needs to be one of c("median","pdp") instead got:', method) )
   }
 
-  if( bins > 7){
+  if( params_bin_numeric_pred$bins > 7){
     warning('if bins > 7 default colors will be repeated, adjust "col_vector_flow" parameter manually')
   }
 
-
-
+  if(n_distinct(pred) < n_distinct(bin_labels)){
+    warning("predictions contain less unique values than 'bin_labels'")
+    bin_labels = bin_labels[1:n_distinct(pred)]
+  }
+  
   # internal function -------------------------------------------------------------------
   # will be applied to each column in df creates a suitable label
 
   make_level_labels = function(col, df, bin_labels){
-
+    df$pred <- fct_drop(df$pred)
     levels( df$pred ) <- paste0( bin_labels, ':')
 
     labels = df %>%
@@ -752,18 +808,28 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
     }
 
     new_cuts = do.call( get_cuts, c(from = list(pred_train), target = list(pred)
-                                    , params_bin_numeric_pred, bins = bins) )
+                                    , params_bin_numeric_pred) )
 
     params$new_cuts = new_cuts
 
+    bin_labels_pred = ifelse(n_distinct(pred) <= params_bin_numeric_pred$bins, "median", "cuts")
+    
     df = df %>%
-      manip_bin_numerics( bins = new_cuts, bin_labels = 'cuts'
+      manip_bin_numerics( bins = new_cuts, bin_labels = bin_labels_pred
                           , scale = F, center = F, transform = F)
 
+    if(n_distinct(df$pred) < n_distinct(bin_labels)){
+      warning(paste("binned predictions have only", n_distinct(df$pred),
+                    "bins, which is  less bins than 'bin_labels'"))
+      bin_labels = bin_labels[1:n_distinct(df$pred)]
+    }
+    
+    df$pred <- fct_drop(df$pred)
+    
     # create new label for response variable -----------------------------
 
     new_levels =  tibble( lvl = levels(df$pred)
-                          , prefix = bin_labels ) %>%
+                          , prefix = bin_labels) %>%
       mutate( new = map2_chr( prefix, lvl, function(x,y) paste0(x,'\n',y) ) ) %>%
       .$new
 
@@ -851,6 +917,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'@description Wraps \code{\link[easyalluvial]{alluvial_model_response}} and
 #'  \code{\link[easyalluvial]{get_data_space}} into one call for caret models.
 #'@param train caret train object
+#'@param data_input dataframe, input data
 #'@param degree integer,  number of top important variables to select. For
 #'  plotting more than 4 will result in two many flows and the alluvial plot
 #'  will not be very readable, Default: 4
@@ -869,13 +936,13 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'@param parallel logical, turn on parallel processing for pdp method. Default: FALSE
 #'@param params_bin_numeric_pred list, additional parameters passed to
 #'  \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
-#'  parameter. Default: list( bins = 5, center = T, transform = T, scale = T)
+#'  parameter. Default: list(bins = 5, center = T, transform = T, scale = T)
 #'@param force logical, force plotting of over 1500 flows, Default: FALSE
 #'@param pred_train numeric vector, base the automated binning of the pred vector on
 #'  the distribution of the training predictions. This is useful if marginal
 #'  histograms are added to the plot later. Default = NULL
 #'@param stratum_label_size numeric, Default: 3.5
-#'@param pred_var character, sometimes target variable cannot be inferred and
+#'@param resp_var character, sometimes target variable cannot be inferred and
 #'needs to be passed. Default NULL
 #'@param ... additional parameters passed to
 #'  \code{\link[easyalluvial]{alluvial_wide}}
@@ -894,12 +961,12 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'                      , trControl = caret::trainControl( method = 'none' )
 #'                      , importance = TRUE )
 #'
-#' alluvial_model_response_caret(train, degree = 3)
+#' alluvial_model_response_caret(train, df, degree = 3)
 #'
 #' # partial dependency plotting method
 #' \dontrun{
 #' future::plan("multisession")
-#' alluvial_model_response_caret(train, degree = 3, method = 'pdp', parallel = TRUE)
+#' alluvial_model_response_caret(train, df, degree = 3, method = 'pdp', parallel = TRUE)
 #'  }
 #'@seealso \code{\link[easyalluvial]{alluvial_wide}},
 #'  \code{\link[easyalluvial]{get_data_space}}, \code{\link[caret]{varImp}},
@@ -908,16 +975,16 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4, bins = 5
 #'  \code{\link[easyalluvial]{get_pdp_predictions}}
 #'@rdname alluvial_model_response_caret
 #'@export
-alluvial_model_response_caret = function(train, degree = 4, bins = 5
+alluvial_model_response_caret = function(train, data_input, degree = 4, bins = 5
                                          , bin_labels = c('LL', 'ML', 'M', 'MH', 'HH')
                                          , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#9DD1D1')
                                          , method = 'median'
                                          , parallel = FALSE
-                                         , params_bin_numeric_pred = list( center = T, transform = T, scale = T)
+                                         , params_bin_numeric_pred = list(bins=5)
                                          , pred_train = NULL
                                          , stratum_label_size = 3.5
                                          , force = F
-                                         , pred_var = NULL
+                                         , resp_var = NULL
                                          , ...){
 
 
@@ -933,32 +1000,10 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
   check_pkg_installed("caret")
   
   imp = caret::varImp( train )
-  imp = imp$importance
+
+  imp = tidy_imp(imp, data_input, resp_var = resp_var)
   
-
-  # for categorical response imp is calculated for each value
-  # and has is own column in imp. In this case we average them
-
-  imp_df = tibble( var = row.names(imp)
-                   , imp = apply(imp, 1, sum) / ncol(imp) )
-
-  # For some models features with zero imp do not occur in imp table, they need to be re-added
-  if(nrow(imp) < ncol(train$trainingData) - 1){
-    if(purrr::is_null(pred_var)){
-      stop("predicted variable cannot be determined, please supply via 'pred_var' parameter")
-    }
-    
-    vars_zero = train$trainingData %>%
-      select(- one_of(c(row.names(imp), pred_var))) %>%
-      colnames()
-    
-    imp_df_zero = tibble(var = vars_zero, imp = 0)
-    
-    imp_df = bind_rows(imp_df, imp_df_zero)
-    
-  }
-  
-  dspace = get_data_space(train$trainingData, imp_df, degree = degree, bins = bins)
+  dspace = get_data_space(data_input, imp, degree = degree, bins = bins)
 
   if( method == 'median'){
     pred = predict(train, newdata = dspace)
@@ -966,20 +1011,19 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 
   if( method == 'pdp'){
 
-    pred = get_pdp_predictions(train$trainingData, imp_df
-                               , .f_predict = predict
+    pred = get_pdp_predictions(data_input, imp
                                , m = train
                                , degree = degree
                                , bins = bins
-                               , parallel = parallel)
+                               , parallel = parallel
+                               , .f_predict = caret::predict.train)
 
   }
 
   p = alluvial_model_response(pred = pred
                               , dspace = dspace
-                              , imp = imp_df
+                              , imp = imp
                               , degree = degree
-                              , bins = bins
                               , bin_labels = bin_labels
                               , col_vector_flow = col_vector_flow
                               , method = method
@@ -1016,15 +1060,15 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 #'@param parallel logical, turn on parallel processing for pdp methof. Default: FALSE
 #'@param params_bin_numeric_pred list, additional parameters passed to
 #'  \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
-#'  parameter. Default: list( bins = 5, center = T, transform = T, scale = T)
+#'  parameter. Default: list(bins = 5, center = T, transform = T, scale = T)
 #'@param force logical, force plotting of over 1500 flows, Default: FALSE
 #'@param pred_train numeric vector, base the automated binning of the pred vector on
 #'  the distribution of the training predictions. This is useful if marginal
 #'  histograms are added to the plot later. Default = NULL
 #'@param stratum_label_size numeric, Default: 3.5
-#'@param pred_var character, sometimes target variable cannot be inferred and
+#'@param resp_var character, sometimes target variable cannot be inferred and
 #'needs to be passed. Default NULL
-#'@param .f_imp vip function that gets importance, Default: vip::vi_model
+#'@param .f_imp vip function that calculates feature importance, Default: vip::vi_model
 #'@param ... additional parameters passed to
 #'  \code{\link[easyalluvial]{alluvial_wide}}
 #'@return ggplot2 object
@@ -1044,12 +1088,18 @@ alluvial_model_response_caret = function(train, degree = 4, bins = 5
 #' 
 #' \dontrun{
 #'# workflow --------------------------------- 
-#'wf <- workflows::workflow() %>%
-#'  workflows::add_model(m) %>%
-#'  workflows::add_recipe(rec_prep) %>%
-#'  parsnip::fit(df)
-#'
-#' alluvial_model_response_parsnip(m, df, degree = 3)
+#' m <- parsnip::rand_forest(mode = "regression") %>%
+#'   parsnip::set_engine("randomForest")
+#' 
+#' rec_prep = recipes::recipe(disp ~ ., df) %>%
+#'   recipes::prep()
+#' 
+#' wf <- workflows::workflow() %>%
+#'   workflows::add_model(m) %>%
+#'   workflows::add_recipe(rec_prep) %>%
+#'   parsnip::fit(df)
+#' 
+#' alluvial_model_response_parsnip(wf, df, degree = 3)
 #'
 #' # partial dependence plotting method -----
 #' future::plan("multisession")
@@ -1067,11 +1117,11 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
                                          , col_vector_flow = c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500', '#7B5380', '#9DD1D1')
                                          , method = 'median'
                                          , parallel = FALSE
-                                         , params_bin_numeric_pred = list( center = T, transform = T, scale = T)
+                                         , params_bin_numeric_pred = list(bins=5)
                                          , pred_train = NULL
                                          , stratum_label_size = 3.5
                                          , force = F
-                                         , pred_var = NULL
+                                         , resp_var = NULL
                                          , .f_imp = vip::vi_model
                                          , ...){
   
@@ -1094,7 +1144,10 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
   }
   
   pred_vars = colnames(attr(m$preproc$terms, "factors"))
-  resp_var = m$preproc$y_var
+  
+  if(is.null(resp_var)){
+    resp_var = m$preproc$y_var
+  }
   
   # vip cannot calculate importance for workflows
   if(! is_workflow_model){
@@ -1106,16 +1159,7 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
       select(Variable, Importance)
   }
   
-  # For some models features with zero imp do not occur in imp table, they need to be re-added
-  if(! all(pred_vars %in% imp$Variable)){
-
-    vars_zero = pred_vars[! pred_vars %in% imp$Variable]
-    
-    imp_df_zero = tibble(Variable = vars_zero, Importance = 0)
-    
-    imp = bind_rows(imp, imp_df_zero)
-    
-  }
+  imp = tidy_imp(imp, data_input, resp_var = resp_var)
   
   dspace = get_data_space(data_input, imp, degree = degree, bins = bins)
 
@@ -1127,7 +1171,7 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
     
     # parsnip predict function uses new_data instead of newdata
     wr_predict <- function(..., newdata){
-      predict(..., new_data = newdata)
+      parsnip::predict.model_fit(..., new_data = newdata)
     }
     
     pred = get_pdp_predictions(data_input, imp
@@ -1154,7 +1198,6 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
                               , dspace = dspace
                               , imp = imp
                               , degree = degree
-                              , bins = bins
                               , bin_labels = bin_labels
                               , col_vector_flow = col_vector_flow
                               , method = method

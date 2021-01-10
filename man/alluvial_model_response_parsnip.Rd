@@ -14,11 +14,11 @@ alluvial_model_response_parsnip(
     "#9DD1D1"),
   method = "median",
   parallel = FALSE,
-  params_bin_numeric_pred = list(center = T, transform = T, scale = T),
+  params_bin_numeric_pred = list(bins = 5),
   pred_train = NULL,
   stratum_label_size = 3.5,
   force = F,
-  pred_var = NULL,
+  resp_var = NULL,
   .f_imp = vip::vi_model,
   ...
 )
@@ -52,7 +52,7 @@ observation and the result is averaged} }. Default: 'median'}
 
 \item{params_bin_numeric_pred}{list, additional parameters passed to
 \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
-parameter. Default: list( bins = 5, center = T, transform = T, scale = T)}
+parameter. Default: list(bins = 5, center = T, transform = T, scale = T)}
 
 \item{pred_train}{numeric vector, base the automated binning of the pred vector on
 the distribution of the training predictions. This is useful if marginal
@@ -62,10 +62,10 @@ histograms are added to the plot later. Default = NULL}
 
 \item{force}{logical, force plotting of over 1500 flows, Default: FALSE}
 
-\item{pred_var}{character, sometimes target variable cannot be inferred and
+\item{resp_var}{character, sometimes target variable cannot be inferred and
 needs to be passed. Default NULL}
 
-\item{.f_imp}{vip function that gets importance, Default: vip::vi_model}
+\item{.f_imp}{vip function that calculates feature importance, Default: vip::vi_model}
 
 \item{...}{additional parameters passed to
 \code{\link[easyalluvial]{alluvial_wide}}}
@@ -101,12 +101,18 @@ alluvial_model_response_parsnip(m, df, degree = 3)
 
 \dontrun{
 # workflow --------------------------------- 
-wf <- workflows::workflow() \%>\%
- workflows::add_model(m) \%>\%
- workflows::add_recipe(rec_prep) \%>\%
- parsnip::fit(df)
+m <- parsnip::rand_forest(mode = "regression") \%>\%
+  parsnip::set_engine("randomForest")
 
-alluvial_model_response_parsnip(m, df, degree = 3)
+rec_prep = recipes::recipe(disp ~ ., df) \%>\%
+  recipes::prep()
+
+wf <- workflows::workflow() \%>\%
+  workflows::add_model(m) \%>\%
+  workflows::add_recipe(rec_prep) \%>\%
+  parsnip::fit(df)
+
+alluvial_model_response_parsnip(wf, df, degree = 3)
 
 # partial dependence plotting method -----
 future::plan("multisession")

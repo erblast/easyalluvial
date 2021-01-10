@@ -138,14 +138,10 @@ test_that('alluvial_model_response'
     # importance df contains unknown variable
 
     imp_no_match = bind_rows(imp_conv, tibble( vars = 'xxx', imp = 0.99) )
-    
+
     expect_error( get_data_space(df, imp_no_match) )
     expect_error( alluvial_model_response( pred, dspace, imp_no_match) )
   
-    # importance as less variables then degrees
-    expect_warning( get_data_space(df, imp_conv[0:2,], degree = 3) )
-    expect_warning( alluvial_model_response(pred, dspace, imp_conv[0:2,], degree = 3) )
-    
     # number of flows to high
     dspace = get_data_space(df, imp, degree = 6)
     pred = predict(m, newdata = dspace)
@@ -181,25 +177,26 @@ test_that('alluvial_model_response'
     # change bin_numerics parameter for pred and bins
     
     p = alluvial_model_response(pred, dspace, imp, degree = 3
-                                , bins = 3
                                 , bin_labels = c('L','M', 'H')
-                                , params_bin_numeric_pred = list(center = F, scale = F, transform = F) )
+                                , params_bin_numeric_pred = list(bins = 3, center = F, scale = F, transform = F) )
     
 
-    expect_true( p$alluvial_params$bins == 3 )
+    expect_true( p$alluvial_params$params_bin_numeric_pred$bins == 3 )
     
     expect_doppelganger('model_response_new_change_bins_3', p)
     
     dspace = get_data_space(df, imp, degree = 4)
     pred = predict(m, newdata = dspace)
     p = alluvial_model_response(pred, dspace, imp, degree = 4
-                                , bins = 7, c('LLL','LL', 'ML', 'M', 'MH', 'HH', 'HHH') )
+                                , params_bin_numeric_pred = list(bins=7)
+                                , c('LLL','LL', 'ML', 'M', 'MH', 'HH', 'HHH') )
     
     pred_train = predict(m)
     
-    p = alluvial_model_response(pred, dspace, imp, degree = 4, bins = 7
-                            , bin_labels = c('LLL','LL', 'ML', 'M', 'MH', 'HH', 'HHH')
-                            , pred_train = pred_train )
+    p = alluvial_model_response(pred, dspace, imp, degree = 4
+                                , params_bin_numeric_pred = list(bins=7)
+                                , bin_labels = c('LLL','LL', 'ML', 'M', 'MH', 'HH', 'HHH')
+                                , pred_train = pred_train )
     
     expect_doppelganger('model_response_new_change_bins_7', p)
     
@@ -287,36 +284,36 @@ test_that('alluvial_model_response_caret'
   
   set.seed(1)
   train = caret::train( disp ~ ., df, method = 'lm',trControl = caret::trainControl(method = 'none') )
-  p = alluvial_model_response_caret(train, degree = 3)
+  p = alluvial_model_response_caret(train, df, degree = 3)
   
   # expect_doppelganger('model_response_caret_lm', p)
   
-  p = alluvial_model_response_caret(train, degree = 3, method = 'pdp')
+  p = alluvial_model_response_caret(train, df, degree = 3, method = 'pdp')
   # expect_doppelganger('model_response_caret_lm_pdp', p)
   
   
   set.seed(0)
   train = caret::train( disp ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
-  p = alluvial_model_response_caret(train, degree = 3)
+  p = alluvial_model_response_caret(train, df, degree = 3)
   
   # expect_doppelganger('model_response_caret_rf', p)
   
   # change bin labels
-  p = alluvial_model_response_caret(train, degree = 3, bin_labels =  c('A','B','C','D','E') )
+  p = alluvial_model_response_caret(train, df, degree = 3, bin_labels =  c('A','B','C','D','E') )
   
   # expect_doppelganger('model_response_caret_new_labs', p)
   
   # categorical bivariate response 
   set.seed(1)
-  train = caret::train( am ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
-  p = alluvial_model_response_caret(train, degree = 3)
+  train = caret::train(am ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
+  p = alluvial_model_response_caret(train, df, degree = 3)
   # expect_doppelganger('model_response_caret_cat_bi', p)
   
   
   # categorical multivariate response
   set.seed(1)
   train = caret::train( cyl ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
-  p = alluvial_model_response_caret(train, degree = 3)
+  p = alluvial_model_response_caret(train, df, degree = 3)
   # expect_doppelganger('model_response_caret_cat_multi', p)
   
   # all facs
@@ -326,7 +323,7 @@ test_that('alluvial_model_response_caret'
     select_if( is.factor )
   
   train = caret::train( Survived ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
-  p = alluvial_model_response_caret(train, degree = 3)
+  p = alluvial_model_response_caret(train, df, degree = 3)
   # expect_doppelganger('all_facs_caret', p)
   
   # all nums
@@ -336,7 +333,7 @@ test_that('alluvial_model_response_caret'
     select_if( is.numeric )
   
   train = caret::train( disp ~ ., df, method = 'rf',trControl = caret::trainControl(method = 'none'), importance = T )
-  p = alluvial_model_response_caret(train, degree = 3)
+  p = alluvial_model_response_caret(train, df, degree = 3)
   # expect_doppelganger('all_nums_caret', p)
   
   # titanic example, + mix of factor and character features
@@ -348,7 +345,7 @@ test_that('alluvial_model_response_caret'
     select(Survived, Sex, Embarked, title)
   
   m <- caret::train(Survived~.,data = df, method="rf",trControl=trc,importance=T)
-  p = alluvial_model_response_caret(train = m,degree = 3,bins=5,stratum_label_size = 2.8) 
+  p = alluvial_model_response_caret(train = m, df, degree = 3,bins=5,stratum_label_size = 2.8) 
   
   p_grid = add_marginal_histograms(p, data_input = df, plot = F) %>%
     add_imp_plot(p, df)
@@ -449,40 +446,7 @@ test_that('alluvial_model_response_parsnip'
 })
 
 
-test_that('params_bin_numeric_pred',{
-  
-  # alluvial_model_response_caret
-  set.seed(1)
-  df = select(mtcars2, -ids)
-  train = caret::train( disp ~ .
-                        , df, method = 'rf'
-                        , trControl = caret::trainControl(method = 'none')
-                        , importance = T)
-  
-  p_trans = alluvial_model_response_caret(train, degree = 4)
-  
-  p_no_trans = alluvial_model_response_caret(train, degree = 4
-                                             , params_bin_numeric_pred = list(transform = F, center = F, scale = F) )
-  
-  expect_true( ! all(levels(p_trans$data_key$pred) == levels(p_no_trans$data_key$pred)) )
-  
-  # alluvial_model_response
-  set.seed(0)
-  df = select(mtcars2, -ids)
-  m = randomForest::randomForest( disp ~ ., df)
-  imp = m$importance
-  dspace = get_data_space(df, imp, degree = 3)
-  
-  pred = predict(m, newdata = dspace)
-  
-  p_trans = alluvial_model_response(pred, dspace, imp, degree = 3)
-  
-  p_no_trans = alluvial_model_response(pred, dspace, imp, degree = 3
-                                       , params_bin_numeric_pred = list(transform = F, center = F, scale = F))
-  
-  expect_true( ! all(levels(p_trans$data_key$pred) == levels(p_no_trans$data_key$pred)) )
-  
-})
+
 
 test_that('n_feats == degree',{
   
