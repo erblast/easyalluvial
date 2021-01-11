@@ -9,7 +9,7 @@ tidy_imp(imp, df, .f = max, resp_var = NULL)
 \arguments{
 \item{imp}{dataframe or matrix with feature importance information}
 
-\item{df}{dataframe, modelling training data}
+\item{df}{dataframe, modeling training data}
 
 \item{.f}{window function, Default: max}
 

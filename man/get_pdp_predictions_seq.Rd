@@ -33,7 +33,7 @@ packages do not export the predict method explicitly and it can only be found
 using :::.}
 }
 \description{
-has been replaced by pdp_predictions which can be parallelized
+has been replaced by pdp_predictions which can be paralelized
 and also handles factor predictions. It is still used to test results.
 }
 \seealso{

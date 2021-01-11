@@ -27,7 +27,7 @@ many flows, Default: 5}
 data frame
 }
 \description{
-calculates a dataspace based on the modelling dataframe and the
+calculates a dataspace based on the modeling dataframe and the
  importance of the explanatory variables. It only considers the most
  important variables as defined by the degree parameter. It selects a number
  (defined by bins) of sensible single values spread over the range of the

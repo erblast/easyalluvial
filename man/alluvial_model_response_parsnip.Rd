@@ -85,7 +85,7 @@ this model visualisation approach follows the "visualising the model
 }
 \section{Parallel Processing}{
  
- We are using `furrr` and the `future` package to parallelize some of the
+ We are using `furrr` and the `future` package to paralelize some of the
  computational steps for calculating the predictions. It is up to the user
  to register a compatible backend (see \link[future]{plan}).
 }

@@ -44,7 +44,7 @@ c('#FF0065','#009850', '#A56F2B', '#005EAA', '#710500')}
 \item{method, }{character vector, one of c('median', 'pdp') \describe{
 \item{median}{sets variables that are not displayed to median mode, use with
 regular predictions} \item{pdp}{partial dependency plot method, for each
-observation in the training data the displayed variableas are set to the
+observation in the training data the displayed variable as are set to the
 indicated values. The predict function is called for each modified
 observation and the result is averaged, calculate predictions using
 \code{\link[easyalluvial]{get_pdp_predictions}} } }. Default: 'median'}

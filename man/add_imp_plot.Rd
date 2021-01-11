@@ -21,7 +21,7 @@ add_imp_plot(grid, p = NULL, data_input, plot = T, ...)
 gtable
 }
 \description{
-adds bar plot of important features to model respoinse alluvial plot
+adds bar plot of important features to model response alluvial plot
 }
 \examples{
 \dontrun{

@@ -23,7 +23,7 @@ can be used to pass training predictions for model response alluvials}
 gtable
 }
 \description{
-will create gtable with densitiy histograms and frequency plots
+will create gtable with density histograms and frequency plots
   of all variables of a given alluvial plot.
 }
 \examples{
