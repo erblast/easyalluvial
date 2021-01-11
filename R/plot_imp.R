@@ -114,7 +114,7 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
 }
 
 #' @title add bar plot of important features to model response alluvial plot
-#' @description adds bar plot of important features to model respoinse alluvial plot
+#' @description adds bar plot of important features to model response alluvial plot
 #' @param grid gtable or ggplot
 #' @param p alluvial plot, optional if alluvial plot has already been passed as grid.  Default: NULL
 #' @param data_input dataframe used to generate alluvial plot

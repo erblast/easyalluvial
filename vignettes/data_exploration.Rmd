@@ -306,7 +306,7 @@ p$data_key %>%
 
 ## ggplot2 manipulations
 
-thanks to `ggalluvial` the alluvial plots that `easyalluvial` returns can be manipulated using `ggplot2` synthax
+thanks to `ggalluvial` the alluvial plots that `easyalluvial` returns can be manipulated using `ggplot2` syntax
 
 ```{r}
 p + 

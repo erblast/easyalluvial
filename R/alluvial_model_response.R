@@ -96,7 +96,7 @@ pretty_num_vec <- function(x){
 #'   that take an imp parameter. Can be called manually if formula for
 #'   aggregating dummy encoded variables must be modified.
 #' @param imp dataframe or matrix with feature importance information
-#' @param df dataframe, modelling training data
+#' @param df dataframe, modeling training data
 #' @param .f window function, Default: max
 #' @param resp_var character, prediction variable, can usually be inferred from 
 #' imp and df. It does not work for all models and needs to be specified in those 
@@ -214,7 +214,7 @@ tidy_imp = function(imp, df, .f = max, resp_var = NULL){
 
 
 #'@title calculate data space
-#'@description calculates a dataspace based on the modelling dataframe and the
+#'@description calculates a dataspace based on the modeling dataframe and the
 #'  importance of the explanatory variables. It only considers the most
 #'  important variables as defined by the degree parameter. It selects a number
 #'  (defined by bins) of sensible single values spread over the range of the
@@ -416,7 +416,7 @@ get_data_space = function(df, imp, degree = 4, bins = 5, max_levels = 10){
 #'  [https://christophm.github.io/interpretable-ml-book/pdp.html]. 
 #' 
 #'@section Parallel Processing: 
-#'  We are using `furrr` and the `future` package to parallelize some of the
+#'  We are using `furrr` and the `future` package to paralelize some of the
 #'  computational steps for calculating the predictions. It is up to the user
 #'  to register a compatible backend (see \link[future]{plan}).
 #' @examples
@@ -474,7 +474,7 @@ get_pdp_predictions = function(df, imp, m, degree = 4, bins = 5,
 
 #'@title get predictions compatible with the partial dependence plotting method,
 #'sequential variant that only works for numeric predictions.
-#'@description has been replaced by pdp_predictions which can be parallelized
+#'@description has been replaced by pdp_predictions which can be paralelized
 #'and also handles factor predictions. It is still used to test results.
 #'@inheritParams get_pdp_predictions
 #'@rdname get_pdp_predictions_seq
@@ -656,7 +656,7 @@ get_cuts = function( from, target, ... ){
 #'@param method, character vector, one of c('median', 'pdp') \describe{
 #'  \item{median}{sets variables that are not displayed to median mode, use with
 #'  regular predictions} \item{pdp}{partial dependency plot method, for each
-#'  observation in the training data the displayed variableas are set to the
+#'  observation in the training data the displayed variable as are set to the
 #'  indicated values. The predict function is called for each modified
 #'  observation and the result is averaged, calculate predictions using
 #'  \code{\link[easyalluvial]{get_pdp_predictions}} } }. Default: 'median'

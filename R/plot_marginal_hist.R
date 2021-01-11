@@ -563,7 +563,7 @@ add_marginal_histograms = function(p, data_input, top = TRUE, keep_labels = FALS
 }
 
 #' @title plot marginal histograms of alluvial plot
-#' @description will create gtable with densitiy histograms and frequency plots
+#' @description will create gtable with density histograms and frequency plots
 #'   of all variables of a given alluvial plot.
 #' @param p alluvial plot
 #' @param data_input dataframe, input data that was used to create dataframe

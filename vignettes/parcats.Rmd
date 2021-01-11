@@ -40,7 +40,7 @@ parcats(p, marginal_histograms = TRUE, data_input = mtcars2)
 
 ### Parcats from model response alluvial
 
-Machine Learning models operate in a multidimensional space and their response is hard to visualise. Model response and partial dependency plots attempt to visualise ML models in a two dimensional space. Using alluvial plots or parrallel categories diagrams we can increase the number of dimensions.
+Machine Learning models operate in a multidimensional space and their response is hard to visualise. Model response and partial dependency plots attempt to visualise ML models in a two dimensional space. Using alluvial plots or parralel categories diagrams we can increase the number of dimensions.
 
 - [Visualise model response with alluvial plots](https://www.datisticsblog.com/page/visualising-model-response-with-easyalluvial/)
 

@@ -1,10 +1,10 @@
 
-# Update 0.2.3
+# Update 0.3.0
 
-minor changes to ensure 'dplyr 1.0.0' compatibility
+vdiffr and other packages moved to suggests and use was made conditional
 
 ## Test Environments
-* local macOS 10.14.6 R 4.0.0
+* local macOS 10.14.6 R 4.0.3
 * local Win10x64 R 4.0.0
 * Appveyor x86_64-w64-mingw32/x64 (64-bit) R 4.0.0
 * Travis CI Ubuntu 16.04.6 LTS x86_64-pc-linux-gnu (64-bit) R 4.0.0

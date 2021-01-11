@@ -1,3 +1,10 @@
+# Version 0.3.0 submitted to CRAN 20200111
+- moved modeling packages and vdiffr from imports to suggests
+- added parsnip and workflows wrapper
+
+Bug Fixes:
+- alluvial_wide() now works when all columns are character columns
+
 # Version 0.2.3 submitted to CRAN
 Bug Fixes:
 - compatibility with `dplyr 1.0.0`
