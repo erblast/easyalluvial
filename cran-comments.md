@@ -1,3 +1,10 @@
+# Resubmission 0.3.0
+
+For some reasons 'caret' did not install on the Windows Server which ran
+the automated CRAN checks.
+
+Since 'caret' is only in Suggests, the examples will now only execute if 'caret'
+is installed.
 
 # Update 0.3.0
 
