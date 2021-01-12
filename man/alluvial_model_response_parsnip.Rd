@@ -91,14 +91,16 @@ this model visualisation approach follows the "visualising the model
 }
 
 \examples{
-df = mtcars2[, ! names(mtcars2) \%in\% 'ids' ]
 
-m = parsnip::rand_forest(mode = "regression") \%>\%
-   parsnip::set_engine("randomForest") \%>\%
-   parsnip::fit(disp ~ ., data = df)
+if(check_pkg_installed("parsnip")) {
+  df = mtcars2[, ! names(mtcars2) \%in\% 'ids' ]
 
-alluvial_model_response_parsnip(m, df, degree = 3)
+  m = parsnip::rand_forest(mode = "regression") \%>\%
+     parsnip::set_engine("randomForest") \%>\%
+     parsnip::fit(disp ~ ., data = df)
 
+  alluvial_model_response_parsnip(m, df, degree = 3)
+}
 \dontrun{
 # workflow --------------------------------- 
 m <- parsnip::rand_forest(mode = "regression") \%>\%

@@ -9,6 +9,13 @@ check_degree = function(degree, imp, df){
   return(degree)
 }
 
+#' @title check if package is installed
+#' @param pkg character, package name
+#' @return logical
+#' @export
+#' @examples 
+#' check_pkg_installed("easyalluvial")
+#' 
 check_pkg_installed = function(pkg){
   
   is_installed <- try({
@@ -30,6 +37,8 @@ check_pkg_installed = function(pkg){
 #' @param digits_lower lower limit for scientific annotation
 #' @param digits_upper upper limit for scientific annotation
 #' @return character
+#' @noRd
+#' @rdname pretty_num
 #' @examples 
 #' pretty_num(0.00009)
 #' pretty_num(0.0009)
@@ -82,7 +91,7 @@ pretty_num = function(x, digits_lower = -3, digits_upper = 6){
 }
 
 #' @title vectorised version of pretty_num
-#' @inheritParams 
+#' @inheritParams pretty_num
 #' @seealso pretty_num
 #' @noRd
 pretty_num_vec <- function(x){
@@ -953,16 +962,18 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4
 #'  (2015) Visualizing statistical models: Removing the blindfold. Statistical
 #'  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 #' @examples
-#' df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
+#' 
+#' if(check_pkg_installed("caret")) {
+#'   df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
 #'
-#' train = caret::train( disp ~ .
-#'                      , df
-#'                      , method = 'rf'
-#'                      , trControl = caret::trainControl( method = 'none' )
-#'                      , importance = TRUE )
+#'   train = caret::train( disp ~ .,
+#'                         df,
+#'                         method = 'rf',
+#'                         trControl = caret::trainControl( method = 'none' ),
+#'                         importance = TRUE )
 #'
-#' alluvial_model_response_caret(train, df, degree = 3)
-#'
+#'   alluvial_model_response_caret(train, df, degree = 3)
+#'}
 #' # partial dependency plotting method
 #' \dontrun{
 #' future::plan("multisession")
@@ -1078,14 +1089,16 @@ alluvial_model_response_caret = function(train, data_input, degree = 4, bins = 5
 #'  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 #'@inheritSection get_pdp_predictions Parallel Processing
 #' @examples
-#' df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
-#'
-#' m = parsnip::rand_forest(mode = "regression") %>%
-#'    parsnip::set_engine("randomForest") %>%
-#'    parsnip::fit(disp ~ ., data = df)
-#'
-#' alluvial_model_response_parsnip(m, df, degree = 3)
 #' 
+#' if(check_pkg_installed("parsnip")) {
+#'   df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
+#'
+#'   m = parsnip::rand_forest(mode = "regression") %>%
+#'      parsnip::set_engine("randomForest") %>%
+#'      parsnip::fit(disp ~ ., data = df)
+#'
+#'   alluvial_model_response_parsnip(m, df, degree = 3)
+#' }
 #' \dontrun{
 #'# workflow --------------------------------- 
 #' m <- parsnip::rand_forest(mode = "regression") %>%

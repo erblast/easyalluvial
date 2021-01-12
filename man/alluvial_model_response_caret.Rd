@@ -88,16 +88,18 @@ this model visualisation approach follows the "visualising the model
 }
 
 \examples{
-df = mtcars2[, ! names(mtcars2) \%in\% 'ids' ]
 
-train = caret::train( disp ~ .
-                     , df
-                     , method = 'rf'
-                     , trControl = caret::trainControl( method = 'none' )
-                     , importance = TRUE )
+if(check_pkg_installed("caret")) {
+  df = mtcars2[, ! names(mtcars2) \%in\% 'ids' ]
 
-alluvial_model_response_caret(train, df, degree = 3)
+  train = caret::train( disp ~ .,
+                        df,
+                        method = 'rf',
+                        trControl = caret::trainControl( method = 'none' ),
+                        importance = TRUE )
 
+  alluvial_model_response_caret(train, df, degree = 3)
+}
 # partial dependency plotting method
 \dontrun{
 future::plan("multisession")
