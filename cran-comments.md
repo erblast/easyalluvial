@@ -1,4 +1,9 @@
-# Resubmission 0.3.0
+# Resubmission 0.3.0 - 2
+
+Got one Note from automated CRAN check that tests are too slow.
+Disabled some none-essential longer running tests for CRAN
+
+# Resubmission 0.3.0 - 1
 
 For some reasons 'caret' did not install on the Windows Server which ran
 the automated CRAN checks.
