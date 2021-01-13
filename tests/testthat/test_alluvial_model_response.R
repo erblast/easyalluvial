@@ -2,7 +2,9 @@ context('alluvial_model_response')
 
 test_that('get_data_space'
           ,{
-            
+  
+  skip_on_cran()
+                      
   set.seed(0)
             
   df = select(mtcars2, -ids)
@@ -26,6 +28,8 @@ test_that('get_data_space'
 
 
 test_that('pdp_parallel',{
+  
+  skip_on_cran()
   
   skip_if_not_installed("furrr")
   
@@ -53,6 +57,8 @@ test_that('pdp_parallel',{
 
 test_that('pdp_methods'
   ,{
+    
+    skip_on_cran()
     
     set.seed(0)
     
@@ -86,6 +92,8 @@ test_that('pdp_methods'
 test_that('pdp_methods_classification_non_binary'
           ,{
             
+    skip_on_cran()
+            
     set.seed(0)
     
     df = select(mtcars2, -ids)
@@ -110,7 +118,8 @@ test_that('pdp_methods_classification_non_binary'
 
 test_that('alluvial_model_response'
           ,{
-
+    skip_on_cran()
+            
     set.seed(0)
     df = select(mtcars2, -ids)
     m = randomForest::randomForest( disp ~ ., df)
