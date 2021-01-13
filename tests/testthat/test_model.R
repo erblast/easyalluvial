@@ -2,6 +2,7 @@
 
 test_that("rpart", {
   
+  skip_on_cran()
   skip_if_not_installed("rpart")
   skip_if_not_installed("vip")
   skip_if_not_installed("caret")
@@ -168,7 +169,7 @@ test_that("earth", {
 })
 
 test_that("rf", {
-  
+  skip_on_cran()
   skip_if_not_installed("vip")
   skip_if_not_installed("caret")
   skip_if_not_installed("parsnip")
@@ -224,7 +225,7 @@ test_that("rf", {
 })
 
 test_that("glm", {
-  
+  skip_on_cran()
   skip_if_not_installed("vip")
   skip_if_not_installed("caret")
   skip_if_not_installed("parsnip")

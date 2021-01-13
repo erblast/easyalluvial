@@ -277,7 +277,7 @@ test_that('alluvial_model_response'
 
 test_that('alluvial_model_response_caret'
           , {
-  
+  skip_on_cran()
   skip_if_not_installed("caret")
             
   df = select(mtcars2, -ids)
@@ -357,6 +357,7 @@ test_that('alluvial_model_response_parsnip'
   skip_if_not_installed("parsnip")
   skip_if_not_installed("vip")
   skip_if_not_installed("workflows")
+  skip_on_cran()
   
   df = select(mtcars2, -ids)
   
