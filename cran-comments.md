@@ -1,3 +1,10 @@
+# Resubmission 0.3.0 - 3
+
+Got one Note from automated CRAN check that tests are too slow.
+Overall checktime 12 min > 10 min
+
+Disabled a few more tests on CRAN
+
 # Resubmission 0.3.0 - 2
 
 Got one Note from automated CRAN check that tests are too slow.
