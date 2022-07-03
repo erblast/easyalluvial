@@ -1,4 +1,4 @@
-
+#' @noRd
 check_degree = function(degree, imp, df){
 
   if( degree > nrow(imp) ){
@@ -13,10 +13,9 @@ check_degree = function(degree, imp, df){
 #' @param pkg character, package name
 #' @param raise_error logical
 #' @return logical
-#' @export
 #' @examples 
 #' check_pkg_installed("easyalluvial")
-#' 
+#' @noRd
 check_pkg_installed = function(pkg, raise_error = TRUE){
   
   is_installed <- try({
@@ -527,6 +526,7 @@ get_pdp_predictions_seq = function(df, imp, m, degree = 4, bins = 5, .f_predict 
 #'@param parallel logical, Default: TRUE
 #'@rdname pdp_predictions
 #'@seealso \code{\link[easyalluvial]{get_pdp_predictions}}
+#' @noRd
 pdp_predictions = function(df, imp, m, degree = 4, bins = 5, .f_predict = predict,
                            parallel = FALSE){
   

@@ -53,3 +53,7 @@ reference:
   - titanic
   - quarterly_flights
   - quarterly_sunspots
+- title: internal
+  contents:
+  - check_pkg_installed
+  - pdp_predictions
