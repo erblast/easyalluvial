@@ -92,7 +92,7 @@ this model visualisation approach follows the "visualising the model
 
 \examples{
 
-if(check_pkg_installed("parsnip")) {
+if(check_pkg_installed("parsnip", raise_error = FALSE)) {
   df = mtcars2[, ! names(mtcars2) \%in\% 'ids' ]
 
   m = parsnip::rand_forest(mode = "regression") \%>\%

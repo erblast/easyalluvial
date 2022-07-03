@@ -3,6 +3,8 @@ context('plot_imp')
 test_that('plot_imp'
           ,{
             
+  skip_if_not_installed("caret")
+            
   df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
   set.seed(1)
   train = caret::train( disp ~ .
@@ -21,7 +23,9 @@ test_that('plot_imp'
 
 test_that('add_importance_plot'
           ,{
-            
+  
+  skip_if_not_installed("caret")
+                      
   df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
   
   train = caret::train( disp ~ .

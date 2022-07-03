@@ -1,3 +1,6 @@
+# Version 0.3.1 submitted to CRAN 20220704
+- cleanup package dependencies
+
 # Version 0.3.0 submitted to CRAN 20200111
 - moved modeling packages and vdiffr from imports to suggests
 - added parsnip and workflows wrapper
