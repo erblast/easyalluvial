@@ -19,5 +19,4 @@ check if package is installed
 }
 \examples{
 check_pkg_installed("easyalluvial")
-
 }

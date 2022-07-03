@@ -13,9 +13,10 @@ check_degree = function(degree, imp, df){
 #' @param pkg character, package name
 #' @param raise_error logical
 #' @return logical
+#' @export
+#' @rdname check_pkg_installed 
 #' @examples 
 #' check_pkg_installed("easyalluvial")
-#' @noRd
 check_pkg_installed = function(pkg, raise_error = TRUE){
   
   is_installed <- try({

@@ -87,7 +87,7 @@ Under the hood this function converts the wide format into long
 }
 \examples{
 alluvial_wide( data = mtcars2, id = ids
-                , max_variables = 5
+                , max_variables = 3
                 , fill_by = 'first_variable' )
 \dontrun{
 

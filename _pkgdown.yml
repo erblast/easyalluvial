@@ -38,6 +38,7 @@ reference:
   contents:
   - starts_with("manip_")
   - tidy_imp
+  - check_pkg_installed
 - title: Helper Functions - Plotting
   desc: ~
   contents:
@@ -53,7 +54,3 @@ reference:
   - titanic
   - quarterly_flights
   - quarterly_sunspots
-- title: internal
-  contents:
-  - check_pkg_installed
-  - pdp_predictions

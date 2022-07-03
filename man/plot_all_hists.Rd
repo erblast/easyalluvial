@@ -27,7 +27,7 @@ will create gtable with density histograms and frequency plots
   of all variables of a given alluvial plot.
 }
 \examples{
-p = alluvial_wide(mtcars2, max_variables = 4)
+p = alluvial_wide(mtcars2, max_variables = 3)
 plot_all_hists(p, mtcars2)
 }
 \seealso{

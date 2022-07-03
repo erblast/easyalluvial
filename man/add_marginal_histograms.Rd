@@ -41,7 +41,7 @@ will add density histograms and frequency plots of original data
  to alluvial plot
 }
 \examples{
-p = alluvial_wide(mtcars2, max_variables = 4)
+p = alluvial_wide(mtcars2, max_variables = 3)
 p_grid = add_marginal_histograms(p, mtcars2)
 }
 \seealso{
