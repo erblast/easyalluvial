@@ -552,6 +552,9 @@ pdp_predictions = function(df, imp, m, degree = 4, bins = 5, .f_predict = predic
     return(pred)
   }
   
+  # we add one call to progress to satisfy R CMD check
+  .f <- progress::progress_bar
+  
   progressr::handlers("progress")
   along <- seq(1, nrow(df))
 
