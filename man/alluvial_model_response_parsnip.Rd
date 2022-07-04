@@ -48,7 +48,7 @@ observation in the training data the displayed variables are set to the
 indicated values. The predict function is called for each modified
 observation and the result is averaged} }. Default: 'median'}
 
-\item{parallel}{logical, turn on parallel processing for pdp methof. Default: FALSE}
+\item{parallel}{logical, turn on parallel processing for pdp method. Default: FALSE}
 
 \item{params_bin_numeric_pred}{list, additional parameters passed to
 \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
