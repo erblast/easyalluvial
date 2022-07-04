@@ -96,12 +96,11 @@ Plots two variables of a dataframe on an alluvial plot. A third
 }
 \examples{
 
-
+\dontrun{
  data = quarterly_flights
 
  alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'last_variable' )
 
-\dontrun{
  # more flow coloring variants ------------------------------------
 
  alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill_by = 'first_variable' )

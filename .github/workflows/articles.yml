@@ -24,6 +24,8 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "devtools", "tidyverse", "pkgdown"))
+          system("git clone https://github.com/erblast/parcats.git")
+          remotes::install_deps("parcats/", dependencies = TRUE)
           remotes::install_deps(dependencies = TRUE)
           devtools::install()
         shell: Rscript {0}

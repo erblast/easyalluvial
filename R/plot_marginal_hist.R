@@ -511,8 +511,10 @@ plot_hist_wide = function( var, p, data_input){
 #'  inferred, Default: NULL } }
 #'@return gtable
 #' @examples
+#'\dontrun{
 #' p = alluvial_wide(mtcars2, max_variables = 3)
 #' p_grid = add_marginal_histograms(p, mtcars2)
+#'}
 #'@seealso \code{\link[gridExtra]{arrangeGrob}}
 #'@rdname add_marginal_histograms
 #'@export
