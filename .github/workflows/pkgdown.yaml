@@ -39,6 +39,7 @@ jobs:
           install.packages("pkgdown", type = "binary")
           system("git clone https://github.com/erblast/parcats.git")
           remotes::install_deps("parcats/", dependencies = TRUE)
+          devtools::install("parcats/")
         shell: Rscript {0}
 
       - name: Install package
