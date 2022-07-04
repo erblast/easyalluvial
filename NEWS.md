@@ -36,7 +36,7 @@ Bug Fixes:
 - Compatibility with `recipes 0.1.5`
 - NA values in numerical columns are excepted
 - correct ggplot2 and ggalluvial versions added as dependencies
-- p$data_key does not contain comlumns with empty levels anyomore
+- p$data_key does not contain columns with empty levels anymore
 - better support for numerical variables for alluvial_long()
 
 # Version: 0.1.8, submitted to CRAN 20190115

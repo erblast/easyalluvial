@@ -1073,7 +1073,7 @@ alluvial_model_response_caret = function(train, data_input, degree = 4, bins = 5
 #'  observation in the training data the displayed variables are set to the
 #'  indicated values. The predict function is called for each modified
 #'  observation and the result is averaged} }. Default: 'median'
-#'@param parallel logical, turn on parallel processing for pdp methof. Default: FALSE
+#'@param parallel logical, turn on parallel processing for pdp method. Default: FALSE
 #'@param params_bin_numeric_pred list, additional parameters passed to
 #'  \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
 #'  parameter. Default: list(bins = 5, center = T, transform = T, scale = T)

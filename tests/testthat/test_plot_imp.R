@@ -38,7 +38,9 @@ test_that('add_importance_plot'
   
   # we can silence the warning by adjusting bins and labels but we want to 
   # maintain more bins for pred_train
-  expect_warning(p <- alluvial_model_response_caret(train, df, degree = 4, pred_train = pred_train))
+  suppressWarnings({
+    p <- alluvial_model_response_caret(train, df, degree = 4, pred_train = pred_train)
+  })
   
   p_grid = add_marginal_histograms(p, data_input = df, plot = F)
   

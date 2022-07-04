@@ -20,9 +20,6 @@ New submission
 
 Package was archived on CRAN
 
-occasionally:
-Examples with CPU (user + system) or elapsed time > 5s
-
 ## Reverse Dependencies
 
 no reverse dependencies
