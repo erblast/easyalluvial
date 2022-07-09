@@ -59,7 +59,7 @@ alluvial_wide(data_wide
 
 ### Alluvial Plot Organisation
 
-Each group of stacked bars represents a variable while the size of each segment represents how many observations in the dataframe belong to that level machting the segment label. The colored flows between the bar stack represent a group of observations that match the value for each variable indicated by the flow. The thickness of the flow indicates how many observations belong to that group. 
+Each group of stacked bars represents a variable while the size of each segment represents how many observations in the dataframe belong to that level matching the segment label. The colored flows between the bar stack represent a group of observations that match the value for each variable indicated by the flow. The thickness of the flow indicates how many observations belong to that group. 
 
 We see that each flow has more or less the same thickness and the statistical information in the plot caption tells us that we have 30 flows in total for 32 observations in the dataframe. Which means that almost each observation is unique in its combination of variable values. 
 

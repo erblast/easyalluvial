@@ -1,4 +1,4 @@
-
+#' @noRd
 check_degree = function(degree, imp, df){
 
   if( degree > nrow(imp) ){
@@ -11,12 +11,13 @@ check_degree = function(degree, imp, df){
 
 #' @title check if package is installed
 #' @param pkg character, package name
+#' @param raise_error logical
 #' @return logical
 #' @export
+#' @rdname check_pkg_installed 
 #' @examples 
 #' check_pkg_installed("easyalluvial")
-#' 
-check_pkg_installed = function(pkg){
+check_pkg_installed = function(pkg, raise_error = TRUE){
   
   is_installed <- try({
     suppressPackageStartupMessages(requireNamespace(pkg, quietly = TRUE))
@@ -24,11 +25,11 @@ check_pkg_installed = function(pkg){
   
   msg <- paste("Please install package `", pkg, "`")
   
-  if(! is_installed){
+  if(! is_installed & raise_error){
     stop(msg)
   }
   
-  return(TRUE)
+  return(is_installed)
 }
 
 #' @title pretty numbers
@@ -526,6 +527,7 @@ get_pdp_predictions_seq = function(df, imp, m, degree = 4, bins = 5, .f_predict 
 #'@param parallel logical, Default: TRUE
 #'@rdname pdp_predictions
 #'@seealso \code{\link[easyalluvial]{get_pdp_predictions}}
+#' @noRd
 pdp_predictions = function(df, imp, m, degree = 4, bins = 5, .f_predict = predict,
                            parallel = FALSE){
   
@@ -550,6 +552,9 @@ pdp_predictions = function(df, imp, m, degree = 4, bins = 5, .f_predict = predic
     
     return(pred)
   }
+  
+  # we add one call to progress to satisfy R CMD check
+  .f <- progress::progress_bar
   
   progressr::handlers("progress")
   along <- seq(1, nrow(df))
@@ -963,7 +968,7 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4
 #'  Analysis and Data Mining 8(4) <doi:10.1002/sam.11271>
 #' @examples
 #' 
-#' if(check_pkg_installed("caret")) {
+#' if(check_pkg_installed("caret", raise_error = FALSE)) {
 #'   df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
 #'
 #'   train = caret::train( disp ~ .,
@@ -1068,7 +1073,7 @@ alluvial_model_response_caret = function(train, data_input, degree = 4, bins = 5
 #'  observation in the training data the displayed variables are set to the
 #'  indicated values. The predict function is called for each modified
 #'  observation and the result is averaged} }. Default: 'median'
-#'@param parallel logical, turn on parallel processing for pdp methof. Default: FALSE
+#'@param parallel logical, turn on parallel processing for pdp method. Default: FALSE
 #'@param params_bin_numeric_pred list, additional parameters passed to
 #'  \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
 #'  parameter. Default: list(bins = 5, center = T, transform = T, scale = T)
@@ -1090,7 +1095,7 @@ alluvial_model_response_caret = function(train, data_input, degree = 4, bins = 5
 #'@inheritSection get_pdp_predictions Parallel Processing
 #' @examples
 #' 
-#' if(check_pkg_installed("parsnip")) {
+#' if(check_pkg_installed("parsnip", raise_error = FALSE)) {
 #'   df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
 #'
 #'   m = parsnip::rand_forest(mode = "regression") %>%

@@ -48,7 +48,7 @@ observation in the training data the displayed variables are set to the
 indicated values. The predict function is called for each modified
 observation and the result is averaged} }. Default: 'median'}
 
-\item{parallel}{logical, turn on parallel processing for pdp methof. Default: FALSE}
+\item{parallel}{logical, turn on parallel processing for pdp method. Default: FALSE}
 
 \item{params_bin_numeric_pred}{list, additional parameters passed to
 \code{\link[easyalluvial]{manip_bin_numerics}} which is applied to the pred
@@ -92,7 +92,7 @@ this model visualisation approach follows the "visualising the model
 
 \examples{
 
-if(check_pkg_installed("parsnip")) {
+if(check_pkg_installed("parsnip", raise_error = FALSE)) {
   df = mtcars2[, ! names(mtcars2) \%in\% 'ids' ]
 
   m = parsnip::rand_forest(mode = "regression") \%>\%

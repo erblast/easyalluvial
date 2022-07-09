@@ -76,6 +76,11 @@ test_that('plot_hist_as_margins',{
   
   # gtables not yet supported by vdiffr
   # expect_doppelganger('marg_hist_long_cat-fill', p)
+})
+
+test_that("plot_hist_margins_model_respons" ,{
+  
+  skip_if_not_installed("caret")
   
   # model response numeric ----------------------------------
   set.seed(1)
@@ -140,6 +145,8 @@ test_that('plot_hist_as_margins',{
 })
 
 test_that('model response marginal hists, extra columns in df',{
+  
+  skip_if_not_installed("caret")
   
   set.seed(1)
   df = select(mtcars2, -ids)

@@ -52,11 +52,10 @@ if(getRversion() >= "2.15.1"){
 #'  name the order will be the same. If we want to change level order
 #'  independently we have to assign unique level names first.
 #' @examples
-#' alluvial_wide( data = mtcars2, id = ids
-#'                 , max_variables = 5
-#'                 , fill_by = 'first_variable' )
 #'\dontrun{
-#'
+#' alluvial_wide( data = mtcars2, id = ids
+#'                 , max_variables = 3
+#'                 , fill_by = 'first_variable' )#'
 #' # more coloring variants----------------------
 #' alluvial_wide( data = mtcars2, id = ids
 #'                 , max_variables = 5

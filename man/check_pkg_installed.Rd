@@ -4,10 +4,12 @@
 \alias{check_pkg_installed}
 \title{check if package is installed}
 \usage{
-check_pkg_installed(pkg)
+check_pkg_installed(pkg, raise_error = TRUE)
 }
 \arguments{
 \item{pkg}{character, package name}
+
+\item{raise_error}{logical}
 }
 \value{
 logical
@@ -17,5 +19,4 @@ check if package is installed
 }
 \examples{
 check_pkg_installed("easyalluvial")
-
 }

@@ -38,6 +38,7 @@ reference:
   contents:
   - starts_with("manip_")
   - tidy_imp
+  - check_pkg_installed
 - title: Helper Functions - Plotting
   desc: ~
   contents:

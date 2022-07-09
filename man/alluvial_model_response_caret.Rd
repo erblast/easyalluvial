@@ -89,7 +89,7 @@ this model visualisation approach follows the "visualising the model
 
 \examples{
 
-if(check_pkg_installed("caret")) {
+if(check_pkg_installed("caret", raise_error = FALSE)) {
   df = mtcars2[, ! names(mtcars2) \%in\% 'ids' ]
 
   train = caret::train( disp ~ .,

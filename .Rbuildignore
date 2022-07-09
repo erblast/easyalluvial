@@ -19,3 +19,4 @@
 ^tests/figs$
 ^\.github$
 ^README.md$
+^CRAN-SUBMISSION$

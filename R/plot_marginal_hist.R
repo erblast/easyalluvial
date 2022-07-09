@@ -511,8 +511,10 @@ plot_hist_wide = function( var, p, data_input){
 #'  inferred, Default: NULL } }
 #'@return gtable
 #' @examples
-#' p = alluvial_wide(mtcars2, max_variables = 4)
+#'\dontrun{
+#' p = alluvial_wide(mtcars2, max_variables = 3)
 #' p_grid = add_marginal_histograms(p, mtcars2)
+#'}
 #'@seealso \code{\link[gridExtra]{arrangeGrob}}
 #'@rdname add_marginal_histograms
 #'@export
@@ -574,8 +576,10 @@ add_marginal_histograms = function(p, data_input, top = TRUE, keep_labels = FALS
 #'   can be used to pass training predictions for model response alluvials
 #' @return gtable
 #' @examples
-#' p = alluvial_wide(mtcars2, max_variables = 4)
+#'\dontrun{
+#' p = alluvial_wide(mtcars2, max_variables = 3)
 #' plot_all_hists(p, mtcars2)
+#' }
 #' @seealso \code{\link[gridExtra]{arrangeGrob}}
 #' @seealso \code{\link[easyalluvial]{add_marginal_histograms}}
 #' @rdname plot_all_hists
