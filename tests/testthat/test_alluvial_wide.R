@@ -93,7 +93,7 @@ test_that('alluvial_wide'
     p = alluvial_wide( data = data
                        , max_variables = max_variables
                        , fill_by = 'first_variable'
-                       , stratum_labels = F
+                       , stratum_labels = "none"
                        , stratum_width = 1/20 )
     
     #vdiffr detects difference when rendered with different OS

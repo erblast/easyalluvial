@@ -17,7 +17,7 @@ alluvial_wide(
   col_vector_value = RColorBrewer::brewer.pal(9, "Greys")[c(4, 7, 5, 8, 6)],
   colorful_fill_variable_stratum = T,
   verbose = F,
-  stratum_labels = T,
+  stratum_labels = "label",
   stratum_label_size = 4.5,
   stratum_width = 1/4,
   auto_rotate_xlabs = T,
@@ -56,7 +56,7 @@ fill variable stratum, Default: TRUE}
 
 \item{verbose}{logical, print plot summary, Default: F}
 
-\item{stratum_labels}{logical, Default: TRUE}
+\item{stratum_labels}{character, Default: "label"}
 
 \item{stratum_label_size}{numeric, Default: 4.5}
 
