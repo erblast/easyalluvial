@@ -75,7 +75,7 @@ Default:RColorBrewer::brewer.pal(9, 'Greys')[c(3,6,4,7,5)]}
 
 \item{verbose}{logical, print plot summary, Default: F}
 
-\item{stratum_labels}{character, Default: "text"}
+\item{stratum_labels}{character, Default: "label"}
 
 \item{stratum_label_size}{numeric, Default: 4.5}
 
