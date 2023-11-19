@@ -32,7 +32,8 @@
 #'@param col_vector_value HEX color values  for y levels/values,
 #'  Default:RColorBrewer::brewer.pal(9, 'Greys')[c(3,6,4,7,5)]
 #'@param verbose logical, print plot summary, Default: F
-#'@param stratum_labels character, Default: "label"
+#'@param stratum_labels logical, Default: TRUE
+#'@param stratum_label_type character, Default: "label"
 #'@param stratum_label_size numeric, Default: 4.5
 #'@param stratum_width double, Default: 1/4
 #'@param auto_rotate_xlabs logical, Default: TRUE
@@ -115,7 +116,8 @@ alluvial_long = function( data
                           , col_vector_flow = palette_qualitative() %>% palette_filter( greys = F)
                           , col_vector_value =  RColorBrewer::brewer.pal(9, 'Greys')[c(3,6,4,7,5)]
                           , verbose = F
-                          , stratum_labels = "label"
+                          , stratum_labels = T
+                          , stratum_label_type = "label"
                           , stratum_label_size = 4.5
                           , stratum_width = 1/4
                           , auto_rotate_xlabs = T
@@ -434,12 +436,14 @@ alluvial_long = function( data
     scale_color_identity() +
     labs( x = '', y = 'count', caption = caption)
 
-  if(stratum_labels == "label"){
-    p = p + geom_label( stat = ggalluvial::StatStratum
-                        , size = stratum_label_size )
-  } else if (stratum_labels == "text"){
-    p = p + geom_text( stat = ggalluvial::StatStratum
-                        , size = stratum_label_size )
+  if(stratum_labels){
+    if(stratum_label_type == "label"){
+        p = p + geom_label( stat = ggalluvial::StatStratum
+                            , size = stratum_label_size )
+    } else if (stratum_labels == "text"){
+        p = p + geom_text( stat = ggalluvial::StatStratum
+                            , size = stratum_label_size )
+    }
   }
 
 

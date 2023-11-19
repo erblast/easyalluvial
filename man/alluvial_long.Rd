@@ -22,7 +22,8 @@ alluvial_long(
   col_vector_flow = palette_qualitative() \%>\% palette_filter(greys = F),
   col_vector_value = RColorBrewer::brewer.pal(9, "Greys")[c(3, 6, 4, 7, 5)],
   verbose = F,
-  stratum_labels = "label",
+  stratum_labels = T,
+  stratum_label_type = "label",
   stratum_label_size = 4.5,
   stratum_width = 1/4,
   auto_rotate_xlabs = T,
@@ -75,7 +76,9 @@ Default:RColorBrewer::brewer.pal(9, 'Greys')[c(3,6,4,7,5)]}
 
 \item{verbose}{logical, print plot summary, Default: F}
 
-\item{stratum_labels}{character, Default: "label"}
+\item{stratum_labels}{logical, Default: TRUE}
+
+\item{stratum_label_type}{character, Default: "label"}
 
 \item{stratum_label_size}{numeric, Default: 4.5}
 
