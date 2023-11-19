@@ -372,7 +372,7 @@ alluvial_wide = function( data
     if(stratum_label_type == "label"){
         p = p + geom_label( stat = ggalluvial::StatStratum
                             , size = stratum_label_size )
-    } else if (stratum_labels == "text"){
+    } else if (stratum_label_type == "text"){
         p = p + geom_text( stat = ggalluvial::StatStratum
                             , size = stratum_label_size )
     }
