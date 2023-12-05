@@ -1095,7 +1095,8 @@ alluvial_model_response_caret = function(train, data_input, degree = 4, bins = 5
 #'@inheritSection get_pdp_predictions Parallel Processing
 #' @examples
 #' 
-#' if(check_pkg_installed("parsnip", raise_error = FALSE)) {
+#' if(check_pkg_installed("parsnip", raise_error = FALSE) &
+#'    check_pkg_installed("vip", raise_error = FALSE)) {
 #'   df = mtcars2[, ! names(mtcars2) %in% 'ids' ]
 #'
 #'   m = parsnip::rand_forest(mode = "regression") %>%
