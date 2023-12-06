@@ -36,7 +36,7 @@ jobs:
           needs: website
       - name: Install dependencies
         run: |
-          install.packages("devtools"))
+          install.packages("devtools")
           system("git clone https://github.com/erblast/parcats.git")
           devtools::install("parcats/", dependencies = TRUE)
         shell: Rscript {0}
