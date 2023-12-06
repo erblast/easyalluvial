@@ -49,7 +49,7 @@ argument which will be converted to bin label.
 # 20181812 0.1.7
 CRAN released
 
-# 20181118
+# 20181118 0.0.1
 CRAN submission
 
 
