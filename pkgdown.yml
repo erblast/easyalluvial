@@ -1,12 +1,12 @@
-pandoc: 2.7.3
-pkgdown: 1.6.1
+pandoc: 2.19.2
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   data_exploration: data_exploration.html
   model_response: model_response.html
   parcats: parcats.html
-last_built: 2021-01-13T09:49Z
+last_built: 2023-12-06T14:56Z
 urls:
-  reference: https://erblast.github.io/easyalluvial//reference
-  article: https://erblast.github.io/easyalluvial//articles
+  reference: https://erblast.github.io/easyalluvial/reference
+  article: https://erblast.github.io/easyalluvial/articles
 

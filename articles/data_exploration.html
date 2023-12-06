@@ -32,6 +32,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -44,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">easyalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.900</span>
       </span>
     </div>
 
@@ -60,7 +62,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -83,7 +85,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/erblast/easyalluvial/">
+  <a href="https://github.com/erblast/easyalluvial/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -98,48 +100,65 @@
 
       
 
-      </header><script src="data_exploration_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Data Exploration with Alluvial Plots</h1>
-                        <h4 class="author">Björn Koneswarakantha</h4>
+                        <h4 data-toc-skip class="author">Björn
+Koneswarakantha</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/erblast/easyalluvial/blob/master/vignettes/data_exploration.Rmd"><code>vignettes/data_exploration.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/erblast/easyalluvial/blob/HEAD/vignettes/data_exploration.Rmd" class="external-link"><code>vignettes/data_exploration.Rmd</code></a></small>
       <div class="hidden name"><code>data_exploration.Rmd</code></div>
 
     </div>
 
     
     
-<div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>Alluvial plots are a form of <a href="https://en.wikipedia.org/wiki/Sankey_diagram">sankey diagrams</a> that are a great tool for exploring categorical data. They group categorical data into flows that can easily be traced in the diagram. Other than sankey diagrams they are constrained to x-y dimensions, however their graphical grammar is a bit more complex then that of a regular x-y plot. The <a href="http://corybrunson.github.io/ggalluvial/"><code>ggalluvial</code></a> package made a great job of translating that grammar into ggplot2 syntax and gives you many option to tweak the appearance of a plot, nevertheless there still remains a multilayered complexity that makes it difficult to use <code>ggalluvial</code> for explorative data analysis. <code>easyalluvial</code> provides a simple interface to this package that allows you to put out a decent alluvial from any dataframe where data is stored in either long or wide format while automatically binning continuous data. It is meant to allow a quick visualisation of entire dataframes similar to the visualisations created by the <a href="https://github.com/mtennekes/tabplot"><code>tabplot</code></a> package providing different colouring options which give it the flexibility needed for data exploration.</p>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>Alluvial plots are a form of <a href="https://en.wikipedia.org/wiki/Sankey_diagram" class="external-link">sankey diagrams</a>
+that are a great tool for exploring categorical data. They group
+categorical data into flows that can easily be traced in the diagram.
+Other than sankey diagrams they are constrained to x-y dimensions,
+however their graphical grammar is a bit more complex then that of a
+regular x-y plot. The <a href="http://corybrunson.github.io/ggalluvial/" class="external-link"><code>ggalluvial</code></a>
+package made a great job of translating that grammar into ggplot2 syntax
+and gives you many option to tweak the appearance of a plot,
+nevertheless there still remains a multilayered complexity that makes it
+difficult to use <code>ggalluvial</code> for explorative data analysis.
+<code>easyalluvial</code> provides a simple interface to this package
+that allows you to put out a decent alluvial from any dataframe where
+data is stored in either long or wide format while automatically binning
+continuous data. It is meant to allow a quick visualisation of entire
+dataframes similar to the visualisations created by the <a href="https://github.com/mtennekes/tabplot" class="external-link"><code>tabplot</code></a>
+package providing different colouring options which give it the
+flexibility needed for data exploration.</p>
 </div>
-<div id="wide-format" class="section level1">
-<h1 class="hasAnchor">
-<a href="#wide-format" class="anchor"></a>Wide Format</h1>
-<div id="sample-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#sample-data" class="anchor"></a>Sample data</h2>
+<div class="section level2">
+<h2 id="wide-format">Wide Format<a class="anchor" aria-label="anchor" href="#wide-format"></a>
+</h2>
+<div class="section level3">
+<h3 id="sample-data">Sample data<a class="anchor" aria-label="anchor" href="#sample-data"></a>
+</h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/erblast/easyalluvial/">easyalluvial</a></span><span class="op">)</span> <span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span> <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/erblast/easyalluvial/" class="external-link">easyalluvial</a></span><span class="op">)</span> <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span> <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span> <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span> <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://forcats.tidyverse.org/" class="external-link">forcats</a></span><span class="op">)</span> <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/" class="external-link">purrr</a></span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data_wide</span> <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
-<span class="va">categoricals</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'cyl'</span>, <span class="st">'vs'</span>, <span class="st">'am'</span>, <span class="st">'gear'</span>, <span class="st">'carb'</span><span class="op">)</span>
-<span class="va">numericals</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'mpg'</span>, <span class="st">'cyl'</span>, <span class="st">'disp'</span>, <span class="st">'hp'</span>, <span class="st">'drat'</span>, <span class="st">'wt'</span>, <span class="st">'qsec'</span><span class="op">)</span>
-
-<span class="va">data_wide</span> <span class="op">=</span> <span class="va">data_wide</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_at</a></span><span class="op">(</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">categoricals</span><span class="op">)</span>, <span class="va">as.factor</span> <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span> car_id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html">row_number</a></span><span class="op">(</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
-<pre><code>## Note: Using an external vector in selections is ambiguous.
-## ℹ Use `all_of(categoricals)` instead of `categoricals` to silence this message.
-## ℹ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.
-## This message is displayed once per session.</code></pre>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">data_wide</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">data_wide</span> <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+<span><span class="va">categoricals</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'cyl'</span>, <span class="st">'vs'</span>, <span class="st">'am'</span>, <span class="st">'gear'</span>, <span class="st">'carb'</span><span class="op">)</span></span>
+<span><span class="va">numericals</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'mpg'</span>, <span class="st">'cyl'</span>, <span class="st">'disp'</span>, <span class="st">'hp'</span>, <span class="st">'drat'</span>, <span class="st">'wt'</span>, <span class="st">'qsec'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">data_wide</span> <span class="op">=</span> <span class="va">data_wide</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html" class="external-link">mutate_at</a></span><span class="op">(</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">categoricals</span><span class="op">)</span>, <span class="va">as.factor</span> <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span> car_id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span> <span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_wide</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">mpg</th>
@@ -243,102 +262,139 @@
 </tbody>
 </table>
 </div>
-<div id="alluvial_wide" class="section level2">
-<h2 class="hasAnchor">
-<a href="#alluvial_wide" class="anchor"></a>alluvial_wide()</h2>
-<div id="binning-of-numerical-variables" class="section level3">
-<h3 class="hasAnchor">
-<a href="#binning-of-numerical-variables" class="anchor"></a>Binning of Numerical Variables</h3>
-<p>This function produces a simple alluvial plot of the given dataframe. Numerical variables are centered, scaled and yeo johnson transformed (transformed to resemble more of a normal distribution) by <code><a href="../reference/manip_bin_numerics.html">easyalluvial::manip_bin_numerics()</a></code>. Outliers as defined by the boxplot criteria ( see documentation for <code><a href="https://rdrr.io/r/grDevices/boxplot.stats.html">grDevices::boxplot.stats()</a></code>) are stunted to to the min and max values that are defined by the whiskers of the box plot. The so transformed numeric variables are then cut into 5 (default) equally ranged bins which are labeled ‘LL’ (low-low), ‘ML’ (medium-low), ‘M’ (medium), ‘MH’ (medium-high), HH (high-high) by default.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span><span class="va">data_wide</span>
-              , bins <span class="op">=</span> <span class="fl">5</span> <span class="co"># Default</span>
-              , bin_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'LL'</span>,<span class="st">'ML'</span>,<span class="st">'M'</span>,<span class="st">'MH'</span>,<span class="st">'HH'</span><span class="op">)</span> <span class="co"># Default</span>
-              , fill_by <span class="op">=</span> <span class="st">'all_flows'</span>
-              <span class="op">)</span></code></pre></div>
+<div class="section level3">
+<h3 id="alluvial_wide">alluvial_wide()<a class="anchor" aria-label="anchor" href="#alluvial_wide"></a>
+</h3>
+<div class="section level4">
+<h4 id="binning-of-numerical-variables">Binning of Numerical Variables<a class="anchor" aria-label="anchor" href="#binning-of-numerical-variables"></a>
+</h4>
+<p>This function produces a simple alluvial plot of the given dataframe.
+Numerical variables are centered, scaled and yeo johnson transformed
+(transformed to resemble more of a normal distribution) by
+<code><a href="../reference/manip_bin_numerics.html">easyalluvial::manip_bin_numerics()</a></code>. Outliers as defined by
+the boxplot criteria ( see documentation for
+<code><a href="https://rdrr.io/r/grDevices/boxplot.stats.html" class="external-link">grDevices::boxplot.stats()</a></code>) are stunted to to the min and
+max values that are defined by the whiskers of the box plot. The so
+transformed numeric variables are then cut into 5 (default) equally
+ranged bins which are labeled ‘LL’ (low-low), ‘ML’ (medium-low), ‘M’
+(medium), ‘MH’ (medium-high), HH (high-high) by default.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span><span class="va">data_wide</span></span>
+<span>              , bins <span class="op">=</span> <span class="fl">5</span> <span class="co"># Default</span></span>
+<span>              , bin_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'LL'</span>,<span class="st">'ML'</span>,<span class="st">'M'</span>,<span class="st">'MH'</span>,<span class="st">'HH'</span><span class="op">)</span> <span class="co"># Default</span></span>
+<span>              , fill_by <span class="op">=</span> <span class="st">'all_flows'</span></span>
+<span>              <span class="op">)</span></span></code></pre></div>
 <p><img src="data_exploration_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
-<div id="alluvial-plot-organisation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#alluvial-plot-organisation" class="anchor"></a>Alluvial Plot Organisation</h3>
-<p>Each group of stacked bars represents a variable while the size of each segment represents how many observations in the dataframe belong to that level machting the segment label. The colored flows between the bar stack represent a group of observations that match the value for each variable indicated by the flow. The thickness of the flow indicates how many observations belong to that group.</p>
-<p>We see that each flow has more or less the same thickness and the statistical information in the plot caption tells us that we have 30 flows in total for 32 observations in the dataframe. Which means that almost each observation is unique in its combination of variable values.</p>
+<div class="section level4">
+<h4 id="alluvial-plot-organisation">Alluvial Plot Organisation<a class="anchor" aria-label="anchor" href="#alluvial-plot-organisation"></a>
+</h4>
+<p>Each group of stacked bars represents a variable while the size of
+each segment represents how many observations in the dataframe belong to
+that level matching the segment label. The colored flows between the bar
+stack represent a group of observations that match the value for each
+variable indicated by the flow. The thickness of the flow indicates how
+many observations belong to that group.</p>
+<p>We see that each flow has more or less the same thickness and the
+statistical information in the plot caption tells us that we have 30
+flows in total for 32 observations in the dataframe. Which means that
+almost each observation is unique in its combination of variable
+values.</p>
 </div>
-<div id="reduce-the-number-of-variables" class="section level3">
-<h3 class="hasAnchor">
-<a href="#reduce-the-number-of-variables" class="anchor"></a>Reduce the Number of Variables</h3>
-<p>In order to reduce the complexity we can use a helper function <code><a href="../reference/plot_condensation.html">plot_condensation()</a></code> to get an idea which variables we want to include in our alluvial plot. Lets say we are especially interested in the <code>mpg</code> (miles per gallon) variable and how it relates to the other variables. <code>plot_condensation</code> will look for other variables it can combine <code>mpg</code> with while trying to condense the data frame to a minimum.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot_condensation.html">plot_condensation</a></span><span class="op">(</span><span class="va">data_wide</span>, first <span class="op">=</span> <span class="va">mpg</span><span class="op">)</span></code></pre></div>
+<div class="section level4">
+<h4 id="reduce-the-number-of-variables">Reduce the Number of Variables<a class="anchor" aria-label="anchor" href="#reduce-the-number-of-variables"></a>
+</h4>
+<p>In order to reduce the complexity we can use a helper function
+<code><a href="../reference/plot_condensation.html">plot_condensation()</a></code> to get an idea which variables we want
+to include in our alluvial plot. Lets say we are especially interested
+in the <code>mpg</code> (miles per gallon) variable and how it relates
+to the other variables. <code>plot_condensation</code> will look for
+other variables it can combine <code>mpg</code> with while trying to
+condense the data frame to a minimum.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_condensation.html">plot_condensation</a></span><span class="op">(</span><span class="va">data_wide</span>, first <span class="op">=</span> <span class="va">mpg</span><span class="op">)</span></span></code></pre></div>
 <p><img src="data_exploration_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-<p>In general we want to condense the dataframe to 50% or less we might get a meaningful alluvial when looking at <code>mpg, cyl, vs, am</code> in that order.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">data_wide</span>, <span class="va">mpg</span>, <span class="va">cyl</span>, <span class="va">vs</span>, <span class="va">am</span><span class="op">)</span>, fill_by <span class="op">=</span> <span class="st">'first_variable'</span> <span class="op">)</span></code></pre></div>
+<p>In general we want to condense the dataframe to 50% or less we might
+get a meaningful alluvial when looking at <code>mpg, cyl, vs, am</code>
+in that order.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">data_wide</span>, <span class="va">mpg</span>, <span class="va">cyl</span>, <span class="va">vs</span>, <span class="va">am</span><span class="op">)</span>, fill_by <span class="op">=</span> <span class="st">'first_variable'</span> <span class="op">)</span></span></code></pre></div>
 <p><img src="data_exploration_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 </div>
-<div id="reorder-levels" class="section level3">
-<h3 class="hasAnchor">
-<a href="#reorder-levels" class="anchor"></a>Reorder Levels</h3>
-<p>We can see a clear pattern in the flows now, especially now that we have colored the flows by the <code>mpg</code> variable. However some of the flows are unnecessarily criss-crossing. We can improve this by changing the order of the levels of the <code>cyl</code> variable.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">data_wide</span>, <span class="va">mpg</span>, <span class="va">cyl</span>, <span class="va">vs</span>, <span class="va">am</span><span class="op">)</span>
-               , fill_by <span class="op">=</span> <span class="st">'first_variable'</span>
-               , order_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'8'</span>,<span class="st">'6'</span>,<span class="st">'4'</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
+<div class="section level4">
+<h4 id="reorder-levels">Reorder Levels<a class="anchor" aria-label="anchor" href="#reorder-levels"></a>
+</h4>
+<p>We can see a clear pattern in the flows now, especially now that we
+have colored the flows by the <code>mpg</code> variable. However some of
+the flows are unnecessarily criss-crossing. We can improve this by
+changing the order of the levels of the <code>cyl</code> variable.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">data_wide</span>, <span class="va">mpg</span>, <span class="va">cyl</span>, <span class="va">vs</span>, <span class="va">am</span><span class="op">)</span></span>
+<span>               , fill_by <span class="op">=</span> <span class="st">'first_variable'</span></span>
+<span>               , order_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'8'</span>,<span class="st">'6'</span>,<span class="st">'4'</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
 <p><img src="data_exploration_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
-<p>If levels of several variables have levels of the same name we cannot order them individually per variable, this is a design choice (see documentation of <code><a href="../reference/alluvial_wide.html">alluvial_wide()</a></code> ). If we want to reorder them we need to assign individual level names first.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p_unordered</span> <span class="op">=</span> <span class="fu"><a href="../reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">data_wide</span>, <span class="va">mpg</span>, <span class="va">disp</span>, <span class="va">hp</span><span class="op">)</span>
-                              , fill_by <span class="op">=</span> <span class="st">'first_variable'</span> <span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span> title <span class="op">=</span> <span class="st">'Unordered'</span>, caption <span class="op">=</span> <span class="st">'\n\n'</span> <span class="op">)</span>
-
-<span class="va">bin_labels</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'mpg_LL'</span>,<span class="st">'mpg_LM'</span>,<span class="st">'mpg_M'</span>,<span class="st">'mpg_MH'</span>,<span class="st">'mpg_HH'</span><span class="op">)</span>
-
-<span class="va">p_ordered</span> <span class="op">=</span> <span class="va">data_wide</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span> mpg <span class="op">=</span> <span class="fu"><a href="../reference/manip_bin_numerics.html">manip_bin_numerics</a></span><span class="op">(</span><span class="va">mpg</span>, bin_labels <span class="op">=</span> <span class="va">bin_labels</span><span class="op">)</span>
-          , mpg <span class="op">=</span> <span class="fu">fct_rev</span><span class="op">(</span><span class="va">mpg</span><span class="op">)</span> <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span> <span class="va">mpg</span>, <span class="va">disp</span>, <span class="va">hp</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span> title <span class="op">=</span> <span class="st">'Ordered'</span><span class="op">)</span>
-
-<span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span><span class="op">(</span> <span class="va">p_unordered</span>, <span class="va">p_ordered</span>, nrow <span class="op">=</span> <span class="fl">1</span> <span class="op">)</span></code></pre></div>
+<p>If levels of several variables have levels of the same name we cannot
+order them individually per variable, this is a design choice (see
+documentation of <code><a href="../reference/alluvial_wide.html">alluvial_wide()</a></code> ). If we want to reorder
+them we need to assign individual level names first.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p_unordered</span> <span class="op">=</span> <span class="fu"><a href="../reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">data_wide</span>, <span class="va">mpg</span>, <span class="va">disp</span>, <span class="va">hp</span><span class="op">)</span></span>
+<span>                              , fill_by <span class="op">=</span> <span class="st">'first_variable'</span> <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span> title <span class="op">=</span> <span class="st">'Unordered'</span>, caption <span class="op">=</span> <span class="st">'\n\n'</span> <span class="op">)</span></span>
+<span></span>
+<span><span class="va">bin_labels</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'mpg_LL'</span>,<span class="st">'mpg_LM'</span>,<span class="st">'mpg_M'</span>,<span class="st">'mpg_MH'</span>,<span class="st">'mpg_HH'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p_ordered</span> <span class="op">=</span> <span class="va">data_wide</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span> mpg <span class="op">=</span> <span class="fu"><a href="../reference/manip_bin_numerics.html">manip_bin_numerics</a></span><span class="op">(</span><span class="va">mpg</span>, bin_labels <span class="op">=</span> <span class="va">bin_labels</span><span class="op">)</span></span>
+<span>          , mpg <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_rev.html" class="external-link">fct_rev</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">)</span> <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span> <span class="va">mpg</span>, <span class="va">disp</span>, <span class="va">hp</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span> title <span class="op">=</span> <span class="st">'Ordered'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span> <span class="va">p_unordered</span>, <span class="va">p_ordered</span>, nrow <span class="op">=</span> <span class="fl">1</span> <span class="op">)</span></span></code></pre></div>
 <p><img src="data_exploration_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 </div>
 </div>
 </div>
-<div id="long-format" class="section level1">
-<h1 class="hasAnchor">
-<a href="#long-format" class="anchor"></a>Long Format</h1>
-<p>In certain cases we might want to start with a dataframe that is already in long format, this is mostly the case for time-series data where we want to track a categorical value over different time periods.</p>
-<div id="sample-data-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#sample-data-1" class="anchor"></a>Sample Data</h2>
+<div class="section level2">
+<h2 id="long-format">Long Format<a class="anchor" aria-label="anchor" href="#long-format"></a>
+</h2>
+<p>In certain cases we might want to start with a dataframe that is
+already in long format, this is mostly the case for time-series data
+where we want to track a categorical value over different time
+periods.</p>
+<div class="section level3">
+<h3 id="sample-data-1">Sample Data<a class="anchor" aria-label="anchor" href="#sample-data-1"></a>
+</h3>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">monthly_flights</span> <span class="op">=</span> <span class="fu">nycflights13</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/nycflights13/man/flights.html" class="external-link">flights</a></span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">month</span>, <span class="va">tailnum</span>, <span class="va">origin</span>, <span class="va">dest</span>, <span class="va">carrier</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span> <span class="va">tailnum</span>, <span class="va">origin</span>, <span class="va">dest</span>, <span class="va">carrier</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span> <span class="va">n</span> <span class="op">==</span> <span class="fl">12</span> <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span> <span class="op">-</span> <span class="va">n</span> <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span> <span class="fu">nycflights13</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/nycflights13/man/flights.html" class="external-link">flights</a></span> <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="va">.</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/stats/complete.cases.html" class="external-link">complete.cases</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>, <span class="op">]</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span> flight_id <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/pmap.html" class="external-link">pmap_chr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">tailnum</span>, <span class="va">origin</span>, <span class="va">dest</span>, <span class="va">carrier</span><span class="op">)</span>, <span class="va">paste</span> <span class="op">)</span></span>
+<span>          , qu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">month</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">flight_id</span>, <span class="va">carrier</span>, <span class="va">origin</span>, <span class="va">dest</span>, <span class="va">qu</span> <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span> mean_arr_delay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">arr_delay</span><span class="op">)</span> <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span> mean_arr_delay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span> <span class="va">mean_arr_delay</span> <span class="op">&lt;</span> <span class="fl">10</span>, <span class="st">'on_time'</span>, <span class="st">'late'</span> <span class="op">)</span> <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## `summarise()` has grouped output by 'month', 'tailnum', 'origin', 'dest'. You</span></span>
+<span><span class="co">## can override using the `.groups` argument.</span></span>
+<span><span class="co">## Joining with `by = join_by(tailnum, origin, dest, carrier)`</span></span>
+<span><span class="co">## `summarise()` has grouped output by 'flight_id', 'carrier', 'origin', 'dest'.</span></span>
+<span><span class="co">## You can override using the `.groups` argument.</span></span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">monthly_flights</span> <span class="op">=</span> <span class="fu">nycflights13</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/nycflights13/man/flights.html">flights</a></span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">month</span>, <span class="va">tailnum</span>, <span class="va">origin</span>, <span class="va">dest</span>, <span class="va">carrier</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span> <span class="va">tailnum</span>, <span class="va">origin</span>, <span class="va">dest</span>, <span class="va">carrier</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span> <span class="va">n</span> <span class="op">==</span> <span class="fl">12</span> <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span> <span class="op">-</span> <span class="va">n</span> <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span> <span class="fu">nycflights13</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/nycflights13/man/flights.html">flights</a></span> <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="va">.</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/stats/complete.cases.html">complete.cases</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>, <span class="op">]</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span> flight_id <span class="op">=</span> <span class="fu">pmap_chr</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">tailnum</span>, <span class="va">origin</span>, <span class="va">dest</span>, <span class="va">carrier</span><span class="op">)</span>, <span class="va">paste</span> <span class="op">)</span>
-          , qu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span><span class="va">month</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">flight_id</span>, <span class="va">carrier</span>, <span class="va">origin</span>, <span class="va">dest</span>, <span class="va">qu</span> <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span> mean_arr_delay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">arr_delay</span><span class="op">)</span> <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span> mean_arr_delay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span> <span class="va">mean_arr_delay</span> <span class="op">&lt;</span> <span class="fl">10</span>, <span class="st">'on_time'</span>, <span class="st">'late'</span> <span class="op">)</span> <span class="op">)</span></code></pre></div>
-<pre><code>## `summarise()` regrouping output by 'month', 'tailnum', 'origin', 'dest' (override with `.groups` argument)</code></pre>
-<pre><code>## Joining, by = c("tailnum", "origin", "dest", "carrier")</code></pre>
-<pre><code>## `summarise()` regrouping output by 'flight_id', 'carrier', 'origin', 'dest' (override with `.groups` argument)</code></pre>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R">  <span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">monthly_flights</span><span class="op">$</span><span class="va">qu</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Q1'</span>, <span class="st">'Q2'</span>, <span class="st">'Q3'</span>, <span class="st">'Q4'</span><span class="op">)</span>
-
-  <span class="va">data_long</span> <span class="op">=</span> <span class="va">monthly_flights</span>
-
-  
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span> <span class="va">data_long</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span>  <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">monthly_flights</span><span class="op">$</span><span class="va">qu</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Q1'</span>, <span class="st">'Q2'</span>, <span class="st">'Q3'</span>, <span class="st">'Q4'</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">data_long</span> <span class="op">=</span> <span class="va">monthly_flights</span></span>
+<span></span>
+<span>  </span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span> <span class="va">data_long</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">flight_id</th>
@@ -400,136 +456,165 @@
 </tbody>
 </table>
 </div>
-<div id="alluvial_long" class="section level2">
-<h2 class="hasAnchor">
-<a href="#alluvial_long" class="anchor"></a>alluvial_long()</h2>
-<p>In long format we only need the column that contains the keys (timepoints, Q1, Q2, Q3, Q4) and the values (late, ontime), but we also need a column for the ID (flight_id) because in long format data for one flight is spread over 4 rows and the function needs to know which IDs to group to put into a flow. If there is implicitly missing data so one flight_id has less than in this case four rows of data (one for each timepoint) it will be made explicit and labeled <code>'NA'</code>.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">col_vector</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'tomato'</span>, <span class="st">'green3'</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/alluvial_long.html">alluvial_long</a></span><span class="op">(</span><span class="va">data_long</span>
-              , key <span class="op">=</span> <span class="va">qu</span>
-              , value <span class="op">=</span> <span class="va">mean_arr_delay</span>
-              , id <span class="op">=</span> <span class="va">flight_id</span> 
-              , fill_by <span class="op">=</span> <span class="st">'value'</span>
-              , col_vector_flow <span class="op">=</span> <span class="va">col_vector</span>
-              , col_vector_value <span class="op">=</span> <span class="va">col_vector</span>
-              <span class="op">)</span></code></pre></div>
+<div class="section level3">
+<h3 id="alluvial_long">alluvial_long()<a class="anchor" aria-label="anchor" href="#alluvial_long"></a>
+</h3>
+<p>In long format we only need the column that contains the keys
+(timepoints, Q1, Q2, Q3, Q4) and the values (late, ontime), but we also
+need a column for the ID (flight_id) because in long format data for one
+flight is spread over 4 rows and the function needs to know which IDs to
+group to put into a flow. If there is implicitly missing data so one
+flight_id has less than in this case four rows of data (one for each
+timepoint) it will be made explicit and labeled <code>'NA'</code>.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">col_vector</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'tomato'</span>, <span class="st">'green3'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/alluvial_long.html">alluvial_long</a></span><span class="op">(</span><span class="va">data_long</span></span>
+<span>              , key <span class="op">=</span> <span class="va">qu</span></span>
+<span>              , value <span class="op">=</span> <span class="va">mean_arr_delay</span></span>
+<span>              , id <span class="op">=</span> <span class="va">flight_id</span> </span>
+<span>              , fill_by <span class="op">=</span> <span class="st">'value'</span></span>
+<span>              , col_vector_flow <span class="op">=</span> <span class="va">col_vector</span></span>
+<span>              , col_vector_value <span class="op">=</span> <span class="va">col_vector</span></span>
+<span>              <span class="op">)</span></span></code></pre></div>
 <p><img src="data_exploration_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
-<p>We might be more interested which airline carrier had the most late flights, we can add it as an additional variable to the plot and use it for coloring. We can place this variable either on the left or on the right.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p_right</span> <span class="op">=</span> <span class="fu"><a href="../reference/alluvial_long.html">alluvial_long</a></span><span class="op">(</span><span class="va">data_long</span>
-              , key <span class="op">=</span> <span class="va">qu</span>
-              , value <span class="op">=</span> <span class="va">mean_arr_delay</span>
-              , id <span class="op">=</span> <span class="va">flight_id</span> 
-              , fill <span class="op">=</span> <span class="va">carrier</span>
-              , fill_by <span class="op">=</span> <span class="st">'last_variable'</span>
-              , fill_right <span class="op">=</span> <span class="cn">T</span> <span class="co"># Default</span>
-              <span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">'Color fill variable placed to the right'</span><span class="op">)</span>
-
-
-<span class="va">p_left</span> <span class="op">=</span> <span class="fu"><a href="../reference/alluvial_long.html">alluvial_long</a></span><span class="op">(</span><span class="va">data_long</span>
-              , key <span class="op">=</span> <span class="va">qu</span>
-              , value <span class="op">=</span> <span class="va">mean_arr_delay</span>
-              , id <span class="op">=</span> <span class="va">flight_id</span> 
-              , fill <span class="op">=</span> <span class="va">carrier</span>
-              , fill_by <span class="op">=</span> <span class="st">'last_variable'</span>
-              , fill_right <span class="op">=</span> <span class="cn">F</span>
-              <span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">'Color fill variable placed to the left'</span>
-       , caption <span class="op">=</span> <span class="st">'\n\n'</span><span class="op">)</span>
-
-
-<span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span><span class="op">(</span> <span class="va">p_left</span>, <span class="va">p_right</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<p>We might be more interested which airline carrier had the most late
+flights, we can add it as an additional variable to the plot and use it
+for coloring. We can place this variable either on the left or on the
+right.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p_right</span> <span class="op">=</span> <span class="fu"><a href="../reference/alluvial_long.html">alluvial_long</a></span><span class="op">(</span><span class="va">data_long</span></span>
+<span>              , key <span class="op">=</span> <span class="va">qu</span></span>
+<span>              , value <span class="op">=</span> <span class="va">mean_arr_delay</span></span>
+<span>              , id <span class="op">=</span> <span class="va">flight_id</span> </span>
+<span>              , fill <span class="op">=</span> <span class="va">carrier</span></span>
+<span>              , fill_by <span class="op">=</span> <span class="st">'last_variable'</span></span>
+<span>              , fill_right <span class="op">=</span> <span class="cn">T</span> <span class="co"># Default</span></span>
+<span>              <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">'Color fill variable placed to the right'</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">p_left</span> <span class="op">=</span> <span class="fu"><a href="../reference/alluvial_long.html">alluvial_long</a></span><span class="op">(</span><span class="va">data_long</span></span>
+<span>              , key <span class="op">=</span> <span class="va">qu</span></span>
+<span>              , value <span class="op">=</span> <span class="va">mean_arr_delay</span></span>
+<span>              , id <span class="op">=</span> <span class="va">flight_id</span> </span>
+<span>              , fill <span class="op">=</span> <span class="va">carrier</span></span>
+<span>              , fill_by <span class="op">=</span> <span class="st">'last_variable'</span></span>
+<span>              , fill_right <span class="op">=</span> <span class="cn">F</span></span>
+<span>              <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">'Color fill variable placed to the left'</span></span>
+<span>       , caption <span class="op">=</span> <span class="st">'\n\n'</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span> <span class="va">p_left</span>, <span class="va">p_right</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="data_exploration_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
-<div id="order-levels" class="section level3">
-<h3 class="hasAnchor">
-<a href="#order-levels" class="anchor"></a>Order Levels</h3>
-<p><code><a href="../reference/alluvial_long.html">alluvial_long()</a></code> takes three different <code>order_levels_*</code> arguments, one for the keys (x-axis) one for the values (y-axis) and one for the fill variable. Here we want to demonstrate how to order the <code>carrier</code> variable by number of flights.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">carriers_ordered_by_count</span> <span class="op">=</span> <span class="va">data_long</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">carrier</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span> <span class="va">n</span> <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="va">.</span><span class="op">[[</span><span class="st">'carrier'</span><span class="op">]</span><span class="op">]</span>
-
-<span class="fu"><a href="../reference/alluvial_long.html">alluvial_long</a></span><span class="op">(</span><span class="va">data_long</span>
-              , key <span class="op">=</span> <span class="va">qu</span>
-              , value <span class="op">=</span> <span class="va">mean_arr_delay</span>
-              , id <span class="op">=</span> <span class="va">flight_id</span> 
-              , fill <span class="op">=</span> <span class="va">carrier</span>
-              , fill_by <span class="op">=</span> <span class="st">'last_variable'</span>
-              , order_levels_fill <span class="op">=</span> <span class="va">carriers_ordered_by_count</span>
-              , fill_right <span class="op">=</span> <span class="cn">F</span>
-              <span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">'Carriers ordered by number of flights'</span><span class="op">)</span></code></pre></div>
+<div class="section level4">
+<h4 id="order-levels">Order Levels<a class="anchor" aria-label="anchor" href="#order-levels"></a>
+</h4>
+<p><code><a href="../reference/alluvial_long.html">alluvial_long()</a></code> takes three different
+<code>order_levels_*</code> arguments, one for the keys (x-axis) one for
+the values (y-axis) and one for the fill variable. Here we want to
+demonstrate how to order the <code>carrier</code> variable by number of
+flights.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">carriers_ordered_by_count</span> <span class="op">=</span> <span class="va">data_long</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">carrier</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span> <span class="va">n</span> <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="va">.</span><span class="op">[[</span><span class="st">'carrier'</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/alluvial_long.html">alluvial_long</a></span><span class="op">(</span><span class="va">data_long</span></span>
+<span>              , key <span class="op">=</span> <span class="va">qu</span></span>
+<span>              , value <span class="op">=</span> <span class="va">mean_arr_delay</span></span>
+<span>              , id <span class="op">=</span> <span class="va">flight_id</span> </span>
+<span>              , fill <span class="op">=</span> <span class="va">carrier</span></span>
+<span>              , fill_by <span class="op">=</span> <span class="st">'last_variable'</span></span>
+<span>              , order_levels_fill <span class="op">=</span> <span class="va">carriers_ordered_by_count</span></span>
+<span>              , fill_right <span class="op">=</span> <span class="cn">F</span></span>
+<span>              <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">'Carriers ordered by number of flights'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="data_exploration_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 </div>
 </div>
 </div>
-<div id="general" class="section level1">
-<h1 class="hasAnchor">
-<a href="#general" class="anchor"></a>General</h1>
-<div id="missing-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#missing-data" class="anchor"></a>Missing Data</h2>
-<p>Explicitly and implicitly missing data will automatically be labeled as <code>'NA'</code> and added as a level. The order of that level can be changed like any other. We will automatically generate implicitly missing data if we sample only a fraction of our long format dataframe, because then not every flight_id will have a value (late, on_time) assigned for each time point (Q1, Q2, Q3, Q4). We can replace <code>'NA'</code> with any other string.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">col_vector</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="st">'tomato'</span>, <span class="st">'grey'</span>, <span class="st">'green3'</span><span class="op">)</span>
-
-<span class="va">data_na</span> <span class="op">=</span> <span class="va">data_long</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">flight_id</span>, <span class="va">qu</span>, <span class="va">mean_arr_delay</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html">sample_frac</a></span><span class="op">(</span><span class="fl">0.9</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/alluvial_long.html">alluvial_long</a></span><span class="op">(</span><span class="va">data_na</span>
-              , key <span class="op">=</span> <span class="va">qu</span>
-              , value <span class="op">=</span> <span class="va">mean_arr_delay</span>
-              , id <span class="op">=</span> <span class="va">flight_id</span>
-              , fill_by <span class="op">=</span> <span class="st">'value'</span>
-              , NA_label <span class="op">=</span> <span class="st">'None'</span>
-              , col_vector_value <span class="op">=</span> <span class="va">col_vector</span>
-              , col_vector_flow <span class="op">=</span> <span class="va">col_vector</span>
-              <span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">'Implicit NA values'</span><span class="op">)</span></code></pre></div>
+<div class="section level2">
+<h2 id="general">General<a class="anchor" aria-label="anchor" href="#general"></a>
+</h2>
+<div class="section level3">
+<h3 id="missing-data">Missing Data<a class="anchor" aria-label="anchor" href="#missing-data"></a>
+</h3>
+<p>Explicitly and implicitly missing data will automatically be labeled
+as <code>'NA'</code> and added as a level. The order of that level can
+be changed like any other. We will automatically generate implicitly
+missing data if we sample only a fraction of our long format dataframe,
+because then not every flight_id will have a value (late, on_time)
+assigned for each time point (Q1, Q2, Q3, Q4). We can replace
+<code>'NA'</code> with any other string.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">col_vector</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span> <span class="st">'tomato'</span>, <span class="st">'grey'</span>, <span class="st">'green3'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">data_na</span> <span class="op">=</span> <span class="va">data_long</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">flight_id</span>, <span class="va">qu</span>, <span class="va">mean_arr_delay</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html" class="external-link">sample_frac</a></span><span class="op">(</span><span class="fl">0.9</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/alluvial_long.html">alluvial_long</a></span><span class="op">(</span><span class="va">data_na</span></span>
+<span>              , key <span class="op">=</span> <span class="va">qu</span></span>
+<span>              , value <span class="op">=</span> <span class="va">mean_arr_delay</span></span>
+<span>              , id <span class="op">=</span> <span class="va">flight_id</span></span>
+<span>              , fill_by <span class="op">=</span> <span class="st">'value'</span></span>
+<span>              , NA_label <span class="op">=</span> <span class="st">'None'</span></span>
+<span>              , col_vector_value <span class="op">=</span> <span class="va">col_vector</span></span>
+<span>              , col_vector_flow <span class="op">=</span> <span class="va">col_vector</span></span>
+<span>              <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">'Implicit NA values'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="data_exploration_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 </div>
-<div id="colors" class="section level2">
-<h2 class="hasAnchor">
-<a href="#colors" class="anchor"></a>Colors</h2>
-<p><code><a href="../reference/alluvial_wide.html">alluvial_wide()</a></code> and <code>alluvial_long</code> take any sequence of either HEX code or string color values. <code>easyalluvial</code> offers some convenience functions around constructing qualitative color palettes for distinct values.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/palette_qualitative.html">palette_qualitative</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/palette_filter.html">palette_filter</a></span><span class="op">(</span>greys <span class="op">=</span> <span class="cn">F</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/palette_plot_rgp.html">palette_plot_rgp</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="section level3">
+<h3 id="colors">Colors<a class="anchor" aria-label="anchor" href="#colors"></a>
+</h3>
+<p><code><a href="../reference/alluvial_wide.html">alluvial_wide()</a></code> and <code>alluvial_long</code> take any
+sequence of either HEX code or string color values.
+<code>easyalluvial</code> offers some convenience functions around
+constructing qualitative color palettes for distinct values.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/palette_qualitative.html">palette_qualitative</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/palette_filter.html">palette_filter</a></span><span class="op">(</span>greys <span class="op">=</span> <span class="cn">F</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/palette_plot_rgp.html">palette_plot_rgp</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="data_exploration_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 </div>
-<div id="connect-flows-to-observations-in-original-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#connect-flows-to-observations-in-original-data" class="anchor"></a>Connect Flows to observations in original data</h2>
-<p>We might recognise interesting patterns in the alluvial plot that we want to follow up upon. For example which cars With medium-low <code>mpg</code> and 8 <code>cyl</code> and 0 <code>vs</code> has an <code>am</code> value of 1. Note that we are passing the <code>car_id</code> variable.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="../reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">data_wide</span>, <span class="va">mpg</span>, <span class="va">cyl</span>, <span class="va">vs</span>, <span class="va">am</span>, <span class="va">car_id</span><span class="op">)</span>
-                   , id <span class="op">=</span> <span class="va">car_id</span>
-                   , fill_by <span class="op">=</span> <span class="st">'first_variable'</span>
-                   , order_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'8'</span>,<span class="st">'6'</span>,<span class="st">'4'</span><span class="op">)</span> <span class="op">)</span>
-
-<span class="va">p</span></code></pre></div>
+<div class="section level3">
+<h3 id="connect-flows-to-observations-in-original-data">Connect Flows to observations in original data<a class="anchor" aria-label="anchor" href="#connect-flows-to-observations-in-original-data"></a>
+</h3>
+<p>We might recognise interesting patterns in the alluvial plot that we
+want to follow up upon. For example which cars With medium-low
+<code>mpg</code> and 8 <code>cyl</code> and 0 <code>vs</code> has an
+<code>am</code> value of 1. Note that we are passing the
+<code>car_id</code> variable.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="../reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">data_wide</span>, <span class="va">mpg</span>, <span class="va">cyl</span>, <span class="va">vs</span>, <span class="va">am</span>, <span class="va">car_id</span><span class="op">)</span></span>
+<span>                   , id <span class="op">=</span> <span class="va">car_id</span></span>
+<span>                   , fill_by <span class="op">=</span> <span class="st">'first_variable'</span></span>
+<span>                   , order_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'8'</span>,<span class="st">'6'</span>,<span class="st">'4'</span><span class="op">)</span> <span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
 <p><img src="data_exploration_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
-<p>The plot objects returned by both functions have an attribute called <code>data_key</code> which is an x-y table arranged like the alluvial plot one column containing the original ID. We can use the <code>car_id</code> variable to rejoin the original dataframe.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p</span><span class="op">$</span><span class="va">data_key</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span> <span class="va">mpg</span> <span class="op">==</span> <span class="st">'ML'</span>
-          , <span class="va">cyl</span> <span class="op">==</span> <span class="fl">8</span>
-          , <span class="va">vs</span> <span class="op">==</span> <span class="fl">0</span> 
-          , <span class="va">am</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="co"># in order to convert factors to integers we have to convert them</span>
-  <span class="co"># to character first. Converting from factor returns the order of</span>
-  <span class="co"># the factor instead.</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span> car_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">car_id</span><span class="op">)</span>
-          , car_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">car_id</span><span class="op">)</span> <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">data_wide</span>, by <span class="op">=</span> <span class="st">'car_id'</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p>The plot objects returned by both functions have an attribute called
+<code>data_key</code> which is an x-y table arranged like the alluvial
+plot one column containing the original ID. We can use the
+<code>car_id</code> variable to rejoin the original dataframe.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span><span class="op">$</span><span class="va">data_key</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span> <span class="va">mpg</span> <span class="op">==</span> <span class="st">'ML'</span></span>
+<span>          , <span class="va">cyl</span> <span class="op">==</span> <span class="fl">8</span></span>
+<span>          , <span class="va">vs</span> <span class="op">==</span> <span class="fl">0</span> </span>
+<span>          , <span class="va">am</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="co"># in order to convert factors to integers we have to convert them</span></span>
+<span>  <span class="co"># to character first. Converting from factor returns the order of</span></span>
+<span>  <span class="co"># the factor instead.</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span> car_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">car_id</span><span class="op">)</span></span>
+<span>          , car_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">car_id</span><span class="op">)</span> <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">data_wide</span>, by <span class="op">=</span> <span class="st">'car_id'</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="6%">
@@ -615,15 +700,17 @@
 </tbody>
 </table>
 </div>
-<div id="ggplot2-manipulations" class="section level2">
-<h2 class="hasAnchor">
-<a href="#ggplot2-manipulations" class="anchor"></a>ggplot2 manipulations</h2>
-<p>thanks to <code>ggalluvial</code> the alluvial plots that <code>easyalluvial</code> returns can be manipulated using <code>ggplot2</code> syntax</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p</span> <span class="op">+</span> 
-  <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">'look at my minimal flip'</span><span class="op">)</span></code></pre></div>
+<div class="section level3">
+<h3 id="ggplot2-manipulations">ggplot2 manipulations<a class="anchor" aria-label="anchor" href="#ggplot2-manipulations"></a>
+</h3>
+<p>thanks to <code>ggalluvial</code> the alluvial plots that
+<code>easyalluvial</code> returns can be manipulated using
+<code>ggplot2</code> syntax</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'look at my minimal flip'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="data_exploration_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 </div>
 </div>
@@ -640,11 +727,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Bjoern Koneswarakantha.</p>
+  <p></p>
+<p>Developed by Bjoern Koneswarakantha.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -652,6 +741,8 @@
 
   
 
+
+  
 
   </body>
 </html>

@@ -44,6 +44,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -56,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">easyalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.900</span>
       </span>
     </div>
 
@@ -72,7 +74,7 @@
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -95,7 +97,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/erblast/easyalluvial/">
+  <a href="https://github.com/erblast/easyalluvial/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -113,47 +115,47 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="easyalluvial-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#easyalluvial-" class="anchor"></a>easyalluvial <a href="https://erblast.github.io/easyalluvial"><img src="reference/figures/logo.png" align="right" height="139"></a>
+<div class="section level1">
+<div class="page-header"><h1 id="easyalluvial-">easyalluvial <a href="https://erblast.github.io/easyalluvial"><img src="reference/figures/logo.png" align="right" height="139"></a>
+<a class="anchor" aria-label="anchor" href="#easyalluvial-"></a>
 </h1></div>
-
-<p>Alluvial plots are similar to <a href="https://en.wikipedia.org/wiki/Sankey_diagram">sankey diagrams</a> and visualise categorical data over multiple dimensions as flows. <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0008694">Rosval et. al. 2010</a> Their graphical grammar however is a bit more complex then that of a regular x/y plots. The <a href="http://corybrunson.github.io/ggalluvial/"><code>ggalluvial</code></a> package made a great job of translating that grammar into <a href="https://github.com/tidyverse/ggplot2"><code>ggplot2</code></a> syntax and gives you many option to tweak the appearance of an alluvial plot, however there still remains a multi-layered complexity that makes it difficult to use ‘ggalluvial’ for explorative data analysis. ‘easyalluvial’ provides a simple interface to this package that allows you to produce a decent alluvial plot from any dataframe in either long or wide format from a single line of code while also handling continuous data. It is meant to allow a quick visualisation of entire dataframes with a focus on different colouring options that can make alluvial plots a great tool for data exploration.</p>
-<div id="features" class="section level2">
-<h2 class="hasAnchor">
-<a href="#features" class="anchor"></a>Features</h2>
+<p><a href="https://ci.appveyor.com/project/erblast/easyalluvial" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a> <a href="https://github.com/erblast/easyalluvial/actions" class="external-link"><img src="https://github.com/erblast/easyalluvial/workflows/R-CMD-check/badge.svg" alt="R build status"></a> <a href="https://codecov.io/github/erblast/easyalluvial?branch=master" class="external-link"><img src="https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg" alt="Coverage Status"></a> <a href="https://CRAN.R-project.org/package=easyalluvial" class="external-link"><img src="https://www.r-pkg.org/badges/last-release/easyalluvial" alt="CRAN last release"></a> <a href="https://CRAN.R-project.org/package=easyalluvial" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/easyalluvial" alt="CRAN total downloads"></a> <a href="https://CRAN.R-project.org/package=easyalluvial" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/easyalluvial" alt="CRAN monthly downloads"></a></p>
+<p>Alluvial plots are similar to <a href="https://en.wikipedia.org/wiki/Sankey_diagram" class="external-link">sankey diagrams</a> and visualise categorical data over multiple dimensions as flows. <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0008694" class="external-link">Rosval et. al. 2010</a> Their graphical grammar however is a bit more complex then that of a regular x/y plots. The <a href="http://corybrunson.github.io/ggalluvial/" class="external-link"><code>ggalluvial</code></a> package made a great job of translating that grammar into <a href="https://github.com/tidyverse/ggplot2" class="external-link"><code>ggplot2</code></a> syntax and gives you many option to tweak the appearance of an alluvial plot, however there still remains a multi-layered complexity that makes it difficult to use ‘ggalluvial’ for explorative data analysis. ‘easyalluvial’ provides a simple interface to this package that allows you to produce a decent alluvial plot from any dataframe in either long or wide format from a single line of code while also handling continuous data. It is meant to allow a quick visualisation of entire dataframes with a focus on different colouring options that can make alluvial plots a great tool for data exploration.</p>
+<div class="section level2">
+<h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
+</h2>
 <ul>
 <li>plot alluvial graph with a single line of code of a given dataframe</li>
-<li>support for wide and long data format <a href="https://en.wikipedia.org/wiki/Wide_and_narrow_data">(wiki, wide vs. long/narrow data)</a>
+<li>support for wide and long data format <a href="https://en.wikipedia.org/wiki/Wide_and_narrow_data" class="external-link">(wiki, wide vs. long/narrow data)</a>
 </li>
 <li>automatically transforms numerical to categorical data</li>
 <li>helper functions for variable selection</li>
 <li>convenient parameters for coloring and ordering</li>
 <li>marginal histograms</li>
 <li><strong>model agnostic partial dependence and model response alluvial plots with 4 dimensions</strong></li>
-<li><strong><a href="https://erblast.github.io/parcats/articles/parcats.html">interactive plots with <code>easyalluvial</code> and <code>parcats</code></a></strong></li>
+<li><strong><a href="https://erblast.github.io/parcats/articles/parcats.html" class="external-link">interactive plots with <code>easyalluvial</code> and <code>parcats</code></a></strong></li>
 </ul>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<div id="cran" class="section level3">
-<h3 class="hasAnchor">
-<a href="#cran" class="anchor"></a>CRAN</h3>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<div class="section level3">
+<h3 id="cran">CRAN<a class="anchor" aria-label="anchor" href="#cran"></a>
+</h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">'easyalluvial'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'easyalluvial'</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="development-version" class="section level3">
-<h3 class="hasAnchor">
-<a href="#development-version" class="anchor"></a>Development Version</h3>
+<div class="section level3">
+<h3 id="development-version">Development Version<a class="anchor" aria-label="anchor" href="#development-version"></a>
+</h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"erblast/easyalluvial"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"erblast/easyalluvial"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<div id="documentation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h2>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
 <ul>
 <li>
 <a href="https://erblast.github.io/easyalluvial/">pkgdown website</a>
@@ -165,21 +167,35 @@
 </li>
 </ul>
 </div>
-<div id="examples" class="section level2">
-<h2 class="hasAnchor">
-<a href="#examples" class="anchor"></a>Examples</h2>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span> <span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/erblast/easyalluvial/">easyalluvial</a></span><span class="op">)</span> <span class="op">)</span></code></pre></div>
-<div id="alluvial-from-data-in-wide-format" class="section level3">
-<h3 class="hasAnchor">
-<a href="#alluvial-from-data-in-wide-format" class="anchor"></a>Alluvial from data in wide format</h3>
-<div id="sample-data" class="section level4">
-<h4 class="hasAnchor">
-<a href="#sample-data" class="anchor"></a>Sample Data</h4>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span> <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/erblast/easyalluvial/" class="external-link">easyalluvial</a></span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="alluvial-from-data-in-wide-format">Alluvial from data in wide format<a class="anchor" aria-label="anchor" href="#alluvial-from-data-in-wide-format"></a>
+</h3>
+<div class="section level4">
+<h4 id="sample-data">Sample Data<a class="anchor" aria-label="anchor" href="#sample-data"></a>
+</h4>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mtcars2</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
-<table class="table">
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mtcars2</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
+<table style="width:100%;" class="table">
+<colgroup>
+<col width="6%">
+<col width="5%">
+<col width="6%">
+<col width="5%">
+<col width="6%">
+<col width="7%">
+<col width="7%">
+<col width="5%">
+<col width="12%">
+<col width="6%">
+<col width="6%">
+<col width="21%">
+</colgroup>
 <thead><tr class="header">
 <th align="right">mpg</th>
 <th align="left">cyl</th>
@@ -282,9 +298,9 @@
 </tbody>
 </table>
 </div>
-<div id="plot" class="section level4">
-<h4 class="hasAnchor">
-<a href="#plot" class="anchor"></a>Plot</h4>
+<div class="section level4">
+<h4 id="plot">Plot<a class="anchor" aria-label="anchor" href="#plot"></a>
+</h4>
 <p>Continuous Variables will be automatically binned as follows.</p>
 <ul>
 <li>High, High (HH)</li>
@@ -294,20 +310,20 @@
 <li>Low, Low (LL)</li>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span> data <span class="op">=</span> <span class="va">mtcars2</span>
-                , max_variables <span class="op">=</span> <span class="fl">5</span>
-                , fill_by <span class="op">=</span> <span class="st">'first_variable'</span> <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span> data <span class="op">=</span> <span class="va">mtcars2</span></span>
+<span>                , max_variables <span class="op">=</span> <span class="fl">5</span></span>
+<span>                , fill_by <span class="op">=</span> <span class="st">'first_variable'</span> <span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-wide_plot-1.png"><!-- --></p>
 </div>
 </div>
-<div id="alluvial-from-data-in-long-format" class="section level3">
-<h3 class="hasAnchor">
-<a href="#alluvial-from-data-in-long-format" class="anchor"></a>Alluvial from data in long format</h3>
-<div id="sample-data-1" class="section level4">
-<h4 class="hasAnchor">
-<a href="#sample-data-1" class="anchor"></a>Sample Data</h4>
+<div class="section level3">
+<h3 id="alluvial-from-data-in-long-format">Alluvial from data in long format<a class="anchor" aria-label="anchor" href="#alluvial-from-data-in-long-format"></a>
+</h3>
+<div class="section level4">
+<h4 id="sample-data-1">Sample Data<a class="anchor" aria-label="anchor" href="#sample-data-1"></a>
+</h4>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">quarterly_flights</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">quarterly_flights</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">tailnum</th>
@@ -369,91 +385,90 @@
 </tbody>
 </table>
 </div>
-<div id="plot-1" class="section level4">
-<h4 class="hasAnchor">
-<a href="#plot-1" class="anchor"></a>Plot</h4>
+<div class="section level4">
+<h4 id="plot-1">Plot<a class="anchor" aria-label="anchor" href="#plot-1"></a>
+</h4>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/alluvial_long.html">alluvial_long</a></span><span class="op">(</span> <span class="va">quarterly_flights</span>
-               , key <span class="op">=</span> <span class="va">qu</span>
-               , value <span class="op">=</span> <span class="va">mean_arr_delay</span>
-               , id <span class="op">=</span> <span class="va">tailnum</span>
-               , fill <span class="op">=</span> <span class="va">carrier</span> <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/alluvial_long.html">alluvial_long</a></span><span class="op">(</span> <span class="va">quarterly_flights</span></span>
+<span>               , key <span class="op">=</span> <span class="va">qu</span></span>
+<span>               , value <span class="op">=</span> <span class="va">mean_arr_delay</span></span>
+<span>               , id <span class="op">=</span> <span class="va">tailnum</span></span>
+<span>               , fill <span class="op">=</span> <span class="va">carrier</span> <span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-plot_long-1.png"><!-- --></p>
 </div>
 </div>
-<div id="marginal-histograms" class="section level3">
-<h3 class="hasAnchor">
-<a href="#marginal-histograms" class="anchor"></a>Marginal Histograms</h3>
+<div class="section level3">
+<h3 id="marginal-histograms">Marginal Histograms<a class="anchor" aria-label="anchor" href="#marginal-histograms"></a>
+</h3>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span> data <span class="op">=</span> <span class="va">mtcars2</span>
-                , max_variables <span class="op">=</span> <span class="fl">5</span>
-                , fill_by <span class="op">=</span> <span class="st">'first_variable'</span> <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="reference/add_marginal_histograms.html">add_marginal_histograms</a></span><span class="op">(</span><span class="va">mtcars2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span> data <span class="op">=</span> <span class="va">mtcars2</span></span>
+<span>                , max_variables <span class="op">=</span> <span class="fl">5</span></span>
+<span>                , fill_by <span class="op">=</span> <span class="st">'first_variable'</span> <span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="reference/add_marginal_histograms.html">add_marginal_histograms</a></span><span class="op">(</span><span class="va">mtcars2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-3-1.png"><!-- --></p>
 </div>
-<div id="interactive-graphs" class="section level3">
-<h3 class="hasAnchor">
-<a href="#interactive-graphs" class="anchor"></a>Interactive Graphs</h3>
+<div class="section level3">
+<h3 id="interactive-graphs">Interactive Graphs<a class="anchor" aria-label="anchor" href="#interactive-graphs"></a>
+</h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="https://erblast.github.io/parcats/">parcats</a></span><span class="op">)</span> <span class="op">)</span>
-
-<span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span><span class="va">mtcars2</span>, max_variables <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
-
-<span class="fu"><a href="https://erblast.github.io/parcats//reference/parcats.html">parcats</a></span><span class="op">(</span><span class="va">p</span>, marginal_histograms <span class="op">=</span> <span class="cn">TRUE</span>, data_input <span class="op">=</span> <span class="va">mtcars2</span><span class="op">)</span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo1.gif" alt="demo"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://erblast.github.io/parcats/" class="external-link">parcats</a></span><span class="op">)</span> <span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span><span class="va">mtcars2</span>, max_variables <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://erblast.github.io/parcats/reference/parcats.html" class="external-link">parcats</a></span><span class="op">(</span><span class="va">p</span>, marginal_histograms <span class="op">=</span> <span class="cn">TRUE</span>, data_input <span class="op">=</span> <span class="va">mtcars2</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo1.gif" alt=""><p class="caption">demo</p>
+</div>
 <ul>
-<li><strong><a href="https://erblast.github.io/parcats/articles/parcats.html">Live Widget</a></strong></li>
+<li><strong><a href="https://erblast.github.io/parcats/articles/parcats.html" class="external-link">Live Widget</a></strong></li>
 </ul>
 </div>
-<div id="partial-dependence-alluvial-plots" class="section level3">
-<h3 class="hasAnchor">
-<a href="#partial-dependence-alluvial-plots" class="anchor"></a>Partial Dependence Alluvial Plots</h3>
+<div class="section level3">
+<h3 id="partial-dependence-alluvial-plots">Partial Dependence Alluvial Plots<a class="anchor" aria-label="anchor" href="#partial-dependence-alluvial-plots"></a>
+</h3>
 <p>Alluvial plots are capable of displaying higher dimensional data on a plane, thus lend themselves to plot the response of a statistical model to changes in the input data across multiple dimensions. The practical limit here is 4 dimensions while conventional partial dependence plots are limited to 2 dimensions.</p>
 <p>Briefly the 4 variables with the highest feature importance for a given model are selected and 5 values spread over the variable range are selected for each. Then a grid of all possible combinations is created. All none-plotted variables are set to the values found in the first row of the training data set. Using this artificial data space model predictions are being generated. This process is then repeated for each row in the training data set and the overall model response is averaged in the end. Each of the possible combinations is plotted as a flow which is coloured by the bin corresponding to the average model response generated by that particular combination.</p>
 <ul>
-<li><a href="https://christophm.github.io/interpretable-ml-book/">more on partial dependence plots (ebook)</a></li>
-<li><a href="https://www.datisticsblog.com/2019/04/visualising-model-response-with-easyalluvial/">Tutorial</a></li>
+<li><a href="https://christophm.github.io/interpretable-ml-book/" class="external-link">more on partial dependence plots (ebook)</a></li>
+<li><a href="https://www.datisticsblog.com/2019/04/visualising-model-response-with-easyalluvial/" class="external-link">Tutorial</a></li>
 </ul>
 <p><code>easyalluvial</code> contains wrappers for <code>parsnip</code> and <code>caret</code> models. Custom Wrappers for other models can easily be created.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df</span> <span class="op">=</span> <span class="fu">select</span><span class="op">(</span><span class="va">mtcars2</span>, <span class="op">-</span><span class="va">ids</span><span class="op">)</span>
-
-<span class="va">m</span> <span class="op">=</span> <span class="fu">parsnip</span><span class="fu">::</span><span class="fu"><a href="https://parsnip.tidymodels.org/reference/rand_forest.html">rand_forest</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">parsnip</span><span class="fu">::</span><span class="fu"><a href="https://parsnip.tidymodels.org/reference/set_engine.html">set_engine</a></span><span class="op">(</span><span class="st">"randomForest"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">parsnip</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">.</span>, <span class="va">df</span><span class="op">)</span>
-
-<span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="reference/alluvial_model_response_parsnip.html">alluvial_model_response_parsnip</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">df</span>, degree <span class="op">=</span> <span class="fl">4</span>, method <span class="op">=</span> <span class="st">"pdp"</span><span class="op">)</span>
-<span class="co">#&gt; Getting partial dependence plot preditions. This can take a while. See easyalluvial::get_pdp_predictions() `Details` on how to use multiprocessing</span>
-
-<span class="va">p_grid</span> <span class="op">=</span> <span class="fu"><a href="reference/add_marginal_histograms.html">add_marginal_histograms</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">df</span>, plot <span class="op">=</span> <span class="cn">F</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="reference/add_imp_plot.html">add_imp_plot</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">df</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">df</span> <span class="op">=</span> <span class="fu">select</span><span class="op">(</span><span class="va">mtcars2</span>, <span class="op">-</span><span class="va">ids</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">m</span> <span class="op">=</span> <span class="fu">parsnip</span><span class="fu">::</span><span class="fu"><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"regression"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">parsnip</span><span class="fu">::</span><span class="fu"><a href="https://parsnip.tidymodels.org/reference/set_engine.html" class="external-link">set_engine</a></span><span class="op">(</span><span class="st">"randomForest"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">parsnip</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">.</span>, <span class="va">df</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="reference/alluvial_model_response_parsnip.html">alluvial_model_response_parsnip</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">df</span>, degree <span class="op">=</span> <span class="fl">4</span>, method <span class="op">=</span> <span class="st">"pdp"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Getting partial dependence plot preditions. This can take a while. See easyalluvial::get_pdp_predictions() `Details` on how to use multiprocessing</span></span>
+<span></span>
+<span><span class="va">p_grid</span> <span class="op">=</span> <span class="fu"><a href="reference/add_marginal_histograms.html">add_marginal_histograms</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">df</span>, plot <span class="op">=</span> <span class="cn">F</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="reference/add_imp_plot.html">add_imp_plot</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">df</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-5-1.png"><!-- --></p>
 </div>
-<div id="interactive-partial-dependence-plot" class="section level3">
-<h3 class="hasAnchor">
-<a href="#interactive-partial-dependence-plot" class="anchor"></a>Interactive Partial Dependence Plot</h3>
+<div class="section level3">
+<h3 id="interactive-partial-dependence-plot">Interactive Partial Dependence Plot<a class="anchor" aria-label="anchor" href="#interactive-partial-dependence-plot"></a>
+</h3>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://erblast.github.io/parcats//reference/parcats.html">parcats</a></span><span class="op">(</span><span class="va">p</span>, marginal_histograms <span class="op">=</span> <span class="cn">TRUE</span>, imp <span class="op">=</span> <span class="cn">TRUE</span>, data_input <span class="op">=</span> <span class="va">df</span><span class="op">)</span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo2.gif" alt="demo"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://erblast.github.io/parcats/reference/parcats.html" class="external-link">parcats</a></span><span class="op">(</span><span class="va">p</span>, marginal_histograms <span class="op">=</span> <span class="cn">TRUE</span>, imp <span class="op">=</span> <span class="cn">TRUE</span>, data_input <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span></code></pre></div>
+<p><img src="https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo2.gif" alt="demo"> - <strong><a href="https://erblast.github.io/parcats/articles/parcats.html" class="external-link">Live Widget</a></strong></p>
+</div>
+</div>
+</div>
+<div class="section level1">
+<h1 id="clinicopath-jamovi-module">ClinicoPath {jamovi} Module<a class="anchor" aria-label="anchor" href="#clinicopath-jamovi-module"></a>
+</h1>
+<p><a href="https://github.com/sbalci/ClinicoPathJamoviModule" class="external-link">ClinicoPath jamovi Module</a> (thanks to Serdar Balci) adds <code>easyalluvial</code> plots to <code>jamovi</code>a spreadsheet interface for doing statistics with <code>R</code>.</p>
+</div>
+<div class="section level1">
+<h1 id="similar-packages">Similar Packages<a class="anchor" aria-label="anchor" href="#similar-packages"></a>
+</h1>
 <ul>
-<li><strong><a href="https://erblast.github.io/parcats/articles/parcats.html">Live Widget</a></strong></li>
-</ul>
-</div>
-</div>
-</div>
-<div id="clinicopath-jamovi-module" class="section level1">
-<h1 class="hasAnchor">
-<a href="#clinicopath-jamovi-module" class="anchor"></a>ClinicoPath {jamovi} Module</h1>
-<p><a href="https://github.com/sbalci/ClinicoPathJamoviModule">ClinicoPath jamovi Module</a> (thanks to Serdar Balci) adds <code>easyalluvial</code> plots to <code>jamovi</code>a spreadsheet interface for doing statistics with <code>R</code>.</p>
-</div>
-<div id="similar-packages" class="section level1">
-<h1 class="hasAnchor">
-<a href="#similar-packages" class="anchor"></a>Similar Packages</h1>
-<ul>
-<li><a href="https://github.com/corybrunson/ggalluvial/"><code>ggalluvial</code></a></li>
-<li><a href="https://github.com/mbojan/alluvial"><code>alluvial</code></a></li>
-<li><a href="https://github.com/christophergandrud/networkD3"><code>networkD3</code></a></li>
-<li><a href="https://github.com/davidsjoberg/ggbump"><code>ggbump</code></a></li>
+<li><a href="https://github.com/corybrunson/ggalluvial/" class="external-link"><code>ggalluvial</code></a></li>
+<li><a href="https://github.com/mbojan/alluvial" class="external-link"><code>alluvial</code></a></li>
+<li><a href="https://github.com/christophergandrud/networkD3" class="external-link"><code>networkD3</code></a></li>
+<li><a href="https://github.com/davidsjoberg/ggbump" class="external-link"><code>ggbump</code></a></li>
 </ul>
 </div>
 
@@ -461,48 +476,49 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=easyalluvial">https://​cloud.r-project.org/​package=easyalluvial</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/erblast/easyalluvial/">https://​github.com/​erblast/​easyalluvial/​</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=easyalluvial" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/erblast/easyalluvial/" class="external-link">Browse source code</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>CC0</li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>Bjoern Koneswarakantha <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-4585-7799" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html#citation">Citing easyalluvial</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://ci.appveyor.com/project/erblast/easyalluvial"><img src="https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
-<li><a href="https://github.com/erblast/easyalluvial/actions"><img src="https://github.com/erblast/easyalluvial/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://codecov.io/github/erblast/easyalluvial?branch=master"><img src="https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg" alt="Coverage Status"></a></li>
-<li><a href="https://CRAN.R-project.org/package=easyalluvial"><img src="https://www.r-pkg.org/badges/last-release/easyalluvial" alt="CRAN last release"></a></li>
-<li><a href="https://CRAN.R-project.org/package=easyalluvial"><img src="https://cranlogs.r-pkg.org/badges/grand-total/easyalluvial" alt="CRAN total downloads"></a></li>
-<li><a href="https://CRAN.R-project.org/package=easyalluvial"><img src="https://cranlogs.r-pkg.org/badges/easyalluvial" alt="CRAN monthly downloads"></a></li>
+<li>Bjoern Koneswarakantha <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-4585-7799" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
-</div>
+
+
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Bjoern Koneswarakantha.</p>
+  <p></p>
+<p>Developed by Bjoern Koneswarakantha.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -510,6 +526,8 @@
 
   
 
+
+  
 
   </body>
 </html>
