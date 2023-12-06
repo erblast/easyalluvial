@@ -9,3 +9,4 @@ docs/
 *.RData
 *.rdb
 vignettes/model_response_cache/
+.DS_Store

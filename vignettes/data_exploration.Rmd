@@ -24,7 +24,11 @@ Alluvial plots are a form of [sankey diagrams](https://en.wikipedia.org/wiki/San
 
 ```{r}
 suppressPackageStartupMessages( require(easyalluvial) )
-suppressPackageStartupMessages( require(tidyverse) )
+suppressPackageStartupMessages( require(tibble) )
+suppressPackageStartupMessages( require(dplyr) )
+suppressPackageStartupMessages( require(ggplot2) )
+suppressPackageStartupMessages( require(forcats) )
+suppressPackageStartupMessages( require(purrr) )
 ```
 
 
