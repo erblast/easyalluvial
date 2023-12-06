@@ -17,7 +17,9 @@ test_that('plot_imp'
   
   p_imp = plot_imp(p, df)
   
-  expect_doppelganger('plot_imp', p_imp)
+  # we do not test snapshot, feature importance
+  # is not stable for different versions of R and used packages
+  expect_true( 'ggplot' %in% class(p_imp) )
   
 })
 
