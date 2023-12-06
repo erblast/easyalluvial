@@ -9,12 +9,14 @@ editor_options:
 ---
 
 ```{r}
-suppressPackageStartupMessages( library(tidyverse) )
+suppressPackageStartupMessages( library(dplyr) )
 suppressPackageStartupMessages( library(easyalluvial) )
 suppressPackageStartupMessages( library(mlbench) )
 suppressPackageStartupMessages( library(randomForest) )
 suppressPackageStartupMessages( library(recipes) )
 suppressPackageStartupMessages( library(earth) )
+suppressPackageStartupMessages( library(parcats) )
+
 ```
 
 
