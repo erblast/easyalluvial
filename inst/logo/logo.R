@@ -32,6 +32,7 @@ p = alluvial_long(monthly_flights, key = qu, value =  mean_arr_delay, fill = car
      , col_vector_flow = col
      , col_vector_value = c('#666633', '#999966')
      , stratum_labels = F
+     , stratum_label_type = "label"
      , stratum_width = 1/4 ) +
   labs( caption = '') +
   theme_minimal() +

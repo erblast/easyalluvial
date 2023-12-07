@@ -18,6 +18,7 @@ alluvial_wide(
   colorful_fill_variable_stratum = T,
   verbose = F,
   stratum_labels = T,
+  stratum_label_type = "label",
   stratum_label_size = 4.5,
   stratum_width = 1/4,
   auto_rotate_xlabs = T,
@@ -57,6 +58,8 @@ fill variable stratum, Default: TRUE}
 \item{verbose}{logical, print plot summary, Default: F}
 
 \item{stratum_labels}{logical, Default: TRUE}
+
+\item{stratum_label_type}{character, Default: "label"}
 
 \item{stratum_label_size}{numeric, Default: 4.5}
 

@@ -77,7 +77,7 @@ test_that('alluvial_long'
   # check stratum options
 
   p = alluvial_long( data, key = qu, value = mean_arr_delay, id = tailnum, fill = carrier
-                     , stratum_labels = FALSE, stratum_width = 1/20)
+                     , stratum_labels = FALSE, stratum_label_type = "none", stratum_width = 1/20)
   
   # comes up as false positive try again with next vdiffr version
   #expect_doppelganger('long_strat_width', p)
