@@ -395,7 +395,7 @@ alluvial_wide = function( data
 
     data_key = data_new %>%
       mutate( alluvial_id = manip_factor_2_numeric(alluvial_id) ) %>%
-      left_join( data_alluvial ) %>%
+      left_join( data_alluvial, relationship = "many-to-many" ) %>%
       select( - fill_flow, -fill_value, -fill ) %>%
       spread( key = x, value = value ) %>%
       select( one_of(id_str, variables, 'alluvial_id', 'n' ) ) %>%

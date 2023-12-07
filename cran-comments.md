@@ -1,12 +1,19 @@
 # Resubmission after being archived on CRAN
 
-clean up package dependencies
+All suggested dependencies were already controlled for, meaning there was a 
+check in place that would raise an error with a message to install the missing
+package. Those are limited to functions most users will not use.
+
+All unit tests would skip if suggested packages were missing.
+
+One example missed a check for a suggested package installation which was added:
+
+-  check for vip pkg installation before executing example of alluvial_model_response_parsnip
 
 ## Test Environments
-* local macOS M1 R 4.2.1
-* Appveyor x86_64-w64-mingw32/x64 (64-bit) R 4.2.1
-* github actions macos-latest R 4.2.1
-* WinBuilder R 4.2.1
+* local macOS M1 R 4.3.2
+* github actions macos-latest R 4.3.2
+* WinBuilder R 4.3.2
 * WinBuilder R devel
 
 coverage -> 96 %

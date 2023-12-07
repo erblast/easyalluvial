@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
 
 # easyalluvial <a href='https://erblast.github.io/easyalluvial'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&svg=true)](https://ci.appveyor.com/project/erblast/easyalluvial) 
 [![R build status](https://github.com/erblast/easyalluvial/workflows/R-CMD-check/badge.svg)](https://github.com/erblast/easyalluvial/actions)
 [![Coverage Status](https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg)](https://codecov.io/github/erblast/easyalluvial?branch=master)
 [![CRAN last release](https://www.r-pkg.org/badges/last-release/easyalluvial)](https://CRAN.R-project.org/package=easyalluvial)
