@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">easyalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.900</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2</span>
       </span>
     </div>
 
@@ -119,7 +119,7 @@
 <div class="page-header"><h1 id="easyalluvial-">easyalluvial <a href="https://erblast.github.io/easyalluvial"><img src="reference/figures/logo.png" align="right" height="139"></a>
 <a class="anchor" aria-label="anchor" href="#easyalluvial-"></a>
 </h1></div>
-<p><a href="https://ci.appveyor.com/project/erblast/easyalluvial" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a> <a href="https://github.com/erblast/easyalluvial/actions" class="external-link"><img src="https://github.com/erblast/easyalluvial/workflows/R-CMD-check/badge.svg" alt="R build status"></a> <a href="https://codecov.io/github/erblast/easyalluvial?branch=master" class="external-link"><img src="https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg" alt="Coverage Status"></a> <a href="https://CRAN.R-project.org/package=easyalluvial" class="external-link"><img src="https://www.r-pkg.org/badges/last-release/easyalluvial" alt="CRAN last release"></a> <a href="https://CRAN.R-project.org/package=easyalluvial" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/easyalluvial" alt="CRAN total downloads"></a> <a href="https://CRAN.R-project.org/package=easyalluvial" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/easyalluvial" alt="CRAN monthly downloads"></a></p>
+<p><a href="https://github.com/erblast/easyalluvial/actions" class="external-link"><img src="https://github.com/erblast/easyalluvial/workflows/R-CMD-check/badge.svg" alt="R build status"></a> <a href="https://codecov.io/github/erblast/easyalluvial?branch=master" class="external-link"><img src="https://img.shields.io/codecov/c/github/erblast/easyalluvial/master.svg" alt="Coverage Status"></a> <a href="https://CRAN.R-project.org/package=easyalluvial" class="external-link"><img src="https://www.r-pkg.org/badges/last-release/easyalluvial" alt="CRAN last release"></a> <a href="https://CRAN.R-project.org/package=easyalluvial" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/easyalluvial" alt="CRAN total downloads"></a> <a href="https://CRAN.R-project.org/package=easyalluvial" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/easyalluvial" alt="CRAN monthly downloads"></a></p>
 <p>Alluvial plots are similar to <a href="https://en.wikipedia.org/wiki/Sankey_diagram" class="external-link">sankey diagrams</a> and visualise categorical data over multiple dimensions as flows. <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0008694" class="external-link">Rosval et. al. 2010</a> Their graphical grammar however is a bit more complex then that of a regular x/y plots. The <a href="http://corybrunson.github.io/ggalluvial/" class="external-link"><code>ggalluvial</code></a> package made a great job of translating that grammar into <a href="https://github.com/tidyverse/ggplot2" class="external-link"><code>ggplot2</code></a> syntax and gives you many option to tweak the appearance of an alluvial plot, however there still remains a multi-layered complexity that makes it difficult to use ‘ggalluvial’ for explorative data analysis. ‘easyalluvial’ provides a simple interface to this package that allows you to produce a decent alluvial plot from any dataframe in either long or wide format from a single line of code while also handling continuous data. It is meant to allow a quick visualisation of entire dataframes with a focus on different colouring options that can make alluvial plots a great tool for data exploration.</p>
 <div class="section level2">
 <h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
@@ -149,7 +149,8 @@
 <h3 id="development-version">Development Version<a class="anchor" aria-label="anchor" href="#development-version"></a>
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<code class="sourceCode R"><span></span>
+<span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"erblast/easyalluvial"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -180,7 +181,8 @@
 <h4 id="sample-data">Sample Data<a class="anchor" aria-label="anchor" href="#sample-data"></a>
 </h4>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mtcars2</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mtcars2</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
 <table style="width:100%;" class="table">
 <colgroup>
 <col width="6%">
@@ -310,7 +312,8 @@
 <li>Low, Low (LL)</li>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span> data <span class="op">=</span> <span class="va">mtcars2</span></span>
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span> data <span class="op">=</span> <span class="va">mtcars2</span></span>
 <span>                , max_variables <span class="op">=</span> <span class="fl">5</span></span>
 <span>                , fill_by <span class="op">=</span> <span class="st">'first_variable'</span> <span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-wide_plot-1.png"><!-- --></p>
@@ -389,7 +392,8 @@
 <h4 id="plot-1">Plot<a class="anchor" aria-label="anchor" href="#plot-1"></a>
 </h4>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/alluvial_long.html">alluvial_long</a></span><span class="op">(</span> <span class="va">quarterly_flights</span></span>
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="reference/alluvial_long.html">alluvial_long</a></span><span class="op">(</span> <span class="va">quarterly_flights</span></span>
 <span>               , key <span class="op">=</span> <span class="va">qu</span></span>
 <span>               , value <span class="op">=</span> <span class="va">mean_arr_delay</span></span>
 <span>               , id <span class="op">=</span> <span class="va">tailnum</span></span>
@@ -411,15 +415,15 @@
 <h3 id="interactive-graphs">Interactive Graphs<a class="anchor" aria-label="anchor" href="#interactive-graphs"></a>
 </h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://erblast.github.io/parcats/" class="external-link">parcats</a></span><span class="op">)</span> <span class="op">)</span></span>
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://erblast.github.io/parcats/" class="external-link">parcats</a></span><span class="op">)</span> <span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="reference/alluvial_wide.html">alluvial_wide</a></span><span class="op">(</span><span class="va">mtcars2</span>, max_variables <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://erblast.github.io/parcats/reference/parcats.html" class="external-link">parcats</a></span><span class="op">(</span><span class="va">p</span>, marginal_histograms <span class="op">=</span> <span class="cn">TRUE</span>, data_input <span class="op">=</span> <span class="va">mtcars2</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo1.gif" alt=""><p class="caption">demo</p>
-</div>
-<ul>
+<figure><img src="https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo1.gif" alt="demo"><figcaption aria-hidden="true">
+demo
+</figcaption></figure><ul>
 <li><strong><a href="https://erblast.github.io/parcats/articles/parcats.html" class="external-link">Live Widget</a></strong></li>
 </ul>
 </div>
@@ -434,7 +438,8 @@
 </ul>
 <p><code>easyalluvial</code> contains wrappers for <code>parsnip</code> and <code>caret</code> models. Custom Wrappers for other models can easily be created.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">df</span> <span class="op">=</span> <span class="fu">select</span><span class="op">(</span><span class="va">mtcars2</span>, <span class="op">-</span><span class="va">ids</span><span class="op">)</span></span>
+<code class="sourceCode R"><span></span>
+<span><span class="va">df</span> <span class="op">=</span> <span class="fu">select</span><span class="op">(</span><span class="va">mtcars2</span>, <span class="op">-</span><span class="va">ids</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">m</span> <span class="op">=</span> <span class="fu">parsnip</span><span class="fu">::</span><span class="fu"><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"regression"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">parsnip</span><span class="fu">::</span><span class="fu"><a href="https://parsnip.tidymodels.org/reference/set_engine.html" class="external-link">set_engine</a></span><span class="op">(</span><span class="st">"randomForest"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
@@ -451,7 +456,8 @@
 <h3 id="interactive-partial-dependence-plot">Interactive Partial Dependence Plot<a class="anchor" aria-label="anchor" href="#interactive-partial-dependence-plot"></a>
 </h3>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://erblast.github.io/parcats/reference/parcats.html" class="external-link">parcats</a></span><span class="op">(</span><span class="va">p</span>, marginal_histograms <span class="op">=</span> <span class="cn">TRUE</span>, imp <span class="op">=</span> <span class="cn">TRUE</span>, data_input <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://erblast.github.io/parcats/reference/parcats.html" class="external-link">parcats</a></span><span class="op">(</span><span class="va">p</span>, marginal_histograms <span class="op">=</span> <span class="cn">TRUE</span>, imp <span class="op">=</span> <span class="cn">TRUE</span>, data_input <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo2.gif" alt="demo"> - <strong><a href="https://erblast.github.io/parcats/articles/parcats.html" class="external-link">Live Widget</a></strong></p>
 </div>
 </div>
