@@ -41,8 +41,8 @@ It selects a the top most important variables based on the degree
  \code{\link[easyalluvial]{manip_bin_numerics}}, while leaving categoric
  variables unchanged. The number of bins for each numeric variable is set to
  bins -2. Next the median is picked for each of the bins and the min and the
- max value is added for each numeric variable So that we get { median(bin) X
- bins -2, max, min} for each numeric variable. Then all possible combinations
+ max value is added for each numeric variable So that we get (median(bin) X
+ bins -2, max, min) for each numeric variable. Then all possible combinations
  between those values and the  categoric factor levels are created. The total
  number of all possible combinations defines the range of the data space. The
  values of the remaining variables are set to mode(factors) or

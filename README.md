@@ -3,8 +3,6 @@
 
 # easyalluvial <a href='https://erblast.github.io/easyalluvial'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
-[![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/github/erblast/easyalluvial?branch=master&svg=true)](https://ci.appveyor.com/project/erblast/easyalluvial)
 [![R build
 status](https://github.com/erblast/easyalluvial/workflows/R-CMD-check/badge.svg)](https://github.com/erblast/easyalluvial/actions)
 [![Coverage
@@ -37,17 +35,17 @@ for data exploration.
 
 ## Features
 
--   plot alluvial graph with a single line of code of a given dataframe
--   support for wide and long data format [(wiki, wide vs. long/narrow
-    data)](https://en.wikipedia.org/wiki/Wide_and_narrow_data)
--   automatically transforms numerical to categorical data
--   helper functions for variable selection
--   convenient parameters for coloring and ordering
--   marginal histograms
--   **model agnostic partial dependence and model response alluvial
-    plots with 4 dimensions**
--   **[interactive plots with `easyalluvial` and
-    `parcats`](https://erblast.github.io/parcats/articles/parcats.html)**
+- plot alluvial graph with a single line of code of a given dataframe
+- support for wide and long data format [(wiki, wide vs. long/narrow
+  data)](https://en.wikipedia.org/wiki/Wide_and_narrow_data)
+- automatically transforms numerical to categorical data
+- helper functions for variable selection
+- convenient parameters for coloring and ordering
+- marginal histograms
+- **model agnostic partial dependence and model response alluvial plots
+  with 4 dimensions**
+- **[interactive plots with `easyalluvial` and
+  `parcats`](https://erblast.github.io/parcats/articles/parcats.html)**
 
 ## Installation
 
@@ -60,19 +58,20 @@ install.packages('easyalluvial')
 ### Development Version
 
 ``` r
+
 # install.packages("devtools")
 devtools::install_github("erblast/easyalluvial")
 ```
 
 ## Documentation
 
--   [pkgdown website](https://erblast.github.io/easyalluvial/)
-    -   [Data Exploration with Alluvial
-        Plots](https://erblast.github.io/easyalluvial/articles/data_exploration.html)
-    -   [Visualising Model
-        Response](https://erblast.github.io/easyalluvial/articles/model_response.html)
-    -   [Interactive Plots with
-        parcats](https://erblast.github.io/easyalluvial/articles/parcats.html)
+- [pkgdown website](https://erblast.github.io/easyalluvial/)
+  - [Data Exploration with Alluvial
+    Plots](https://erblast.github.io/easyalluvial/articles/data_exploration.html)
+  - [Visualising Model
+    Response](https://erblast.github.io/easyalluvial/articles/model_response.html)
+  - [Interactive Plots with
+    parcats](https://erblast.github.io/easyalluvial/articles/parcats.html)
 
 ## Examples
 
@@ -86,6 +85,7 @@ suppressPackageStartupMessages( require(easyalluvial) )
 #### Sample Data
 
 ``` r
+
 knitr::kable( head(mtcars2) )
 ```
 
@@ -102,13 +102,14 @@ knitr::kable( head(mtcars2) )
 
 Continuous Variables will be automatically binned as follows.
 
--   High, High (HH)
--   Medium, High (MH)
--   Medium (M)
--   Medium, Low (ML)
--   Low, Low (LL)
+- High, High (HH)
+- Medium, High (MH)
+- Medium (M)
+- Medium, Low (ML)
+- Low, Low (LL)
 
 ``` r
+
 alluvial_wide( data = mtcars2
                 , max_variables = 5
                 , fill_by = 'first_variable' )
@@ -124,18 +125,19 @@ alluvial_wide( data = mtcars2
 knitr::kable( head(quarterly_flights) )
 ```
 
-| tailnum           | carrier | origin | dest | qu  | mean\_arr\_delay |
-|:------------------|:--------|:-------|:-----|:----|:-----------------|
-| N0EGMQ LGA BNA MQ | MQ      | LGA    | BNA  | Q1  | on\_time         |
-| N0EGMQ LGA BNA MQ | MQ      | LGA    | BNA  | Q2  | on\_time         |
-| N0EGMQ LGA BNA MQ | MQ      | LGA    | BNA  | Q3  | on\_time         |
-| N0EGMQ LGA BNA MQ | MQ      | LGA    | BNA  | Q4  | on\_time         |
-| N11150 EWR MCI EV | EV      | EWR    | MCI  | Q1  | late             |
-| N11150 EWR MCI EV | EV      | EWR    | MCI  | Q2  | late             |
+| tailnum           | carrier | origin | dest | qu  | mean_arr_delay |
+|:------------------|:--------|:-------|:-----|:----|:---------------|
+| N0EGMQ LGA BNA MQ | MQ      | LGA    | BNA  | Q1  | on_time        |
+| N0EGMQ LGA BNA MQ | MQ      | LGA    | BNA  | Q2  | on_time        |
+| N0EGMQ LGA BNA MQ | MQ      | LGA    | BNA  | Q3  | on_time        |
+| N0EGMQ LGA BNA MQ | MQ      | LGA    | BNA  | Q4  | on_time        |
+| N11150 EWR MCI EV | EV      | EWR    | MCI  | Q1  | late           |
+| N11150 EWR MCI EV | EV      | EWR    | MCI  | Q2  | late           |
 
 #### Plot
 
 ``` r
+
 alluvial_long( quarterly_flights
                , key = qu
                , value = mean_arr_delay
@@ -159,6 +161,7 @@ alluvial_wide( data = mtcars2
 ### Interactive Graphs
 
 ``` r
+
 suppressPackageStartupMessages( require(parcats) )
 
 p = alluvial_wide(mtcars2, max_variables = 5)
@@ -166,10 +169,15 @@ p = alluvial_wide(mtcars2, max_variables = 5)
 parcats(p, marginal_histograms = TRUE, data_input = mtcars2)
 ```
 
-![demo](https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo1.gif)
+<figure>
+<img
+src="https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo1.gif"
+alt="demo" />
+<figcaption aria-hidden="true">demo</figcaption>
+</figure>
 
--   **[Live
-    Widget](https://erblast.github.io/parcats/articles/parcats.html)**
+- **[Live
+  Widget](https://erblast.github.io/parcats/articles/parcats.html)**
 
 ### Partial Dependence Alluvial Plots
 
@@ -190,14 +198,15 @@ in the end. Each of the possible combinations is plotted as a flow which
 is coloured by the bin corresponding to the average model response
 generated by that particular combination.
 
--   [more on partial dependence plots
-    (ebook)](https://christophm.github.io/interpretable-ml-book/)
--   [Tutorial](https://www.datisticsblog.com/2019/04/visualising-model-response-with-easyalluvial/)
+- [more on partial dependence plots
+  (ebook)](https://christophm.github.io/interpretable-ml-book/)
+- [Tutorial](https://www.datisticsblog.com/2019/04/visualising-model-response-with-easyalluvial/)
 
 `easyalluvial` contains wrappers for `parsnip` and `caret` models.
 Custom Wrappers for other models can easily be created.
 
 ``` r
+
 df = select(mtcars2, -ids)
 
 m = parsnip::rand_forest(mode = "regression") %>%
@@ -216,11 +225,12 @@ p_grid = add_marginal_histograms(p, df, plot = F) %>%
 ### Interactive Partial Dependence Plot
 
 ``` r
+
 parcats(p, marginal_histograms = TRUE, imp = TRUE, data_input = df)
 ```
 
-![demo](https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo2.gif)
-- **[Live
+![demo](https://raw.githubusercontent.com/erblast/parcats/master/man/figures/demo2.gif) -
+**[Live
 Widget](https://erblast.github.io/parcats/articles/parcats.html)**
 
 # ClinicoPath {jamovi} Module
@@ -232,7 +242,7 @@ interface for doing statistics with `R`.
 
 # Similar Packages
 
--   [`ggalluvial`](https://github.com/corybrunson/ggalluvial/)
--   [`alluvial`](https://github.com/mbojan/alluvial)
--   [`networkD3`](https://github.com/christophergandrud/networkD3)
--   [`ggbump`](https://github.com/davidsjoberg/ggbump)
+- [`ggalluvial`](https://github.com/corybrunson/ggalluvial/)
+- [`alluvial`](https://github.com/mbojan/alluvial)
+- [`networkD3`](https://github.com/christophergandrud/networkD3)
+- [`ggbump`](https://github.com/davidsjoberg/ggbump)
