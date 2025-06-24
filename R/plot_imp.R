@@ -155,7 +155,7 @@ add_imp_plot = function(grid, p = NULL, data_input, plot = T, ... ){
   
   
   if( is_null(p) ){
-    if( class(grid)[1] %in% c('gg','ggplot') ){
+    if(inherits(grid, c("ggplot", "ggplot2::ggplot"))){
       grid = grid +
         labs( y = '', caption = '',  subtitle = '')
       
