@@ -82,8 +82,7 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
   
   p_imp = ggplot(imp_df, aes_string('vars', 'perc', fill = 'plotted')) +
     geom_col( color = color
-              , show.legend = F
-              , size = 1) 
+              , show.legend = F) 
   
   if(! is_empty(constant_values) ){
     p_imp = p_imp +
