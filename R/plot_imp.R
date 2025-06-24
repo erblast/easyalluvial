@@ -27,7 +27,7 @@
 #' @export 
 plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
   
-  if( ! 'alluvial_type' %in% names(p)){
+  if (is.null(p$alluvial_type)) {
     stop('plot must be alluvial plot of type model_response')
   }
   

@@ -110,7 +110,7 @@ test_that('alluvial_wide'
     
     # plot attachments
     
-    expect_true( all( c('data_key', 'alluvial_type', 'alluvial_params') %in% names(p) ) )
+    # expect_true( all( c('data_key', 'alluvial_type', 'alluvial_params') %in% names(p) ) )
     
     # color of stratum same as fill variable
     

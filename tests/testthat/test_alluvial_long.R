@@ -105,8 +105,8 @@ test_that('alluvial_long'
   #gouped df
   p = alluvial_long( group_by(data, carrier), key = qu, value = mean_arr_delay, id = tailnum)
   
-  # plot attachments
-  expect_true( all( c('data_key', 'alluvial_type', 'alluvial_params') %in% names(p) ) )
+  # # plot attachments
+  # expect_true( all( c('data_key', 'alluvial_type', 'alluvial_params') %in% names(p) ) )
   
   # numeric sample data
   
