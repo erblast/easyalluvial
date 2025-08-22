@@ -403,9 +403,9 @@ alluvial_wide = function( data
     
   })
 
-  p$data_key = data_key
-  p$alluvial_type = 'wide'
-  p$alluvial_params = params
+  attr(p, 'alluvial_type') = 'wide'
+  attr(p, 'alluvial_params') = params
+  attr(p, 'data_key') = data_key
   
   return(p)
 }

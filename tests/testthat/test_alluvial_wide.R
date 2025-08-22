@@ -42,21 +42,21 @@ test_that('alluvial_wide'
     expect_doppelganger('wide_reorder_y_levels', p)
     
     #check integritiy of returned dataframe
-    expect_equal( nrow(data), nrow(p$data_key) )
+    expect_equal( nrow(data), nrow(attr(p, "data_key")) )
 
     # id
 
     p = alluvial_wide(data, id = ids )
-    expect_true( ! 'ID' %in% names(p$data_key) )
-    expect_true( length(unique(p$data_key$ids) ) == nrow(p$data_key)  )
+    expect_true( ! 'ID' %in% names(attr(p, "data_key")) )
+    expect_true( length(unique(attr(p, "data_key")$ids) ) == nrow(attr(p, "data_key"))  )
 
     p = alluvial_wide(data, id = 'ids' )
-    expect_true( ! 'ID' %in% names(p$data_key) )
-    expect_true( length(unique(p$data_key$ids) ) == nrow(p$data_key)  )
+    expect_true( ! 'ID' %in% names(attr(p, "data_key")) )
+    expect_true( length(unique(attr(p, "data_key")$ids) ) == nrow(attr(p, "data_key"))  )
 
     p = alluvial_wide(data, id = NULL)
-    expect_true( 'ID' %in% names(p$data_key) )
-    expect_true( length(unique(p$data_key$ID) ) == nrow(p$data_key)  )
+    expect_true( 'ID' %in% names(attr(p, "data_key")) )
+    expect_true( length(unique(attr(p, "data_key")$ID) ) == nrow(attr(p, "data_key"))  )
 
     #check automatic angling of x axis labels
 
@@ -110,7 +110,7 @@ test_that('alluvial_wide'
     
     # plot attachments
     
-    expect_true( all( c('data_key', 'alluvial_type', 'alluvial_params') %in% names(p) ) )
+    expect_true( all( c('data_key', 'alluvial_type', 'alluvial_params') %in% names(attributes(p)) ) )
     
     # color of stratum same as fill variable
     

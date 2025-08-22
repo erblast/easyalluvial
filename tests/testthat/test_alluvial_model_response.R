@@ -136,11 +136,11 @@ test_that('alluvial_model_response'
     
     expect_doppelganger('model_response', p)
     
-    expect_equal( length( levels(p$data$x) ) - 1, 3 )
+    expect_equal( length( levels(attr(p, "data")$x) ) - 1, 3 )
     
-    expect_equal( length( levels(p$data$x) ) - 1, length( arrange(imp_conv, desc(imp))$vars[1:3] ) )
+    expect_equal( length( levels(attr(p, "data")$x) ) - 1, length( arrange(imp_conv, desc(imp))$vars[1:3] ) )
     
-    expect_equivalent( levels(p$data$x)[2:( 3 + 1 )],  arrange(imp_conv, desc(imp))$vars[1:3] )
+    expect_equivalent( levels(attr(p, "data")$x)[2:( 3 + 1 )],  arrange(imp_conv, desc(imp))$vars[1:3] )
     
     # checks
     
@@ -190,7 +190,7 @@ test_that('alluvial_model_response'
                                 , params_bin_numeric_pred = list(bins = 3, center = F, scale = F, transform = F) )
     
 
-    expect_true( p$alluvial_params$params_bin_numeric_pred$bins == 3 )
+    expect_true( attr(p, "alluvial_params")$params_bin_numeric_pred$bins == 3 )
     
     expect_doppelganger('model_response_new_change_bins_3', p)
     

@@ -919,8 +919,11 @@ alluvial_model_response = function(pred, dspace, imp, degree = 4
   p = p +
     labs(title = title, subtitle = subtitle, caption = caption)
 
-  p$alluvial_type = 'model_response'
-  p$alluvial_params = c(p$alluvial_params[! names(p$alluvial_params) %in% names(params)], params)
+  attr(p, "alluvial_type") <- 'model_response'
+  attr(p, "alluvial_params") <- c(
+    attr(p, "alluvial_params")[! names(attr(p, "alluvial_params")) %in% names(params)],
+    params
+  )
 
   return(p)
 

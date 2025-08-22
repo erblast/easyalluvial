@@ -26,7 +26,7 @@ test_that('plot condensation'
     
     # compare values from alluvial_wide and plot_condensation
 
-    values = p$data %>%
+    values = attr(p, "data") %>%
       mutate( test1 = map_lgl(comb, function(x) all( c('price', 'carat', 'x', 'y', 'z', 'depth', 'cut') %in% x ) )
               , test2 = map_lgl(comb, function(x) all( x %in% c('price', 'carat', 'x', 'y', 'z', 'depth', 'cut') ) )) %>%
       filter( test1 & test2 ) %>%
