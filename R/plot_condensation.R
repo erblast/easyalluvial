@@ -144,7 +144,7 @@ plot_condensation = function(df, first = NULL){
     mutate(comb_str = map_chr(comb, paste, collapse = '\n') )
 
 
-  p = df_results %>%
+  data = df_results %>%
     mutate( max_flows = max(n_flows) ) %>%
     gather(key = 'key', value = 'value', condensation, n_flows ) %>%
     mutate( hline = case_when( key == 'n_flows' & max_flows >= 1500 ~ 1500
@@ -152,7 +152,9 @@ plot_condensation = function(df, first = NULL){
                                  )
             , key = case_when( key == 'n_flows' ~ 'number of flows'
                              , T ~ 'percent condensation')
-            ) %>%
+            )
+  
+  p = data %>%
     ggplot( aes(x = comb_str, y = value, fill = key) ) +
     geom_col( width = 0.5, show.legend = F ) +
     geom_hline( aes(yintercept = hline)
@@ -162,7 +164,11 @@ plot_condensation = function(df, first = NULL){
     scale_fill_manual( values = RColorBrewer::brewer.pal(8, 'Blues')[c(4,7)] ) +
     theme_minimal() +
     labs( x = '', y = '')
-
+  
+  # older ggplot2 versions do not use S7 objects
+  if (is.null(attr(p, "data"))) {
+    attr(p, "data") <- data
+  }
 
   return(p)
 

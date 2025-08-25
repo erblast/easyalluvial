@@ -30,8 +30,7 @@ test_that("rpart", {
     m_wf <- parsnip::decision_tree(mode = mode) %>%
       parsnip::set_engine("rpart")
     
-    rec_prep = recipes::recipe(form, df) %>%
-      recipes::prep()
+    rec_prep = recipes::recipe(form, df)
     
     wf <- workflows::workflow() %>%
       workflows::add_model(m_wf) %>%

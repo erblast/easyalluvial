@@ -1113,8 +1113,7 @@ alluvial_model_response_caret = function(train, data_input, degree = 4, bins = 5
 #' m <- parsnip::rand_forest(mode = "regression") %>%
 #'   parsnip::set_engine("randomForest")
 #' 
-#' rec_prep = recipes::recipe(disp ~ ., df) %>%
-#'   recipes::prep()
+#' rec_prep = recipes::recipe(disp ~ ., df) 
 #' 
 #' wf <- workflows::workflow() %>%
 #'   workflows::add_model(m) %>%
@@ -1176,7 +1175,7 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
     imp = .f_imp(m) %>%
       select(Variable, Importance)
   } else {
-    imp = workflows::pull_workflow_fit(m) %>%
+    imp = workflows::extract_fit_parsnip(m) %>%
       .f_imp() %>%
       select(Variable, Importance)
   }
@@ -1232,6 +1231,5 @@ alluvial_model_response_parsnip = function(m, data_input, degree = 4, bins = 5
   
   return(p)
 }
-
 
 

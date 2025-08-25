@@ -43,7 +43,7 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
   imp = attr(p, "alluvial_params")$imp %>%
     head(truncate_at)
   
-  all_vars = attr(p,"data")$x %>%
+  all_vars = manip_get_ggplot_data(p)$x %>%
     levels() %>%
     .[ ! . == 'pred']
   
@@ -80,7 +80,7 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
             )
   
   
-  p_imp = ggplot(imp_df, aes_string('vars', 'perc', fill = 'plotted')) +
+  p_imp = ggplot(imp_df, aes(.data$vars, .data$perc, fill = .data$plotted)) +
     geom_col( color = color
               , show.legend = F
               , width = 1) 

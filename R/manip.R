@@ -291,3 +291,17 @@ check_empty_lvl <- function(col, df){
   }
 }
 
+
+#' Get ggplot data
+#'@description retrieve ggplot 2 plot data from S3 and S7 (>= ggplot2 v4.0)
+#'@param p ggplot object
+#'@export
+manip_get_ggplot_data <- function(p) {
+  data <- if (inherits(p, "ggplot2::ggplot")) {
+    p@data
+  } else if (inherits(p, "ggplot")) {
+    p$data
+  } else {
+    stop("p needs to be a ggplot object")
+  }
+}

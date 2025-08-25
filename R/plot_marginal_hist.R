@@ -87,12 +87,12 @@ plot_hist_long = function(var, p, data_input){
     }
   }
   
-  var_order = levels(attr(p, "data")$value)
+  var_order = levels(manip_get_ggplot_data(p)$value)
   
   data_input[[id_str]] <- as.character( data_input[[id_str]] )
   data_input[[key_str]] <- as.character( data_input[[key_str]] )
   
-  df_col = attr(p, "data")
+  df_col = manip_get_ggplot_data(p)
   
   if(var_is_fill){
     df_col = df_col %>%
@@ -144,7 +144,7 @@ plot_hist_long = function(var, p, data_input){
     
     p = ggplot(df_plot ) +
       geom_ribbon( aes(x, fill = fill_value, color = fill_value, ymin = 0, ymax = y) ) +
-      geom_rug( data = df_filt, mapping = aes_string(value_str), sides = 'b')
+      geom_rug( data = df_filt, aes(.data[[value_str]]), sides = 'b')
   
   }else if(var_is_fill){
     df_plot = df_filt %>%
@@ -203,7 +203,7 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
     is_num = is.numeric( data_input[[var_str]] )
   }
   
-  df_col = attr(p, "data") %>%
+  df_col = manip_get_ggplot_data(p) %>%
     filter( x == var_str ) %>%
     arrange( desc(value) ) %>%
     select(fill_value, value) %>%
@@ -220,15 +220,15 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
       arrange(!! var_quo) %>%
       bind_cols(df_col)
     
-    p = ggplot(data_input, aes_string( x = var_str ) ) +
-      geom_density( aes_string( y = '..density..'), size = 1 ) +
+    p = ggplot(data_input, aes( x = .data[[var_str]] ) ) +
+      geom_density( aes( y = after_stat(density)), linewidth = 1 ) +
       geom_rug()
     
     for( i in seq(1, nrow(df_median) ) ){
       p = p +
         geom_vline(xintercept = df_median[[var_str]][i]
                    , color = df_median[['fill_value']][i]
-                   , size = 2)
+                   , linewidth = 2)
     }
   }
   
@@ -240,7 +240,7 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
               , colors = as.integer(colors) ) %>%
       left_join( df_col, by = c( 'colors' = 'rwn') )
     
-    p = ggplot(df_plot, aes_string(var_str, fill = 'fill_value') ) +
+    p = ggplot(df_plot, aes(.data[[var_str]], fill = .data$fill_value) ) +
       geom_bar( width = 1/2 ) 
     
   }
@@ -253,13 +253,13 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
       mutate( variable = var_str ) %>%
       rename( value = !! as.name(var_str) ) 
     
-    df_resp = attr(p, "data") %>%
+    df_resp = manip_get_ggplot_data(p) %>%
       filter( x == 'pred') %>%
       select( x, value ) %>%
       rename( variable = x) %>%
       mutate( variable = as.character(variable)
               , value = fct_drop(value)
-              # attr(p, "data") does not preserve factor order
+              # manip_get_ggplot_data(p) does not preserve factor order
               , value = fct_relevel(value, levels(df_input$value) ) )
     
     stopifnot(all(levels(df_input$value) == levels(df_resp$value)))
@@ -418,7 +418,7 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
 plot_hist_wide = function( var, p, data_input){
   # use ID to join data_key with data_input to
   # have sratum name combined with original numeric value
-  # get stratum color from attr(p, "data")
+  # get stratum color from manip_get_ggplot_data(p)
   # use density() to get x,y density coordinate
   # train model on stratum_name (key) and original numeric value
   # apply model to x density coordinates to get segment borders
@@ -452,7 +452,7 @@ plot_hist_wide = function( var, p, data_input){
   df = left_join(df_left, df_right, by = attr(p, "alluvial_params")$id) %>%
     select( starts_with('var') ) 
   
-  df_col = attr(p, "data") %>%
+  df_col = manip_get_ggplot_data(p) %>%
     filter( x == var_str) %>%
     select( value, fill_value) %>%
     distinct() %>%
@@ -529,7 +529,7 @@ add_marginal_histograms = function(p, data_input, top = TRUE, keep_labels = FALS
     .f = gridExtra::arrangeGrob
   }
   
-  vars = levels( attr(p, "data")$x )
+  vars = levels( manip_get_ggplot_data(p)$x )
 
   hists = map( vars, plot_hist, p = p, data_input = data_input, ...)
   
@@ -589,7 +589,7 @@ add_marginal_histograms = function(p, data_input, top = TRUE, keep_labels = FALS
 #' @importFrom stats density
 plot_all_hists = function(p, data_input, top = TRUE, keep_labels = FALSE, ...){
   
-  vars = levels( attr(p, "data")$x )
+  vars = levels( manip_get_ggplot_data(p)$x )
   
   hists = map( vars, plot_hist, p = p, data_input = data_input, ...)
   
