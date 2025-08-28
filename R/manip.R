@@ -164,7 +164,7 @@ manip_bin_numerics = function(x
     # labels
     
     df = df %>%
-      mutate_if(is.factor, fct_explicit_na, na_level = NA_label ) %>%
+      mutate_if(is.factor, manip_explicit_na, na_level = NA_label ) %>%
       left_join( select(df_old, one_of( c(numerics, 'easyalluvialid') ) ), by = 'easyalluvialid')
     
     for(num in numerics){
@@ -185,7 +185,7 @@ manip_bin_numerics = function(x
     
     df = df %>%
       mutate_if(is.numeric, as.factor ) %>%
-      mutate_if(is.factor, fct_explicit_na, na_level = NA_label ) %>%
+      mutate_if(is.factor,  manip_explicit_na, na_level = NA_label ) %>%
       rename_at( vars( ends_with('.y') ) , .funs = function(x) str_replace(x, '\\.y$', '') )
     
     return(df)
@@ -239,8 +239,8 @@ manip_bin_numerics = function(x
   }
   
   #remove easyalluvialid
-  data_new = select(data_new, columns) %>%
-    mutate_if( is.factor, fct_explicit_na, na_level = NA_label )
+  data_new = select(data_new, all_of(columns)) %>%
+    mutate_if( is.factor, manip_explicit_na, na_level = NA_label )
   
   if( input_vector ){
     return( data_new$x )
@@ -305,3 +305,17 @@ manip_get_ggplot_data <- function(p) {
     stop("p needs to be a ggplot object")
   }
 }
+
+#' Make NA levels explicit
+#' @description fct_na_value_to_level will create a NA level even there is
+#' none present to begin with
+#'@keywords internal
+manip_explicit_na <- function(f, na_level) {
+
+  if (anyNA(f)) {
+    f <- forcats::fct_na_value_to_level(f, level = na_level)
+  }
+  
+  return(f)
+}
+
