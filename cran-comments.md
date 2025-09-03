@@ -1,32 +1,12 @@
-# Resubmission after being archived on CRAN
+## R CMD check results
 
-All suggested dependencies were already controlled for, meaning there was a 
-check in place that would raise an error with a message to install the missing
-package. Those are limited to functions most users will not use.
-
-All unit tests would skip if suggested packages were missing.
-
-One example missed a check for a suggested package installation which was added:
-
--  check for vip pkg installation before executing example of alluvial_model_response_parsnip
-
-## Test Environments
-* local macOS M1 R 4.3.2
-* github actions macos-latest R 4.3.2
-* WinBuilder R 4.3.2
-* WinBuilder R devel
-
-coverage -> 96 %
+0 errors | 0 warnings | 0 note
+locally, rhub, gh-actions
 
 
-## Test Results
-
-Maintainer: ‘Bjoern Koneswarakantha <datistics@gmail.com>’
-
-New submission
-
-Package was archived on CRAN
-
-## Reverse Dependencies
-
-no reverse dependencies
+# Reverse Dependency Checks
+- checks for {parcats} are now failing
+- updates are necessary to ensure compatibility with ggplot 4.0.0
+- {parcats} is also maintained by me (Bjoern Koneswarakantha), I have already
+  prepared a compatible version and will submit it to CRAN after easyalluvial is
+  updated on CRAN
