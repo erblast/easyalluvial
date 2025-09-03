@@ -107,8 +107,7 @@ if(check_pkg_installed("parsnip", raise_error = FALSE) &
 m <- parsnip::rand_forest(mode = "regression") \%>\%
   parsnip::set_engine("randomForest")
 
-rec_prep = recipes::recipe(disp ~ ., df) \%>\%
-  recipes::prep()
+rec_prep = recipes::recipe(disp ~ ., df) 
 
 wf <- workflows::workflow() \%>\%
   workflows::add_model(m) \%>\%

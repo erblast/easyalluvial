@@ -17,6 +17,7 @@ navbar:
       text: Changelog
       href: news/index.html
 template:
+  bootstrap: 5
   params:
     ganalytics: UA-123997499-2
 url: https://erblast.github.io/easyalluvial/

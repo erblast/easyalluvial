@@ -58,7 +58,7 @@ test_that('alluvial_long'
   expect_doppelganger('long_reorder_carrier_by_size', p)
   
   #check integritiy of returned dataframe
-  expect_equivalent( unique(data$tailnum), levels( p$data_key$tailnum ) )
+  expect_equivalent( unique(data$tailnum), levels( attr(p, "data_key")$tailnum ) )
 
   #check with incomplete data
 
@@ -106,7 +106,7 @@ test_that('alluvial_long'
   p = alluvial_long( group_by(data, carrier), key = qu, value = mean_arr_delay, id = tailnum)
   
   # plot attachments
-  expect_true( all( c('data_key', 'alluvial_type', 'alluvial_params') %in% names(p) ) )
+  expect_true( all( c('data_key', 'alluvial_type', 'alluvial_params') %in% names(attributes(p)) ) )
   
   # numeric sample data
   

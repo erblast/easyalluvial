@@ -1,3 +1,6 @@
+# Version 0.4.0 20250825
+- adapted to changes in ggplot2 v4.0.0
+
 # Version 0.3.2 submitted to CRAN 20231207
 - check for vip pkg installation before executing example of alluvial_model_response_parsnip
 - option for using geom_text instead of geom_label (by https://github.com/gernophil)

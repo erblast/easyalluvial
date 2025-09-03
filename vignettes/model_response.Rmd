@@ -75,7 +75,7 @@ p_grid <- p %>%
 ## Interactive Partial Dependence Plot with {parcats}
 
 ```{r  fig.width=12, fig.height=10}
-parcats::parcats(p, data_input = df)
+# parcats::parcats(p, data_input = df)
 ```
 
 
@@ -220,7 +220,7 @@ p_grid = add_marginal_histograms(p, df_inv)
 
 ```
 
-We can see that for the upper ranges of `lstat` a pretty specific combination values is required from 8 feature variables from `medv` until `tax` only then begin the flows to scatter over the entire range of the following variables. The lower range values of `lstat` start to scatter at `crim` or `dis`. Interestingly there seems to be a set of houses that branches off from the other houses in the lower range of `lstat` predictions already at the third feature, `age`. We could potentially explore this further, as a reminder you can get the binned input data for each alluvial plot by calling `p$data_key` and trace the variables of interest.
+We can see that for the upper ranges of `lstat` a pretty specific combination values is required from 8 feature variables from `medv` until `tax` only then begin the flows to scatter over the entire range of the following variables. The lower range values of `lstat` start to scatter at `crim` or `dis`. Interestingly there seems to be a set of houses that branches off from the other houses in the lower range of `lstat` predictions already at the third feature, `age`. We could potentially explore this further, as a reminder you can get the binned input data for each alluvial plot by calling `attr(p, "data_key")` and trace the variables of interest.
 
 
 # Advantages

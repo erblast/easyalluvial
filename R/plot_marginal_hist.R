@@ -30,15 +30,15 @@ plot_hist = function( var, p, data_input, ... ){
   
   p_ori = p
   
-  if( p$alluvial_type == 'wide'){
+  if( attr(p, "alluvial_type") == 'wide'){
     
     p = plot_hist_wide( var, p_ori, data_input)
     
-  }else if( p$alluvial_type == 'model_response'){
+  }else if( attr(p, "alluvial_type") == 'model_response'){
     
     p = plot_hist_model_response( var, p_ori, data_input, ...)
     
-  } else if(p$alluvial_type == 'long'){
+  } else if(attr(p, "alluvial_type") == 'long'){
     
     p = plot_hist_long( var, p_ori, data_input)
     
@@ -50,7 +50,7 @@ plot_hist = function( var, p, data_input, ... ){
     scale_fill_identity() +
     scale_color_identity() 
   
-  if( p_ori$alluvial_type == 'model_response' & var == 'pred'){
+  if( attr(p_ori, "alluvial_type") == 'model_response' & var == 'pred'){
     p = p +
       theme( line = element_blank()
              , axis.title = element_blank()
@@ -68,18 +68,18 @@ plot_hist = function( var, p, data_input, ... ){
 
 plot_hist_long = function(var, p, data_input){
   
-  is_num = is.numeric(data_input[[p$alluvial_params$value]])
-  key_str = as.character(p$alluvial_params$key)
-  id_str = as.character(p$alluvial_params$id)
-  value_str = as.character(p$alluvial_params$value)
+  is_num = is.numeric(data_input[[attr(p, "alluvial_params")$value]])
+  key_str = as.character(attr(p, "alluvial_params")$key)
+  id_str = as.character(attr(p, "alluvial_params")$id)
+  value_str = as.character(attr(p, "alluvial_params")$value)
   
-  if( is_null(p$alluvial_params$fill) ){
+  if( is_null(attr(p, "alluvial_params")$fill) ){
     var_is_fill = F
     var_has_fill = F
     fill_str = NULL
   }else{
     var_has_fill = T
-    fill_str = p$alluvial_params$fill
+    fill_str = attr(p, "alluvial_params")$fill
     if( fill_str == var ){
       var_is_fill = T
     }else{
@@ -87,12 +87,12 @@ plot_hist_long = function(var, p, data_input){
     }
   }
   
-  var_order = levels(p$data$value)
+  var_order = levels(manip_get_ggplot_data(p)$value)
   
   data_input[[id_str]] <- as.character( data_input[[id_str]] )
   data_input[[key_str]] <- as.character( data_input[[key_str]] )
   
-  df_col = p$data
+  df_col = manip_get_ggplot_data(p)
   
   if(var_is_fill){
     df_col = df_col %>%
@@ -120,7 +120,7 @@ plot_hist_long = function(var, p, data_input){
     
     cols_to_gather = unique(data_input[[key_str]])
     
-    df_match = p$data_key %>%
+    df_match = attr(p, "data_key") %>%
       select( -n, -alluvial_id) %>%
       gather( key = !! as.name(key_str), value = 'bin'
               , !!! map(cols_to_gather, as.name) ) %>%
@@ -144,7 +144,7 @@ plot_hist_long = function(var, p, data_input){
     
     p = ggplot(df_plot ) +
       geom_ribbon( aes(x, fill = fill_value, color = fill_value, ymin = 0, ymax = y) ) +
-      geom_rug( data = df_filt, mapping = aes_string(value_str), sides = 'b')
+      geom_rug( data = df_filt, aes(.data[[value_str]]), sides = 'b')
   
   }else if(var_is_fill){
     df_plot = df_filt %>%
@@ -188,7 +188,7 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
     }
     
     if( is_null(ori_name)){
-      ori_name = names(data_input)[ ! names(data_input) %in% names(p$alluvial_params$dspace) ] %>% unlist()
+      ori_name = names(data_input)[ ! names(data_input) %in% names(attr(p, "alluvial_params")$dspace) ] %>% unlist()
     }
     
     
@@ -203,7 +203,7 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
     is_num = is.numeric( data_input[[var_str]] )
   }
   
-  df_col = p$data %>%
+  df_col = manip_get_ggplot_data(p) %>%
     filter( x == var_str ) %>%
     arrange( desc(value) ) %>%
     select(fill_value, value) %>%
@@ -214,21 +214,21 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
   
   if( is_num & ! is_pred){
     
-    df_median = p$alluvial_params$dspace %>%
+    df_median = attr(p, "alluvial_params")$dspace %>%
       select( !! var_quo ) %>%
       distinct() %>%
       arrange(!! var_quo) %>%
       bind_cols(df_col)
     
-    p = ggplot(data_input, aes_string( x = var_str ) ) +
-      geom_density( aes_string( y = '..density..'), size = 1 ) +
+    p = ggplot(data_input, aes( x = .data[[var_str]] ) ) +
+      geom_density( aes( y = after_stat(density)), linewidth = 1 ) +
       geom_rug()
     
     for( i in seq(1, nrow(df_median) ) ){
       p = p +
         geom_vline(xintercept = df_median[[var_str]][i]
                    , color = df_median[['fill_value']][i]
-                   , size = 2)
+                   , linewidth = 2)
     }
   }
   
@@ -240,7 +240,7 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
               , colors = as.integer(colors) ) %>%
       left_join( df_col, by = c( 'colors' = 'rwn') )
     
-    p = ggplot(df_plot, aes_string(var_str, fill = 'fill_value') ) +
+    p = ggplot(df_plot, aes(.data[[var_str]], fill = .data$fill_value) ) +
       geom_bar( width = 1/2 ) 
     
   }
@@ -253,13 +253,13 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
       mutate( variable = var_str ) %>%
       rename( value = !! as.name(var_str) ) 
     
-    df_resp = p$data %>%
+    df_resp = manip_get_ggplot_data(p) %>%
       filter( x == 'pred') %>%
       select( x, value ) %>%
       rename( variable = x) %>%
       mutate( variable = as.character(variable)
               , value = fct_drop(value)
-              # p$data does not preserve factor order
+              # manip_get_ggplot_data(p) does not preserve factor order
               , value = fct_relevel(value, levels(df_input$value) ) )
     
     stopifnot(all(levels(df_input$value) == levels(df_resp$value)))
@@ -312,7 +312,7 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
     
     
     df_pred = tibble( variable = 'pred'
-                      , value = p$alluvial_params$pred )
+                      , value = attr(p, "alluvial_params")$pred )
     
 
     dens_pred = density( df_pred$value )
@@ -321,11 +321,11 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
 
     # pred_train -------------------------------------
     
-    pred_train_from_plot = ! is_null(p$alluvial_params$pred_train)
+    pred_train_from_plot = ! is_null(attr(p, "alluvial_params")$pred_train)
     pred_train_as_arg = ! is_null(pred_train)
     
     if(pred_train_from_plot){
-      pred_train = p$alluvial_params$pred_train
+      pred_train = attr(p, "alluvial_params")$pred_train
     }
     
     if(pred_train_from_plot | pred_train_as_arg){
@@ -349,11 +349,11 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
     
     # apply cuts and select colors -----------------
     df_plot = df_plot%>%
-      mutate( rwn = apply_cuts(x, p$alluvial_params$new_cuts) 
+      mutate( rwn = apply_cuts(x, attr(p, "alluvial_params")$new_cuts) 
               , rwn = as.integer(rwn) )
     
-    min_rwn_pred = p$alluvial_params$pred %>%
-      apply_cuts( p$alluvial_params$new_cuts) %>%
+    min_rwn_pred = attr(p, "alluvial_params")$pred %>%
+      apply_cuts( attr(p, "alluvial_params")$new_cuts) %>%
       as.integer() %>%
       min()
     
@@ -362,7 +362,7 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
     df_col = df_col %>%
       mutate( rwn = rwn + min_rwn_pred -1 ) 
     
-    unused_colours = p$alluvial_params$col_vector_flow[ ! p$alluvial_params$col_vector_flow %in% df_col$fill_value]
+    unused_colours = attr(p, "alluvial_params")$col_vector_flow[ ! attr(p, "alluvial_params")$col_vector_flow %in% df_col$fill_value]
     unused_rwn = seq(1,max_color)
     unused_rwn = unused_rwn[! unused_rwn %in% df_col$rwn]
     
@@ -418,7 +418,7 @@ plot_hist_model_response = function(var, p, data_input, pred_train = NULL, scale
 plot_hist_wide = function( var, p, data_input){
   # use ID to join data_key with data_input to
   # have sratum name combined with original numeric value
-  # get stratum color from p$data
+  # get stratum color from manip_get_ggplot_data(p)
   # use density() to get x,y density coordinate
   # train model on stratum_name (key) and original numeric value
   # apply model to x density coordinates to get segment borders
@@ -431,11 +431,11 @@ plot_hist_wide = function( var, p, data_input){
   data_input = data_input %>%
     rename( var_num = !! var_quo )
 
-  p$data_key = p$data_key %>%
+  attr(p, "data_key") <- attr(p, "data_key") %>%
     rename( var_key = !! var_quo )
   
-  if( is_null(p$alluvial_params$id) ){
-    p$alluvial_params$id = 'ID'
+  if( is_null(attr(p, "alluvial_params")$id) ){
+    attr(p, "alluvial_params")$id = 'ID'
     
     data_input = data_input %>%
       mutate( ID = as.character(row_number() ) )
@@ -444,15 +444,15 @@ plot_hist_wide = function( var, p, data_input){
   # in order not to produce a warning we change joining
   # variable to character 
   df_left = data_input %>%
-    mutate( !! as.name(p$alluvial_params$id) := as.character(!! as.name(p$alluvial_params$id)) )
+    mutate( !! as.name(attr(p, "alluvial_params")$id) := as.character(!! as.name(attr(p, "alluvial_params")$id)) )
   
-  df_right = p$data_key %>%
-    mutate( !! as.name(p$alluvial_params$id) := as.character(!! as.name(p$alluvial_params$id)) )
+  df_right = attr(p, "data_key") %>%
+    mutate( !! as.name(attr(p, "alluvial_params")$id) := as.character(!! as.name(attr(p, "alluvial_params")$id)) )
   
-  df = left_join(df_left, df_right, by = p$alluvial_params$id) %>%
+  df = left_join(df_left, df_right, by = attr(p, "alluvial_params")$id) %>%
     select( starts_with('var') ) 
   
-  df_col = p$data %>%
+  df_col = manip_get_ggplot_data(p) %>%
     filter( x == var_str) %>%
     select( value, fill_value) %>%
     distinct() %>%
@@ -529,7 +529,7 @@ add_marginal_histograms = function(p, data_input, top = TRUE, keep_labels = FALS
     .f = gridExtra::arrangeGrob
   }
   
-  vars = levels( p$data$x )
+  vars = levels( manip_get_ggplot_data(p)$x )
 
   hists = map( vars, plot_hist, p = p, data_input = data_input, ...)
   
@@ -589,7 +589,7 @@ add_marginal_histograms = function(p, data_input, top = TRUE, keep_labels = FALS
 #' @importFrom stats density
 plot_all_hists = function(p, data_input, top = TRUE, keep_labels = FALSE, ...){
   
-  vars = levels( p$data$x )
+  vars = levels( manip_get_ggplot_data(p)$x )
   
   hists = map( vars, plot_hist, p = p, data_input = data_input, ...)
   

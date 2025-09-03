@@ -291,7 +291,7 @@ p
 The plot objects returned by both functions have an attribute called `data_key` which is an x-y table arranged like the alluvial plot one column containing the original ID. We can use the `car_id` variable to rejoin the original dataframe.
 
 ```{r}
-p$data_key %>%
+attr(p, "data_key") %>%
   filter( mpg == 'ML'
           , cyl == 8
           , vs == 0 

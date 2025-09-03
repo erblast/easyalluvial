@@ -27,23 +27,23 @@
 #' @export 
 plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
   
-  if( ! 'alluvial_type' %in% names(p)){
+  if( ! "alluvial_type" %in% names(attributes(p))){
     stop('plot must be alluvial plot of type model_response')
   }
   
-  if(p$alluvial_type != 'model_response'){
+  if(attr(p, "alluvial_type") != 'model_response'){
     stop('plot must be alluvial plot of type model_response')
   }
   
-  if( nrow(p$alluvial_params$imp %>% tidy_imp(df = data_input) ) > truncate_at ){
+  if( nrow(attr(p, "alluvial_params")$imp %>% tidy_imp(df = data_input) ) > truncate_at ){
     warning( paste('More than', truncate_at, 'features detected, they will be truncated. 
                    Adjust threshold using the truncate_at parameter') )
   }
   
-  imp = p$alluvial_params$imp %>%
+  imp = attr(p, "alluvial_params")$imp %>%
     head(truncate_at)
   
-  all_vars = p$data$x %>%
+  all_vars = manip_get_ggplot_data(p)$x %>%
     levels() %>%
     .[ ! . == 'pred']
   
@@ -56,7 +56,7 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
     .$perc %>%
     sum()
   
-  constant_values = p$alluvial_params$dspace %>%
+  constant_values = attr(p, "alluvial_params")$dspace %>%
     select( - one_of(all_vars) ) %>%
     mutate_all(as.character) %>%
     head(1) %>%
@@ -80,10 +80,10 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
             )
   
   
-  p_imp = ggplot(imp_df, aes_string('vars', 'perc', fill = 'plotted')) +
+  p_imp = ggplot(imp_df, aes(.data$vars, .data$perc, fill = .data$plotted)) +
     geom_col( color = color
               , show.legend = F
-              , size = 1) 
+              , width = 1) 
   
   if(! is_empty(constant_values) ){
     p_imp = p_imp +
@@ -101,7 +101,7 @@ plot_imp = function(p, data_input, truncate_at = 50, color = 'darkgrey'){
     geom_text( aes( label = round(perc,3) )
                , hjust = 0) 
   
-  if(p$alluvial_params$method == 'median' & ! is_empty(constant_values) ){
+  if(attr(p, "alluvial_params")$method == 'median' & ! is_empty(constant_values) ){
     p_imp = p_imp +
       geom_label( aes( y = 1, label = const_values)
                 , data = filter(imp_df, ! is.na(const_values) )
@@ -155,7 +155,7 @@ add_imp_plot = function(grid, p = NULL, data_input, plot = T, ... ){
   
   
   if( is_null(p) ){
-    if( class(grid)[1] %in% c('gg','ggplot') ){
+    if( inherits(grid, "ggplot") ){
       grid = grid +
         labs( y = '', caption = '',  subtitle = '')
       

@@ -136,11 +136,13 @@ test_that('alluvial_model_response'
     
     expect_doppelganger('model_response', p)
     
-    expect_equal( length( levels(p$data$x) ) - 1, 3 )
+    p_data <- manip_get_ggplot_data(p)
     
-    expect_equal( length( levels(p$data$x) ) - 1, length( arrange(imp_conv, desc(imp))$vars[1:3] ) )
+    expect_equal( length( unique(p_data$x) ) - 1, 3 )
     
-    expect_equivalent( levels(p$data$x)[2:( 3 + 1 )],  arrange(imp_conv, desc(imp))$vars[1:3] )
+    expect_equal( length( unique(p_data$x) ) - 1, length( arrange(imp_conv, desc(imp))$vars[1:3] ) )
+    
+    expect_equivalent( levels( p_data$x )[2:( 3 + 1 )],  arrange(imp_conv, desc(imp))$vars[1:3] )
     
     # checks
     
@@ -190,7 +192,7 @@ test_that('alluvial_model_response'
                                 , params_bin_numeric_pred = list(bins = 3, center = F, scale = F, transform = F) )
     
 
-    expect_true( p$alluvial_params$params_bin_numeric_pred$bins == 3 )
+    expect_true( attr(p, "alluvial_params")$params_bin_numeric_pred$bins == 3 )
     
     expect_doppelganger('model_response_new_change_bins_3', p)
     
@@ -375,8 +377,7 @@ test_that('alluvial_model_response_parsnip'
   m = parsnip::linear_reg(mode = "regression") %>%
     parsnip::set_engine("lm")
   
-  rec_prep = recipes::recipe(disp ~ ., df) %>%
-    recipes::prep()
+  rec_prep = recipes::recipe(disp ~ ., df)
   
   m_form = parsnip::fit(m, disp ~ ., df)
   
@@ -385,7 +386,7 @@ test_that('alluvial_model_response_parsnip'
     workflows::add_recipe(rec_prep) %>%
     parsnip::fit(df)
   
-  m_wf <- workflows::pull_workflow_fit(wf)
+  m_wf <- workflows::extract_fit_parsnip(wf)
   
   p = alluvial_model_response_parsnip(m_form, df, degree = 3)
   p = alluvial_model_response_parsnip(m_wf, df, degree = 3)

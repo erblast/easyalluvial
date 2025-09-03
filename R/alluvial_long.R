@@ -459,9 +459,9 @@ alluvial_long = function( data
       theme( axis.text.x = element_text( angle = 90, vjust = 0.5 , hjust = 0 ) )
   }
 
-  p$data_key = data_key
-  p$alluvial_type = 'long'
-  p$alluvial_params = params
+  attr(p, "data_key") <- data_key
+  attr(p, "alluvial_type") <- 'long'
+  attr(p, "alluvial_params") <- params
 
   return(p)
 }

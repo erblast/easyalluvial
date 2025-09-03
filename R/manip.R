@@ -164,7 +164,7 @@ manip_bin_numerics = function(x
     # labels
     
     df = df %>%
-      mutate_if(is.factor, fct_explicit_na, na_level = NA_label ) %>%
+      mutate_if(is.factor, manip_explicit_na, na_level = NA_label ) %>%
       left_join( select(df_old, one_of( c(numerics, 'easyalluvialid') ) ), by = 'easyalluvialid')
     
     for(num in numerics){
@@ -185,7 +185,7 @@ manip_bin_numerics = function(x
     
     df = df %>%
       mutate_if(is.numeric, as.factor ) %>%
-      mutate_if(is.factor, fct_explicit_na, na_level = NA_label ) %>%
+      mutate_if(is.factor,  manip_explicit_na, na_level = NA_label ) %>%
       rename_at( vars( ends_with('.y') ) , .funs = function(x) str_replace(x, '\\.y$', '') )
     
     return(df)
@@ -239,8 +239,8 @@ manip_bin_numerics = function(x
   }
   
   #remove easyalluvialid
-  data_new = select(data_new, columns) %>%
-    mutate_if( is.factor, fct_explicit_na, na_level = NA_label )
+  data_new = select(data_new, all_of(columns)) %>%
+    mutate_if( is.factor, manip_explicit_na, na_level = NA_label )
   
   if( input_vector ){
     return( data_new$x )
@@ -289,5 +289,33 @@ check_empty_lvl <- function(col, df){
   if(nrow(df_check) > 0){
     warning(paste("bins ", paste(unique(df_check[[col]]), collapse = ","), "of", col, "are empty" ))
   }
+}
+
+
+#' Get ggplot data
+#'@description retrieve ggplot 2 plot data from S3 and S7 (>= ggplot2 v4.0)
+#'@param p ggplot object
+#'@export
+manip_get_ggplot_data <- function(p) {
+  data <- if (inherits(p, "ggplot2::ggplot")) {
+    p@data
+  } else if (inherits(p, "ggplot")) {
+    p$data
+  } else {
+    stop("p needs to be a ggplot object")
+  }
+}
+
+#' Make NA levels explicit
+#' @description fct_na_value_to_level will create a NA level even there is
+#' none present to begin with
+#'@keywords internal
+manip_explicit_na <- function(f, na_level) {
+
+  if (anyNA(f)) {
+    f <- forcats::fct_na_value_to_level(f, level = na_level)
+  }
+  
+  return(f)
 }
 
