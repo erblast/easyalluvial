@@ -35,7 +35,7 @@
 
     <a class="navbar-brand me-2" href="index.html">easyalluvial</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -390,7 +390,7 @@ demo
 <p><code>easyalluvial</code> contains wrappers for <code>parsnip</code> and <code>caret</code> models. Custom Wrappers for other models can easily be created.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">df</span> <span class="op">=</span> <span class="fu">select</span><span class="op">(</span><span class="va">mtcars2</span>, <span class="op">-</span><span class="va">ids</span><span class="op">)</span></span>
+<span><span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">mtcars2</span>, <span class="op">-</span><span class="va">ids</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">m</span> <span class="op">=</span> <span class="fu">parsnip</span><span class="fu">::</span><span class="fu"><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"regression"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">parsnip</span><span class="fu">::</span><span class="fu"><a href="https://parsnip.tidymodels.org/reference/set_engine.html" class="external-link">set_engine</a></span><span class="op">(</span><span class="st">"randomForest"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
@@ -434,6 +434,7 @@ demo
 <ul class="list-unstyled">
 <li><a href="https://cloud.r-project.org/package=easyalluvial" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/erblast/easyalluvial/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/erblast/easyalluvial/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
