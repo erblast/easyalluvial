@@ -75,7 +75,7 @@ p_grid <- p %>%
 ## Interactive Partial Dependence Plot with {parcats}
 
 ```{r  fig.width=12, fig.height=10}
-parcats::parcats(p, data_input = df)
+# parcats::parcats(p, data_input = df)
 ```
 
 
