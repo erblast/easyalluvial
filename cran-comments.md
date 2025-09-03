@@ -1,3 +1,6 @@
+## resubmission
+- reduced build size by removing reference snapshots from test folder
+
 ## R CMD check results
 
 0 errors | 0 warnings | 0 note
