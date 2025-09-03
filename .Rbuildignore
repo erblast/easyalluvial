@@ -16,7 +16,7 @@
 ^docs$
 ^pkgdown$
 ^vignettes$
-^tests/figs$
+^tests/testthat/_snaps$
 ^\.github$
 ^README.md$
 ^CRAN-SUBMISSION$
