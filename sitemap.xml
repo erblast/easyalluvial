@@ -1,114 +1,40 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/404.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/articles/data_exploration.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/articles/model_response.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/articles/parcats.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/index.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/add_imp_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/add_marginal_histograms.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/alluvial_long.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/alluvial_model_response.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/alluvial_model_response_caret.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/alluvial_model_response_parsnip.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/alluvial_wide.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/check_pkg_installed.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/get_data_space.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/get_pdp_predictions.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/get_pdp_predictions_seq.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/manip_bin_numerics.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/manip_factor_2_numeric.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/mtcars2.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/palette_filter.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/palette_increase_length.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/palette_plot_intensity.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/palette_plot_rgp.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/palette_qualitative.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/plot_all_hists.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/plot_condensation.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/plot_hist.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/plot_imp.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/quarterly_flights.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/quarterly_sunspots.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/tidy_imp.html</loc>
-  </url>
-  <url>
-    <loc>https://erblast.github.io/easyalluvial/reference/titanic.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://erblast.github.io/easyalluvial/404.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/articles/data_exploration.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/articles/index.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/articles/model_response.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/authors.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/index.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/news/index.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/add_imp_plot.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/add_marginal_histograms.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/alluvial_long.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/alluvial_model_response.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/alluvial_model_response_caret.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/alluvial_model_response_parsnip.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/alluvial_wide.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/check_pkg_installed.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/get_data_space.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/get_pdp_predictions.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/get_pdp_predictions_seq.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/index.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/manip_bin_numerics.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/manip_factor_2_numeric.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/manip_get_ggplot_data.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/mtcars2.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/palette_filter.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/palette_increase_length.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/palette_plot_intensity.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/palette_plot_rgp.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/palette_qualitative.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/pipe.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/plot_all_hists.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/plot_condensation.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/plot_hist.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/plot_imp.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/quarterly_flights.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/quarterly_sunspots.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/tidy_imp.html</loc></url>
+<url><loc>https://erblast.github.io/easyalluvial/reference/titanic.html</loc></url>
 </urlset>
+
