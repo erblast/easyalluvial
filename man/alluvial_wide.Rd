@@ -22,6 +22,7 @@ alluvial_wide(
   stratum_label_size = 4.5,
   stratum_width = 1/4,
   auto_rotate_xlabs = T,
+  custom_value = NULL,
   ...
 )
 }
@@ -66,6 +67,9 @@ fill variable stratum, Default: TRUE}
 \item{stratum_width}{double, Default: 1/4}
 
 \item{auto_rotate_xlabs}{logical, Default: TRUE}
+
+\item{custom_value}{string, create a custom label with counts and percentages
+included in value label, Default: NULL}
 
 \item{...}{additional arguments passed to
 \code{\link[easyalluvial]{manip_bin_numerics}}}

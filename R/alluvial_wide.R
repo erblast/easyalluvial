@@ -42,6 +42,8 @@ if(getRversion() >= "2.15.1"){
 #'@param stratum_label_size numeric, Default: 4.5
 #'@param stratum_width double, Default: 1/4
 #'@param auto_rotate_xlabs logical, Default: TRUE
+#'@param custom_value string, create a custom label with counts and percentages
+#'included in value label, Default: NULL
 #'@param ... additional arguments passed to
 #'  \code{\link[easyalluvial]{manip_bin_numerics}}
 #'@return ggplot2 object
@@ -86,6 +88,8 @@ if(getRversion() >= "2.15.1"){
 #'@importFrom forcats fct_relevel
 #'@importFrom ggalluvial stat_stratum geom_flow geom_stratum StatStratum
 #'@importFrom magrittr %>%
+#'@importFrom table.glue table_value round_spec round_using_magnitude
+#'@importFrom glue glue
 alluvial_wide = function( data
                             , id = NULL
                             , max_variables = 20
@@ -103,6 +107,7 @@ alluvial_wide = function( data
                             , stratum_label_size = 4.5
                             , stratum_width = 1/4
                             , auto_rotate_xlabs = T
+                            , custom_value = NULL
                             , ...
                             ){
   # quos
@@ -347,12 +352,48 @@ alluvial_wide = function( data
       mutate( fill_value = ifelse( x == fill_by, fill_flow, fill_value) )
   }
   
+  if(!is.null(custom_value) && stratum_labels){
+    if(!grepl("\\{value\\}", custom_value, ignore.case = TRUE)){
+      stop("Must provide the column '{value}' for custom labels")
+    }
+    
+    rspec <- round_spec() %>% 
+      round_using_magnitude()
+    
+    data_new = data_new %>% 
+      group_by(value, x) %>% 
+      mutate(count = sum(n)) %>% 
+      ungroup() %>% 
+      group_by(x) %>% 
+      mutate(
+        percent = table_value(100*count/sum(n), rspec = rspec),
+        percent = paste0(percent, "%"),
+        count = table_value(as.integer(count)),
+        # careful not to overwrite the value column as it is used
+        # to set up data_key later on in this function.
+        value_label = glue(custom_value),
+        value_label = as.factor(value_label)
+      ) %>% 
+      ungroup()
+    
+  } else {
+    
+    data_new = data_new %>% 
+      mutate(value_label = value)
+    
+  }
+    
+  if(!is.null(custom_value) && !stratum_labels){
+    warning("Warning with stratum_labels set to FALSE
+              no labels will be shown.")
+  }
+  
   p <- ggplot(data_new,
               aes(x = x
                   , stratum = value
                   , alluvium = alluvial_id
                   , y = n
-                  , label = value)) +
+                  , label = value_label)) +
     ggalluvial::geom_flow(stat = "alluvium"
                           , lode.guidance = "leftright"
                           , aes( fill = fill_flow
@@ -396,7 +437,8 @@ alluvial_wide = function( data
     data_key = data_new %>%
       mutate( alluvial_id = manip_factor_2_numeric(alluvial_id) ) %>%
       left_join( data_alluvial, relationship = "many-to-many" ) %>%
-      select( - fill_flow, -fill_value, -fill ) %>%
+      select( - fill_flow, -fill_value, -fill, 
+              - any_of(c("count", "percent", "value_label"))) %>%
       spread( key = x, value = value ) %>%
       select( one_of(id_str, variables, 'alluvial_id', 'n' ) ) %>%
       mutate_if( is.factor, fct_drop)

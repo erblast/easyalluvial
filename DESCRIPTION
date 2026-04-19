@@ -40,7 +40,7 @@ Suggests:
     rpart,
     glmnet,
     xgboost
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Imports:
   purrr
   , tidyr (>= 1.0.0)
@@ -59,4 +59,6 @@ Imports:
   , randomForest
   , progressr
   , progress
+  , glue
+  , table.glue
 Language: en-US

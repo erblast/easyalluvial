@@ -27,6 +27,7 @@ alluvial_long(
   stratum_label_size = 4.5,
   stratum_width = 1/4,
   auto_rotate_xlabs = T,
+  custom_value = NULL,
   ...
 )
 }
@@ -84,7 +85,9 @@ Default:RColorBrewer::brewer.pal(9, 'Greys')[c(3,6,4,7,5)]}
 
 \item{stratum_width}{double, Default: 1/4}
 
-\item{auto_rotate_xlabs}{logical, Default: TRUE}
+\item{auto_rotate_xlabs}{logical, Default: TRUE
+#'@param custom_value string, create a custom label with counts and percentages
+included in value label, Default: NULL}
 
 \item{...}{additional parameter passed to \code{\link[easyalluvial]{manip_bin_numerics}}}
 }
