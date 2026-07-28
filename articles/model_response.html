@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Partial Dependence Alluvial Plots - Visualising Model Response">
 <!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-123997499-2"></script><script>
@@ -32,7 +32,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">easyalluvial</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@
 Koneswarakantha</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/erblast/easyalluvial/blob/v0.4.0/vignettes/model_response.Rmd" class="external-link"><code>vignettes/model_response.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/erblast/easyalluvial/blob/master/vignettes/model_response.Rmd" class="external-link"><code>vignettes/model_response.Rmd</code></a></small>
       <div class="d-none name"><code>model_response.Rmd</code></div>
     </div>
 
@@ -149,7 +149,7 @@ want to add to the plot.</p>
 <span><span class="va">p_grid</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_marginal_histograms.html">add_marginal_histograms</a></span><span class="op">(</span>data_input <span class="op">=</span> <span class="va">df</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_imp_plot.html">add_imp_plot</a></span><span class="op">(</span>p <span class="op">=</span> <span class="va">p</span>, data_input <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span></code></pre></div>
-<p><img src="model_response_files/figure-html/unnamed-chunk-2-1.png" width="1152"></p>
+<p><img src="model_response_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="" width="1152"></p>
 </div>
 <div class="section level3">
 <h3 id="interactive-partial-dependence-plot-with-parcats">Interactive Partial Dependence Plot with {parcats}<a class="anchor" aria-label="anchor" href="#interactive-partial-dependence-plot-with-parcats"></a>
@@ -169,7 +169,7 @@ want to add to the plot.</p>
 <span></span>
 <span><span class="fu"><a href="../reference/alluvial_model_response_caret.html">alluvial_model_response_caret</a></span><span class="op">(</span><span class="va">train</span>, <span class="va">df</span>, degree <span class="op">=</span> <span class="fl">4</span>, bins <span class="op">=</span> <span class="fl">5</span></span>
 <span>                              , stratum_label_size <span class="op">=</span> <span class="fl">2.8</span><span class="op">)</span></span></code></pre></div>
-<p><img src="model_response_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p><img src="model_response_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="step-by-step-build-your-own-wrappers">Step By Step (build your own wrappers)<a class="anchor" aria-label="anchor" href="#step-by-step-build-your-own-wrappers"></a>
@@ -502,7 +502,7 @@ parameter.</p>
 <span>                            , degree <span class="op">=</span> <span class="fl">4</span>, bins <span class="op">=</span> <span class="fl">5</span></span>
 <span>                            , stratum_label_size <span class="op">=</span> <span class="fl">2.8</span> <span class="op">)</span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<p><img src="model_response_files/figure-html/alluv1-1.png" width="960"></p>
+<p><img src="model_response_files/figure-html/alluv1-1.png" class="r-plt" alt="" width="960"></p>
 <p>We can see the binned range of predictions and explore by which
 variable combination they have been created by tracing the coloured
 flows. The stratum labels of the prediction variables indicate the value
@@ -520,7 +520,7 @@ marginal histograms and as a bonus also the feature importance.</p>
 <span>                                 , scale <span class="op">=</span> <span class="fl">50</span> <span class="co"># to increase distance between ridge plots, Default: 400</span></span>
 <span>                                 <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_imp_plot.html">add_imp_plot</a></span><span class="op">(</span> p <span class="op">=</span> <span class="va">p</span>, data_input <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span></code></pre></div>
-<p><img src="model_response_files/figure-html/unnamed-chunk-10-1.png" width="1152"></p>
+<p><img src="model_response_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="1152"></p>
 <p>We can see the original distribution of the variables, the lines
 indicate the position of the values as picked by
 <code><a href="../reference/get_data_space.html">get_data_space()</a></code>. When comparing the distribution of the
@@ -541,7 +541,7 @@ parameter.</p>
 <span><span class="fu"><a href="../reference/plot_hist.html">plot_hist</a></span><span class="op">(</span><span class="st">'pred'</span>, <span class="va">p</span>, <span class="va">df</span></span>
 <span>          , pred_train <span class="op">=</span> <span class="va">pred_train</span> <span class="co"># pred_train can also be passed to add_marginal_histograms()</span></span>
 <span>          , scale <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
-<p><img src="model_response_files/figure-html/unnamed-chunk-11-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="model_response_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="288" style="display: block; margin: auto;"></p>
 <p>We see that the training prediction also do not completely cover all
 of the <code>lstat</code> range but more of it than the predictions from
 the artificial data space.</p>
@@ -561,14 +561,14 @@ resolution on the plot.</p>
 <span><span class="co">## 'bin_labels'</span></span></code></pre>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_hist.html">plot_hist</a></span><span class="op">(</span><span class="st">'pred'</span>, <span class="va">p</span>, <span class="va">df</span>, scale <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
-<p><img src="model_response_files/figure-html/p_hist-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="model_response_files/figure-html/p_hist-1.png" class="r-plt" alt="" width="288" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_grid</span> <span class="op">=</span> <span class="fu"><a href="../reference/add_marginal_histograms.html">add_marginal_histograms</a></span><span class="op">(</span><span class="va">p</span>, data_input <span class="op">=</span> <span class="va">df</span></span>
 <span>                                 , plot <span class="op">=</span> <span class="cn">F</span> <span class="co"># plot only after adding feature importance</span></span>
 <span>                                 , scale <span class="op">=</span> <span class="fl">50</span> <span class="co"># to increase distance between ridge plots, Default: 400</span></span>
 <span>                                 <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_imp_plot.html">add_imp_plot</a></span><span class="op">(</span> p <span class="op">=</span> <span class="va">p</span>, data_input <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span></code></pre></div>
-<p><img src="model_response_files/figure-html/unnamed-chunk-12-1.png" width="1152"></p>
+<p><img src="model_response_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="1152"></p>
 </div>
 </div>
 <div class="section level2">
@@ -599,7 +599,7 @@ we remove all other flows from the plot by setting their color to
 <span><span class="co">## empty</span></span></code></pre>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_grid</span> <span class="op">=</span> <span class="fu"><a href="../reference/add_marginal_histograms.html">add_marginal_histograms</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">df_inv</span><span class="op">)</span></span></code></pre></div>
-<p><img src="model_response_files/figure-html/unnamed-chunk-13-1.png" width="1152"></p>
+<p><img src="model_response_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="1152"></p>
 <p>We can see that for the upper ranges of <code>lstat</code> a pretty
 specific combination values is required from 8 feature variables from
 <code>medv</code> until <code>tax</code> only then begin the flows to
@@ -636,7 +636,7 @@ variables of lower feature importance.</p>
 <span><span class="va">pred</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">m</span>, newdata <span class="op">=</span> <span class="va">dspace</span>,type <span class="op">=</span> <span class="st">'response'</span><span class="op">)</span></span>
 <span><span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="../reference/alluvial_model_response.html">alluvial_model_response</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">dspace</span>, <span class="va">imp</span>, degree <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<p><img src="model_response_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<p><img src="model_response_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="limitations">Limitations<a class="anchor" aria-label="anchor" href="#limitations"></a>
@@ -667,7 +667,7 @@ values, etc, …</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
