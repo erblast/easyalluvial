@@ -41,6 +41,9 @@ if(getRversion() >= "2.15.1"){
 #'@param stratum_label_type character, Default: "label"
 #'@param stratum_label_size numeric, Default: 4.5
 #'@param stratum_width double, Default: 1/4
+#'@param flow_border_size numeric, line width of the flow polygon borders passed
+#'  as \code{linewidth} to \code{\link[ggalluvial]{geom_flow}}. Set to a value
+#'  greater than 0 to draw visible outlines around the flows, Default: 0.1
 #'@param auto_rotate_xlabs logical, Default: TRUE
 #'@param ... additional arguments passed to
 #'  \code{\link[easyalluvial]{manip_bin_numerics}}
@@ -102,6 +105,7 @@ alluvial_wide = function( data
                             , stratum_label_type = "label"
                             , stratum_label_size = 4.5
                             , stratum_width = 1/4
+                            , flow_border_size = 0.3
                             , auto_rotate_xlabs = T
                             , ...
                             ){
@@ -129,6 +133,7 @@ alluvial_wide = function( data
     , verbose = verbose
     , stratum_labels = stratum_labels
     , stratum_width = stratum_width
+    , flow_border_size = flow_border_size
     , auto_rotate_xlabs = auto_rotate_xlabs
   )
   
@@ -358,6 +363,7 @@ alluvial_wide = function( data
                           , aes( fill = fill_flow
                                  , color = fill_flow )
                           , width = stratum_width
+                          , linewidth = flow_border_size
     ) +
     ggalluvial::geom_stratum(  aes(fill = fill_value
                                    , color = fill_value)

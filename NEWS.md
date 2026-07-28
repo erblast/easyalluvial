@@ -1,5 +1,8 @@
 # Version 0.4.1 20260728
 - adapted to vip 0.5.0 move from CRAN to r-universe
+- adapt to ggplot2 3.4.0 linewidth changes by introducing `flow_border_size`
+  parameter in `alluvial_wide()` and `alluvial_long()` 
+
 
 # Version 0.4.0 20250825
 - adapted to changes in ggplot2 v4.0.0

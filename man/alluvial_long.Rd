@@ -26,6 +26,7 @@ alluvial_long(
   stratum_label_type = "label",
   stratum_label_size = 4.5,
   stratum_width = 1/4,
+  flow_border_size = 0.1,
   auto_rotate_xlabs = T,
   ...
 )
@@ -83,6 +84,10 @@ Default:RColorBrewer::brewer.pal(9, 'Greys')[c(3,6,4,7,5)]}
 \item{stratum_label_size}{numeric, Default: 4.5}
 
 \item{stratum_width}{double, Default: 1/4}
+
+\item{flow_border_size}{numeric, line width of the flow polygon borders passed
+as \code{linewidth} to \code{\link[ggalluvial]{geom_flow}}. Set to a value
+greater than 0 to draw visible outlines around the flows, Default: 0.1}
 
 \item{auto_rotate_xlabs}{logical, Default: TRUE}
 
