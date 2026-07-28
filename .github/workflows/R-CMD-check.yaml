@@ -31,6 +31,12 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
+      - name: Include vdiffr snapshots in CI build
+        run: |
+          # keep tarball small for CRAN but let CI compare against baselines
+          sed -i '/_snaps/d' .Rbuildignore
+        shell: bash
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           error-on: '"note"'
