@@ -1,3 +1,6 @@
+# Version 0.4.1 20260728
+- adapted to vip 0.5.0
+
 # Version 0.4.0 20250825
 - adapted to changes in ggplot2 v4.0.0
 
