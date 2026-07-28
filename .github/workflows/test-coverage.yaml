@@ -28,6 +28,12 @@ jobs:
           extra-packages: any::covr, any::xml2
           needs: coverage
 
+      - name: Include vdiffr snapshots in CI build
+        run: |
+          # keep tarball small for CRAN but let CI compare against baselines
+          perl -i -ne 'print unless /_snaps/' .Rbuildignore
+        shell: bash
+
       - name: Test coverage
         run: |
           cov <- covr::package_coverage(
