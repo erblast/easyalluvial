@@ -15,7 +15,7 @@ name: R-CMD-check
 
 jobs:
   R-CMD-check:
-    runs-on: macOS-latest
+    runs-on: macOS-latest # ubuntu too slow
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -30,6 +30,12 @@ jobs:
         with:
           extra-packages: any::rcmdcheck
           needs: check
+
+      - name: Include vdiffr snapshots in CI build
+        run: |
+          # keep tarball small for CRAN but let CI compare against baselines
+          perl -i -ne 'print unless /_snaps/' .Rbuildignore
+        shell: bash
 
       - uses: r-lib/actions/check-r-package@v2
         with:
