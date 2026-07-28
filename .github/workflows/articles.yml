@@ -25,6 +25,7 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
+          extra-repositories: https://bgreenwell.r-universe.dev
           needs: check
       - name: Install dependencies
         run: |

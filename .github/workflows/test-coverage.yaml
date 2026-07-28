@@ -25,6 +25,7 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::covr, any::xml2
+          extra-repositories: https://bgreenwell.r-universe.dev
           needs: coverage
 
       - name: Test coverage
