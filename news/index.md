@@ -2,6 +2,8 @@
 
 ## Version 0.4.1 20260728
 
+CRAN release: 2026-07-31
+
 - adapted to vip 0.5.0 move from CRAN to r-universe
 - adapt to ggplot2 3.4.0 linewidth changes by introducing
   `flow_border_size` parameter in

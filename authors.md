@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/erblast/easyalluvial/blob/master/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/erblast/easyalluvial/blob/v0.4.1/DESCRIPTION)
 
 Koneswarakantha B (2026). *easyalluvial: Generate Alluvial Plots with a
 Single Line of Code*. R package version 0.4.1,

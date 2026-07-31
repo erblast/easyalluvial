@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   data_exploration: data_exploration.html
   model_response: model_response.html
-last_built: 2026-07-28T16:30Z
+last_built: 2026-07-31T08:35Z
 urls:
   reference: https://erblast.github.io/easyalluvial/reference
   article: https://erblast.github.io/easyalluvial/articles

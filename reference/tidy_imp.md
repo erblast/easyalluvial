@@ -52,16 +52,16 @@ m = randomForest::randomForest( disp ~ ., df)
 imp = m$importance
 tidy_imp(imp, df)
 #> # A tibble: 10 × 2
-#>    vars     imp
-#>    <chr>  <dbl>
-#>  1 cyl   97729.
-#>  2 mpg   89060.
-#>  3 hp    79989.
-#>  4 wt    70987.
-#>  5 drat  45498.
-#>  6 gear  20966.
-#>  7 qsec  19997.
-#>  8 vs    16253.
-#>  9 carb   8897.
-#> 10 am     5045.
+#>    vars      imp
+#>    <chr>   <dbl>
+#>  1 cyl   105250.
+#>  2 mpg    81248.
+#>  3 hp     73445.
+#>  4 wt     70898.
+#>  5 drat   47462.
+#>  6 gear   23399.
+#>  7 qsec   23065.
+#>  8 vs     13312.
+#>  9 carb    7973.
+#> 10 am      2363.
 ```
